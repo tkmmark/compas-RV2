@@ -9,7 +9,16 @@ __commandname__ = "RV2_init"
 
 
 def RunCommand(is_interactive):
-    sc.sticky["RV2"] = {}
+    sc.sticky["RV2"] = {
+        "settings": {
+            "layers.form": "RV2::FormDiagram",
+            "layers.force": "RV2::ForceDiagram",
+            "layers.thrust": "RV2::ThrustNetwork",
+        },
+        "form": None,
+        "force": None,
+        "thrust": None
+    }
 
 
 # ==============================================================================

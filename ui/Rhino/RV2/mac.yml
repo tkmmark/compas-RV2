@@ -1,0 +1,11 @@
+name: IASS19
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - pip>=19.0
+  - python.app
+  - COMPAS
+  - pip:
+    - git+https://github.com/compas-dev/compas_ags.git#egg=compas_ags
+    - git+https://github.com/compas-dev/compas_tna.git#egg=compas_tna
