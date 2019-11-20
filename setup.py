@@ -65,4 +65,5 @@ setup(
         'console_scripts': [],
     },
     ext_modules=[],
+    scripts=[]
 )
