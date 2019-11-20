@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<RhinoUI default_language_id="1033" guid="42126ae6-a8c7-4aa3-b3fb-eaa24c9a58b8" localize="False" major_ver="2" minor_ver="0">
+  <extend_rhino_menus>
+    <menu guid="f8b1fcfc-6a3f-4bfd-b082-acc09f5f2a24">
+      <text>
+        <locale_1033>Extend Rhino Menus</locale_1033>
+      </text>
+    </menu>
+  </extend_rhino_menus>
+  <menus/>
+  <tool_bar_groups>
+    <tool_bar_group active_tool_bar_group="" dock_bar_guid32="" dock_bar_guid64="" guid="5f3ec363-39f9-4f39-a0d6-8b53b41fcf15" hide_single_tab="False" point_floating="0,0" single_file="False">
+      <text>
+        <locale_1033>RV2</locale_1033>
+      </text>
+      <tool_bar_group_item guid="85290bb8-16e5-411a-8447-197759953f45" major_version="1" minor_version="1">
+        <text>
+          <locale_1033>RV2</locale_1033>
+        </text>
+        <tool_bar_id>892de914-2ead-4a13-a9e7-657dbe615b60</tool_bar_id>
+      </tool_bar_group_item>
+    </tool_bar_group>
+  </tool_bar_groups>
+  <tool_bars>
+    <tool_bar guid="892de914-2ead-4a13-a9e7-657dbe615b60" item_display_style="text_only">
+      <text>
+        <locale_1033>RV2</locale_1033>
+      </text>
+      <tool_bar_item button_display_mode="control_only" button_style="normal" guid="a14428a6-aaba-43cf-a213-2ee6af069464">
+        <left_macro_id>c5b0769c-0d3f-46dc-a779-d5cbe819d4a6</left_macro_id>
+        <right_macro_id>None</right_macro_id>
+      </tool_bar_item>
+    </tool_bar>
+  </tool_bars>
+  <macros>
+    <macro_item guid="c5b0769c-0d3f-46dc-a779-d5cbe819d4a6">
+      <text>
+        <locale_1033>RV2_init</locale_1033>
+      </text>
+      <script>-_RV2_init</script>
+      <tooltip>
+        <locale_1033/>
+      </tooltip>
+      <help_text>
+        <locale_1033/>
+      </help_text>
+      <button_text>
+        <locale_1033>RV2_init</locale_1033>
+      </button_text>
+      <menu_text>
+        <locale_1033>RV2_init</locale_1033>
+      </menu_text>
+    </macro_item>
+  </macros>
+  <bitmaps>
+    <small_bitmap item_height="16" item_width="16">
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6Q
+AAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAATSURBVDhPYxgFo2AUjAIwYGAAAA
+QQAAGnRHxjAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+    </small_bitmap>
+    <normal_bitmap item_height="24" item_width="24">
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6Q
+AAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVEhL7cEBAQAAAIIg/6+uIU
+AAAFwNCRgAAdACW14AAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+    </normal_bitmap>
+    <large_bitmap item_height="32" item_width="32">
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6Q
+AAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAaSURBVFhH7cEBAQAAAIIg/69uSE
+AAAADAuRoQIAABnXhJQwAAAABJRU5ErkJgggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+    </large_bitmap>
+  </bitmaps>
+  <scripts/>
+</RhinoUI>

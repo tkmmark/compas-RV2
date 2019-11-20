@@ -1,0 +1,51 @@
+{
+    "plugin":
+    {
+        "id": "{949ca7a4-7ddf-4939-8a5b-d945d5ac0bc8}",
+        "version": "0.1.0",
+        "title": "RV2"
+    },
+    "ui":
+    {
+        "macros":
+        [
+            "RV2init",
+            "RV2settings",
+            "RV2file",
+            "RV2form",
+            "RV2force",
+            "RV2horizontal",
+            "RV2Vertical"
+        ],
+        "menus":
+        [
+
+        ],
+        "toolbars":
+        [
+            {
+                "name": "RV2",
+                "items":
+                [
+                    {"text": "init", "left": "RV2init"},
+                    {"text": "settings", "left": "RV2settings"},
+                    {"text": "file", "left": "RV2file"},
+                    {"text": "form", "left": "RV2form"},
+                    {"text": "force", "left": "RV2force"},
+                    {"text": "horizontal", "left": "RV2horizontal"},
+                    {"text": "vertical", "left": "RV2vertical"}
+                ]
+            }
+        ],
+        "toolbargroups":
+        [
+            {
+                "name": "RV2",
+                "toolbars":
+                [
+                    "RV2"
+                ]
+            }
+        ]
+    }
+}
