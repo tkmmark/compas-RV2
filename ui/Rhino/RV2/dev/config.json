@@ -7,19 +7,31 @@
     },
     "ui":
     {
-        "macros":
+        "commands":
         [
-            "RV2init",
-            "RV2settings",
-            "RV2file",
-            "RV2form",
-            "RV2force",
-            "RV2horizontal",
-            "RV2Vertical"
+            {"name": "RV2init", "button_text": "init", "menu_text": "Init"},
+            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings"},
+            {"name": "RV2file", "button_text": "file", "menu_text": "File"},
+            {"name": "RV2form", "button_text": "form", "menu_text": "Form"},
+            {"name": "RV2form_attributes", "button_text": "form_@", "menu_text": "Form Attributes"},
+            {"name": "RV2form_vertices_attributes", "button_text": "form_v@", "menu_text": "Form Vertex Attributes"},
+            {"name": "RV2form_edges_attributes", "button_text": "form_e@", "menu_text": "Form Edge Attributes"},
+            {"name": "RV2form_faces_attributes", "button_text": "form_f@", "menu_text": "Form Face Attributes"},
+            {"name": "RV2force", "button_text": "force", "menu_text": "Force"},
+            {"name": "RV2horizontal", "button_text": "horizontal", "menu_text": "Horizontal"},
+            {"name": "RV2vertical", "button_text": "vertical", "menu_text": "Vertical"}
         ],
         "menus":
         [
-
+            {
+                "name": "Formdiagram",
+                "items":
+                [
+                    {"command": "RV2form_attributes"},
+                    {"command": "RV2form_vertices_attributes"},
+                    {"command": "RV2form_edges_attributes"}
+                ]
+            }
         ],
         "toolbars":
         [
@@ -27,26 +39,24 @@
                 "name": "RV2",
                 "items":
                 [
-                    {"text": "init", "left": "RV2init"},
-                    {"text": "settings", "left": "RV2settings"},
-                    {"text": "file", "left": "RV2file"},
-                    {"text": "form", "left": "RV2form"},
-                    {"text": "force", "left": "RV2force"},
-                    {"text": "horizontal", "left": "RV2horizontal"},
-                    {"text": "vertical", "left": "RV2vertical"}
+                    {"left": "RV2init"},
+                    {"left": "RV2settings"},
+                    {"left": "RV2file"},
+                    {"type": "separator"},
+                    {"left": "RV2form"},
+                    {"left": "RV2force"},
+                    {"left": "RV2horizontal"},
+                    {"type": "separator"},
+                    {"left": "RV2vertical"}
                 ]
             },
             {
                 "name": "RV2.form",
                 "items":
                 [
-                    {"text": "init", "left": "RV2init"},
-                    {"text": "settings", "left": "RV2settings"},
-                    {"text": "file", "left": "RV2file"},
-                    {"text": "form", "left": "RV2form"},
-                    {"text": "force", "left": "RV2force"},
-                    {"text": "horizontal", "left": "RV2horizontal"},
-                    {"text": "vertical", "left": "RV2vertical"}
+                    {"left": "RV2form_attributes"},
+                    {"left": "RV2form_vertices_attributes"},
+                    {"left": "RV2form_edges_attributes"}
                 ]
             }
         ],
@@ -56,7 +66,8 @@
                 "name": "RV2",
                 "toolbars":
                 [
-                    "RV2"
+                    "RV2",
+                    "RV2.form"
                 ]
             }
         ]

@@ -101,30 +101,25 @@ def from_lines(root):
 
 
 def from_mesh(root):
-    guids = compas_rhino.select_lines()
-    if not guids:
+    guid = compas_rhino.select_mesh()
+    if not guid:
         return
-    lines = compas_rhino.get_line_coordinates(guids)
-    form = FormDiagram.from_lines(lines)
+    form = FormDiagram.from_rhinomesh(guid)
     return form
 
 
 def from_surface(root):
-    guids = compas_rhino.select_lines()
-    if not guids:
+    # add option for uv versus heighfield?
+    # add option for patches?
+    guid = compas_rhino.select_surface()
+    if not guid:
         return
-    lines = compas_rhino.get_line_coordinates(guids)
-    form = FormDiagram.from_lines(lines)
+    form = FormDiagram.from_rhinosurface(guid)
     return form
 
 
 def from_features(root):
-    guids = compas_rhino.select_lines()
-    if not guids:
-        return
-    lines = compas_rhino.get_line_coordinates(guids)
-    form = FormDiagram.from_lines(lines)
-    return form
+    raise NotImplementedError
 
 
 config = {
@@ -178,7 +173,10 @@ def RunCommand(is_interactive):
     if not action:
         return
 
+    form = action(RV2["session"]["cwd"])
 
+    if form:
+        form.draw(RV2["settings"])
 
 
 # ==============================================================================

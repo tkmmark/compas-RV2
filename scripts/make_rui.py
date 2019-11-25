@@ -1,7 +1,5 @@
 import os
-import shutil
-from zipfile import ZipFile
-
+import json
 
 HERE = os.path.dirname(__file__)
 FILE_I = os.path.join(HERE, "../ui/Rhino/RV2/dev/config.json")
@@ -9,7 +7,6 @@ FILE_O = os.path.join(HERE, "../ui/Rhino/RV2/dev/RV2.rui")
 
 
 def main():
-
     with open(FILE_I, "r") as f:
         config = json.load(f)
 

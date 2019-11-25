@@ -31,6 +31,13 @@ else:
 __commandname__ = "RV2init"
 
 
+# recode this in a C# plugin
+# start the server
+# load the plugin toolbar
+# restart the server
+# ...
+
+
 def RunCommand(is_interactive):
     sc.sticky["RV2"] = {
         # the names of the settings can be split at the dot to allow for grouping

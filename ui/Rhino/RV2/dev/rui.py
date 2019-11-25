@@ -216,17 +216,14 @@ class Rui(object):
         e_locale = ET.SubElement(e_text, "locale_1033")
         e_locale.text = menu["name"]
         for item in menu["items"]:
-            if item["type"] == "normal":
-                e_macro = self.macros[item["macro"]]
+            if "command" in item:
+                e_macro = self.macros[item["command"]]
                 macro_guid = e_macro.attrib["guid"]
                 self.add_menuitem(e_menu, macro_guid)
-                continue
-            if item["type"] == "separator":
-                self.add_menuseparator(e_menu)
-                continue
-            if item["type"] == "submenu":
+            elif "items" in item:
                 self.add_menu(item, root=e_menu)
-                continue
+            elif item.get("type") == "separator":
+                self.add_menuseparator(e_menu)
 
     def add_menuitem(self, root, macro_id):
         guid = uuid.uuid4()
@@ -258,22 +255,20 @@ class Rui(object):
         self.root_toolbars.append(e_tb)
         self.toolbars[toolbar["name"]] = e_tb
         for item in toolbar["items"]:
-            if item.get("type", "normal") == "normal":
-                left_guid = None
-                left_macro = item.get("left_macro", item.get("left"))
-                if left_macro:
-                    e_left = self.macros[left_macro]
-                    left_guid = e_left.attrib["guid"]
-                right_guid = None
-                right_macro = item.get("right_macro", item.get("right"))
-                if right_macro:
-                    e_right = self.macros[right_macro]
-                    right_guid = e_right.attrib["guid"]
-                self.add_toolbaritem(e_tb, left_guid, right_guid)
-                continue
-            if item["type"] == "separator":
+            if item.get("type") == "separator":
                 self.add_toolbarseparator(e_tb)
                 continue
+            left_guid = None
+            left_macro = item.get("left")
+            if left_macro:
+                e_left = self.macros[left_macro]
+                left_guid = e_left.attrib["guid"]
+            right_guid = None
+            right_macro = item.get("right")
+            if right_macro:
+                e_right = self.macros[right_macro]
+                right_guid = e_right.attrib["guid"]
+            self.add_toolbaritem(e_tb, left_guid, right_guid)
 
     def add_toolbaritem(self, root, left_macro_id, right_macro_id):
         guid = uuid.uuid4()
@@ -323,27 +318,30 @@ class Rui(object):
 if __name__ == "__main__":
 
     HERE = os.path.dirname(__file__)
-    FILE = os.path.join(HERE, "config.json")
+    FILE_I = os.path.join(HERE, "config.json")
+    FILE_O = os.path.join(HERE, "RV2.rui")
 
-    with open(FILE, "r") as f:
+    rui = Rui(FILE_O)
+
+    # add this to from_json
+    with open(FILE_I, "r") as f:
         config = json.load(f)
 
-    macros = []
-    for name in config["rui"]["macros"]:
-        macros.append({
-            "name": name,
-            "script": "-_{}".format(name),
-            "tooltip": "",
-            "help_text": "",
-            "button_text": name,
-            "menu_text": name
+    # move this to add_commands
+    commands = []
+    for cmd in config["ui"]["commands"]:
+        commands.append({
+            "name": cmd["name"],
+            "script": "-_{}".format(cmd["name"]),
+            "tooltip": cmd.get("tooltip"),
+            "help_text": cmd.get("help_text"),
+            "button_text": cmd["button_text"],
+            "menu_text": cmd.get("menu_text")
         })
 
-    rui = Rui(os.path.join(HERE, "RV2.rui"))
-
     rui.init()
-    rui.add_macros(macros)
-    rui.add_menus(config["rui"]["menus"])
-    rui.add_toolbars(config["rui"]["toolbars"])
-    rui.add_toolbargroups(config["rui"]["toolbargroups"])
+    rui.add_macros(commands)
+    rui.add_menus(config["ui"]["menus"])
+    rui.add_toolbars(config["ui"]["toolbars"])
+    rui.add_toolbargroups(config["ui"]["toolbargroups"])
     rui.write()
