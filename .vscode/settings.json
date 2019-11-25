@@ -1,0 +1,7 @@
+{
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true,
+    "python.pythonPath": "/Users/vanmelet/anaconda3/envs/rv2/bin/python",
+    "restructuredtext.confPath": "${workspaceFolder}/docsource/conf.py"
+}

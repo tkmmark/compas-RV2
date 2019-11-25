@@ -35,6 +35,19 @@
                     {"text": "horizontal", "left": "RV2horizontal"},
                     {"text": "vertical", "left": "RV2vertical"}
                 ]
+            },
+            {
+                "name": "RV2.form",
+                "items":
+                [
+                    {"text": "init", "left": "RV2init"},
+                    {"text": "settings", "left": "RV2settings"},
+                    {"text": "file", "left": "RV2file"},
+                    {"text": "form", "left": "RV2form"},
+                    {"text": "force", "left": "RV2force"},
+                    {"text": "horizontal", "left": "RV2horizontal"},
+                    {"text": "vertical", "left": "RV2vertical"}
+                ]
             }
         ],
         "toolbargroups":
