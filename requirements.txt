@@ -1,1 +1,5 @@
-COMPAS>=0.11.0
+COMPAS
+compas_ags
+compas_tna
+compas_pattern
+compas_cloud

@@ -4,4 +4,4 @@ from __future__ import division
 
 from .rhinodiagram import RhinoDiagram
 
-__all__ = [name for name in dir if not name.startswith('_')]
+__all__ = [name for name in dir() if not name.startswith('_')]
