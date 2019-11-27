@@ -46,15 +46,29 @@ def RunCommand(is_interactive):
             "ext": 'rv2',
             "current": None
         },
-        "settings": {
-            "layers.form": "RV2::FormDiagram",
-            "layers.force": "RV2::ForceDiagram",
-            "layers.thrust": "RV2::ThrustNetwork"
-        },
         "data": {
             "form": None,
             "force": None,
             "thrust": None
+        },
+        "settings": {
+            "layers.form": "RV2::FormDiagram",
+            "layers.force": "RV2::ForceDiagram",
+            "layers.thrust": "RV2::ThrustNetwork",
+
+            "show.form.vertices": True,
+            "show.form.edges": True,
+            "show.form.faces": True,
+
+            "show.force.vertices": True,
+            "show.force.edges": True,
+            "show.force.faces": True,
+
+            "color.form.vertices": (0, 0, 0),
+            "color.form.vertices:is_anchor": (255, 0, 0),
+
+            "color.form.edges": (0, 0, 0),
+            "color.form.faces": (0, 0, 0),
         }
         # solver settings?
     }

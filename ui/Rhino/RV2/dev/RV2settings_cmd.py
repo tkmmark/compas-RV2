@@ -5,6 +5,8 @@ from __future__ import division
 import scriptcontext as sc
 import compas_rhino
 
+from compas_rv2.rhino import RhinoDiagram
+
 
 __commandname__ = "RV2settings"
 
@@ -22,11 +24,14 @@ def RunCommand(is_interactive):
 
     if compas_rhino.update_settings(settings):
         if form:
-            form.draw(settings)
+            rhinoform = RhinoDiagram(form)
+            rhinoform.draw(settings)
         if force:
-            force.draw(settings)
+            rhinoforce = RhinoDiagram(force)
+            rhinoforce.draw(settings)
         if thrust:
-            thrust.draw(settings)
+            rhinothrust = RhinoDiagram(thrust)
+            rhinothrust.draw(settings)
 
 
 # ==============================================================================

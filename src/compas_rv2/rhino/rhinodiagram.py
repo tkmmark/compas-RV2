@@ -40,24 +40,41 @@ class RhinoDiagram(object):
         return compas_rhino.update_settings(self.diagram.attributes)
 
     def update_vertices_attributes(self, keys=None, names=None):
+        if not keys:
+            keys = self.select_vertices()
         return VertexModifier.update_vertex_attributes(self.diagram, keys, names)
 
     def update_edges_attributes(self, keys=None, names=None):
+        if not keys:
+            keys = self.select_edges()
         return EdgeModifier.update_edge_attributes(self.diagram, keys, names)
 
     def update_faces_attributes(self, keys=None, names=None):
+        if not keys:
+            keys = self.select_faces()
         return FaceModifier.update_face_attributes(self.diagram, keys, names)
 
     def draw(self, settings):
-        self.artist.layer = settings.get("layer")
+        self.artist.layer = settings.get("layers.form")
         self.artist.clear_layer()
 
-        if settings.get("show.vertices", True):
-            self.artist.draw_vertices()
-        if settings.get("show.edges", True):
-            self.artist.draw_edges()
-        if settings.get("show.faces", True):
-            self.artist.draw_faces()
+        if settings.get("show.form.vertices", True):
+            color = {}
+            color.update({key: settings.get("color.form.vertices") for key in self.diagram.vertices()})
+            color.update({key: settings.get("color.form.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
+            self.artist.draw_vertices(color=color)
+
+        if settings.get("show.form.edges", True):
+            color = {}
+            color.update({key: settings.get("color.form.edges") for key in self.diagram.edges()})
+            self.artist.draw_edges(color=color)
+
+        if settings.get("show.form.faces", True):
+            color = {}
+            color.update({key: settings.get("color.form.faces") for key in self.diagram.faces()})
+            self.artist.draw_faces(color=color)
+
+        self.artist.redraw()
 
 
 # ==============================================================================

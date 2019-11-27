@@ -9,6 +9,7 @@ import compas_rhino
 from compas_rhino.ui import CommandMenu
 
 from compas_rv2.diagrams import FormDiagram
+from compas_rv2.rhino import RhinoDiagram
 
 
 __commandname__ = "RV2form"
@@ -167,16 +168,25 @@ def RunCommand(is_interactive):
 
     RV2 = sc.sticky["RV2"]
 
+    session = RV2["session"]
+    settings = RV2["settings"]
+    data = RV2["data"]
+
     menu = CommandMenu(config)
     action = menu.select_action()
 
     if not action:
         return
 
-    form = action(RV2["session"]["cwd"])
+    form = action['action'](session["cwd"])
 
-    if form:
-        form.draw(RV2["settings"])
+    if not form:
+        return
+
+    diagram = RhinoDiagram(form)
+    diagram.draw(settings)
+
+    data["form"] = form
 
 
 # ==============================================================================
