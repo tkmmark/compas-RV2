@@ -54,28 +54,6 @@ class RhinoDiagram(object):
             keys = self.select_faces()
         return FaceModifier.update_face_attributes(self.diagram, keys, names)
 
-    def draw(self, settings):
-        self.artist.layer = settings.get("layers.form")
-        self.artist.clear_layer()
-
-        if settings.get("show.form.vertices", True):
-            color = {}
-            color.update({key: settings.get("color.form.vertices") for key in self.diagram.vertices()})
-            color.update({key: settings.get("color.form.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
-            self.artist.draw_vertices(color=color)
-
-        if settings.get("show.form.edges", True):
-            color = {}
-            color.update({key: settings.get("color.form.edges") for key in self.diagram.edges()})
-            self.artist.draw_edges(color=color)
-
-        if settings.get("show.form.faces", True):
-            color = {}
-            color.update({key: settings.get("color.form.faces") for key in self.diagram.faces()})
-            self.artist.draw_faces(color=color)
-
-        self.artist.redraw()
-
 
 # ==============================================================================
 # Main

@@ -9,8 +9,11 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
+from compas_rhino.etoforms import TextForm
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
+from compas_rv2.rhino import RhinoFormDiagram
+from compas_rv2.rhino import RhinoForceDiagram
 
 
 __commandname__ = "RV2file"
@@ -114,7 +117,9 @@ config = {
 def RunCommand(is_interactive):
     # can this be moved to a decorator
     if "RV2" not in sc.sticky:
-        raise Exception("Initialise the plugin first!")
+        form = TextForm('Initialise the plugin first!', 'RV2')
+        form.show()
+        return
 
     RV2 = sc.sticky["RV2"]
 
@@ -141,23 +146,26 @@ def RunCommand(is_interactive):
         if settings:
             RV2["settings"].update(settings)
 
-        form, force, thrust = None, None, None
+        form, force = None, None
 
         if data:
             form = data.get("form")
             force = data.get("force")
-            thrust = data.get("thrust")
+            # thrust = data.get("thrust")
 
             if form:
-                form.draw(RV2["settings"], clear_layer=True)
+                formdiagram = RhinoFormDiagram(form)
+                formdiagram.draw(RV2["settings"])
             if force:
-                force.draw(RV2["settings"], clear_layer=True)
-            if thrust:
-                thrust.draw(RV2["settings"], clear_layer=True)
+                forcediagram = RhinoForceDiagram(force)
+                forcediagram.draw(RV2["settings"])
+            # if thrust:
+            #     thrustdiagram = RhinoThrustDiagram(thrust)
+            #     thrustdiagram.draw(RV2["settings"])
 
         RV2["data"]["form"] = form
         RV2["data"]["force"] = force
-        RV2["data"]["thrust"] = thrust
+        # RV2["data"]["thrust"] = thrust
 
     # only ask for a filepath if there is none
     elif action["name"] == "save":
