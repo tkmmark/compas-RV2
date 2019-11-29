@@ -5,11 +5,11 @@ from __future__ import division
 import scriptcontext as sc
 
 import compas_rhino
+from compas_rhino.etoforms import TextForm
+from compas_rv2.rhino import RhinoFormDiagram
 
-from compas_rv2.rhino import RhinoDiagram
 
-
-__commandname__ = "RV2form_faces_attributes"
+__commandname__ = "RV2form_update_boundaries"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -17,18 +17,21 @@ HERE = compas_rhino.get_document_dirname()
 
 def RunCommand(is_interactive):
     if "RV2" not in sc.sticky:
-        raise Exception("Initialise the plugin first!")
+        form = TextForm('Initialise the plugin first!', 'RV2')
+        form.show()
+        return
 
     RV2 = sc.sticky["RV2"]
+    settings = RV2["settings"]
     form = RV2["data"]["form"]
 
     if not form:
         return
 
-    diagram = RhinoDiagram(form)
+    form.update_boundaries(feet=2)
 
-    if diagram.update_faces_attributes():
-        diagram.draw(RV2["settings"])
+    diagram = RhinoFormDiagram(form)
+    diagram.draw(settings)
 
 
 # ==============================================================================

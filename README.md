@@ -31,7 +31,7 @@ RhinoVault for Rhino 6 based on COMPAS
 3. Install requirements.
 
    We will install all required packages "from source".
-   Therefore, for each of `compas`, `compas_ags`, `compas_tna`, `compas_pattern`, navigate to the (local) root of the corresponding repo, and do
+   Therefore, for each of `compas`, `compas_ags`, `compas_tna`, `compas_pattern`, and `compas_cloud` navigate to the (local) root of the corresponding repo, and do
 
    ```bash
    pip install -e .
@@ -44,6 +44,7 @@ RhinoVault for Rhino 6 based on COMPAS
    >>> import compas_ags
    >>> import compas_tna
    >>> import compas_pattern
+   >>> import compas_cloud
    >>> exit()
    ```
 

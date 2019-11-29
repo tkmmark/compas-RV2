@@ -5,12 +5,13 @@ from __future__ import division
 import scriptcontext as sc
 
 import compas_rhino
+
 from compas_rhino.etoforms import TextForm
 from compas_rhino.ui import CommandMenu
-from compas_rv2.rhino import RhinoFormDiagram
+from compas_rv2.rhino import RhinoForceDiagram
 
 
-__commandname__ = "RV2form_attributes"
+__commandname__ = "RV2force_attributes"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -33,7 +34,7 @@ def update_attributes_faces(diagram):
 
 
 config = {
-    "message": "FormDiagram Attributes",
+    "message": "ForceDiagram Attributes",
     "options": [
         {"name": "Diagram", "action": update_attributes_diagram},
         {"name": "Vertices", "action": update_attributes_vertices},
@@ -50,14 +51,14 @@ def RunCommand(is_interactive):
         return
 
     RV2 = sc.sticky["RV2"]
-    form = RV2["data"]["form"]
+    force = RV2["data"]["force"]
 
-    if not form:
+    if not force:
         return
 
     settings = RV2["settings"]
 
-    diagram = RhinoFormDiagram(form)
+    diagram = RhinoForceDiagram(force)
 
     menu = CommandMenu(config)
     action = menu.select_action()

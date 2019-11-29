@@ -5,4 +5,4 @@ from __future__ import division
 from .formdiagram import FormDiagram
 from .forcediagram import ForceDiagram
 
-__all__ = [name for name in dir if not name.startswith('_')]
+__all__ = [name for name in dir() if not name.startswith('_')]

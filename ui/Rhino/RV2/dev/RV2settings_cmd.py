@@ -4,15 +4,18 @@ from __future__ import division
 
 import scriptcontext as sc
 import compas_rhino
+from compas_rhino.etoforms import TextForm
+from compas_rv2.rhino import RhinoDiagram
 
 
 __commandname__ = "RV2settings"
 
 
 def RunCommand(is_interactive):
-    # can this be moved to a decorator
     if "RV2" not in sc.sticky:
-        raise Exception("Initialise the plugin first!")
+        form = TextForm('Initialise the plugin first!', 'RV2')
+        form.show()
+        return
 
     form = sc.sticky["RV2"]["data"]["form"]
     force = sc.sticky["RV2"]["data"]["force"]
@@ -22,11 +25,14 @@ def RunCommand(is_interactive):
 
     if compas_rhino.update_settings(settings):
         if form:
-            form.draw(settings)
+            rhinoform = RhinoDiagram(form)
+            rhinoform.draw(settings)
         if force:
-            force.draw(settings)
+            rhinoforce = RhinoDiagram(force)
+            rhinoforce.draw(settings)
         if thrust:
-            thrust.draw(settings)
+            rhinothrust = RhinoDiagram(thrust)
+            rhinothrust.draw(settings)
 
 
 # ==============================================================================

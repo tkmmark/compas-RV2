@@ -7,8 +7,9 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
-
+from compas_rhino.etoforms import TextForm
 from compas_rv2.diagrams import FormDiagram
+from compas_rv2.rhino import RhinoFormDiagram
 
 
 __commandname__ = "RV2form"
@@ -161,11 +162,16 @@ config = {
 
 
 def RunCommand(is_interactive):
-    # can this be moved to a decorator
     if "RV2" not in sc.sticky:
-        raise Exception("Initialise the plugin first!")
+        form = TextForm('Initialise the plugin first!', 'RV2')
+        form.show()
+        return
 
     RV2 = sc.sticky["RV2"]
+
+    session = RV2["session"]
+    settings = RV2["settings"]
+    data = RV2["data"]
 
     menu = CommandMenu(config)
     action = menu.select_action()
@@ -173,10 +179,15 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    form = action(RV2["session"]["cwd"])
+    form = action['action'](session["cwd"])
 
-    if form:
-        form.draw(RV2["settings"])
+    if not form:
+        return
+
+    diagram = RhinoFormDiagram(form)
+    diagram.draw(settings)
+
+    data["form"] = form
 
 
 # ==============================================================================
