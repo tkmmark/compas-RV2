@@ -29,6 +29,9 @@ import rhinoscriptsyntax as rs
 import copy
 
 
+__all__ = ['Skeleton']
+
+
 class Skeleton(Mesh):
     """ class Skeleton is a low poly mesh.
     It stores a few attributes representing a 'skeleton' which functions as the central spine of the mesh.
