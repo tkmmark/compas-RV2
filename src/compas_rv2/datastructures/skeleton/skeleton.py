@@ -11,23 +11,7 @@ from compas.geometry import centroid_points
 from compas.geometry import Vector
 from compas.geometry import add_vectors
 
-from compas_rhino.utilities import objects
-
-from compas_rhino.helpers import network_draw
-from compas_rhino.helpers import mesh_draw_edges
-from compas_rhino.helpers import mesh_draw_vertices
-from compas_rhino.helpers import mesh_select_vertex
-from compas_rhino.helpers import mesh_move_vertex
-from compas_rhino.artists import MeshArtist
-
-import Rhino
-from Rhino.Geometry import Point3d
-from Rhino.Geometry import Line
-from System.Drawing.Color import FromArgb
-
-import rhinoscriptsyntax as rs
 import copy
-
 
 __all__ = ['Skeleton']
 
@@ -59,8 +43,6 @@ class Skeleton(Mesh):
         skeleton = cls()
 
         network = Network.from_lines(lines)
-        network_draw(network, layer='skeleton_edges', clear_layer=False, vertexcolor=(255, 0, 0), edgecolor=(0, 255, 0))
-
         skeleton.mesh_from_network(network)
 
         return skeleton
@@ -70,10 +52,9 @@ class Skeleton(Mesh):
         The leaf_width, node_width, sub_level will remain the same.
         """
         current_lines = []
-        for u, v, attr in self.edges(True):
-            if attr['type'] == 'skeleton_branch':
-                line = [self.vertex_coordinates(u), self.vertex_coordinates(v)]
-                current_lines.append(line)
+        for u, v in self.skeleton_branches():
+            line = [self.vertex_coordinates(u), self.vertex_coordinates(v)]
+            current_lines.append(line)
 
         current_lines += lines
         network = Network.from_lines(current_lines)
@@ -196,66 +177,6 @@ class Skeleton(Mesh):
     # modifiers
     # --------------------------------------------------------------------------
 
-    def dynamic_draw_self(self):
-        """ Update the skeleton leaf width and node width with dynamic draw. """
-        self.dynamic_draw('both_width')
-        mesh_draw_edges(self._subdivide(k=self.attributes['sub_level']), layer='skeleton_diagram_edges', clear_layer=True)
-
-        self.dynamic_draw('node_width')
-        self.draw_self()
-
-    def dynamic_draw(self, flag):
-        gp = Rhino.Input.Custom.GetPoint()
-        if flag == 'node_width':
-            gp.SetCommandPrompt('select a skeleton node vertex')
-        else:
-            gp.SetCommandPrompt('select a skeleton leaf vertex')
-        gp.Get()
-        sp = gp.Point()
-        gp.SetCommandPrompt('confirm the diagram width')
-
-        try:
-            rs.PurgeLayer('skeleton_diagram_edges')
-        except:  # noqa: E722
-            pass
-
-        def OnDynamicDraw(sender, e):
-            cp = e.CurrentPoint
-            dist = cp.DistanceTo(sp)
-            self._update_width(dist, flag)
-            self._update_mesh_vertices_pos()
-            lines = self._get_edge_lines_in_rhino()
-
-            for line in lines:
-                e.Display.DrawLine(line, FromArgb(0, 0, 0), 2)
-
-        gp.DynamicDraw += OnDynamicDraw
-
-        gp.Get()
-        ep = gp.Point()
-        dist = ep.DistanceTo(sp)
-
-        self._update_width(dist, flag)
-        self._update_mesh_vertices_pos()
-
-    def move_skeleton_vertex(self):
-        """ Change the position of a skeleton vertex and update all the other vertices. """
-        key = mesh_select_vertex(self)
-        if self.vertex[key]['type'] == 'skeleton_node' or self.vertex[key]['type'] == 'skeleton_leaf':
-            mesh_move_vertex(self, key)
-            self._update_mesh_vertices_pos()
-        else:
-            print('Not a skeleton vertex! Please select again:')
-            pass
-
-    def move_diagram_vertext(self):
-        """ Change the position of the mesh vertcies.
-        Notice that by this function, change of selected vertex won't affect others.
-        This is different from the Skeleton.move_skeleton_vertex().
-        """
-        keys = mesh_select_vertex(self)
-        mesh_move_vertex(self, keys)
-
     def _update_width(self, dist, flag):
         if flag == 'both_width':
             self.attributes['leaf_width'] = dist
@@ -271,14 +192,14 @@ class Skeleton(Mesh):
         This structure is stored in the face when the faces are created.
         When there is change of skeleton vertex position or the mesh width, the boundary vertices can be traced to be updated.
         """
-        def update_node_boundary(u, v):
+        def update_node_boundary_vertex(u, v):
             fkey = self.halfedge[u][v]
             key = self.face[fkey][3]
             pt = self._get_node_boundary_vertex_pos(u, v)
 
             self.vertex[key].update({'x': pt[0], 'y': pt[1], 'z': pt[2]})
 
-        def update_leaf_boundary(u, v):
+        def update_leaf_boundary_vertex(u, v):
             fkey1 = self.halfedge[u][v]
             fkey2 = self.halfedge[v][u]
             key1 = self.face[fkey1][3]
@@ -292,13 +213,13 @@ class Skeleton(Mesh):
         skeleton_branches = self.skeleton_branches()
         for u, v in skeleton_branches:
             if self.vertex[u]['type'] == 'skeleton_node':
-                update_node_boundary(u, v)
+                update_node_boundary_vertex(u, v)
             else:
-                update_leaf_boundary(u, v)
+                update_leaf_boundary_vertex(u, v)
             if self.vertex[v]['type'] == 'skeleton_node':
-                update_node_boundary(v, u)
+                update_node_boundary_vertex(v, u)
             else:
-                update_leaf_boundary(v, u)
+                update_leaf_boundary_vertex(v, u)
 
     def _get_node_boundary_vertex_pos(self, u, v):
         """ Find the xyz coordinates for a boundary vertex around a skeleton node.
@@ -389,17 +310,6 @@ class Skeleton(Mesh):
 
         return mesh_subdivide_catmullclark(self, k, fixed=corners)
 
-    def _get_edge_lines_in_rhino(self):
-        """ Get rhino object lines for dynamic darw. """
-        sub_mesh = self._subdivide(k=self.attributes['sub_level'])
-        edge_lines = []
-        for u, v in sub_mesh.edges():
-            pts = sub_mesh.edge_coordinates(u, v)
-            line = Line(Point3d(*pts[0]), Point3d(*pts[1]))
-            edge_lines.append(line)
-
-        return edge_lines
-
     def subdivide(self, k=1):
         """ Increase & decrease subdivision level for displaying & exporting high poly mesh. """
         self.attributes['sub_level'] += k
@@ -408,37 +318,6 @@ class Skeleton(Mesh):
         """ Increase & decrease subdivision level for displaying & exporting high poly mesh. """
         if self.attributes['sub_level'] > 1:
             self.attributes['sub_level'] -= k
-
-    def draw_self(self):
-        """ Draw the skeleton mesh in Rhino.
-        Below will be drawn:
-            skeleton vertices
-            skeleton branches
-            low poly mesh vertices
-            high poly mesh edges
-        """
-        skeleton_vertices = self.skeleton_vertices()[0] + self.skeleton_vertices()[1]
-        skeleton_branches = self.skeleton_branches()
-        boundary_vertices = list(set(range(0, self.number_of_vertices())) - set(skeleton_vertices))
-
-        artist = MeshArtist(self)
-        artist.layer = 'skeleton_vertices'
-        artist.clear_layer()
-        artist.draw_vertices(keys=skeleton_vertices, color=(255, 0, 0))
-
-        artist.layer = 'skeleton_edges'
-        artist.clear_layer()
-        artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
-
-        artist.layer = 'skeleton_diagram_vertices'
-        artist.clear_layer()
-        artist.draw_vertices(keys=boundary_vertices, color=(0, 0, 0))
-
-        artist = MeshArtist(self._subdivide(k=self.attributes['sub_level']))
-        artist.layer = 'skeleton_diagram_edges'
-        artist.clear_layer()
-        artist.draw_edges(color=(0, 0, 0))
-        artist.redraw()
 
     def to_diagram(self):
         """ Diagram mesh(high poly) is a mesh without any additional attr or functions from class Skeleton.
@@ -456,92 +335,5 @@ class Skeleton(Mesh):
         return digram_mesh
 
 
-def update_skeleton(skeleton):
-    # this part should be embeded in UI
-
-    while True:
-        operation = rs.GetString('next')
-        if operation == 'move_skeleton':
-            skeleton.move_skeleton_vertex()
-            skeleton.draw_self()
-        elif operation == 'move_diagram':
-            skeleton.move_diagram_vertext()
-            skeleton.draw_self()
-        elif operation == 'subdivide':
-            skeleton.subdivide(k=1)
-            skeleton.draw_self()
-        elif operation == 'merge':
-            skeleton.merge(k=1)
-            skeleton.draw_self()
-        elif operation == 'leaf_width':
-            skeleton.dynamic_draw('leaf_width')
-            skeleton.draw_self()
-        elif operation == 'node_width':
-            skeleton.dynamic_draw('node_width')
-            skeleton.draw_self()
-
-        elif operation == 'add_lines':
-            try:
-                rs.PurgeLayer('skeleton_vertices')
-                rs.PurgeLayer('skeleton_diagram_vertices')
-                rs.PurgeLayer('skeleton_diagram_edges')
-            except:  # noqa E722
-                pass
-
-            line_ids = rs.GetObjects("select curves to add", filter=rs.filter.curve)
-            lines = objects.get_line_coordinates(line_ids)
-            rs.DeleteObjects(line_ids)
-            skeleton.add_skeleton_lines(lines)
-            skeleton.draw_self()
-
-        elif operation == 'remove_lines':
-            skeleton_branches = skeleton.skeleton_branches()
-            branch_names = []
-            for branch in skeleton_branches:
-                branch_names.append('Mesh.edge.{0}-{1}'.format(branch[0], branch[1]))
-
-            def custom_filter(rhino_object, geometry, component_index):
-                if rhino_object.Attributes.Name in branch_names:
-                    return True
-                return False
-
-            try:
-                rs.PurgeLayer('skeleton_vertices')
-                rs.PurgeLayer('skeleton_diagram_vertices')
-                rs.PurgeLayer('skeleton_diagram_edges')
-            except:  # noqa E722
-                pass
-
-            line_ids = rs.GetObjects('select a skeleton line to remove', custom_filter=custom_filter)
-
-            remove_branches = []
-            for line_id in line_ids:
-                name = rs.ObjectName(line_id)
-                branch = (int(name[-3]), int(name[-1]))
-                remove_branches.append(branch)
-
-            skeleton.remove_skeleton_lines(remove_branches)
-            skeleton.draw_self()
-
-        elif operation == 'export':
-            diagram = skeleton.to_diagram()
-            mesh_draw_edges(diagram, layer='form diagram')
-            mesh_draw_vertices(diagram, color=(0, 0, 255), layer='form diagram')
-        elif operation == 'stop':
-            rs.PurgeLayer('skeleton_vertices')
-            break
-        else:
-            break
-
-
 if __name__ == '__main__':
-
-    line_ids = rs.GetObjects("select curves", filter=rs.filter.curve)
-    lines = objects.get_line_coordinates(line_ids)
-    rs.DeleteObjects(line_ids)
-
-    skeleton = Skeleton.from_skeleton_lines(lines)
-    skeleton.dynamic_draw_self()
-    update_skeleton(skeleton)
-
-    skeleton.to_json('skeleton_temp1.json', pretty=True)
+    pass
