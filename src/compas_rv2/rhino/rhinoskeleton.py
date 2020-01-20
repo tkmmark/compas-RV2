@@ -3,12 +3,15 @@ from __future__ import absolute_import
 from __future__ import division
 
 from compas_rhino.utilities import objects
+from compas.geometry import Vector
 
 from compas_rhino.helpers import mesh_draw_edges
 from compas_rhino.helpers import mesh_draw_vertices
 from compas_rhino.helpers import mesh_select_vertex
 from compas_rhino.helpers import mesh_move_vertex
 from compas_rhino.artists import MeshArtist
+from compas_rhino import draw_points
+from compas_rhino import draw_lines
 
 import Rhino
 from Rhino.Geometry import Point3d
@@ -25,6 +28,7 @@ class RhinoSkeleton(object):
 
     def __init__(self, diagram):
         self.diagram = diagram
+        self.draw_skeleton_branches()
 
     def artist(self):
         return MeshArtist(self.diagram.to_diagram())
@@ -38,11 +42,19 @@ class RhinoSkeleton(object):
         self.draw_self()
 
     def dynamic_draw(self, flag):
+
         gp = Rhino.Input.Custom.GetPoint()
         if flag == 'node_width':
-            gp.SetCommandPrompt('select a skeleton node vertex')
+            node_vertex = self.diagram.skeleton_vertices()[0][0]
+            sp = Point3d(*(self.diagram.vertex_coordinates(node_vertex)))
+            gp.SetCommandPrompt('select the node vertex')
         else:
-            gp.SetCommandPrompt('select a skeleton leaf vertex')
+            leaf_vertex = self.diagram.skeleton_vertices()[1][0]
+            sp = Point3d(*(self.diagram.vertex_coordinates(leaf_vertex)))
+            gp.SetCommandPrompt('select the leaf vertex')
+
+        gp.SetBasePoint(sp, False)
+        gp.ConstrainDistanceFromBasePoint(0.1)
         gp.Get()
         sp = gp.Point()
         gp.SetCommandPrompt('confirm the diagram width')
@@ -54,13 +66,34 @@ class RhinoSkeleton(object):
 
         def OnDynamicDraw(sender, e):
             cp = e.CurrentPoint
+            e.Display.DrawDottedLine(sp, cp, FromArgb(0, 0, 0))
+
+            mp = Point3d.Add(sp, cp)
+            mp = Point3d.Divide(mp, 2)
             dist = cp.DistanceTo(sp)
+            e.Display.Draw2dText(str(dist), FromArgb(0, 0, 0), mp, False, 20)
+
             self.diagram._update_width(dist, flag)
             self.diagram._update_mesh_vertices_pos()
             lines = self._get_edge_lines_in_rhino()
 
             for line in lines:
                 e.Display.DrawLine(line, FromArgb(0, 0, 0), 2)
+
+        if flag != 'node_width':
+            u = leaf_vertex
+            v = None
+            for key in self.diagram.halfedge[u]:
+                if self.diagram.vertex[key]['type'] == 'skeleton_node':
+                    v = key
+
+            vec_along_edge = Vector(*(self.diagram.edge_vector(v, u)))
+            vec_offset = vec_along_edge.cross(Vector.Zaxis())
+            vec_rhino = Rhino.Geometry.Vector3d(vec_offset[0], vec_offset[1], vec_offset[2])
+
+            pt_leaf = Point3d(*(self.diagram.vertex_coordinates(u)))
+            line = Line(pt_leaf, vec_rhino)
+            gp.Constrain(line)
 
         gp.DynamicDraw += OnDynamicDraw
 
@@ -103,6 +136,24 @@ class RhinoSkeleton(object):
 
         return edge_lines
 
+    def draw_skeleton_branches(self):
+        skeleton_vertices = self.diagram.skeleton_vertices()[0] + self.diagram.skeleton_vertices()[1]
+        skeleton_branches = self.diagram.skeleton_branches()
+
+        pts = []
+        for key in skeleton_vertices:
+            pts.append({'pos': self.diagram.vertex_coordinates(key), 'color': (255, 0, 0)})
+        draw_points(pts, layer='skeleton_vertices', clear=True, redraw=True)
+
+        lines = []
+        for u, v in skeleton_branches:
+            lines.append({
+                'start': self.diagram.vertex_coordinates(u),
+                'end': self.diagram.vertex_coordinates(v),
+                'color': (0, 255, 0)
+            })
+        draw_lines(lines, layer='skeleton_edges', clear=True, redraw=True)
+
     def draw_self(self):
         """ Draw the skeleton mesh in Rhino.
         Below will be drawn:
@@ -134,7 +185,7 @@ class RhinoSkeleton(object):
         artist.draw_edges(color=(0, 0, 0))
         artist.redraw()
 
-    def update_in_rhino(self):
+    def update(self):
         # this part should be embeded in UI
 
         while True:
