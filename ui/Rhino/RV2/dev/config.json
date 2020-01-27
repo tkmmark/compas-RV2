@@ -19,6 +19,7 @@
             {"name": "RV2form_attributes_vertices", "button_text": "form@V", "menu_text": "Form Vertex Attributes"},
             {"name": "RV2form_attributes_edges", "button_text": "form@E", "menu_text": "Form Edge Attributes"},
             {"name": "RV2form_attributes_faces", "button_text": "form@F", "menu_text": "Form Face Attributes"},
+            {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Form Relax"},
 
             {"name": "RV2force", "button_text": "force", "menu_text": "Force"},
             {"name": "RV2force_attributes", "button_text": "force@", "menu_text": "Force Attributes"},
@@ -43,8 +44,8 @@
                     {"left": "RV2file"},
                     {"left": "RV2form"},
                     {"left": "RV2force"},
-                    {"left": "RV2horizontal"},
-                    {"left": "RV2vertical"}
+                    {"left": "RV2equilibrium_horizontal"},
+                    {"left": "RV2equilibrium_vertical"}
                 ]
             }
         ],
@@ -54,9 +55,7 @@
                 "name": "RV2",
                 "toolbars":
                 [
-                    "RV2",
-                    "RV2.form",
-                    "RV2.force"
+                    "RV2"
                 ]
             }
         ]

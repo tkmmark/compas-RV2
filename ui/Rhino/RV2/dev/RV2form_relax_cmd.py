@@ -33,10 +33,9 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    proxy.package = "compas_rv2.datastructures"
+    proxy.package = "compas_tna.utilities"
     relax = proxy.relax_boundary_openings_proxy
 
-    # anchors = list(form.vertices_where({'is_anchor': True}))
     fixed = list(form.vertices_where({'is_fixed': True}))
     form.data = relax(form.data, fixed)
 
