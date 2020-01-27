@@ -38,7 +38,8 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    horizontal = proxy.package("compas_rv2.equilibrium.horizontal_nodal_proxy")
+    proxy.package = "compas_rv2.equilibrium"
+    horizontal = proxy.horizontal_nodal_proxy
 
     formdata, forcedata = horizontal(form.data, force.data)
 

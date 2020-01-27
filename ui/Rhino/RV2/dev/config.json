@@ -31,19 +31,7 @@
             {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical"}
         ],
         "menus":
-        [
-            {
-                "name": "Formdiagram",
-                "items":
-                [
-                    {"command": "RV2form"},
-                    {"command": "RV2form_attributes_diagram"},
-                    {"command": "RV2form_attributes_vertices"},
-                    {"command": "RV2form_attributes_edges"},
-                    {"command": "RV2form_attributes_faces"}
-                ]
-            }
-        ],
+        [],
         "toolbars":
         [
             {
@@ -53,44 +41,10 @@
                     {"left": "RV2init"},
                     {"left": "RV2settings"},
                     {"left": "RV2file"},
-
-                    {"type": "separator"},
-
                     {"left": "RV2form"},
-                    {"left": "RV2form_attributes"},
-                    {"left": "RV2form_update_boundaries"},
-
-                    {"type": "separator"},
-
                     {"left": "RV2force"},
-                    {"left": "RV2force_attributes"},
-
-                    {"type": "separator"},
-
                     {"left": "RV2horizontal"},
                     {"left": "RV2vertical"}
-                ]
-            },
-            {
-                "name": "RV2.form",
-                "items":
-                [
-                    {"left": "RV2form"},
-                    {"left": "RV2form_diagram_attributes"},
-                    {"left": "RV2form_vertices_attributes"},
-                    {"left": "RV2form_edges_attributes"},
-                    {"left": "RV2form_faces_attributes"}
-                ]
-            },
-            {
-                "name": "RV2.force",
-                "items":
-                [
-                    {"left": "RV2force"},
-                    {"left": "RV2force_diagram_attributes"},
-                    {"left": "RV2force_vertices_attributes"},
-                    {"left": "RV2force_edges_attributes"},
-                    {"left": "RV2force_faces_attributes"}
                 ]
             }
         ],

@@ -4,6 +4,8 @@ RhinoVault for Rhino 6 based on COMPAS
 
 ## Dev install
 
+These installation instructions assume that Anaconda/conda are available on your system.
+
 1. Set up a dedicated `conda` environment.
 
    On Windows.
@@ -12,7 +14,7 @@ RhinoVault for Rhino 6 based on COMPAS
    conda create -n rv2 python=3.7
    ```
 
-   On Mac, also install Python as a framework.
+   On Mac, also install Python as a framework (add ``python.app``).
 
    ```bash
    conda create -n rv2 python=3.7 python.app
@@ -30,8 +32,8 @@ RhinoVault for Rhino 6 based on COMPAS
 
 3. Install requirements.
 
-   We will install all required packages "from source".
-   Therefore, for each of `compas`, `compas_ags`, `compas_tna`, `compas_pattern`, and `compas_cloud` navigate to the (local) root of the corresponding repo, and do
+   Since no requirements are explicitly listed in a "requirements" file, we will install all required packages manually "from source".
+   Therefore, for each of `compas`, `compas_ags`, `compas_tna`, `compas_pattern`, and `compas_cloud` navigate to the root of the corresponding repo, and do
 
    ```bash
    pip install -e .
@@ -86,6 +88,8 @@ RhinoVault for Rhino 6 based on COMPAS
 
    > (Windows) If the command does not appear in the list of possible commands, you may have to open and close the Python Script Editor to initialise the plugin.
 
+   A full list of available commands can be found [here](commands.html).
+
 ## Notes
 
 `ui/Rhino/RV2/dev` contains `RV2.rui`, which defines the Rhino UI for RhinoVault2 on Windows. the file is generated using `rui.py` (command line: `python ui/Rhino/RV2/dev/rui.py`). part of its configuration is in `config.json`, part is in `rui.py`.
@@ -93,5 +97,3 @@ RhinoVault for Rhino 6 based on COMPAS
 on windows, the .rui file can be dragged into Rhino to load the toolbar. on mac, there is no equivalent mechanism. the toolbar has to be created manually and, as far as i know, can't be shared.
 
 just fyi, the .rui file can be converted to a .plist file using the `TestEditToolPaletteCollection` command. you can see the contents of the .plist file in the editor and even update it, but you can't load the palette and use it.
-
-therefore, for now, on mac you have the use the command `RV2ui` to load a set of buttons that correspond to the options that would otherwise be available on the main toolbar: `RV2init`, `RV2settings`, `RV2file`, `RV2form`, `RV2force`, `RV2horizontal`, `RV2vertical`.

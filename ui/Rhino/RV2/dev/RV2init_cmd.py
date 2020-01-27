@@ -25,7 +25,7 @@ except ImportError:
 
 else:
     # replace this by from compas_cloud import Proxy
-    from compas_cloud import Proxy
+    from compas.rpc import Proxy
     from compas_rhino.etoforms import ImageForm
 
 

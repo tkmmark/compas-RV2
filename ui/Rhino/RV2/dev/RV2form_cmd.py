@@ -8,7 +8,7 @@ import scriptcontext as sc
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
-from compas_rv2.diagrams import FormDiagram
+from compas_rv2.datastructures import FormDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 
 
@@ -123,6 +123,10 @@ def from_features(root):
     raise NotImplementedError
 
 
+def from_skeleton(root):
+    raise NotImplementedError
+
+
 config = {
     "name": "form",
     "message": "Form",
@@ -156,6 +160,11 @@ config = {
             "name": "from_features",
             "message": "From features",
             "action": from_features
+        },
+        {
+            "name": "from_skeleton",
+            "message": "From skeleton",
+            "action": from_skeleton
         }
      ]
 }

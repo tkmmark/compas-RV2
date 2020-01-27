@@ -6,7 +6,7 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rv2.diagrams import ForceDiagram
+from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.rhino import RhinoForceDiagram
 
 

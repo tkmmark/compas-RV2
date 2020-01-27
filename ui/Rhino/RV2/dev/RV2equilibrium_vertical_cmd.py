@@ -25,6 +25,7 @@ def RunCommand(is_interactive):
     settings = RV2["settings"]
     form = RV2["data"]["form"]
     force = RV2["data"]["force"]
+    zmax = settings.get('vertical_from_zmax', 1.0)
 
     proxy = sc.sticky["RV2.proxy"]
 
@@ -37,10 +38,12 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    proxy.package = "compas_rv2.equilibrium"
-    vertical = proxy.vertical_nodal_proxy
+    proxy.package = "compas_tna.equilibrium"
+    vertical = proxy.vertical_from_zmax_proxy
 
-    form.data = vertical(form.data)
+    formdata, scale = vertical(form.data, zmax)
+    form.data = formdata
+    force.attributes['scale'] = scale
 
     formdiagram = RhinoFormDiagram(form)
     formdiagram.draw(settings)

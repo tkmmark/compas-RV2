@@ -1,5 +1,0 @@
-COMPAS
-compas_ags
-compas_tna
-compas_pattern
-compas_cloud
