@@ -34,6 +34,26 @@ class Skeleton(Mesh):
         self.default_edge_attributes.update({'type': None})
 
     # --------------------------------------------------------------------------
+    # special attributes
+    # --------------------------------------------------------------------------
+
+    @property
+    def leaf_width(self):
+        return self.attributes['leaf_width']
+
+    @leaf_width.setter
+    def leaf_width(self, width):
+        self.attributes['leaf_width'] = width
+
+    @property
+    def node_width(self):
+        return self.attributes['node_width']
+
+    @node_width.setter
+    def node_width(self, width):
+        self.attributes['node_width'] = width
+
+    # --------------------------------------------------------------------------
     # constructors
     # --------------------------------------------------------------------------
 
@@ -61,7 +81,7 @@ class Skeleton(Mesh):
 
         self.clear()
         self.mesh_from_network(network)
-        self._update_mesh_vertices_pos()
+        self.update_mesh_vertices_pos()
 
     def remove_skeleton_lines(self, line_keys=[]):
         """ Update skeleton mesh structure from a new network which is created with the currrent skeleton lines subtract added lines.
@@ -78,7 +98,7 @@ class Skeleton(Mesh):
 
         self.clear()
         self.mesh_from_network(network)
-        self._update_mesh_vertices_pos()
+        self.update_mesh_vertices_pos()
 
     # --------------------------------------------------------------------------
     # builders
@@ -109,8 +129,10 @@ class Skeleton(Mesh):
     def _add_skeleton_branches(self, network):
         self.halfedge = copy.deepcopy(network.halfedge)
         self.update_default_edge_attributes({'type': None})
-        for u, v in network.edges():
-            self.edgedata[(u, v)].update({'type': 'skeleton_branch'})
+        for key, attr in self.edges(True):
+            attr.update({'type': 'skeleton_branch'})
+        # for u, v in network.edges():
+        #     self.edgedata[(u, v)].update({'type': 'skeleton_branch'})
 
     def _add_boundary_vertices(self, network):
         """ Assgin two new keys to each network halfedge so a face can be added to skeleton.
@@ -148,6 +170,7 @@ class Skeleton(Mesh):
                 get_boundary_vertex_keys(network, vertex_prvs, u, ep=current_key)
 
                 self.add_vertex(current_key)
+                self.vertex[current_key].update({'type': None})
 
                 current_key += 1
 
@@ -159,6 +182,8 @@ class Skeleton(Mesh):
 
             self.add_vertex(current_key)
             self.add_vertex(current_key+1)
+            self.vertex[current_key].update({'type': None})
+            self.vertex[current_key+1].update({'type': None})
 
             current_key += 2
 
@@ -186,7 +211,7 @@ class Skeleton(Mesh):
         else:
             self.attributes['node_width'] = dist
 
-    def _update_mesh_vertices_pos(self):
+    def update_mesh_vertices_pos(self):
         """
         There is a parent-children relationship between skeleton vertices and boundary vertices.
         This structure is stored in the face when the faces are created.
@@ -205,6 +230,8 @@ class Skeleton(Mesh):
             key1 = self.face[fkey1][3]
             key2 = self.face[fkey2][2]
 
+            if self.attributes['leaf_width'] == 0:
+                self.attributes['leaf_width'] = self.attributes['node_width']
             pt1, pt2 = self._get_leaf_boundary_vertex_pos(u, v)
 
             self.vertex[key1].update({'x': pt1[0], 'y': pt1[1], 'z': pt1[2]})
@@ -278,28 +305,21 @@ class Skeleton(Mesh):
         return prvs
 
     def skeleton_vertices(self):
-        skeleton_nodes = []
-        skeleton_leaves = []
-
-        for key in self.vertex:
-            if self.vertex[key]['type'] == 'skeleton_node':
-                skeleton_nodes.append(key)
-            elif self.vertex[key]['type'] == 'skeleton_leaf':
-                skeleton_leaves.append(key)
+        skeleton_nodes = list(self.vertices_where({'type': 'skeleton_node'}))
+        skeleton_leaves = list(self.vertices_where({'type': 'skeleton_leaf'}))
 
         return skeleton_nodes, skeleton_leaves
 
     def skeleton_branches(self):
         skeleton_branches = []
-        for u, v, attr in self.edges(True):
+        for key, attr in self.edges(True):
             if attr['type'] == 'skeleton_branch':
-                skeleton_branches.append((u, v))
+                skeleton_branches.append(key)
 
         return skeleton_branches
 
     # --------------------------------------------------------------------------
     # visualization
-    # exporting digrams
     # --------------------------------------------------------------------------
 
     def _subdivide(self, k=1):
@@ -319,6 +339,10 @@ class Skeleton(Mesh):
         if self.attributes['sub_level'] > 1:
             self.attributes['sub_level'] -= k
 
+    # --------------------------------------------------------------------------
+    # exporting digrams
+    # --------------------------------------------------------------------------
+
     def to_diagram(self):
         """ Diagram mesh(high poly) is a mesh without any additional attr or functions from class Skeleton.
         It cannot be edited again once exported as diagram for further analysis.
@@ -333,6 +357,38 @@ class Skeleton(Mesh):
             digram_mesh.add_face(highpoly_mesh.face[fkey])
 
         return digram_mesh
+
+    def to_lines(self):
+        lines = []
+        for u, v in self.to_diagram().edges():
+            lines.append(self.to_diagram().edge_coordinates(u, v))
+        return lines
+
+    def to_support_vertices(self):
+        support_vertices = []
+        leaf_vertices = list(self.vertices_where({'type': 'skeleton_leaf'}))
+        iterations = self.attributes['sub_level']
+
+        for key in leaf_vertices:
+            vertices_on_edge = [key]
+            for nbr in self.vertex_neighbors(key):
+                if self.vertex[nbr]['type'] != 'skeleton_node':
+                    vertices_on_edge.append(nbr)
+
+            vertices_temp = [key]
+            for i in range(iterations):
+                vertices_temp_2 = []
+                mesh = self._subdivide(i+1)
+                for v in vertices_temp:
+                    for nbr in mesh.vertex_neighbors(v):
+                        if mesh.vertex_degree(nbr) == 3:
+                            vertices_on_edge.append(nbr)
+                            vertices_temp_2.append(nbr)
+                vertices_temp = vertices_temp_2
+
+            support_vertices.extend(vertices_on_edge)
+
+        return support_vertices
 
 
 if __name__ == '__main__':

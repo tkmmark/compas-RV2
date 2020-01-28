@@ -5,10 +5,12 @@ from __future__ import division
 from compas_rhino.utilities import objects
 from compas.geometry import Vector
 
-from compas_rhino.helpers import mesh_draw_edges
-from compas_rhino.helpers import mesh_draw_vertices
-from compas_rhino.helpers import mesh_select_vertex
-from compas_rhino.helpers import mesh_move_vertex
+# from compas_rhino.helpers import mesh_draw_edges
+# from compas_rhino.helpers import mesh_draw_vertices
+# from compas_rhino.helpers import mesh_select_vertex
+# from compas_rhino.helpers import mesh_move_vertex
+from compas_rhino.selectors import mesh_select_vertex
+from compas_rhino.modifiers import mesh_move_vertex
 from compas_rhino.artists import MeshArtist
 from compas_rhino import draw_points
 from compas_rhino import draw_lines
@@ -30,13 +32,16 @@ class RhinoSkeleton(object):
         self.diagram = diagram
         self.draw_skeleton_branches()
 
-    def artist(self):
-        return MeshArtist(self.diagram.to_diagram())
-
     def dynamic_draw_self(self):
         """ Update the skeleton leaf width and node width with dynamic draw. """
-        self.dynamic_draw('both_width')
-        mesh_draw_edges(self.diagram.to_diagram(), layer='skeleton_diagram_edges', clear_layer=True)
+        if self.diagram.skeleton_vertices()[1] != []:
+            self.dynamic_draw('both_width')
+            artist = MeshArtist(self.diagram.to_diagram())
+            artist.layer = 'skeleton_diagram_edges'
+            artist.clear_layer()
+            artist.draw_edges()
+            artist.redraw()
+            # mesh_draw_edges(self.diagram.to_diagram(), layer='skeleton_diagram_edges', clear_layer=True)
 
         self.dynamic_draw('node_width')
         self.draw_self()
@@ -74,7 +79,7 @@ class RhinoSkeleton(object):
             e.Display.Draw2dText(str(dist), FromArgb(0, 0, 0), mp, False, 20)
 
             self.diagram._update_width(dist, flag)
-            self.diagram._update_mesh_vertices_pos()
+            self.diagram.update_mesh_vertices_pos()
             lines = self._get_edge_lines_in_rhino()
 
             for line in lines:
@@ -102,7 +107,7 @@ class RhinoSkeleton(object):
         dist = ep.DistanceTo(sp)
 
         self.diagram._update_width(dist, flag)
-        self.diagram._update_mesh_vertices_pos()
+        self.diagram.update_mesh_vertices_pos()
 
     def move_skeleton_vertex(self):
         """ Change the position of a skeleton vertex and update all the other vertices. """
@@ -123,7 +128,7 @@ class RhinoSkeleton(object):
         mesh_move_vertex(self.diagram, keys)
 
     def update_diagram(self):
-        self.diagram._update_mesh_vertices_pos()
+        self.diagram.update_mesh_vertices_pos()
 
     def _get_edge_lines_in_rhino(self):
         """ Get rhino object lines for dynamic darw. """
@@ -143,7 +148,7 @@ class RhinoSkeleton(object):
         pts = []
         for key in skeleton_vertices:
             pts.append({'pos': self.diagram.vertex_coordinates(key), 'color': (255, 0, 0)})
-        draw_points(pts, layer='skeleton_vertices', clear=True, redraw=True)
+        draw_points(pts, layer='skeleton_vertices', clear=True, redraw=False)
 
         lines = []
         for u, v in skeleton_branches:
@@ -166,7 +171,7 @@ class RhinoSkeleton(object):
         skeleton_branches = self.diagram.skeleton_branches()
         boundary_vertices = list(set(range(0, self.diagram.number_of_vertices())) - set(skeleton_vertices))
 
-        artist = self.artist()
+        artist = MeshArtist(self.diagram)
 
         artist.layer = 'skeleton_vertices'
         artist.clear_layer()
@@ -175,6 +180,8 @@ class RhinoSkeleton(object):
         artist.layer = 'skeleton_edges'
         artist.clear_layer()
         artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
+
+        artist = MeshArtist(self.diagram.to_diagram())
 
         artist.layer = 'skeleton_diagram_vertices'
         artist.clear_layer()
@@ -197,8 +204,12 @@ class RhinoSkeleton(object):
                 self.move_diagram_vertext()
                 self.draw_self()
             elif operation == 'leaf_width':
-                self.dynamic_draw('leaf_width')
-                self.draw_self()
+                if self.diagram.skeleton_vertices()[1] != []:
+                    self.dynamic_draw('leaf_width')
+                    self.draw_self()
+                else:
+                    print('this skeleton doesn\'t have any leaf!')
+                    pass
             elif operation == 'node_width':
                 self.dynamic_draw('node_width')
                 self.draw_self()
@@ -242,7 +253,7 @@ class RhinoSkeleton(object):
                 except:  # noqa E722
                     pass
 
-                line_ids = rs.GetObjects('select a skeleton line to remove', custom_filter=custom_filter)
+                line_ids = rs.GetObjects('select skeleton lines to remove', custom_filter=custom_filter)
 
                 remove_branches = []
                 for line_id in line_ids:
@@ -253,12 +264,13 @@ class RhinoSkeleton(object):
                 self.diagram.remove_skeleton_lines(remove_branches)
                 self.draw_self()
 
-            elif operation == 'export':
-                diagram = self.diagram.to_diagram()
-                mesh_draw_edges(diagram, layer='form diagram')
-                mesh_draw_vertices(diagram, color=(0, 0, 255), layer='form diagram')
+            # elif operation == 'export':
+            #     rs.PurgeLayer('skeleton_vertices')
+            #     rs.PurgeLayer('skeleton_diagram_vertices')
+            #     diagram = self.diagram.to_diagram()
+            #     mesh_draw_edges(diagram, layer='form diagram')
+            #     mesh_draw_vertices(diagram, color=(0, 0, 255), layer='form diagram')
             elif operation == 'stop':
-                rs.PurgeLayer('skeleton_vertices')
                 break
             else:
                 break
