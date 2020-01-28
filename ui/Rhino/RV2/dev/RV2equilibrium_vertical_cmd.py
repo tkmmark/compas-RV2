@@ -25,7 +25,7 @@ def RunCommand(is_interactive):
     settings = RV2["settings"]
     form = RV2["data"]["form"]
     force = RV2["data"]["force"]
-    zmax = settings.get('vertical_from_zmax', 1.0)
+    zmax = settings["vertical.zmax"]
 
     proxy = sc.sticky["RV2.proxy"]
 

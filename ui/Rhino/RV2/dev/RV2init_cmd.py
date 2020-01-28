@@ -77,6 +77,12 @@ def RunCommand(is_interactive):
 
             "color.form.edges": (0, 0, 0),
             "color.form.faces": (0, 0, 0),
+
+            "vertical.zmax": 4.0,
+            "vertical.kmax": 100,
+
+            "horizontal.kmax": 100,
+            "horizontal.alpha": 100
         }
         # solver settings?
     }
