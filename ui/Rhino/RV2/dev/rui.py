@@ -1,7 +1,7 @@
 import os
 import json
-
 import uuid
+import base64
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
 
@@ -23,33 +23,12 @@ TPL_RUI = """<?xml version="1.0" encoding="utf-8"?>
     <tool_bars />
     <macros />
     <bitmaps>
-        <small_bitmap item_width="16" item_height="16">
-          <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6Q
-AAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAATSURBVDhPYxgFo2AUjAIwYGAAAA
-QQAAGnRHxjAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
-        </small_bitmap>
-        <normal_bitmap item_width="24" item_height="24">
-          <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6Q
-AAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYSURBVEhL7cEBAQAAAIIg/6+uIU
-AAAFwNCRgAAdACW14AAAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
-        </normal_bitmap>
-        <large_bitmap item_width="32" item_height="32">
-          <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6Q
-AAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAaSURBVFhH7cEBAQAAAIIg/69uSE
-AAAADAuRoQIAABnXhJQwAAAABJRU5ErkJgggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
-        </large_bitmap>
     </bitmaps>
     <scripts />
 </RhinoUI>
 """
 
-TPL_ICON = """
+TPL_ICON_SMALL = """
 <small_bitmap item_width="16" item_height="16">
     <bitmap_item guid="{0}" index="0" />
     <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
@@ -58,10 +37,16 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
 </small_bitmap>
+"""
+
+TPL_ICON_NORMAL = """
 <normal_bitmap item_width="24" item_height="24">
     <bitmap_item guid="{0}" index="0" />
     <bitmap>{1}</bitmap>
 </normal_bitmap>
+"""
+
+TPL_ICON_LARGE = """
 <large_bitmap item_width="32" item_height="32">
     <bitmap_item guid="{0}" index="0" />
     <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
@@ -180,10 +165,12 @@ class Rui(object):
 
     def __init__(self, filepath):
         self.filepath = filepath
+        self.icons = {}
         self.macros = {}
         self.toolbars = {}
         self.xml = None
         self.root = None
+        self.root_icons = []
         self.root_macros = []
         self.root_menus = []
         self.root_toolbargroups = []
@@ -206,6 +193,7 @@ class Rui(object):
             f.write(TPL_RUI.format(uuid.uuid4(), uuid.uuid4()))
         self.xml = ET.parse(self.filepath)
         self.root = self.xml.getroot()
+        self.root_icons = self.root.find("bitmaps")
         self.root_macros = self.root.find("macros")
         self.root_menus = self.root.find("menus")
         self.root_toolbargroups = self.root.find("tool_bar_groups")
@@ -232,11 +220,17 @@ class Rui(object):
             path = image["path"]
             icon = None
             with open(path, "rb") as f:
-                icon = base64.b64encode(f.read())
-            s_icon = TPL_ICON.format(guid, name, icon)
-            e_icon = ET.fromstring(s_icon)
-            self.root_icons.append(e_icon)
-            self.images[name] = e_icon
+                icon = base64.encodebytes(f.read()).decode("utf-8")
+            s_icon_S = TPL_ICON_SMALL.format(guid)
+            s_icon_N = TPL_ICON_NORMAL.format(guid, icon)
+            s_icon_L = TPL_ICON_LARGE.format(guid)
+            e_icon_S = ET.fromstring(s_icon_S)
+            e_icon_N = ET.fromstring(s_icon_N)
+            e_icon_L = ET.fromstring(s_icon_L)
+            self.root_icons.append(e_icon_S)
+            self.root_icons.append(e_icon_N)
+            self.root_icons.append(e_icon_L)
+            self.icons[name] = guid
 
     # --------------------------------------------------------------------------
     # add macros
@@ -251,12 +245,13 @@ class Rui(object):
             help_text = macro.get("help_text", "")
             button_text = macro.get("button_text", name)
             menu_text = macro.get("menu_text", name.replace("_", " "))
-            icon = macro.get("icon")
-            self.add_macro(name, guid, script, tooltip, help_text, button_text, menu_text, icon)
+            icon_name = macro.get("icon")
+            self.add_macro(name, guid, script, tooltip, help_text, button_text, menu_text, icon_name)
 
-    def add_macro(self, name, guid, script, tooltip, help_text, button_text, menu_text, icon=None):
-        if icon:
-            s_macro = TPL_MACRO_ICON.format(guid, name, script, tooltip, help_text, button_text, menu_text, icon)
+    def add_macro(self, name, guid, script, tooltip, help_text, button_text, menu_text, icon_name=None):
+        if icon_name:
+            icon_guid = self.icons[icon_name]
+            s_macro = TPL_MACRO_ICON.format(guid, name, script, tooltip, help_text, button_text, menu_text, icon_guid)
         else:
             s_macro = TPL_MACRO.format(guid, name, script, tooltip, help_text, button_text, menu_text)
         e_macro = ET.fromstring(s_macro)

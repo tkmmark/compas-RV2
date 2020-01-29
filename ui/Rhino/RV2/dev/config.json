@@ -19,7 +19,7 @@
         "commands":
         [
             {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": "init"},
-            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": "setings"},
+            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": "settings"},
             {"name": "RV2file", "button_text": "file", "menu_text": "File"},
             {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": "form"},
             {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": "force"},
