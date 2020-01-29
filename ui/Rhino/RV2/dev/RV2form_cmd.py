@@ -136,37 +136,6 @@ def from_skeleton(root):
     rhinoskeleton = RhinoSkeleton(skeleton)
     rhinoskeleton.dynamic_draw_self()
 
-    def add_lines():
-        try:
-            rs.PurgeLayer('skeleton_vertices')
-            rs.PurgeLayer('skeleton_diagram_vertices')
-            rs.PurgeLayer('skeleton_diagram_edges')
-        except:  # noqa E722
-            pass
-
-        guids = compas_rhino.select_lines()
-        if not guids:
-            return
-        lines = compas_rhino.get_line_coordinates(guids)
-        rs.DeleteObjects(guids)
-        rhinoskeleton.diagram.add_skeleton_lines(lines)
-        rhinoskeleton.draw_self()
-
-    def remove_lines():
-        pass
-
-    def move_skeleton():
-        rhinoskeleton.move_skeleton_vertex()
-        rhinoskeleton.draw_self()
-
-    def subdivide():
-        rhinoskeleton.diagram.subdivide(k=1)
-        rhinoskeleton.draw_self()
-
-    def merge():
-        rhinoskeleton.diagram.merge(k=1)
-        rhinoskeleton.draw_self()
-
     config = {
         "name": "modify",
         "message": "Modify",
@@ -177,14 +146,44 @@ def from_skeleton(root):
                 "action": None
             },
             {
+                "name": "move_skeleton",
+                "message": "Move_Skeleton",
+                "action": rhinoskeleton.move_skeleton_vertex
+            },
+            {
+                "name": "move_vertex",
+                "message": "Move_Vertex",
+                "action": rhinoskeleton.move_diagram_vertex
+            },
+            {
+                "name": "node_width",
+                "message": "Node_Width",
+                "action": rhinoskeleton.dynamic_draw
+            },
+            {
+                "name": "leaf_width",
+                "message": "Leaf_Width",
+                "action": rhinoskeleton.dynamic_draw
+            },
+            {
+                "name": "add_lines",
+                "message": "Add_Lines",
+                "action": rhinoskeleton.add_lines
+            },
+            {
+                "name": "remove_lines",
+                "message": "Remove_Lines",
+                "action": rhinoskeleton.remove_lines
+            },
+            {
                 "name": "subdivide",
                 "message": "Subdivide",
-                "action": subdivide
+                "action": rhinoskeleton.diagram.subdivide
             },
             {
                 "name": "merge",
                 "message": "Merge",
-                "action": merge
+                "action": rhinoskeleton.diagram.merge
             }
         ]
     }
@@ -192,16 +191,26 @@ def from_skeleton(root):
     while True:
         menu = CommandMenu(config)
         action = menu.select_action()
-
         if not action:
             return
+
+        elif action['name'] == 'leaf_width':
+            if rhinoskeleton.diagram.skeleton_vertices()[1] != []:
+                action['action']('leaf_width')
+            else:
+                print('this skeleton doesn\'t have any leaf!')
+        elif action['name'] == 'node_width':
+            action['action']('node_width')
+
         elif action['name'] == 'finish':
             rs.PurgeLayer('skeleton_vertices')
             rs.PurgeLayer('skeleton_diagram_vertices')
             rs.PurgeLayer('skeleton_edges')
             rs.PurgeLayer('skeleton_diagram_edges')
             break
-        action['action']()
+        else:
+            action['action']()
+        rhinoskeleton.draw_self()
 
     form = rhinoskeleton.diagram.to_diagram()
     # keys = rhinoskeleton.diagram.to_support_vertices()
