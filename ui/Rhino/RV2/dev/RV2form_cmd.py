@@ -4,11 +4,14 @@ from __future__ import division
 
 import os
 import scriptcontext as sc
+import rhinoscriptsyntax as rs
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
 from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import Skeleton
+from compas_rv2.rhino import RhinoSkeleton
 from compas_rv2.rhino import RhinoFormDiagram
 
 
@@ -124,7 +127,90 @@ def from_features(root):
 
 
 def from_skeleton(root):
-    raise NotImplementedError
+    guids = compas_rhino.select_lines()
+    if not guids:
+        return
+    lines = compas_rhino.get_line_coordinates(guids)
+    skeleton = Skeleton.from_skeleton_lines(lines)
+    rs.DeleteObjects(guids)
+    rhinoskeleton = RhinoSkeleton(skeleton)
+    rhinoskeleton.dynamic_draw_self()
+
+    def add_lines():
+        try:
+            rs.PurgeLayer('skeleton_vertices')
+            rs.PurgeLayer('skeleton_diagram_vertices')
+            rs.PurgeLayer('skeleton_diagram_edges')
+        except:  # noqa E722
+            pass
+
+        guids = compas_rhino.select_lines()
+        if not guids:
+            return
+        lines = compas_rhino.get_line_coordinates(guids)
+        rs.DeleteObjects(guids)
+        rhinoskeleton.diagram.add_skeleton_lines(lines)
+        rhinoskeleton.draw_self()
+
+    def remove_lines():
+        pass
+
+    def move_skeleton():
+        rhinoskeleton.move_skeleton_vertex()
+        rhinoskeleton.draw_self()
+
+    def subdivide():
+        rhinoskeleton.diagram.subdivide(k=1)
+        rhinoskeleton.draw_self()
+
+    def merge():
+        rhinoskeleton.diagram.merge(k=1)
+        rhinoskeleton.draw_self()
+
+    config = {
+        "name": "modify",
+        "message": "Modify",
+        "options": [
+            {
+                "name": "finish",
+                "message": "Finish",
+                "action": None
+            },
+            {
+                "name": "subdivide",
+                "message": "Subdivide",
+                "action": subdivide
+            },
+            {
+                "name": "merge",
+                "message": "Merge",
+                "action": merge
+            }
+        ]
+    }
+
+    while True:
+        menu = CommandMenu(config)
+        action = menu.select_action()
+
+        if not action:
+            return
+        elif action['name'] == 'finish':
+            rs.PurgeLayer('skeleton_vertices')
+            rs.PurgeLayer('skeleton_diagram_vertices')
+            rs.PurgeLayer('skeleton_edges')
+            rs.PurgeLayer('skeleton_diagram_edges')
+            break
+        action['action']()
+
+    form = rhinoskeleton.diagram.to_diagram()
+    # keys = rhinoskeleton.diagram.to_support_vertices()
+
+    # if keys:
+    #     form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=keys)
+    # form.update_boundaries(feet=2)
+
+    return form
 
 
 config = {
