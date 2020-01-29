@@ -7,29 +7,39 @@
     },
     "ui":
     {
+        "images":
+        [
+            {"name": "init", "path": "ui/Rhino/RV2/dev/icons/00_initialise.png"},
+            {"name": "settings", "path": "ui/Rhino/RV2/dev/icons/01_settings_A.png"},
+            {"name": "form", "path": "ui/Rhino/RV2/dev/icons/04_form_diagram.png"},
+            {"name": "force", "path": "ui/Rhino/RV2/dev/icons/05_force_diagram_A.png"},
+            {"name": "horizontal", "path": "ui/Rhino/RV2/dev/icons/06_horizontal_equilibrium_A.png"},
+            {"name": "vertical", "path": "ui/Rhino/RV2/dev/icons/07_vertical_equilibrium.png"}
+        ],
         "commands":
         [
-            {"name": "RV2init", "button_text": "init", "menu_text": "Init"},
-            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings"},
+            {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": "init"},
+            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": "setings"},
             {"name": "RV2file", "button_text": "file", "menu_text": "File"},
+            {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": "form"},
+            {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": "force"},
 
-            {"name": "RV2form", "button_text": "form", "menu_text": "Form"},
             {"name": "RV2form_attributes", "button_text": "form@", "menu_text": "Form Attributes"},
             {"name": "RV2form_attributes_diagram", "button_text": "form@D", "menu_text": "Form Diagram Attributes"},
             {"name": "RV2form_attributes_vertices", "button_text": "form@V", "menu_text": "Form Vertex Attributes"},
             {"name": "RV2form_attributes_edges", "button_text": "form@E", "menu_text": "Form Edge Attributes"},
             {"name": "RV2form_attributes_faces", "button_text": "form@F", "menu_text": "Form Face Attributes"},
+
             {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Form Relax"},
 
-            {"name": "RV2force", "button_text": "force", "menu_text": "Force"},
             {"name": "RV2force_attributes", "button_text": "force@", "menu_text": "Force Attributes"},
             {"name": "RV2force_attributes_diagram", "button_text": "force@D", "menu_text": "Force Diagram Attributes"},
             {"name": "RV2force_attributes_vertices", "button_text": "force@V", "menu_text": "Force Vertex Attributes"},
             {"name": "RV2force_attributes_edges", "button_text": "force@E", "menu_text": "Force Edge Attributes"},
             {"name": "RV2force_attributes_faces", "button_text": "force@F", "menu_text": "Force Face Attributes"},
 
-            {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal"},
-            {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical"}
+            {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": "horizontal"},
+            {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": "vertical"}
         ],
         "menus":
         [],

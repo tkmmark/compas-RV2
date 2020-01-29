@@ -1,6 +1,5 @@
 import os
 import json
-import inspect
 
 import uuid
 from xml.etree import ElementTree as ET
@@ -48,6 +47,50 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
     </bitmaps>
     <scripts />
 </RhinoUI>
+"""
+
+TPL_ICON = """
+<small_bitmap item_width="16" item_height="16">
+    <bitmap_item guid="{0}" index="0" />
+    <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+</small_bitmap>
+<normal_bitmap item_width="24" item_height="24">
+    <bitmap_item guid="{0}" index="0" />
+    <bitmap>{1}</bitmap>
+</normal_bitmap>
+<large_bitmap item_width="32" item_height="32">
+    <bitmap_item guid="{0}" index="0" />
+    <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+</large_bitmap>
+"""
+
+TPL_MACRO_ICON = """
+<macro_item guid="{0}" bitmap_id="{7}">
+    <text>
+        <locale_1033>{1}</locale_1033>
+    </text>
+    <script>{2}</script>
+    <tooltip>
+        <locale_1033>{3}</locale_1033>
+    </tooltip>
+    <help_text>
+        <locale_1033>{4}</locale_1033>
+    </help_text>
+    <button_text>
+        <locale_1033>{5}</locale_1033>
+    </button_text>
+    <menu_text>
+        <locale_1033>{6}</locale_1033>
+    </menu_text>
+</macro_item>
 """
 
 TPL_MACRO = """
@@ -179,6 +222,23 @@ class Rui(object):
             fh.write(xml)
 
     # --------------------------------------------------------------------------
+    # add images
+    # --------------------------------------------------------------------------
+
+    def add_images(self, images):
+        for image in images:
+            guid = str(uuid.uuid4())
+            name = image["name"]
+            path = image["path"]
+            icon = None
+            with open(path, "rb") as f:
+                icon = base64.b64encode(f.read())
+            s_icon = TPL_ICON.format(guid, name, icon)
+            e_icon = ET.fromstring(s_icon)
+            self.root_icons.append(e_icon)
+            self.images[name] = e_icon
+
+    # --------------------------------------------------------------------------
     # add macros
     # --------------------------------------------------------------------------
 
@@ -191,10 +251,14 @@ class Rui(object):
             help_text = macro.get("help_text", "")
             button_text = macro.get("button_text", name)
             menu_text = macro.get("menu_text", name.replace("_", " "))
-            self.add_macro(name, guid, script, tooltip, help_text, button_text, menu_text)
+            icon = macro.get("icon")
+            self.add_macro(name, guid, script, tooltip, help_text, button_text, menu_text, icon)
 
-    def add_macro(self, name, guid, script, tooltip, help_text, button_text, menu_text):
-        s_macro = TPL_MACRO.format(guid, name, script, tooltip, help_text, button_text, menu_text)
+    def add_macro(self, name, guid, script, tooltip, help_text, button_text, menu_text, icon=None):
+        if icon:
+            s_macro = TPL_MACRO_ICON.format(guid, name, script, tooltip, help_text, button_text, menu_text, icon)
+        else:
+            s_macro = TPL_MACRO.format(guid, name, script, tooltip, help_text, button_text, menu_text)
         e_macro = ET.fromstring(s_macro)
         self.root_macros.append(e_macro)
         self.macros[name] = e_macro
@@ -336,10 +400,12 @@ if __name__ == "__main__":
             "tooltip": cmd.get("tooltip"),
             "help_text": cmd.get("help_text"),
             "button_text": cmd["button_text"],
-            "menu_text": cmd.get("menu_text")
+            "menu_text": cmd.get("menu_text"),
+            "icon": cmd.get("icon"),
         })
 
     rui.init()
+    rui.add_images(config["ui"]["images"])
     rui.add_macros(commands)
     rui.add_menus(config["ui"]["menus"])
     rui.add_toolbars(config["ui"]["toolbars"])

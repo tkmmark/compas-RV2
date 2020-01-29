@@ -54,13 +54,13 @@ def RunCommand(is_interactive):
         "data": {
             "form": None,
             "force": None,
-            "thrust": None
+            # "thrust": None
         },
 
         "settings": {
             "layers.form": "RV2::FormDiagram",
             "layers.force": "RV2::ForceDiagram",
-            "layers.thrust": "RV2::ThrustNetwork",
+            # "layers.thrust": "RV2::ThrustNetwork",
 
             "show.form.vertices": True,
             "show.form.edges": True,
@@ -84,8 +84,11 @@ def RunCommand(is_interactive):
             "horizontal.kmax": 100,
             "horizontal.alpha": 100
         }
-        # solver settings?
     }
+
+    settings = sc.sticky["RV2"]["settings"]
+    layers = [settings[name] for name in settings if name.startswith("layers")]
+    compas_rhino.clear_layers(layers)
 
     # display the "welcome" screen
     form = ImageForm('http://block.arch.ethz.ch/brg/images/cache/dsc02360_ni-2_cropped_1528706473_624x351.jpg')
