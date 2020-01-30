@@ -5,11 +5,11 @@ from __future__ import division
 import os
 import scriptcontext as sc
 import rhinoscriptsyntax as rs
+# from System.Windows.Forms import Cursor, Cursors
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
-from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import Skeleton
 from compas_rv2.rhino import RhinoSkeleton
 from compas_rv2.rhino import RhinoFormDiagram
@@ -79,54 +79,7 @@ def select_filepath_open(root, ext):
     return filepath
 
 
-def from_obj(root):
-    filepath = select_filepath_open(root, 'obj')
-    if not filepath:
-        return
-    form = FormDiagram.from_obj(filepath)
-    return form
-
-
-def from_json(root):
-    filepath = select_filepath_open(root, 'json')
-    if not filepath:
-        return
-    form = FormDiagram.from_json(filepath)
-    return form
-
-
-def from_lines(root):
-    guids = compas_rhino.select_lines()
-    if not guids:
-        return
-    lines = compas_rhino.get_line_coordinates(guids)
-    form = FormDiagram.from_lines(lines)
-    return form
-
-
-def from_mesh(root):
-    guid = compas_rhino.select_mesh()
-    if not guid:
-        return
-    form = FormDiagram.from_rhinomesh(guid)
-    return form
-
-
-def from_surface(root):
-    # add option for uv versus heighfield?
-    # add option for patches?
-    guid = compas_rhino.select_surface()
-    if not guid:
-        return
-    form = FormDiagram.from_rhinosurface(guid)
-    return form
-
-
-def from_features(root):
-    raise NotImplementedError
-
-
-def from_skeleton(root):
+def create(root):
     guids = compas_rhino.select_lines()
     if not guids:
         return
@@ -134,7 +87,16 @@ def from_skeleton(root):
     skeleton = Skeleton.from_skeleton_lines(lines)
     rs.DeleteObjects(guids)
     rhinoskeleton = RhinoSkeleton(skeleton)
+    rhinoskeleton.draw_skeleton_branches()
     rhinoskeleton.dynamic_draw_self()
+
+    return rhinoskeleton.diagram
+
+
+def modify(root):
+    RV2 = sc.sticky["RV2"]
+    skeleton = RV2["data"]["skeleton"]
+    rhinoskeleton = RhinoSkeleton(skeleton)
 
     config = {
         "name": "modify",
@@ -203,60 +165,41 @@ def from_skeleton(root):
             action['action']('node_width')
 
         elif action['name'] == 'finish':
-            rs.PurgeLayer('skeleton_vertices')
-            rs.PurgeLayer('skeleton_diagram_vertices')
-            rs.PurgeLayer('skeleton_edges')
-            rs.PurgeLayer('skeleton_diagram_edges')
             break
         else:
             action['action']()
         rhinoskeleton.draw_self()
-        # Cursor.Current = Cursors.Default
-        # rs.Sleep(1000)
 
-    form = rhinoskeleton.diagram.to_diagram()
+    skeleton = rhinoskeleton.diagram
+    return skeleton
 
-    return form
+
+def to_diagram(root):
+    RV2 = sc.sticky["RV2"]
+    skeleton = RV2["data"]["skeleton"]
+    diagram = skeleton.to_diagram()
+
+    return diagram
 
 
 config = {
-    "name": "form",
-    "message": "Form",
+    "name": "skeleton",
+    "message": "Skeleton",
     "options": [
         {
-            "name": "from_obj",
-            "message": "From OBJ",
-            "action": from_obj
+            "name": "create",
+            "message": "Create",
+            "action": create
         },
         {
-            "name": "from_json",
-            "message": "From JSON",
-            "action": from_json
+            "name": "modify",
+            "message": "Modify",
+            "action": modify
         },
         {
-            "name": "from_lines",
-            "message": "From lines",
-            "action": from_lines
-        },
-        {
-            "name": "from_mesh",
-            "message": "From mesh",
-            "action": from_mesh
-        },
-        {
-            "name": "from_surface",
-            "message": "From surface",
-            "action": from_surface
-        },
-        {
-            "name": "from_features",
-            "message": "From features",
-            "action": from_features
-        },
-        {
-            "name": "from_skeleton",
-            "message": "From skeleton",
-            "action": from_skeleton
+            "name": "to_diagram",
+            "message": "To_Diagram",
+            "action": to_diagram
         }
      ]
 }
@@ -280,20 +223,32 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    form = action['action'](session["cwd"])
+    if action['name'] != 'to_diagram':
 
-    if not form:
-        return
+        skeleton = action['action'](session["cwd"])
 
-    diagram = RhinoFormDiagram(form)
-    diagram.draw(settings)
+        if not skeleton:
+            return
 
-    data["form"] = form
+        rhinoskeleton = RhinoSkeleton(skeleton)
+        rhinoskeleton.draw_self()
 
+        data["skeleton"] = skeleton
+
+    else:
+        form = action['action'](session["cwd"])
+        if not form:
+            return
+
+        diagram = RhinoFormDiagram(form)
+        diagram.draw(settings)
+
+        data["form"] = form
 
 # ==============================================================================
 # Main
 # ==============================================================================
+
 
 if __name__ == "__main__":
 

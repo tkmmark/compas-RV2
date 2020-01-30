@@ -2,6 +2,6 @@
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
-    "python.pythonPath": "/Users/vanmelet/anaconda3/envs/rv2/bin/python",
+    "python.pythonPath": "C:\\Users\\Wenqian\\Anaconda2\\envs\\rv2\\python.exe",
     "restructuredtext.confPath": "${workspaceFolder}/docsource/conf.py"
 }
