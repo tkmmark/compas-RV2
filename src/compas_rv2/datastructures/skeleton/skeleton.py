@@ -357,7 +357,8 @@ class Skeleton(Mesh):
             digram_mesh.add_face(highpoly_mesh.face[fkey])
 
         anchor_vertices = self.get_anchor_vertices()
-        digram_mesh.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
+        if anchor_vertices != []:
+            digram_mesh.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
 
         return digram_mesh
 
