@@ -4,7 +4,6 @@ from __future__ import division
 
 import os
 import scriptcontext as sc
-import rhinoscriptsyntax as rs
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
@@ -127,7 +126,15 @@ def from_features(root):
 
 
 def from_skeleton(root):
-    raise NotImplementedError
+    RV2 = sc.sticky["RV2"]
+    skeleton = RV2["data"]["skeleton"]
+    if not skeleton:
+        print('There is not skeleton to be found!')
+        return 
+    
+    form = skeleton.to_diagram()
+
+    return form
 
 
 config = {

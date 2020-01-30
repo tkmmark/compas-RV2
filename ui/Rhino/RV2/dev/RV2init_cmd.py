@@ -54,12 +54,14 @@ def RunCommand(is_interactive):
         "data": {
             "form": None,
             "force": None,
+            "skeleton": None
             # "thrust": None
         },
 
         "settings": {
             "layers.form": "RV2::FormDiagram",
             "layers.force": "RV2::ForceDiagram",
+            "layers.skeleton": "RV2::Skeleton",
             # "layers.thrust": "RV2::ThrustNetwork",
 
             "show.form.vertices": True,
