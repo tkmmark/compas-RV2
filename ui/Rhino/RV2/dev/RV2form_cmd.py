@@ -211,10 +211,13 @@ def from_skeleton(root):
         else:
             action['action']()
         rhinoskeleton.draw_self()
-        # Cursor.Current = Cursors.Default
-        # rs.Sleep(1000)
 
     form = rhinoskeleton.diagram.to_diagram()
+    # keys = rhinoskeleton.diagram.to_support_vertices()
+
+    # if keys:
+    #     form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=keys)
+    # form.update_boundaries(feet=2)
 
     return form
 

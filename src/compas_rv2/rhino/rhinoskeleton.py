@@ -26,13 +26,13 @@ class RhinoSkeleton(object):
 
     def __init__(self, diagram):
         self.diagram = diagram
-        # self.draw_skeleton_branches()
+        self.draw_skeleton_branches()
 
     def add_lines(self):
         try:
-            rs.PurgeLayer('RV2::Skeleton::skeleton_vertices')
-            rs.PurgeLayer('RV2::Skeleton::diagram_vertices')
-            rs.PurgeLayer('RV2::Skeleton::diagram_edges')
+            rs.PurgeLayer('skeleton_vertices')
+            rs.PurgeLayer('skeleton_diagram_vertices')
+            rs.PurgeLayer('skeleton_diagram_edges')
         except:  # noqa E722
             pass
 
@@ -55,9 +55,9 @@ class RhinoSkeleton(object):
             return False
 
         try:
-            rs.PurgeLayer('RV2::Skeleton::skeleton_vertices')
-            rs.PurgeLayer('RV2::Skeleton::diagram_vertices')
-            rs.PurgeLayer('RV2::Skeleton::diagram_edges')
+            rs.PurgeLayer('skeleton_vertices')
+            rs.PurgeLayer('skeleton_diagram_vertices')
+            rs.PurgeLayer('skeleton_diagram_edges')
         except:  # noqa E722
             pass
 
@@ -76,7 +76,7 @@ class RhinoSkeleton(object):
         if self.diagram.skeleton_vertices()[1] != []:
             self.dynamic_draw('both_width')
             artist = MeshArtist(self.diagram.to_diagram())
-            artist.layer = 'RV2::Skeleton::diagram_edges'
+            artist.layer = 'skeleton_diagram_edges'
             artist.clear_layer()
             artist.draw_edges()
             artist.redraw()
@@ -103,7 +103,7 @@ class RhinoSkeleton(object):
         gp.SetCommandPrompt('confirm the diagram width')
 
         try:
-            rs.PurgeLayer('RV2::Skeleton::diagram_edges')
+            rs.PurgeLayer('skeleton_diagram_edges')
         except:  # noqa: E722
             pass
 
@@ -186,7 +186,7 @@ class RhinoSkeleton(object):
         pts = []
         for key in skeleton_vertices:
             pts.append({'pos': self.diagram.vertex_coordinates(key), 'color': (255, 0, 0)})
-        draw_points(pts, layer='RV2::Skeleton::skeleton_vertices', clear=True, redraw=False)
+        draw_points(pts, layer='skeleton_vertices', clear=True, redraw=False)
 
         lines = []
         for u, v in skeleton_branches:
@@ -195,7 +195,7 @@ class RhinoSkeleton(object):
                 'end': self.diagram.vertex_coordinates(v),
                 'color': (0, 255, 0)
             })
-        draw_lines(lines, layer='RV2::Skeleton::skeleton_edges', clear=True, redraw=True)
+        draw_lines(lines, layer='skeleton_edges', clear=True, redraw=True)
 
     def draw_self(self):
         """ Draw the skeleton mesh in Rhino.
@@ -211,21 +211,21 @@ class RhinoSkeleton(object):
 
         artist = MeshArtist(self.diagram)
 
-        artist.layer = 'RV2::Skeleton::skeleton_vertices'
+        artist.layer = 'skeleton_vertices'
         artist.clear_layer()
         artist.draw_vertices(keys=skeleton_vertices, color=(255, 0, 0))
 
-        artist.layer = 'RV2::Skeleton::skeleton_edges'
+        artist.layer = 'skeleton_edges'
         artist.clear_layer()
         artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
 
         artist = MeshArtist(self.diagram.to_diagram())
 
-        artist.layer = 'RV2::Skeleton::diagram_vertices'
+        artist.layer = 'skeleton_diagram_vertices'
         artist.clear_layer()
         artist.draw_vertices(keys=boundary_vertices, color=(0, 0, 0))
 
-        artist.layer = 'RV2::Skeleton::diagram_edges'
+        artist.layer = 'skeleton_diagram_edges'
         artist.clear_layer()
         artist.draw_edges(color=(0, 0, 0))
         artist.redraw()
@@ -256,8 +256,8 @@ class RhinoSkeleton(object):
                 self.remove_lines()
 
             # elif operation == 'export':
-            #     rs.PurgeLayer('RV2::Skeleton::skeleton_vertices')
-            #     rs.PurgeLayer('RV2::Skeleton::diagram_vertices')
+            #     rs.PurgeLayer('skeleton_vertices')
+            #     rs.PurgeLayer('skeleton_diagram_vertices')
             #     diagram = self.diagram.to_diagram()
             #     mesh_draw_edges(diagram, layer='form diagram')
             #     mesh_draw_vertices(diagram, color=(0, 0, 255), layer='form diagram')
