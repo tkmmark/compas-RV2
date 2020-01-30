@@ -23,16 +23,21 @@ class RhinoForceDiagram(RhinoDiagram):
             self.artist.draw_vertices(color=color)
 
         if settings.get("show.force.edges", True):
-            keys = list(self.diagram.edges_where({'is_edge': True}))
+            keys = list(self.diagram.edges())
             color = {}
-            color.update({key: settings.get("color.force.edges") for key in keys})
+            for key in keys:
+                u_, v_ = self.diagram.primal.face_adjacency_halfedge(*key)
+                if self.diagram.primal.vertex_attribute(u_, 'is_external') or self.diagram.primal.vertex_attribute(v_, 'is_external'):
+                    color[key] = settings.get("color.force.edges:is_external")
+                else:
+                    color[key] = settings.get("color.force.edges")
             self.artist.draw_edges(keys=keys, color=color)
 
-        if settings.get("show.force.faces", True):
-            keys = list(self.diagram.faces_where({'is_loaded': True}))
-            color = {}
-            color.update({key: settings.get("color.force.faces") for key in keys})
-            self.artist.draw_faces(keys=keys, color=color)
+        # if settings.get("show.force.faces", True):
+        #     keys = list(self.diagram.faces_where({'is_loaded': True}))
+        #     color = {}
+        #     color.update({key: settings.get("color.force.faces") for key in keys})
+        #     self.artist.draw_faces(keys=keys, color=color)
 
         self.artist.redraw()
 
