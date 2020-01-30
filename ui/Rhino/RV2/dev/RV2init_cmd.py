@@ -64,7 +64,7 @@ def RunCommand(is_interactive):
             "color.form.vertices": (0, 255, 0),
             "color.form.vertices:is_fixed": (0, 255, 255),
             "color.form.vertices:is_external": (0, 0, 255),
-            "color.form.vertices:is_anchor": (255, 0, 0),
+            "color.form.vertices:is_anchor": (255, 255, 255),
 
             "color.form.edges": (0, 255, 0),
             "color.form.edges:is_external": (0, 0, 255),
@@ -81,6 +81,8 @@ def RunCommand(is_interactive):
 
             "color.force.edges": (0, 255, 0),
             "color.force.edges:is_external": (0, 0, 255),
+
+            "scale.thrust.external": 0.25,
 
             "vertical.zmax": 4.0,
             "vertical.kmax": 100,

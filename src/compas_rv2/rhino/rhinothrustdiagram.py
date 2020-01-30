@@ -2,13 +2,39 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+import compas_rhino
+
+from compas.geometry import add_vectors
+from compas.geometry import scale_vector
+from compas_rhino.artists import MeshArtist
 from compas_rv2.rhino import RhinoDiagram
 
 
 __all__ = ["RhinoThrustDiagram"]
 
 
+class ThrustArtist(MeshArtist):
+
+    def draw_external(self, scale=1.0):
+        lines = []
+        for key in self.mesh.vertices_where({'is_anchor': True}):
+            a = self.mesh.vertex_attributes(key, 'xyz')
+            r = self.mesh.vertex_attributes(key, ['rx', 'ry', 'rz'])
+            b = add_vectors(a, scale_vector([0, 0, r[2]], scale))
+            lines.append({
+                "start": a,
+                "end": b,
+                "color": (0, 255, 255),
+                "arrow": "start"
+            })
+        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
+
+
 class RhinoThrustDiagram(RhinoDiagram):
+
+    def __init__(self, diagram):
+        super(RhinoThrustDiagram, self).__init__(diagram)
+        self.artist = ThrustArtist(self.diagram)
 
     def draw(self, settings):
         self.artist.layer = settings.get("layers.thrust")
@@ -33,6 +59,9 @@ class RhinoThrustDiagram(RhinoDiagram):
             color = {}
             color.update({key: settings.get("color.thrust.faces") for key in keys})
             self.artist.draw_faces(keys=keys, color=color)
+
+        if settings.get("show.thrust.external", True):
+            self.artist.draw_external(scale=settings.get("scale.thrust.external"))
 
         self.artist.redraw()
 
