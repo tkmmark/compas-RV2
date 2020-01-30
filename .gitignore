@@ -111,4 +111,6 @@ ENV/
 temp/**
 !temp/PLACEHOLDER
 
+.vscode
+
 .DS_Store
