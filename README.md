@@ -70,7 +70,7 @@ These installation instructions assume that Anaconda/conda are available on your
    From the root of `compas-RV2`, do
 
    ```bash
-   python -m compas_rhino.install -p compas compas_rhino compas_ags compas_tna compas_pattern compas_rv2
+   python -m compas_rhino.install -p compas compas_rhino compas_ags compas_tna compas_pattern compas_rv2 compas_cloud
    ```
 
 6. Install RV2 command plugin.
