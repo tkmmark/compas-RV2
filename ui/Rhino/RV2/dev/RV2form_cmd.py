@@ -4,7 +4,6 @@ from __future__ import division
 
 import os
 import scriptcontext as sc
-import rhinoscriptsyntax as rs
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
@@ -128,97 +127,13 @@ def from_features(root):
 
 
 def from_skeleton(root):
-    guids = compas_rhino.select_lines()
-    if not guids:
-        return
-    lines = compas_rhino.get_line_coordinates(guids)
-    skeleton = Skeleton.from_skeleton_lines(lines)
-    rs.DeleteObjects(guids)
-    rhinoskeleton = RhinoSkeleton(skeleton)
-    rhinoskeleton.dynamic_draw_self()
-
-    config = {
-        "name": "modify",
-        "message": "Modify",
-        "options": [
-            {
-                "name": "finish",
-                "message": "Finish",
-                "action": None
-            },
-            {
-                "name": "move_skeleton",
-                "message": "Move_Skeleton",
-                "action": rhinoskeleton.move_skeleton_vertex
-            },
-            {
-                "name": "move_vertex",
-                "message": "Move_Vertex",
-                "action": rhinoskeleton.move_diagram_vertex
-            },
-            {
-                "name": "node_width",
-                "message": "Node_Width",
-                "action": rhinoskeleton.dynamic_draw
-            },
-            {
-                "name": "leaf_width",
-                "message": "Leaf_Width",
-                "action": rhinoskeleton.dynamic_draw
-            },
-            {
-                "name": "add_lines",
-                "message": "Add_Lines",
-                "action": rhinoskeleton.add_lines
-            },
-            {
-                "name": "remove_lines",
-                "message": "Remove_Lines",
-                "action": rhinoskeleton.remove_lines
-            },
-            {
-                "name": "subdivide",
-                "message": "Subdivide",
-                "action": rhinoskeleton.diagram.subdivide
-            },
-            {
-                "name": "merge",
-                "message": "Merge",
-                "action": rhinoskeleton.diagram.merge
-            }
-        ]
-    }
-
-    while True:
-        menu = CommandMenu(config)
-        action = menu.select_action()
-        if not action:
-            return
-
-        elif action['name'] == 'leaf_width':
-            if rhinoskeleton.diagram.skeleton_vertices()[1] != []:
-                action['action']('leaf_width')
-            else:
-                print('this skeleton doesn\'t have any leaf!')
-        elif action['name'] == 'node_width':
-            action['action']('node_width')
-
-        elif action['name'] == 'finish':
-            rs.PurgeLayer('skeleton_vertices')
-            rs.PurgeLayer('skeleton_diagram_vertices')
-            rs.PurgeLayer('skeleton_edges')
-            rs.PurgeLayer('skeleton_diagram_edges')
-            break
-        else:
-            action['action']()
-        rhinoskeleton.draw_self()
-
-    form = rhinoskeleton.diagram.to_diagram()
-    # keys = rhinoskeleton.diagram.to_support_vertices()
-
-    # if keys:
-    #     form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=keys)
-    # form.update_boundaries(feet=2)
+    RV2 = sc.sticky["RV2"]
+    skeleton = RV2["data"]["skeleton"]
+    if not skeleton:
+        print('There is not skeleton to be found!')
+        return 
+    
+    form = skeleton.to_diagram()
 
     return form
 
