@@ -10,13 +10,13 @@
         "images":
         [
 
-            {"name": "init", "path": "ui/Rhino/RV2/dev/icons/00_initialise.png"},
-            {"name": "settings", "path": "ui/Rhino/RV2/dev/icons/01_settings_A.png"},
-            {"name": "skeleton", "path": "ui/Rhino/RV2/dev/icons/04_form_diagram.png"},
-            {"name": "form", "path": "ui/Rhino/RV2/dev/icons/04_form_diagram.png"},
-            {"name": "force", "path": "ui/Rhino/RV2/dev/icons/05_force_diagram_A.png"},
-            {"name": "horizontal", "path": "ui/Rhino/RV2/dev/icons/06_horizontal_equilibrium_A.png"},
-            {"name": "vertical", "path": "ui/Rhino/RV2/dev/icons/07_vertical_equilibrium.png"}
+            {"name": "init", "path": "ui/Rhino/RV2/dev/icons.png", "index": 0},
+            {"name": "settings", "path": "ui/Rhino/RV2/dev/icons.png", "index": 1},
+            {"name": "skeleton", "path": "ui/Rhino/RV2/dev/icons.png", "index": 2},
+            {"name": "form", "path": "ui/Rhino/RV2/dev/icons.png", "index": 2},
+            {"name": "force", "path": "ui/Rhino/RV2/dev/icons.png", "index": 3},
+            {"name": "horizontal", "path": "ui/Rhino/RV2/dev/icons.png", "index": 4},
+            {"name": "vertical", "path": "ui/Rhino/RV2/dev/icons.png", "index": 5}
 
         ],
         "commands":
