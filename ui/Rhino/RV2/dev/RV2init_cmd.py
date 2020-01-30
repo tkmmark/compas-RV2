@@ -2,14 +2,6 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-# check if the following exist
-# - conda: ask user to install Anaconda/Miniconda
-
-# insert local lib in path
-# remove again after imports?
-
-# start a proxy with the environment set to use the local libs?
-
 import scriptcontext as sc
 
 try:
@@ -26,17 +18,10 @@ except ImportError:
 else:
     # replace this by from compas_cloud import Proxy
     from compas.rpc import Proxy
-    from compas_rhino.etoforms import ImageForm
+    from compas_rhino.forms import BrowserForm
 
 
 __commandname__ = "RV2init"
-
-
-# recode this in a C# plugin
-# start the server
-# load the plugin toolbar
-# restart the server
-# ...
 
 
 def RunCommand(is_interactive):
@@ -51,32 +36,49 @@ def RunCommand(is_interactive):
             "current": None
         },
 
-        "data": {
+        "scene": {
             "form": None,
             "force": None,
-            # "thrust": None
+            "thrust": None
         },
 
         "settings": {
             "layers.form": "RV2::FormDiagram",
             "layers.force": "RV2::ForceDiagram",
-            # "layers.thrust": "RV2::ThrustNetwork",
+            "layers.thrust": "RV2::ThrustNetwork",
 
             "show.form.vertices": True,
             "show.form.edges": True,
-            "show.form.faces": True,
+            "show.form.faces": False,
 
             "show.force.vertices": True,
             "show.force.edges": True,
-            "show.force.faces": True,
+            "show.force.faces": False,
 
-            "color.form.vertices": (0, 0, 0),
-            "color.form.vertices:is_fixed": (0, 255, 0),
+            "show.thrust.vertices": True,
+            "show.thrust.edges": True,
+            "show.thrust.faces": True,
+
+            "color.form.vertices": (0, 255, 0),
+            "color.form.vertices:is_fixed": (0, 255, 255),
             "color.form.vertices:is_external": (0, 0, 255),
             "color.form.vertices:is_anchor": (255, 0, 0),
 
-            "color.form.edges": (0, 0, 0),
-            "color.form.faces": (0, 0, 0),
+            "color.form.edges": (0, 255, 0),
+            "color.form.edges:is_external": (0, 0, 255),
+
+            "color.thrust.vertices": (255, 0, 255),
+            "color.thrust.vertices:is_fixed": (0, 255, 0),
+            "color.thrust.vertices:is_anchor": (255, 0, 0),
+
+            "color.thrust.edges": (255, 0, 255),
+            "color.thrust.faces": (255, 0, 255),
+
+            "color.force.vertices": (0, 255, 0),
+            "color.force.vertices:is_fixed": (0, 255, 255),
+
+            "color.force.edges": (0, 255, 0),
+            "color.force.edges:is_external": (0, 0, 255),
 
             "vertical.zmax": 4.0,
             "vertical.kmax": 100,
@@ -90,9 +92,8 @@ def RunCommand(is_interactive):
     layers = [settings[name] for name in settings if name.startswith("layers")]
     compas_rhino.clear_layers(layers)
 
-    # display the "welcome" screen
-    form = ImageForm('http://block.arch.ethz.ch/brg/images/cache/dsc02360_ni-2_cropped_1528706473_624x351.jpg')
-    form.show()
+    browser = BrowserForm('https://compas-dev.github.io/main/', width=960, height=720)
+    browser.show()
 
 
 # ==============================================================================

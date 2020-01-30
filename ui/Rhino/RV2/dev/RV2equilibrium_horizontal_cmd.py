@@ -24,15 +24,15 @@ def RunCommand(is_interactive):
 
     RV2 = sc.sticky["RV2"]
     settings = RV2["settings"]
-    form = RV2["data"]["form"]
-    force = RV2["data"]["force"]
+    rhinoform = RV2["scene"]["form"]
+    rhinoforce = RV2["scene"]["force"]
 
     proxy = sc.sticky["RV2.proxy"]
 
-    if not form:
+    if not rhinoform:
         return
 
-    if not force:
+    if not rhinoforce:
         return
 
     if not proxy:
@@ -41,16 +41,13 @@ def RunCommand(is_interactive):
     proxy.package = "compas_rv2.equilibrium"
     horizontal = proxy.horizontal_nodal_proxy
 
-    formdata, forcedata = horizontal(form.data, force.data)
+    formdata, forcedata = horizontal(rhinoform.diagram.data, rhinoforce.diagram.data)
 
-    form.data = formdata
-    force.data = forcedata
+    rhinoform.diagram.data = formdata
+    rhinoforce.diagram.data = forcedata
 
-    formdiagram = RhinoFormDiagram(form)
-    forcediagram = RhinoForceDiagram(force)
-
-    formdiagram.draw(settings)
-    forcediagram.draw(settings)
+    rhinoform.draw(settings)
+    rhinoforce.draw(settings)
 
 
 # ==============================================================================

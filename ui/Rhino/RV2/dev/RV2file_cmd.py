@@ -14,6 +14,7 @@ from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoForceDiagram
+from compas_rv2.rhino import RhinoThrustDiagram
 
 
 __commandname__ = "RV2file"
@@ -151,21 +152,19 @@ def RunCommand(is_interactive):
         if data:
             form = data.get("form")
             force = data.get("force")
-            # thrust = data.get("thrust")
 
             if form:
-                formdiagram = RhinoFormDiagram(form)
-                formdiagram.draw(RV2["settings"])
+                rhinoform = RhinoFormDiagram(form)
+                rhinoform.draw(RV2["settings"])
+                rhinothrust = RhinoThrustDiagram(form)
+                rhinothrust.draw(RV2["settings"])
             if force:
-                forcediagram = RhinoForceDiagram(force)
-                forcediagram.draw(RV2["settings"])
-            # if thrust:
-            #     thrustdiagram = RhinoThrustDiagram(thrust)
-            #     thrustdiagram.draw(RV2["settings"])
+                rhinoforce = RhinoForceDiagram(force)
+                rhinoforce.draw(RV2["settings"])
 
-        RV2["data"]["form"] = form
-        RV2["data"]["force"] = force
-        # RV2["data"]["thrust"] = thrust
+        RV2["scene"]["form"] = rhinoform
+        RV2["scene"]["force"] = rhinoforce
+        RV2["scene"]["thrust"] = rhinothrust
 
     # only ask for a filepath if there is none
     elif action["name"] == "save":
@@ -175,8 +174,16 @@ def RunCommand(is_interactive):
         if not filepath:
             return
 
+        data = {"session": RV2["session"], "settings": RV2["settings"], "data": {"form": None, "force": None}}
+
+        if RV2["scene"]["form"]:
+            data["data"]["form"] = RV2["scene"]["form"].diagram.to_data()
+
+        if RV2["scene"]["force"]:
+            data["data"]["force"] = RV2["scene"]["force"].diagram.to_data()
+
         with open(filepath, 'w+') as f:
-            json.dump(RV2, f, cls=DataEncoder)
+            json.dump(data, f, cls=DataEncoder)
 
     # always ask for a filepath
     elif action["name"] == "saveas":
@@ -184,8 +191,16 @@ def RunCommand(is_interactive):
         if not filepath:
             return
 
+        data = {"session": RV2["session"], "settings": RV2["settings"], "data": {"form": None, "force": None}}
+
+        if RV2["scene"]["form"]:
+            data["data"]["form"] = RV2["scene"]["form"].diagram.to_data()
+
+        if RV2["scene"]["force"]:
+            data["data"]["force"] = RV2["scene"]["force"].diagram.to_data()
+
         with open(filepath, 'w+') as f:
-            json.dump(RV2, f, cls=DataEncoder)
+            json.dump(data, f, cls=DataEncoder)
 
 
 # ==============================================================================

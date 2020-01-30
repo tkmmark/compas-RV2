@@ -5,8 +5,6 @@ from __future__ import division
 import scriptcontext as sc
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rv2.rhino import RhinoFormDiagram
-from compas_rv2.rhino import RhinoForceDiagram
 
 
 __commandname__ = "RV2settings"
@@ -18,22 +16,16 @@ def RunCommand(is_interactive):
         form.show()
         return
 
-    form = sc.sticky["RV2"]["data"]["form"]
-    force = sc.sticky["RV2"]["data"]["force"]
-    # thrust = sc.sticky["RV2"]["data"]["thrust"]
+    rhinoform = sc.sticky["RV2"]["scene"]["form"]
+    rhinoforce = sc.sticky["RV2"]["scene"]["force"]
 
     settings = sc.sticky["RV2"]["settings"]
 
     if compas_rhino.update_settings(settings):
-        if form:
-            rhinoform = RhinoFormDiagram(form)
+        if rhinoform:
             rhinoform.draw(settings)
-        if force:
-            rhinoforce = RhinoForceDiagram(force)
+        if rhinoforce:
             rhinoforce.draw(settings)
-        # if thrust:
-        #     rhinothrust = RhinoThrustDiagram(thrust)
-        #     rhinothrust.draw(settings)
 
 
 # ==============================================================================

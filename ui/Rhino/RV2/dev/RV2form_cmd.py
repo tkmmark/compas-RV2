@@ -11,8 +11,9 @@ from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import Skeleton
-from compas_rv2.rhino import RhinoSkeleton
 from compas_rv2.rhino import RhinoFormDiagram
+from compas_rv2.rhino import RhinoThrustDiagram
+from compas_rv2.rhino import RhinoSkeleton
 
 
 __commandname__ = "RV2form"
@@ -275,7 +276,7 @@ def RunCommand(is_interactive):
 
     session = RV2["session"]
     settings = RV2["settings"]
-    data = RV2["data"]
+    scene = RV2["scene"]
 
     menu = CommandMenu(config)
     action = menu.select_action()
@@ -288,10 +289,14 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    diagram = RhinoFormDiagram(form)
-    diagram.draw(settings)
+    rhinoform = RhinoFormDiagram(form)
+    rhinoform.draw(settings)
 
-    data["form"] = form
+    rhinothrust = RhinoThrustDiagram(form)
+
+    scene["form"] = rhinoform
+    scene["force"] = None
+    scene["thrust"] = rhinothrust
 
 
 # ==============================================================================

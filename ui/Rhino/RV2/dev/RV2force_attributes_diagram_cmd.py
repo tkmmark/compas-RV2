@@ -6,7 +6,6 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rv2.rhino import RhinoForceDiagram
 
 
 __commandname__ = "RV2force_attributes_diagram"
@@ -22,17 +21,15 @@ def RunCommand(is_interactive):
         return
 
     RV2 = sc.sticky["RV2"]
-    force = RV2["data"]["force"]
+    rhinoforce = RV2["scene"]["force"]
 
-    if not force:
+    if not rhinoforce:
         return
 
     settings = RV2["settings"]
 
-    diagram = RhinoForceDiagram(force)
-
-    if diagram.update_attributes():
-        diagram.draw(settings)
+    if rhinoforce.update_attributes():
+        rhinoforce.draw(settings)
 
 
 # ==============================================================================

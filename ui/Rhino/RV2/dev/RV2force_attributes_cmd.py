@@ -8,7 +8,6 @@ import compas_rhino
 
 from compas_rhino.etoforms import TextForm
 from compas_rhino.ui import CommandMenu
-from compas_rv2.rhino import RhinoForceDiagram
 
 
 __commandname__ = "RV2force_attributes"
@@ -51,14 +50,12 @@ def RunCommand(is_interactive):
         return
 
     RV2 = sc.sticky["RV2"]
-    force = RV2["data"]["force"]
+    rhinoforce = RV2["scene"]["force"]
 
-    if not force:
+    if not rhinoforce:
         return
 
     settings = RV2["settings"]
-
-    diagram = RhinoForceDiagram(force)
 
     menu = CommandMenu(config)
     action = menu.select_action()
@@ -66,8 +63,8 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    if action["action"](diagram):
-        diagram.draw(settings)
+    if action["action"](rhinoforce):
+        rhinoforce.draw(settings)
 
 
 # ==============================================================================

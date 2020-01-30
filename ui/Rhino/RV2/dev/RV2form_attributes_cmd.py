@@ -7,7 +7,6 @@ import scriptcontext as sc
 import compas_rhino
 from compas_rhino.etoforms import TextForm
 from compas_rhino.ui import CommandMenu
-from compas_rv2.rhino import RhinoFormDiagram
 
 
 __commandname__ = "RV2form_attributes"
@@ -50,14 +49,12 @@ def RunCommand(is_interactive):
         return
 
     RV2 = sc.sticky["RV2"]
-    form = RV2["data"]["form"]
+    rhinoform = RV2["scene"]["form"]
 
-    if not form:
+    if not rhinoform:
         return
 
     settings = RV2["settings"]
-
-    diagram = RhinoFormDiagram(form)
 
     menu = CommandMenu(config)
     action = menu.select_action()
@@ -65,8 +62,8 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    if action["action"](diagram):
-        diagram.draw(settings)
+    if action["action"](rhinoform):
+        rhinoform.draw(settings)
 
 
 # ==============================================================================
