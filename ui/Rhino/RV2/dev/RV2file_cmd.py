@@ -12,6 +12,8 @@ from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
+from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoForceDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
@@ -150,15 +152,20 @@ def RunCommand(is_interactive):
         form, force = None, None
 
         if data:
-            form = data.get("form")
-            force = data.get("force")
+            formdata = data.get("form")
+            forcedata = data.get("force")
 
-            if form:
+            if formdata:
+                form = FormDiagram.from_data(formdata)
                 rhinoform = RhinoFormDiagram(form)
                 rhinoform.draw(RV2["settings"])
+
                 rhinothrust = RhinoThrustDiagram(form)
                 rhinothrust.draw(RV2["settings"])
-            if force:
+
+            if forcedata:
+                force = ForceDiagram.from_data(forcedata)
+                force.primal = form
                 rhinoforce = RhinoForceDiagram(force)
                 rhinoforce.draw(RV2["settings"])
 
