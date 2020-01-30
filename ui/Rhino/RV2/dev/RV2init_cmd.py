@@ -37,12 +37,14 @@ def RunCommand(is_interactive):
         },
 
         "scene": {
+            "skeleton": None,
             "form": None,
             "force": None,
             "thrust": None
         },
 
         "settings": {
+            "layers.skeleton": "RV2::Skeleton",
             "layers.form": "RV2::FormDiagram",
             "layers.force": "RV2::ForceDiagram",
             "layers.thrust": "RV2::ThrustNetwork",
