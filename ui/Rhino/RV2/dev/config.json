@@ -11,6 +11,7 @@
         [
             {"name": "init", "path": "ui/Rhino/RV2/dev/icons/00_initialise.png"},
             {"name": "settings", "path": "ui/Rhino/RV2/dev/icons/01_settings_A.png"},
+            {"name": "skeleton", "path": "ui/Rhino/RV2/dev/icons/04_form_diagram.png"},
             {"name": "form", "path": "ui/Rhino/RV2/dev/icons/04_form_diagram.png"},
             {"name": "force", "path": "ui/Rhino/RV2/dev/icons/05_force_diagram_A.png"},
             {"name": "horizontal", "path": "ui/Rhino/RV2/dev/icons/06_horizontal_equilibrium_A.png"},
@@ -21,6 +22,7 @@
             {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": "init"},
             {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": "settings"},
             {"name": "RV2file", "button_text": "file", "menu_text": "File"},
+            {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton", "icon": "skeleton"},
             {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": "form"},
             {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": "force"},
 
@@ -52,6 +54,7 @@
                     {"left": "RV2init"},
                     {"left": "RV2settings"},
                     {"left": "RV2file"},
+                    {"left": "RV2skeleton"},
                     {"left": "RV2form"},
                     {"left": "RV2force"},
                     {"left": "RV2equilibrium_horizontal"},
