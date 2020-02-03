@@ -32,25 +32,11 @@ def update_attributes_faces(diagram):
 
 
 def property_sheet(diagram):
-    from compas_rhino.utilities import unload_modules
-    unload_modules("compas_rv2")
-    from compas_rv2.rhino import PropertySheet
-    propertySheet = PropertySheet()
-    propertySheet.setup(diagram)
-    propertySheet.Show()
+    # from compas_rhino.utilities import unload_modules
+    # unload_modules("compas_rv2")
+    # from compas_rv2.rhino import PropertySheet
+    PropertySheet.from_diagram(diagram)
     return False
-
-
-def goto_selection(diagram):
-    propertySheet = sc.sticky["RV2"]["propertySheet"]
-    # propertySheet.Enabled = True
-    # propertySheet.Visible = True
-    propertySheet.vertices_table.SelectRow(2)
-    return False
-
-
-def redraw(diagram):
-    return True
 
 
 config = {
@@ -60,11 +46,7 @@ config = {
         {"name": "Vertices", "action": update_attributes_vertices},
         {"name": "Edges", "action": update_attributes_edges},
         {"name": "Faces", "action": update_attributes_faces},
-        {"name": "Property", "action": property_sheet},
-        {"name": "redraw", "action": redraw},
-        {"name": "goto_selection", "action": goto_selection},
-
-
+        {"name": "Property", "action": property_sheet}
     ]
 }
 

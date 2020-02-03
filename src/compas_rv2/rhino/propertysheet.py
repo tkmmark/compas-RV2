@@ -205,6 +205,13 @@ class Tree_Table(forms.TreeGridView):
 
 class PropertySheet(forms.Form):
 
+    @classmethod
+    def from_diagram(cls, rhinoDiagram):
+        propertySheet = cls()
+        propertySheet.setup(rhinoDiagram)
+        propertySheet.Show()
+        return propertySheet
+
     def setup(self, rhinoDiagram):
         self.Title = "Properties"
         self.TabControl = self.from_rhinoDiagram(rhinoDiagram)
