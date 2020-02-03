@@ -10,7 +10,6 @@ try:
     import rhinoscriptsyntax as rs
     import scriptcontext as sc
     find_object = sc.doc.Objects.Find
-    import System
     import Eto.Drawing as drawing
     import Eto.Forms as forms
 except Exception:
@@ -26,6 +25,7 @@ class Tree_Table(forms.TreeGridView):
     def __init__(self, ShowHeader=True):
         self.ShowHeader = ShowHeader
         self.Height = 300
+        self.last_sorted_to = None
 
     @classmethod
     def from_rhinoDiagram(cls, rhinoDiagram):
@@ -66,7 +66,7 @@ class Tree_Table(forms.TreeGridView):
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(rhinoDiagram.guid_vertices)
         table.CellEdited += table.EditEvent(diagram, attributes)
-        
+        table.ColumnHeaderClick += table.HeaderClickEvent()
         return table
 
     @classmethod
@@ -91,6 +91,7 @@ class Tree_Table(forms.TreeGridView):
                 edge_item.Children.Add(vertex_item)
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(rhinoDiagram.guid_edges, rhinoDiagram.guid_vertices)
+        table.ColumnHeaderClick += table.HeaderClickEvent()
         return table
 
     @classmethod
@@ -115,6 +116,7 @@ class Tree_Table(forms.TreeGridView):
                 face_item.Children.Add(vertex_item)
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(rhinoDiagram.guid_faces, rhinoDiagram.guid_vertices)
+        table.ColumnHeaderClick += table.HeaderClickEvent()
         return table
 
     def SelectEvent(self, GUIDs, GUIDs2=None):
@@ -161,19 +163,49 @@ class Tree_Table(forms.TreeGridView):
 
         return on_edited
 
+    def HeaderClickEvent(self):
+        def on_hearderClick(sender, event):
+            try:
+                # print(event.Column.HeaderText)
+                sender.sort(event.Column.HeaderText)
+            except Exception as e:
+                print(e)
+        return on_hearderClick
+
     def add_column(self, HeaderText=None, Editable=False):
         column = forms.GridColumn()
         if self.ShowHeader:
             column.HeaderText = HeaderText
         column.Editable = Editable
         column.DataCell = forms.TextBoxCell(self.Columns.Count)
+        column.Sortable = True
         self.Columns.Add(column)
+
+    def sort(self, key):
+        headerTexts = [column.HeaderText for column in self.Columns]
+        index = headerTexts.index(key)
+        print(key, index)
+
+        def getValue(item):
+            try:
+                value = ast.literal_eval(item.Values[index])
+            except (ValueError, TypeError):
+                value = item.Values[index]
+            return value
+
+        items = sorted(self.DataStore, key=getValue, reverse=True)
+        if self.last_sorted_to == key:
+            items.reverse()
+            self.last_sorted_to = None
+        else:
+            self.last_sorted_to = key
+
+        self.DataStore = forms.TreeGridItemCollection(items)
 
 
 class PropertySheet(forms.Form):
 
     def setup(self, rhinoDiagram):
-        self.Rnd = System.Random()
         self.Title = "Properties"
         self.TabControl = self.from_rhinoDiagram(rhinoDiagram)
         tab_items = forms.StackLayoutItem(self.TabControl, True)
