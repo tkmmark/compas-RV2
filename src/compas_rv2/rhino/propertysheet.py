@@ -213,7 +213,7 @@ class PropertySheet(forms.Form):
         return propertySheet
 
     def setup(self, rhinoDiagram):
-        self.Title = "Properties"
+        self.Title = "Property - " + rhinoDiagram.__class__.__name__
         self.TabControl = self.from_rhinoDiagram(rhinoDiagram)
         tab_items = forms.StackLayoutItem(self.TabControl, True)
         layout = forms.StackLayout()
@@ -246,10 +246,12 @@ class PropertySheet(forms.Form):
         control.Pages.Add(tab)
         self.edges_table = tab.Content
 
-        # tab = forms.TabPage()
-        # tab.Text = "Faces"
-        # tab.Content = Tree_Table.from_faces(rhinoDiagram)
-        # control.Pages.Add(tab)
+        if hasattr(rhinoDiagram, 'guid_faces'):
+            tab = forms.TabPage()
+            tab.Text = "Faces"
+            tab.Content = Tree_Table.from_faces(rhinoDiagram)
+            control.Pages.Add(tab)
+            self.faces_table = tab.Content
 
         return control
 
