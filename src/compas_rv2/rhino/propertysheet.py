@@ -139,24 +139,25 @@ class Tree_Table(forms.TreeGridView):
     def EditEvent(self, diagram, attributes):
         def on_edited(sender, event):
             try:
-                print('check0')
-                key = event.Item.Values[0]
-                values = event.Item.Values[1:]
-                for attr, value in zip(attributes, values):
-                    if value != '-':
-                        try:
-                            diagram.vertex_attribute(key, attr, ast.literal_eval(value))
-                        except (ValueError, TypeError):
-                            diagram.vertex_attribute(key, attr, value)
+                raise NotImplementedError("still in dev")
+                # print('check0')
+                # key = event.Item.Values[0]
+                # values = event.Item.Values[1:]
+                # for attr, value in zip(attributes, values):
+                #     if value != '-':
+                #         try:
+                #             diagram.vertex_attribute(key, attr, ast.literal_eval(value))
+                #         except (ValueError, TypeError):
+                #             diagram.vertex_attribute(key, attr, value)
 
-                # redraw diagram to update
-                RV2 = sc.sticky["RV2"]
-                form = RV2["data"]["form"]
-                if not form:
-                    return
-                settings = RV2["settings"]
-                rfdiagram = RhinoFormDiagram(form)
-                rfdiagram.draw(settings)
+                # # redraw diagram to update
+                # RV2 = sc.sticky["RV2"]
+                # form = RV2["data"]["form"]
+                # if not form:
+                #     return
+                # settings = RV2["settings"]
+                # rfdiagram = RhinoFormDiagram(form)
+                # rfdiagram.draw(settings)
 
             except Exception as e:
                 print(e)
