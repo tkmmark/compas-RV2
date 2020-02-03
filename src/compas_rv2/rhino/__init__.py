@@ -6,5 +6,6 @@ from .rhinodiagram import RhinoDiagram
 from .rhinoformdiagram import RhinoFormDiagram
 from .rhinoforcediagram import RhinoForceDiagram
 from .rhinoskeleton import RhinoSkeleton
+from .propertysheet import PropertySheet
 
 __all__ = [name for name in dir() if not name.startswith('_')]

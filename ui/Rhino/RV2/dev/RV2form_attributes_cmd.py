@@ -8,7 +8,7 @@ import compas_rhino
 from compas_rhino.etoforms import TextForm
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import RhinoFormDiagram
-
+from compas_rv2.rhino import PropertySheet
 
 __commandname__ = "RV2form_attributes"
 
@@ -32,13 +32,38 @@ def update_attributes_faces(diagram):
     return diagram.update_faces_attributes()
 
 
+def property_sheet(diagram):
+    propertySheet = PropertySheet()
+    propertySheet.setup(diagram)
+    propertySheet.Show()
+    sc.sticky["RV2"]["propertySheet"] = propertySheet
+    return False
+
+
+def goto_selection(diagram):
+    propertySheet = sc.sticky["RV2"]["propertySheet"]
+    # propertySheet.Enabled = True
+    # propertySheet.Visible = True
+    propertySheet.vertices_table.SelectRow(2)
+    return False
+
+
+def redraw(diagram):
+    return True
+
+
 config = {
     "message": "FormDiagram Attributes",
     "options": [
         {"name": "Diagram", "action": update_attributes_diagram},
         {"name": "Vertices", "action": update_attributes_vertices},
         {"name": "Edges", "action": update_attributes_edges},
-        {"name": "Faces", "action": update_attributes_faces}
+        {"name": "Faces", "action": update_attributes_faces},
+        {"name": "Property", "action": property_sheet},
+        {"name": "redraw", "action": redraw},
+        {"name": "goto_selection", "action": goto_selection},
+
+
     ]
 }
 
