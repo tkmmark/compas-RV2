@@ -8,6 +8,7 @@ import compas_rhino
 
 from compas_rhino.etoforms import TextForm
 from compas_rhino.ui import CommandMenu
+from compas_rv2.rhino import PropertySheet
 
 
 __commandname__ = "RV2force_attributes"
@@ -32,13 +33,19 @@ def update_attributes_faces(diagram):
     return diagram.update_faces_attributes()
 
 
+def property_sheet(diagram):
+    PropertySheet.from_diagram(diagram)
+    return False
+
+
 config = {
     "message": "ForceDiagram Attributes",
     "options": [
         {"name": "Diagram", "action": update_attributes_diagram},
         {"name": "Vertices", "action": update_attributes_vertices},
         {"name": "Edges", "action": update_attributes_edges},
-        {"name": "Faces", "action": update_attributes_faces}
+        {"name": "Faces", "action": update_attributes_faces},
+        {"name": "Property", "action": property_sheet}
     ]
 }
 

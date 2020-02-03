@@ -33,6 +33,7 @@
             {"name": "RV2form_attributes_vertices", "button_text": "form@V", "menu_text": "Form Vertex Attributes"},
             {"name": "RV2form_attributes_edges", "button_text": "form@E", "menu_text": "Form Edge Attributes"},
             {"name": "RV2form_attributes_faces", "button_text": "form@F", "menu_text": "Form Face Attributes"},
+            {"name": "RV2form_attributes_property", "button_text": "form@P", "menu_text": "Form Property Attributes"},
 
             {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Form Relax"},
 
@@ -41,6 +42,9 @@
             {"name": "RV2force_attributes_vertices", "button_text": "force@V", "menu_text": "Force Vertex Attributes"},
             {"name": "RV2force_attributes_edges", "button_text": "force@E", "menu_text": "Force Edge Attributes"},
             {"name": "RV2force_attributes_faces", "button_text": "force@F", "menu_text": "Force Face Attributes"},
+            {"name": "RV2force_attributes_property", "button_text": "form@P", "menu_text": "Force Property Attributes"},
+
+            {"name": "RV2thrust_attributes_property", "button_text": "thrust@P", "menu_text": "Th Property Attributes"},
 
             {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": "horizontal"},
             {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": "vertical"}

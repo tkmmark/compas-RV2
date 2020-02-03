@@ -7,7 +7,7 @@ import scriptcontext as sc
 import compas_rhino
 from compas_rhino.etoforms import TextForm
 from compas_rhino.ui import CommandMenu
-
+from compas_rv2.rhino import PropertySheet
 
 __commandname__ = "RV2form_attributes"
 
@@ -31,13 +31,22 @@ def update_attributes_faces(diagram):
     return diagram.update_faces_attributes()
 
 
+def property_sheet(diagram):
+    # from compas_rhino.utilities import unload_modules
+    # unload_modules("compas_rv2")
+    # from compas_rv2.rhino import PropertySheet
+    PropertySheet.from_diagram(diagram)
+    return False
+
+
 config = {
     "message": "FormDiagram Attributes",
     "options": [
         {"name": "Diagram", "action": update_attributes_diagram},
         {"name": "Vertices", "action": update_attributes_vertices},
         {"name": "Edges", "action": update_attributes_edges},
-        {"name": "Faces", "action": update_attributes_faces}
+        {"name": "Faces", "action": update_attributes_faces},
+        {"name": "Property", "action": property_sheet}
     ]
 }
 
