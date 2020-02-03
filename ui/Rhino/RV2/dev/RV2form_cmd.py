@@ -9,10 +9,8 @@ import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
 from compas_rv2.datastructures import FormDiagram
-from compas_rv2.datastructures import Skeleton
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
-from compas_rv2.rhino import RhinoSkeleton
 
 
 __commandname__ = "RV2form"
@@ -128,11 +126,11 @@ def from_features(root):
 
 def from_skeleton(root):
     RV2 = sc.sticky["RV2"]
-    skeleton = RV2["data"]["skeleton"]
+    skeleton = RV2["scene"]["skeleton"]
     if not skeleton:
         print('There is not skeleton to be found!')
-        return 
-    
+        return
+
     form = skeleton.to_diagram()
 
     return form
