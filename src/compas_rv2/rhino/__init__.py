@@ -5,6 +5,7 @@ from __future__ import division
 from .rhinodiagram import RhinoDiagram
 from .rhinoformdiagram import RhinoFormDiagram
 from .rhinoforcediagram import RhinoForceDiagram
+from .rhinothrustdiagram import RhinoThrustDiagram
 from .rhinoskeleton import RhinoSkeleton
 from .propertysheet import PropertySheet
 

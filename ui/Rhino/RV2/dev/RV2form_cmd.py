@@ -4,15 +4,15 @@ from __future__ import division
 
 import os
 import scriptcontext as sc
-import rhinoscriptsyntax as rs
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rhino.etoforms import TextForm
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import Skeleton
-from compas_rv2.rhino import RhinoSkeleton
 from compas_rv2.rhino import RhinoFormDiagram
+from compas_rv2.rhino import RhinoThrustDiagram
+from compas_rv2.rhino import RhinoSkeleton
 
 
 __commandname__ = "RV2form"
@@ -127,88 +127,13 @@ def from_features(root):
 
 
 def from_skeleton(root):
-    guids = compas_rhino.select_lines()
-    if not guids:
-        return
-    lines = compas_rhino.get_line_coordinates(guids)
-    skeleton = Skeleton.from_skeleton_lines(lines)
-    rs.DeleteObjects(guids)
-    rhinoskeleton = RhinoSkeleton(skeleton)
-    rhinoskeleton.dynamic_draw_self()
-
-    def add_lines():
-        try:
-            rs.PurgeLayer('skeleton_vertices')
-            rs.PurgeLayer('skeleton_diagram_vertices')
-            rs.PurgeLayer('skeleton_diagram_edges')
-        except:  # noqa E722
-            pass
-
-        guids = compas_rhino.select_lines()
-        if not guids:
-            return
-        lines = compas_rhino.get_line_coordinates(guids)
-        rs.DeleteObjects(guids)
-        rhinoskeleton.diagram.add_skeleton_lines(lines)
-        rhinoskeleton.draw_self()
-
-    def remove_lines():
-        pass
-
-    def move_skeleton():
-        rhinoskeleton.move_skeleton_vertex()
-        rhinoskeleton.draw_self()
-
-    def subdivide():
-        rhinoskeleton.diagram.subdivide(k=1)
-        rhinoskeleton.draw_self()
-
-    def merge():
-        rhinoskeleton.diagram.merge(k=1)
-        rhinoskeleton.draw_self()
-
-    config = {
-        "name": "modify",
-        "message": "Modify",
-        "options": [
-            {
-                "name": "finish",
-                "message": "Finish",
-                "action": None
-            },
-            {
-                "name": "subdivide",
-                "message": "Subdivide",
-                "action": subdivide
-            },
-            {
-                "name": "merge",
-                "message": "Merge",
-                "action": merge
-            }
-        ]
-    }
-
-    while True:
-        menu = CommandMenu(config)
-        action = menu.select_action()
-
-        if not action:
-            return
-        elif action['name'] == 'finish':
-            rs.PurgeLayer('skeleton_vertices')
-            rs.PurgeLayer('skeleton_diagram_vertices')
-            rs.PurgeLayer('skeleton_edges')
-            rs.PurgeLayer('skeleton_diagram_edges')
-            break
-        action['action']()
-
-    form = rhinoskeleton.diagram.to_diagram()
-    # keys = rhinoskeleton.diagram.to_support_vertices()
-
-    # if keys:
-    #     form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=keys)
-    # form.update_boundaries(feet=2)
+    RV2 = sc.sticky["RV2"]
+    skeleton = RV2["data"]["skeleton"]
+    if not skeleton:
+        print('There is not skeleton to be found!')
+        return 
+    
+    form = skeleton.to_diagram()
 
     return form
 
@@ -266,7 +191,7 @@ def RunCommand(is_interactive):
 
     session = RV2["session"]
     settings = RV2["settings"]
-    data = RV2["data"]
+    scene = RV2["scene"]
 
     menu = CommandMenu(config)
     action = menu.select_action()
@@ -279,10 +204,14 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    diagram = RhinoFormDiagram(form)
-    diagram.draw(settings)
+    rhinoform = RhinoFormDiagram(form)
+    rhinoform.draw(settings)
 
-    data["form"] = form
+    rhinothrust = RhinoThrustDiagram(form)
+
+    scene["form"] = rhinoform
+    scene["force"] = None
+    scene["thrust"] = rhinothrust
 
 
 # ==============================================================================

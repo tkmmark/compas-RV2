@@ -6,7 +6,6 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rv2.rhino import RhinoFormDiagram
 
 
 __commandname__ = "RV2form_relax"
@@ -23,11 +22,11 @@ def RunCommand(is_interactive):
 
     RV2 = sc.sticky["RV2"]
     settings = RV2["settings"]
-    form = RV2["data"]["form"]
+    rhinoform = RV2["scene"]["form"]
 
     proxy = sc.sticky["RV2.proxy"]
 
-    if not form:
+    if not rhinoform:
         return
 
     if not proxy:
@@ -36,11 +35,10 @@ def RunCommand(is_interactive):
     proxy.package = "compas_tna.utilities"
     relax = proxy.relax_boundary_openings_proxy
 
-    fixed = list(form.vertices_where({'is_fixed': True}))
-    form.data = relax(form.data, fixed)
+    fixed = list(rhinoform.diagram.vertices_where({'is_fixed': True}))
+    rhinoform.diagram.data = relax(rhinoform.diagram.data, fixed)
 
-    formdiagram = RhinoFormDiagram(form)
-    formdiagram.draw(settings)
+    rhinoform.draw(settings)
 
 
 # ==============================================================================

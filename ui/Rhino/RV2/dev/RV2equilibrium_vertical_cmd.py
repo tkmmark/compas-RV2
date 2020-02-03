@@ -6,7 +6,6 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rv2.rhino import RhinoFormDiagram
 
 
 __commandname__ = "RV2equilibrium_vertical"
@@ -23,16 +22,20 @@ def RunCommand(is_interactive):
 
     RV2 = sc.sticky["RV2"]
     settings = RV2["settings"]
-    form = RV2["data"]["form"]
-    force = RV2["data"]["force"]
+    rhinoform = RV2["scene"]["form"]
+    rhinoforce = RV2["scene"]["force"]
+    rhinothrust = RV2["scene"]["thrust"]
     zmax = settings["vertical.zmax"]
 
     proxy = sc.sticky["RV2.proxy"]
 
-    if not form:
+    if not rhinoform:
         return
 
-    if not force:
+    if not rhinoforce:
+        return
+
+    if not rhinothrust:
         return
 
     if not proxy:
@@ -41,12 +44,15 @@ def RunCommand(is_interactive):
     proxy.package = "compas_tna.equilibrium"
     vertical = proxy.vertical_from_zmax_proxy
 
-    formdata, scale = vertical(form.data, zmax)
-    form.data = formdata
-    force.attributes['scale'] = scale
+    formdata, scale = vertical(rhinoform.diagram.data, zmax)
 
-    formdiagram = RhinoFormDiagram(form)
-    formdiagram.draw(settings)
+    rhinoforce.diagram.attributes['scale'] = scale
+
+    rhinoform.diagram.data = formdata
+    rhinothrust.diagram.data = formdata
+
+    rhinoform.draw(settings)
+    rhinothrust.draw(settings)
 
 
 # ==============================================================================

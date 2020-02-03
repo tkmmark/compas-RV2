@@ -8,6 +8,9 @@ import compas_rhino
 from compas_rhino.etoforms import TextForm
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.rhino import RhinoForceDiagram
+from compas.geometry import subtract_vectors
+from compas.geometry import scale_vector
+from compas.geometry import Translation
 
 
 __commandname__ = "RV2force"
@@ -24,17 +27,28 @@ def RunCommand(is_interactive):
 
     RV2 = sc.sticky["RV2"]
     settings = RV2["settings"]
-    form = RV2["data"]["form"]
+    rhinoform = RV2["scene"]["form"]
 
-    if not form:
+    if not rhinoform:
         return
 
-    force = ForceDiagram.from_formdiagram(form)
+    force = ForceDiagram.from_formdiagram(rhinoform.diagram)
+    bbox = force.bounding_box()
 
-    forcediagram = RhinoForceDiagram(force)
-    forcediagram.draw(settings)
+    a = bbox[0]
+    b = bbox[1]
 
-    RV2["data"]["force"] = force
+    ab = subtract_vectors(b, a)
+    ab = scale_vector(ab, 1.5)
+
+    T = Translation(ab)
+
+    force.transform(T)
+
+    rhinoforce = RhinoForceDiagram(force)
+    rhinoforce.draw(settings)
+
+    RV2["scene"]["force"] = rhinoforce
 
 
 # ==============================================================================

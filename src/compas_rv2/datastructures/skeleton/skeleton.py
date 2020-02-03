@@ -356,6 +356,10 @@ class Skeleton(Mesh):
         for fkey in highpoly_mesh.face:
             digram_mesh.add_face(highpoly_mesh.face[fkey])
 
+        anchor_vertices = self.get_anchor_vertices()
+        if anchor_vertices != []:
+            digram_mesh.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
+
         return digram_mesh
 
     def to_lines(self):
@@ -364,8 +368,8 @@ class Skeleton(Mesh):
             lines.append(self.to_diagram().edge_coordinates(u, v))
         return lines
 
-    def to_support_vertices(self):
-        support_vertices = []
+    def get_anchor_vertices(self):
+        anchor_vertices = []
         leaf_vertices = list(self.vertices_where({'type': 'skeleton_leaf'}))
         iterations = self.attributes['sub_level']
 
@@ -386,9 +390,9 @@ class Skeleton(Mesh):
                             vertices_temp_2.append(nbr)
                 vertices_temp = vertices_temp_2
 
-            support_vertices.extend(vertices_on_edge)
+            anchor_vertices.extend(vertices_on_edge)
 
-        return support_vertices
+        return anchor_vertices
 
 
 if __name__ == '__main__':

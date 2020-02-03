@@ -6,7 +6,6 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rv2.rhino import RhinoFormDiagram
 
 
 __commandname__ = "RV2form_update_boundaries"
@@ -23,15 +22,13 @@ def RunCommand(is_interactive):
 
     RV2 = sc.sticky["RV2"]
     settings = RV2["settings"]
-    form = RV2["data"]["form"]
+    rhinoform = RV2["scene"]["form"]
 
-    if not form:
+    if not rhinoform:
         return
 
-    form.update_boundaries(feet=2)
-
-    diagram = RhinoFormDiagram(form)
-    diagram.draw(settings)
+    rhinoform.diagram.update_boundaries(feet=2)
+    rhinoform.draw(settings)
 
 
 # ==============================================================================
