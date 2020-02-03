@@ -117,7 +117,7 @@ class RhinoFormDiagram(RhinoDiagram):
             color.update({key: settings.get("color.form.vertices:is_fixed") for key in self.diagram.vertices_where({'is_fixed': True})})
             color.update({key: settings.get("color.form.vertices:is_external") for key in self.diagram.vertices_where({'is_external': True})})
             color.update({key: settings.get("color.form.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
-            self.diagram.guid_vertices = self.artist.draw_vertices(color=color)
+            self.guid_vertices = self.artist.draw_vertices(color=color)
 
         if settings.get("show.form.edges", True):
             keys = list(self.diagram.edges_where({'is_edge': True}))
@@ -129,7 +129,7 @@ class RhinoFormDiagram(RhinoDiagram):
                     color[key] = settings.get("color.form.edges:is_external")
                 else:
                     color[key] = settings.get("color.form.edges")
-            self.artist.draw_edges(keys=keys, color=color)
+            self.guid_edges = self.artist.draw_edges(keys=keys, color=color)
 
         self.artist.redraw()
 

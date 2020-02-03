@@ -28,29 +28,29 @@ class Tree_Table(forms.TreeGridView):
         self.Height = 300
 
     @classmethod
-    def from_sceneNode(cls, sceneNode):
+    def from_rhinoDiagram(cls, rhinoDiagram):
         table = cls(ShowHeader=False)
         table.add_column()
         table.add_column()
 
         treecollection = forms.TreeGridItemCollection()
-        treecollection.Add(forms.TreeGridItem(Values=('Type', sceneNode.diagram.__class__.__name__)))
-        treecollection.Add(forms.TreeGridItem(Values=('Name', sceneNode.artist.name)))
-        treecollection.Add(forms.TreeGridItem(Values=('Layer', sceneNode.artist.layer)))
+        treecollection.Add(forms.TreeGridItem(Values=('Type', rhinoDiagram.diagram.__class__.__name__)))
+        treecollection.Add(forms.TreeGridItem(Values=('Name', rhinoDiagram.artist.name)))
+        treecollection.Add(forms.TreeGridItem(Values=('Layer', rhinoDiagram.artist.layer)))
 
-        if hasattr(sceneNode.artist, 'settings'):
+        if hasattr(rhinoDiagram.artist, 'settings'):
             settings = forms.TreeGridItem(Values=('Settings',))
             treecollection.Add(settings)
-            for key in sceneNode.artist.settings:
-                settings.Children.Add(forms.TreeGridItem(Values=(key, str(sceneNode.artist.settings[key]))))
+            for key in rhinoDiagram.artist.settings:
+                settings.Children.Add(forms.TreeGridItem(Values=(key, str(rhinoDiagram.artist.settings[key]))))
 
         table.DataStore = treecollection
         return table
 
     @classmethod
-    def from_vertices(cls, sceneNode):
+    def from_vertices(cls, rhinoDiagram):
 
-        diagram = sceneNode.diagram
+        diagram = rhinoDiagram.diagram
         table = cls()
         table.add_column('key')
         attributes = list(diagram.default_vertex_attributes.keys())
@@ -64,14 +64,14 @@ class Tree_Table(forms.TreeGridView):
                 values.append(str(diagram.vertex_attribute(key, attr)))
             treecollection.Add(forms.TreeGridItem(Values=tuple(values)))
         table.DataStore = treecollection
-        table.Activated += table.SelectEvent(diagram.guid_vertices)
+        table.Activated += table.SelectEvent(rhinoDiagram.guid_vertices)
         table.CellEdited += table.EditEvent(diagram, attributes)
         
         return table
 
     @classmethod
-    def from_edges(cls, sceneNode):
-        diagram = sceneNode.diagram
+    def from_edges(cls, rhinoDiagram):
+        diagram = rhinoDiagram.diagram
         table = cls()
         table.add_column('key')
         table.add_column('vertices')
@@ -90,12 +90,12 @@ class Tree_Table(forms.TreeGridView):
                 vertex_item = forms.TreeGridItem(Values=('', key))
                 edge_item.Children.Add(vertex_item)
         table.DataStore = treecollection
-        table.Activated += table.SelectEvent(diagram.guid_edges, diagram.guid_vertices)
+        table.Activated += table.SelectEvent(rhinoDiagram.guid_edges, rhinoDiagram.guid_vertices)
         return table
 
     @classmethod
-    def from_faces(cls, sceneNode):
-        diagram = sceneNode.diagram
+    def from_faces(cls, rhinoDiagram):
+        diagram = rhinoDiagram.diagram
         table = cls()
         table.add_column('key')
         table.add_column('vertices')
@@ -114,7 +114,7 @@ class Tree_Table(forms.TreeGridView):
                 vertex_item = forms.TreeGridItem(Values=('', v))
                 face_item.Children.Add(vertex_item)
         table.DataStore = treecollection
-        table.Activated += table.SelectEvent(diagram.guid_faces, diagram.guid_vertices)
+        table.Activated += table.SelectEvent(rhinoDiagram.guid_faces, rhinoDiagram.guid_vertices)
         return table
 
     def SelectEvent(self, GUIDs, GUIDs2=None):
@@ -172,10 +172,10 @@ class Tree_Table(forms.TreeGridView):
 
 class PropertySheet(forms.Form):
 
-    def setup(self, sceneNode):
+    def setup(self, rhinoDiagram):
         self.Rnd = System.Random()
         self.Title = "Properties"
-        self.TabControl = self.from_sceneNode(sceneNode)
+        self.TabControl = self.from_rhinoDiagram(rhinoDiagram)
         tab_items = forms.StackLayoutItem(self.TabControl, True)
         layout = forms.StackLayout()
         layout.Spacing = 5
@@ -186,30 +186,31 @@ class PropertySheet(forms.Form):
         self.Resizable = False
         self.ClientSize = drawing.Size(400, 600)
 
-    def from_sceneNode(self, sceneNode):
+    def from_rhinoDiagram(self, rhinoDiagram):
         control = forms.TabControl()
         control.TabPosition = forms.DockPosition.Top
 
         tab = forms.TabPage()
         tab.Text = "Basic"
-        tab.Content = Tree_Table.from_sceneNode(sceneNode)
+        tab.Content = Tree_Table.from_rhinoDiagram(rhinoDiagram)
         control.Pages.Add(tab)
 
         tab = forms.TabPage()
         tab.Text = "Vertices"
-        tab.Content = Tree_Table.from_vertices(sceneNode)
+        tab.Content = Tree_Table.from_vertices(rhinoDiagram)
         control.Pages.Add(tab)
         self.vertices_table = tab.Content
 
         tab = forms.TabPage()
         tab.Text = "Edges"
-        tab.Content = Tree_Table.from_edges(sceneNode)
+        tab.Content = Tree_Table.from_edges(rhinoDiagram)
         control.Pages.Add(tab)
+        self.edges_table = tab.Content
 
-        tab = forms.TabPage()
-        tab.Text = "Faces"
-        tab.Content = Tree_Table.from_faces(sceneNode)
-        control.Pages.Add(tab)
+        # tab = forms.TabPage()
+        # tab.Text = "Faces"
+        # tab.Content = Tree_Table.from_faces(rhinoDiagram)
+        # control.Pages.Add(tab)
 
         return control
 
@@ -226,10 +227,9 @@ if __name__ == "__main__":
     filepath = compas.get('faces.obj')
     form = FormDiagram.from_obj(filepath)
 
-    diagram = RhinoFormDiagram(form)
-    diagram.draw({})
-    # form.plot()
+    rhinoDiagram = RhinoFormDiagram(form)
+    rhinoDiagram.draw({})
 
     dialog = PropertySheet()
-    dialog.setup(diagram)
+    dialog.setup(rhinoDiagram)
     dialog.Show()
