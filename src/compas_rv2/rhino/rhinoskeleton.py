@@ -230,6 +230,12 @@ class RhinoSkeleton(object):
         artist.draw_edges(color=(0, 0, 0))
         artist.redraw()
 
+    def draw_rhino_mesh(self):
+        artist = MeshArtist(self.diagram.to_diagram())
+        artist.layer = 'RV2::Skeleton::mesh'
+        artist.draw_mesh()
+        artist.redraw()
+
     def update(self):
         # this part should be embeded in UI
 
