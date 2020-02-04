@@ -7,26 +7,19 @@
     },
     "ui":
     {
-        "images":
-        [
-
-            {"name": "init", "path": "ui/Rhino/RV2/dev/icons.png", "index": 0},
-            {"name": "settings", "path": "ui/Rhino/RV2/dev/icons.png", "index": 1},
-            {"name": "skeleton", "path": "ui/Rhino/RV2/dev/icons.png", "index": 2},
-            {"name": "form", "path": "ui/Rhino/RV2/dev/icons.png", "index": 2},
-            {"name": "force", "path": "ui/Rhino/RV2/dev/icons.png", "index": 3},
-            {"name": "horizontal", "path": "ui/Rhino/RV2/dev/icons.png", "index": 4},
-            {"name": "vertical", "path": "ui/Rhino/RV2/dev/icons.png", "index": 5}
-
-        ],
+        "icons":
+        {
+            "bitmap": "icons/grid.png",
+            "images": ["init", "init", "settings", "files", "form", "force", "horizontal", "vertical"]
+        },
         "commands":
         [
-            {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": "init"},
-            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": "settings"},
-            {"name": "RV2file", "button_text": "file", "menu_text": "File"},
-            {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton", "icon": "skeleton"},
-            {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": "form"},
-            {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": "force"},
+            {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": 0},
+            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": 2},
+            {"name": "RV2file", "button_text": "file", "menu_text": "File", "icon": 3},
+            {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
+            {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": 4},
+            {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": 5},
 
             {"name": "RV2form_attributes", "button_text": "form@", "menu_text": "Form Attributes"},
             {"name": "RV2form_attributes_diagram", "button_text": "form@D", "menu_text": "Form Diagram Attributes"},
@@ -42,8 +35,8 @@
             {"name": "RV2force_attributes_edges", "button_text": "force@E", "menu_text": "Force Edge Attributes"},
             {"name": "RV2force_attributes_faces", "button_text": "force@F", "menu_text": "Force Face Attributes"},
 
-            {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": "horizontal"},
-            {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": "vertical"}
+            {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": 6},
+            {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": 7}
         ],
         "menus":
         [],
@@ -74,5 +67,9 @@
                 ]
             }
         ]
+    },
+    "settings":
+    {
+
     }
 }

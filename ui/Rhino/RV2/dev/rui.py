@@ -23,38 +23,34 @@ TPL_RUI = """<?xml version="1.0" encoding="utf-8"?>
     <tool_bars />
     <macros />
     <bitmaps>
+        <small_bitmap item_width="16" item_height="16">
+            <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+        </small_bitmap>
+        <normal_bitmap item_width="24" item_height="24">
+            <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+        </normal_bitmap>
+        <large_bitmap item_width="32" item_height="32">
+            <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+        </large_bitmap>
     </bitmaps>
     <scripts />
 </RhinoUI>
 """
 
-TPL_ICON_SMALL = """
-<small_bitmap item_width="16" item_height="16">
-    <bitmap_item guid="{0}" index="0" />
-    <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
-</small_bitmap>
-"""
-
-TPL_ICON_NORMAL = """
-<normal_bitmap item_width="24" item_height="24">
-    <bitmap_item guid="{0}" index="0" />
-    <bitmap>{1}</bitmap>
-</normal_bitmap>
-"""
-
-TPL_ICON_LARGE = """
-<large_bitmap item_width="32" item_height="32">
-    <bitmap_item guid="{0}" index="0" />
-    <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
-</large_bitmap>
+TPL_BITMAP_ITEM = """
+<bitmap_item guid="{0}" index="{1}" />
 """
 
 TPL_MACRO_ICON = """
@@ -110,7 +106,7 @@ TPL_MENUSEPARATOR = """
 """
 
 TPL_TOOLBARITEM = """
-<tool_bar_item guid="{0}" button_display_mode="control_only" button_style="normal">
+<tool_bar_item guid="{0}" button_style="normal">
     <left_macro_id>{1}</left_macro_id>
     <right_macro_id>{2}</right_macro_id>
 </tool_bar_item>
@@ -165,12 +161,12 @@ class Rui(object):
 
     def __init__(self, filepath):
         self.filepath = filepath
-        self.icons = {}
+        self.icons = []
         self.macros = {}
         self.toolbars = {}
         self.xml = None
         self.root = None
-        self.root_icons = []
+        self.root_bitmaps = []
         self.root_macros = []
         self.root_menus = []
         self.root_toolbargroups = []
@@ -193,7 +189,7 @@ class Rui(object):
             f.write(TPL_RUI.format(uuid.uuid4(), uuid.uuid4()))
         self.xml = ET.parse(self.filepath)
         self.root = self.xml.getroot()
-        self.root_icons = self.root.find("bitmaps")
+        self.root_bitmaps = self.root.find("bitmaps")
         self.root_macros = self.root.find("macros")
         self.root_menus = self.root.find("menus")
         self.root_toolbargroups = self.root.find("tool_bar_groups")
@@ -210,27 +206,26 @@ class Rui(object):
             fh.write(xml)
 
     # --------------------------------------------------------------------------
-    # add images
+    # add icons
     # --------------------------------------------------------------------------
 
-    def add_images(self, images):
-        for image in images:
+    def add_bitmap(self, path):
+        with open(path, "rb") as f:
+            bitmap = base64.encodebytes(f.read()).decode("utf-8")
+        self.root_bitmaps.find("large_bitmap").find("bitmap").text = bitmap
+
+    def add_bitmap_items(self, items):
+        small = self.root_bitmaps.find("small_bitmap")
+        normal = self.root_bitmaps.find("normal_bitmap")
+        large = self.root_bitmaps.find("large_bitmap")
+        for index, name in enumerate(items):
             guid = str(uuid.uuid4())
-            name = image["name"]
-            path = image["path"]
-            icon = None
-            with open(path, "rb") as f:
-                icon = base64.encodebytes(f.read()).decode("utf-8")
-            s_icon_S = TPL_ICON_SMALL.format(guid)
-            s_icon_N = TPL_ICON_NORMAL.format(guid, icon)
-            s_icon_L = TPL_ICON_LARGE.format(guid)
-            e_icon_S = ET.fromstring(s_icon_S)
-            e_icon_N = ET.fromstring(s_icon_N)
-            e_icon_L = ET.fromstring(s_icon_L)
-            self.root_icons.append(e_icon_S)
-            self.root_icons.append(e_icon_N)
-            self.root_icons.append(e_icon_L)
-            self.icons[name] = guid
+            s = TPL_BITMAP_ITEM.format(guid, index)
+            e = ET.fromstring(s)
+            small.append(e)
+            normal.append(e)
+            large.append(e)
+            self.icons.append(guid)
 
     # --------------------------------------------------------------------------
     # add macros
@@ -245,12 +240,12 @@ class Rui(object):
             help_text = macro.get("help_text", "")
             button_text = macro.get("button_text", name)
             menu_text = macro.get("menu_text", name.replace("_", " "))
-            icon_name = macro.get("icon")
-            self.add_macro(name, guid, script, tooltip, help_text, button_text, menu_text, icon_name)
+            icon_index = macro.get("icon")
+            self.add_macro(name, guid, script, tooltip, help_text, button_text, menu_text, icon_index)
 
-    def add_macro(self, name, guid, script, tooltip, help_text, button_text, menu_text, icon_name=None):
-        if icon_name:
-            icon_guid = self.icons[icon_name]
+    def add_macro(self, name, guid, script, tooltip, help_text, button_text, menu_text, icon_index=None):
+        if icon_index is not None:
+            icon_guid = self.icons[icon_index]
             s_macro = TPL_MACRO_ICON.format(guid, name, script, tooltip, help_text, button_text, menu_text, icon_guid)
         else:
             s_macro = TPL_MACRO.format(guid, name, script, tooltip, help_text, button_text, menu_text)
@@ -306,7 +301,7 @@ class Rui(object):
 
     def add_toolbar(self, toolbar):
         options = {
-            "item_display_style": "text_only"
+            "item_display_style": "control_and_text"
         }
         guid = uuid.uuid4()
         s_tb = TPL_TOOLBAR.format(guid, toolbar["name"], options)
@@ -400,9 +395,13 @@ if __name__ == "__main__":
         })
 
     rui.init()
-    rui.add_images(config["ui"]["images"])
+
+    rui.add_bitmap(os.path.join(HERE, config["ui"]["icons"]["bitmap"]))
+    rui.add_bitmap_items(config["ui"]["icons"]["images"])
+
     rui.add_macros(commands)
     rui.add_menus(config["ui"]["menus"])
     rui.add_toolbars(config["ui"]["toolbars"])
     rui.add_toolbargroups(config["ui"]["toolbargroups"])
+
     rui.write()

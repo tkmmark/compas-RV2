@@ -1,60 +1,71 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<RhinoUI major_ver="3" minor_ver="0" guid="eded98c3-9aaf-4cb0-b82d-460358be7887" localize="False" default_language_id="1033" dpi_scale="100">
+<?xml version="1.0" ?>
+<RhinoUI default_language_id="1033" guid="3521cd97-e201-434d-926b-4dc50ef58c18" localize="False" major_ver="2" minor_ver="0">
   <extend_rhino_menus>
-    <menu guid="6444500f-b063-49a6-bbaf-fa26d5d8068e">
+    <menu guid="c4cdac59-c8d2-4be4-961a-da24925088b1">
       <text>
         <locale_1033>Extend Rhino Menus</locale_1033>
       </text>
     </menu>
   </extend_rhino_menus>
-  <menus />
+  <menus/>
   <tool_bar_groups>
-    <tool_bar_group guid="a62767cd-d068-4f7f-bd78-5c5eea071389" dock_bar_guid32="00000000-0000-0000-0000-000000000000" dock_bar_guid64="e76a60d2-3ff0-4a8c-b7b6-797d0847e8d2" active_tool_bar_group="a4d10d0b-8b0d-4f28-a70e-ba006106ac9a" single_file="False" hide_single_tab="False" point_floating="213,165">
+    <tool_bar_group active_tool_bar_group="" dock_bar_guid32="" dock_bar_guid64="" guid="1230c943-1507-41b3-be90-ce62698bbd63" hide_single_tab="False" point_floating="0,0" single_file="False">
       <text>
         <locale_1033>RV2</locale_1033>
       </text>
-      <tool_bar_group_item guid="a4d10d0b-8b0d-4f28-a70e-ba006106ac9a" major_version="1" minor_version="1">
+      <tool_bar_group_item guid="ed3c6196-d449-407a-8dca-a9d8d7103049" major_version="1" minor_version="1">
         <text>
           <locale_1033>RV2</locale_1033>
         </text>
-        <tool_bar_id>5bd22ec8-f689-4f40-92ca-d9ce21aa487d</tool_bar_id>
+        <tool_bar_id>ae7e60ec-2815-4b2c-a2f0-7a0182ca6264</tool_bar_id>
       </tool_bar_group_item>
-      <dock_bar_info dpi_scale="100" dock_bar="False" docking="True" horz="False" visible="True" floating="True" mru_float_style="8192" bar_id="59459" mru_width="868" point_pos="-2,-2" float_point="213,165" rect_mru_dock_pos="63,0,98,716" dock_location_u="59420" dock_location="left" float_size="584,60" />
     </tool_bar_group>
   </tool_bar_groups>
   <tool_bars>
-    <tool_bar guid="5bd22ec8-f689-4f40-92ca-d9ce21aa487d" item_display_style="control_and_text">
+    <tool_bar guid="ae7e60ec-2815-4b2c-a2f0-7a0182ca6264" item_display_style="control_and_text">
       <text>
         <locale_1033>RV2</locale_1033>
       </text>
-      <tool_bar_item guid="31f19dc3-2a74-49d7-b63c-a31a356f55f9">
-        <left_macro_id>b6823ce9-8fb2-428a-a296-8ca7caded638</left_macro_id>
+      <tool_bar_item button_style="normal" guid="45deff23-deaa-4e78-935b-4cd1487b6506">
+        <left_macro_id>898ac36e-b3c7-4e19-9ae3-1bc5e6c17192</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="75c45a88-6042-477e-922a-2faa34eacbcb">
-        <left_macro_id>02b68fbb-7f2c-4734-b83f-510927707ab5</left_macro_id>
+      <tool_bar_item button_style="normal" guid="cddaf464-c5e0-4044-ada3-2a8255835ab6">
+        <left_macro_id>d4dff0c2-7727-4fc4-a184-6bc888e3ff37</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="ee4f6a87-adaa-4dac-903e-5ab20e72177e">
-        <left_macro_id>0aba062a-6eab-409e-af5f-36411fd39da8</left_macro_id>
+      <tool_bar_item button_style="normal" guid="6fc8fc03-2d65-49d0-82cc-ce03b21f12d1">
+        <left_macro_id>dbc56c7b-e2d8-4f2e-a17a-0b281ec72a03</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="42a02347-f295-4f1a-82e4-fa78503eff8b">
-        <left_macro_id>d24397cb-b762-4139-8f01-1c0ed1acf4cf</left_macro_id>
+      <tool_bar_item button_style="normal" guid="9b76f658-5638-4679-8f99-178656911837">
+        <left_macro_id>c8a4a50e-4f2a-4c90-a84b-7a333348aa58</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="1ad58ee7-f5f5-48da-acb1-0a700f009e6f">
-        <left_macro_id>3dd917af-8671-4d4c-a7ac-dc1a77772f4d</left_macro_id>
+      <tool_bar_item button_style="normal" guid="dc99eeab-9794-45b6-ae78-eeb01590a16f">
+        <left_macro_id>3c8e96bf-5b58-46c6-b232-c9bed2a82eca</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="2e4a7548-9e47-4191-821d-7142fccc8ea8">
-        <left_macro_id>ecb7ab8a-2bf1-422e-8ccc-e6716ceb0d25</left_macro_id>
+      <tool_bar_item button_style="normal" guid="a1e47607-8470-4e88-943a-d154e6d126ef">
+        <left_macro_id>4d637c61-d9dd-4ddc-abc9-eeb71a230138</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="16c0755c-9886-4544-91fa-67c041d13174">
-        <left_macro_id>aa2770f5-e694-4a83-9290-b95593a76606</left_macro_id>
+      <tool_bar_item button_style="normal" guid="a2f1c398-02c8-4ad9-9773-521f8d8b62c8">
+        <left_macro_id>cfbfa570-fdba-4527-8859-c91958592358</left_macro_id>
+        <right_macro_id>None</right_macro_id>
+      </tool_bar_item>
+      <tool_bar_item button_style="normal" guid="508f57b1-2fd3-4814-bbb1-93db511a95aa">
+        <left_macro_id>ec479d5f-d692-458c-8852-641d2fba7a65</left_macro_id>
+        <right_macro_id>None</right_macro_id>
       </tool_bar_item>
     </tool_bar>
   </tool_bars>
   <macros>
-    <macro_item guid="b6823ce9-8fb2-428a-a296-8ca7caded638" bitmap_id="f800f026-7f91-488f-8adc-f1a322d2eb3f">
+    <macro_item bitmap_id="00e3f9f7-29f6-4bdd-8fe3-87c97d6eafc5" guid="898ac36e-b3c7-4e19-9ae3-1bc5e6c17192">
       <text>
         <locale_1033>RV2init</locale_1033>
       </text>
+      <script>-_RV2init</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -67,12 +78,12 @@
       <menu_text>
         <locale_1033>Init</locale_1033>
       </menu_text>
-      <script>-_RV2init</script>
     </macro_item>
-    <macro_item guid="02b68fbb-7f2c-4734-b83f-510927707ab5" bitmap_id="53d87de0-30fe-492e-a2df-1155f3fff2e9">
+    <macro_item bitmap_id="8c515cc7-0b40-4240-a8d9-444e0231907f" guid="d4dff0c2-7727-4fc4-a184-6bc888e3ff37">
       <text>
         <locale_1033>RV2settings</locale_1033>
       </text>
+      <script>-_RV2settings</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -85,12 +96,12 @@
       <menu_text>
         <locale_1033>Settings</locale_1033>
       </menu_text>
-      <script>-_RV2settings</script>
     </macro_item>
-    <macro_item guid="0aba062a-6eab-409e-af5f-36411fd39da8" bitmap_id="a3e5d0c5-899b-40e2-b17c-a15872b12c49">
+    <macro_item bitmap_id="2eb6b766-cf28-4ce8-91bd-ce0940c79152" guid="dbc56c7b-e2d8-4f2e-a17a-0b281ec72a03">
       <text>
         <locale_1033>RV2file</locale_1033>
       </text>
+      <script>-_RV2file</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -103,12 +114,30 @@
       <menu_text>
         <locale_1033>File</locale_1033>
       </menu_text>
-      <script>-_RV2file</script>
     </macro_item>
-    <macro_item guid="d24397cb-b762-4139-8f01-1c0ed1acf4cf" bitmap_id="412ae393-dba4-4e02-aac0-8b681b7ae6de">
+    <macro_item guid="c8a4a50e-4f2a-4c90-a84b-7a333348aa58">
+      <text>
+        <locale_1033>RV2skeleton</locale_1033>
+      </text>
+      <script>-_RV2skeleton</script>
+      <tooltip>
+        <locale_1033>None</locale_1033>
+      </tooltip>
+      <help_text>
+        <locale_1033>None</locale_1033>
+      </help_text>
+      <button_text>
+        <locale_1033>skeleton</locale_1033>
+      </button_text>
+      <menu_text>
+        <locale_1033>Skeleton</locale_1033>
+      </menu_text>
+    </macro_item>
+    <macro_item bitmap_id="e015c46d-ae9a-4e9d-8dd9-8ac896b18804" guid="3c8e96bf-5b58-46c6-b232-c9bed2a82eca">
       <text>
         <locale_1033>RV2form</locale_1033>
       </text>
+      <script>-_RV2form</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -121,12 +150,12 @@
       <menu_text>
         <locale_1033>Form</locale_1033>
       </menu_text>
-      <script>-_RV2form</script>
     </macro_item>
-    <macro_item guid="3dd917af-8671-4d4c-a7ac-dc1a77772f4d" bitmap_id="922ec974-6c58-4abe-81c1-2760e8a9f3fe">
+    <macro_item bitmap_id="ca17e072-88f9-4e0d-8855-75a9aa18bcc9" guid="4d637c61-d9dd-4ddc-abc9-eeb71a230138">
       <text>
         <locale_1033>RV2force</locale_1033>
       </text>
+      <script>-_RV2force</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -139,12 +168,12 @@
       <menu_text>
         <locale_1033>Force</locale_1033>
       </menu_text>
-      <script>-_RV2force</script>
     </macro_item>
-    <macro_item guid="cab2cc2b-7453-418d-b081-b7f6d09ecbd0">
+    <macro_item guid="35aeea22-62a7-4128-98aa-db20115e0d3a">
       <text>
         <locale_1033>RV2form_attributes</locale_1033>
       </text>
+      <script>-_RV2form_attributes</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -157,12 +186,12 @@
       <menu_text>
         <locale_1033>Form Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2form_attributes</script>
     </macro_item>
-    <macro_item guid="fef09acf-c3f0-4f32-8aba-f54f7c5f4296">
+    <macro_item guid="d19ab83e-464f-4ed1-8477-a574baed6656">
       <text>
         <locale_1033>RV2form_attributes_diagram</locale_1033>
       </text>
+      <script>-_RV2form_attributes_diagram</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -175,12 +204,12 @@
       <menu_text>
         <locale_1033>Form Diagram Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2form_attributes_diagram</script>
     </macro_item>
-    <macro_item guid="1a80a757-5014-4bb3-9815-63197cf8c5c5">
+    <macro_item guid="45060566-c5fc-4c42-a653-a83570a7f79c">
       <text>
         <locale_1033>RV2form_attributes_vertices</locale_1033>
       </text>
+      <script>-_RV2form_attributes_vertices</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -193,12 +222,12 @@
       <menu_text>
         <locale_1033>Form Vertex Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2form_attributes_vertices</script>
     </macro_item>
-    <macro_item guid="a7ae110a-367f-4b5d-8f9f-91c15e2dc50e">
+    <macro_item guid="cb5aa3cd-44bb-4ecb-b9ff-a57b6c3eae99">
       <text>
         <locale_1033>RV2form_attributes_edges</locale_1033>
       </text>
+      <script>-_RV2form_attributes_edges</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -211,12 +240,12 @@
       <menu_text>
         <locale_1033>Form Edge Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2form_attributes_edges</script>
     </macro_item>
-    <macro_item guid="baf2576d-bea1-457c-bc81-fd853dff1a49">
+    <macro_item guid="c7f52cf1-5e98-4af8-9db9-682dbe713045">
       <text>
         <locale_1033>RV2form_attributes_faces</locale_1033>
       </text>
+      <script>-_RV2form_attributes_faces</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -229,12 +258,12 @@
       <menu_text>
         <locale_1033>Form Face Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2form_attributes_faces</script>
     </macro_item>
-    <macro_item guid="c212ac3c-ce8b-468a-b763-34894dd910fb">
+    <macro_item guid="5accb0f8-4098-4e6e-a123-be08062e8ce6">
       <text>
         <locale_1033>RV2form_relax</locale_1033>
       </text>
+      <script>-_RV2form_relax</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -247,12 +276,12 @@
       <menu_text>
         <locale_1033>Form Relax</locale_1033>
       </menu_text>
-      <script>-_RV2form_relax</script>
     </macro_item>
-    <macro_item guid="f7ff7c9d-d43e-437e-877b-a33b7914f042">
+    <macro_item guid="21512cbb-2604-4ddd-87b5-e674aa329464">
       <text>
         <locale_1033>RV2force_attributes</locale_1033>
       </text>
+      <script>-_RV2force_attributes</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -265,12 +294,12 @@
       <menu_text>
         <locale_1033>Force Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2force_attributes</script>
     </macro_item>
-    <macro_item guid="68aea97c-92b5-4798-9a19-f6fe80df16a5">
+    <macro_item guid="58ba6be3-b9aa-40c3-a114-b49dd61d3cd0">
       <text>
         <locale_1033>RV2force_attributes_diagram</locale_1033>
       </text>
+      <script>-_RV2force_attributes_diagram</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -283,12 +312,12 @@
       <menu_text>
         <locale_1033>Force Diagram Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2force_attributes_diagram</script>
     </macro_item>
-    <macro_item guid="b7605159-c2dc-41d7-869e-b852416e5fb7">
+    <macro_item guid="9f40298f-65b0-4707-9744-fb1d236d4779">
       <text>
         <locale_1033>RV2force_attributes_vertices</locale_1033>
       </text>
+      <script>-_RV2force_attributes_vertices</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -301,12 +330,12 @@
       <menu_text>
         <locale_1033>Force Vertex Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2force_attributes_vertices</script>
     </macro_item>
-    <macro_item guid="fb3b4425-f7f6-4a89-afbc-424dee9fdeb6">
+    <macro_item guid="11501058-73e8-48cd-8595-bc88ef23e698">
       <text>
         <locale_1033>RV2force_attributes_edges</locale_1033>
       </text>
+      <script>-_RV2force_attributes_edges</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -319,12 +348,12 @@
       <menu_text>
         <locale_1033>Force Edge Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2force_attributes_edges</script>
     </macro_item>
-    <macro_item guid="dfc703e9-3287-4836-b28d-f966444e57e0">
+    <macro_item guid="7e84c2cc-9360-4b6c-81db-1a8fe30da151">
       <text>
         <locale_1033>RV2force_attributes_faces</locale_1033>
       </text>
+      <script>-_RV2force_attributes_faces</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -337,12 +366,12 @@
       <menu_text>
         <locale_1033>Force Face Attributes</locale_1033>
       </menu_text>
-      <script>-_RV2force_attributes_faces</script>
     </macro_item>
-    <macro_item guid="ecb7ab8a-2bf1-422e-8ccc-e6716ceb0d25" bitmap_id="74099f97-7f75-425a-828b-7fd939129b62">
+    <macro_item bitmap_id="6be3fd26-cf72-4129-acc7-77a0ff57fc88" guid="cfbfa570-fdba-4527-8859-c91958592358">
       <text>
         <locale_1033>RV2equilibrium_horizontal</locale_1033>
       </text>
+      <script>-_RV2equilibrium_horizontal</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -355,12 +384,12 @@
       <menu_text>
         <locale_1033>Horizontal</locale_1033>
       </menu_text>
-      <script>-_RV2equilibrium_horizontal</script>
     </macro_item>
-    <macro_item guid="aa2770f5-e694-4a83-9290-b95593a76606" bitmap_id="53e2aa1e-ab63-4c05-b89b-ca4b29350457">
+    <macro_item bitmap_id="a256261b-6958-438e-8e5c-010e9225c12d" guid="ec479d5f-d692-458c-8852-641d2fba7a65">
       <text>
         <locale_1033>RV2equilibrium_vertical</locale_1033>
       </text>
+      <script>-_RV2equilibrium_vertical</script>
       <tooltip>
         <locale_1033>None</locale_1033>
       </tooltip>
@@ -373,49 +402,40 @@
       <menu_text>
         <locale_1033>Vertical</locale_1033>
       </menu_text>
-      <script>-_RV2equilibrium_vertical</script>
     </macro_item>
   </macros>
   <bitmaps>
-    <small_bitmap item_width="16" item_height="16">
-      <bitmap_item guid="f800f026-7f91-488f-8adc-f1a322d2eb3f" index="0" />
-      <bitmap_item guid="a1cefe64-bb71-433e-b037-755a13d02eaf" index="1" />
-      <bitmap_item guid="53d87de0-30fe-492e-a2df-1155f3fff2e9" index="2" />
-      <bitmap_item guid="a3e5d0c5-899b-40e2-b17c-a15872b12c49" index="3" />
-      <bitmap_item guid="412ae393-dba4-4e02-aac0-8b681b7ae6de" index="4" />
-      <bitmap_item guid="922ec974-6c58-4abe-81c1-2760e8a9f3fe" index="5" />
-      <bitmap_item guid="74099f97-7f75-425a-828b-7fd939129b62" index="6" />
-      <bitmap_item guid="53e2aa1e-ab63-4c05-b89b-ca4b29350457" index="7" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAACACAYAAAAClekiAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAAdhQAAHYUB8Bsy7AAAAB9JREFUaEPtwTEBAAAAwqD1T20IXyAAAAAAAAAAgEsNIIAAAassRskA
-AAAASUVORK5CYIIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    <small_bitmap item_height="16" item_width="16">
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+      <bitmap_item guid="00e3f9f7-29f6-4bdd-8fe3-87c97d6eafc5" index="0"/>
+      <bitmap_item guid="7284cefe-98c2-4b61-98ef-a3712eea73ab" index="1"/>
+      <bitmap_item guid="8c515cc7-0b40-4240-a8d9-444e0231907f" index="2"/>
+      <bitmap_item guid="2eb6b766-cf28-4ce8-91bd-ce0940c79152" index="3"/>
+      <bitmap_item guid="e015c46d-ae9a-4e9d-8dd9-8ac896b18804" index="4"/>
+      <bitmap_item guid="ca17e072-88f9-4e0d-8855-75a9aa18bcc9" index="5"/>
+      <bitmap_item guid="6be3fd26-cf72-4129-acc7-77a0ff57fc88" index="6"/>
+      <bitmap_item guid="a256261b-6958-438e-8e5c-010e9225c12d" index="7"/>
     </small_bitmap>
-    <normal_bitmap item_width="24" item_height="24">
-      <bitmap_item guid="f800f026-7f91-488f-8adc-f1a322d2eb3f" index="0" />
-      <bitmap_item guid="a1cefe64-bb71-433e-b037-755a13d02eaf" index="1" />
-      <bitmap_item guid="53d87de0-30fe-492e-a2df-1155f3fff2e9" index="2" />
-      <bitmap_item guid="a3e5d0c5-899b-40e2-b17c-a15872b12c49" index="3" />
-      <bitmap_item guid="412ae393-dba4-4e02-aac0-8b681b7ae6de" index="4" />
-      <bitmap_item guid="922ec974-6c58-4abe-81c1-2760e8a9f3fe" index="5" />
-      <bitmap_item guid="74099f97-7f75-425a-828b-7fd939129b62" index="6" />
-      <bitmap_item guid="53e2aa1e-ab63-4c05-b89b-ca4b29350457" index="7" />
-      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABgAAADACAYAAAAeGqO6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAAdhQAAHYUB8Bsy7AAAAClJREFUeF7twTEBAAAAwqD1T20GfyAAAAAAAAAAAAAAAAAAAAAAAIBL
-DUjAAAFIxXMkAAAAAElFTkSuQmCCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    <normal_bitmap item_height="24" item_width="24">
+      <bitmap>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOvAAADrwBlbxySQAAABNJREFUOE9jGAWjYBSMAjBgYAAABBAAAadEfGMAAAAASUVORK5CYIIA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
+      <bitmap_item guid="00e3f9f7-29f6-4bdd-8fe3-87c97d6eafc5" index="0"/>
+      <bitmap_item guid="7284cefe-98c2-4b61-98ef-a3712eea73ab" index="1"/>
+      <bitmap_item guid="8c515cc7-0b40-4240-a8d9-444e0231907f" index="2"/>
+      <bitmap_item guid="2eb6b766-cf28-4ce8-91bd-ce0940c79152" index="3"/>
+      <bitmap_item guid="e015c46d-ae9a-4e9d-8dd9-8ac896b18804" index="4"/>
+      <bitmap_item guid="ca17e072-88f9-4e0d-8855-75a9aa18bcc9" index="5"/>
+      <bitmap_item guid="6be3fd26-cf72-4129-acc7-77a0ff57fc88" index="6"/>
+      <bitmap_item guid="a256261b-6958-438e-8e5c-010e9225c12d" index="7"/>
     </normal_bitmap>
-    <large_bitmap item_width="32" item_height="32">
-      <bitmap_item guid="f800f026-7f91-488f-8adc-f1a322d2eb3f" index="0" />
-      <bitmap_item guid="a1cefe64-bb71-433e-b037-755a13d02eaf" index="1" />
-      <bitmap_item guid="53d87de0-30fe-492e-a2df-1155f3fff2e9" index="2" />
-      <bitmap_item guid="a3e5d0c5-899b-40e2-b17c-a15872b12c49" index="3" />
-      <bitmap_item guid="412ae393-dba4-4e02-aac0-8b681b7ae6de" index="4" />
-      <bitmap_item guid="922ec974-6c58-4abe-81c1-2760e8a9f3fe" index="5" />
-      <bitmap_item guid="74099f97-7f75-425a-828b-7fd939129b62" index="6" />
-      <bitmap_item guid="53e2aa1e-ab63-4c05-b89b-ca4b29350457" index="7" />
+    <large_bitmap item_height="32" item_width="32">
       <bitmap>iVBORw0KGgoAAAANSUhEUgAAACAAAAEACAYAAADSoXR2AAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
 AAAdhQAAHYUB8Bsy7AAAGDlJREFUeF7tWwl4jlfa/kw7RfFPpv1bo9GinW6uVk3p2Fu0HdoqqbWt
 KqoosWSItZYIassmQiREUEJGia12CYmICBP71iVaaxVRS5VK73nu873n836rrDX/f333dT3e857z
@@ -526,8 +546,17 @@ z7ODTDTMb3yenlhBHfqNxJTlmegzQd4hl6apQpyyeCPGxiWpgpwr8z4oLF45Nm0tf0C3m3Ma5luS
 LcNcEgX5obkxt2U6wF2x5+hw5QCLrZ/UAdPPta8diHJ2oOjgfkAHwlfvQv/Js2wOsPA4DdoB9peI
 A4KUMQs2IXRlFnqMCkPMpn2Ys8W6Erj5zBMHBodbHeBeQX6rWPEh6MOhk5QDXIoxG8UBqXhuPnoV
 9B0bicgV29VuKfyeirpQ8Pvzw5XwxHO14Pv403jqhdp4puZLNMRtm9GaiTVWHOdKO3CVuNwnvPAi
-/7BY/gM5Ka1JKbIM1gAAAABJRU5ErkJggg==</bitmap>
+/7BY/gM5Ka1JKbIM1gAAAABJRU5ErkJggg==
+</bitmap>
+      <bitmap_item guid="00e3f9f7-29f6-4bdd-8fe3-87c97d6eafc5" index="0"/>
+      <bitmap_item guid="7284cefe-98c2-4b61-98ef-a3712eea73ab" index="1"/>
+      <bitmap_item guid="8c515cc7-0b40-4240-a8d9-444e0231907f" index="2"/>
+      <bitmap_item guid="2eb6b766-cf28-4ce8-91bd-ce0940c79152" index="3"/>
+      <bitmap_item guid="e015c46d-ae9a-4e9d-8dd9-8ac896b18804" index="4"/>
+      <bitmap_item guid="ca17e072-88f9-4e0d-8855-75a9aa18bcc9" index="5"/>
+      <bitmap_item guid="6be3fd26-cf72-4129-acc7-77a0ff57fc88" index="6"/>
+      <bitmap_item guid="a256261b-6958-438e-8e5c-010e9225c12d" index="7"/>
     </large_bitmap>
   </bitmaps>
-  <scripts />
+  <scripts/>
 </RhinoUI>
