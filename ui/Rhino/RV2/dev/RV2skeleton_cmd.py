@@ -95,7 +95,7 @@ def create(root):
 
 def modify(root):
     RV2 = sc.sticky["RV2"]
-    skeleton = RV2["data"]["skeleton"]
+    skeleton = RV2["scene"]["skeleton"]
     rhinoskeleton = RhinoSkeleton(skeleton)
 
     config = {
@@ -176,7 +176,7 @@ def modify(root):
 
 def to_diagram(root):
     RV2 = sc.sticky["RV2"]
-    skeleton = RV2["data"]["skeleton"]
+    skeleton = RV2["scene"]["skeleton"]
     diagram = skeleton.to_diagram()
 
     return diagram
@@ -215,7 +215,7 @@ def RunCommand(is_interactive):
 
     session = RV2["session"]
     settings = RV2["settings"]
-    data = RV2["data"]
+    scene = RV2["scene"]
 
     menu = CommandMenu(config)
     action = menu.select_action()
@@ -233,17 +233,17 @@ def RunCommand(is_interactive):
         rhinoskeleton = RhinoSkeleton(skeleton)
         rhinoskeleton.draw_self()
 
-        data["skeleton"] = skeleton
+        scene["skeleton"] = skeleton
 
     else:
         form = action['action'](session["cwd"])
         if not form:
             return
 
-        diagram = RhinoFormDiagram(form)
-        diagram.draw(settings)
+        rhinoform = RhinoFormDiagram(form)
+        rhinoform.draw(settings)
 
-        data["form"] = form
+        scene["form"] = rhinoform
 
 # ==============================================================================
 # Main

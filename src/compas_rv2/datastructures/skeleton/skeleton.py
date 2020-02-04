@@ -11,6 +11,8 @@ from compas.geometry import centroid_points
 from compas.geometry import Vector
 from compas.geometry import add_vectors
 
+from compas_tna.diagrams import FormDiagram
+
 import copy
 
 __all__ = ['Skeleton']
@@ -347,20 +349,21 @@ class Skeleton(Mesh):
         """ Diagram mesh(high poly) is a mesh without any additional attr or functions from class Skeleton.
         It cannot be edited again once exported as diagram for further analysis.
         """
-        digram_mesh = Mesh()
+
+        form = FormDiagram()
         highpoly_mesh = self._subdivide(self.attributes['sub_level'])
 
         for key, attr in highpoly_mesh.vertices(True):
-            digram_mesh.add_vertex(key, x=attr['x'], y=attr['y'], z=attr['z'])
+            form.add_vertex(key, x=attr['x'], y=attr['y'], z=attr['z'])
 
         for fkey in highpoly_mesh.face:
-            digram_mesh.add_face(highpoly_mesh.face[fkey])
+            form.add_face(highpoly_mesh.face[fkey])
 
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:
-            digram_mesh.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
+            form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
 
-        return digram_mesh
+        return form
 
     def to_lines(self):
         lines = []

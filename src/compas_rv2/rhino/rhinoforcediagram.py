@@ -20,7 +20,7 @@ class RhinoForceDiagram(RhinoDiagram):
             # color.update({key: settings.get("color.force.vertices:is_fixed") for key in self.diagram.vertices_where({'is_fixed': True})})
             # color.update({key: settings.get("color.force.vertices:is_external") for key in self.diagram.vertices_where({'is_external': True})})
             # color.update({key: settings.get("color.force.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
-            self.artist.draw_vertices(color=color)
+            self.guid_vertices = self.artist.draw_vertices(color=color)
 
         if settings.get("show.force.edges", True):
             keys = list(self.diagram.edges())
@@ -31,7 +31,7 @@ class RhinoForceDiagram(RhinoDiagram):
                     color[key] = settings.get("color.force.edges:is_external")
                 else:
                     color[key] = settings.get("color.force.edges")
-            self.artist.draw_edges(keys=keys, color=color)
+            self.guid_edges = self.artist.draw_edges(keys=keys, color=color)
 
         # if settings.get("show.force.faces", True):
         #     keys = list(self.diagram.faces_where({'is_loaded': True}))
