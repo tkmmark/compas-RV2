@@ -56,7 +56,7 @@ class Tree_Table(forms.TreeGridView):
         attributes = list(diagram.default_vertex_attributes.keys())
         attributes.sort()
         for attr in attributes:
-            table.add_column(attr, Editable=True)
+            table.add_column(attr, Editable=rhinoDiagram.vertex_attribute_editable(attr))
         treecollection = forms.TreeGridItemCollection()
         for key in diagram.vertices():
             values = [key]
@@ -64,8 +64,8 @@ class Tree_Table(forms.TreeGridView):
                 values.append(str(diagram.vertex_attribute(key, attr)))
             treecollection.Add(forms.TreeGridItem(Values=tuple(values)))
         table.DataStore = treecollection
-        table.Activated += table.SelectEvent(rhinoDiagram.guid_vertices)
-        table.CellEdited += table.EditEvent(diagram, attributes)
+        table.Activated += table.SelectEvent(rhinoDiagram, 'guid_vertices')
+        table.CellEdited += table.EditEvent(rhinoDiagram, attributes)
         table.ColumnHeaderClick += table.HeaderClickEvent()
         return table
 
@@ -78,7 +78,7 @@ class Tree_Table(forms.TreeGridView):
         attributes = list(diagram.default_edge_attributes.keys())
         attributes.sort()
         for attr in attributes:
-            table.add_column(attr)
+            table.add_column(attr, Editable=rhinoDiagram.edge_attribute_editable(attr))
         treecollection = forms.TreeGridItemCollection()
         for key, edge in enumerate(diagram.edges()):
             values = [key, str(edge)]
@@ -90,7 +90,7 @@ class Tree_Table(forms.TreeGridView):
                 vertex_item = forms.TreeGridItem(Values=('', key))
                 edge_item.Children.Add(vertex_item)
         table.DataStore = treecollection
-        table.Activated += table.SelectEvent(rhinoDiagram.guid_edges, rhinoDiagram.guid_vertices)
+        table.Activated += table.SelectEvent(rhinoDiagram, 'guid_edges', 'guid_vertices')
         table.ColumnHeaderClick += table.HeaderClickEvent()
         return table
 
@@ -103,7 +103,7 @@ class Tree_Table(forms.TreeGridView):
         attributes = list(diagram.default_face_attributes.keys())
         attributes.sort()
         for attr in attributes:
-            table.add_column(attr)
+            table.add_column(attr, Editable=rhinoDiagram.face_attribute_editable(attr))
         treecollection = forms.TreeGridItemCollection()
         for key in diagram.faces():
             values = [key, str(diagram.face[key])]
@@ -115,52 +115,48 @@ class Tree_Table(forms.TreeGridView):
                 vertex_item = forms.TreeGridItem(Values=('', v))
                 face_item.Children.Add(vertex_item)
         table.DataStore = treecollection
-        table.Activated += table.SelectEvent(rhinoDiagram.guid_faces, rhinoDiagram.guid_vertices)
+        table.Activated += table.SelectEvent(rhinoDiagram, 'guid_faces', 'guid_vertices')
         table.ColumnHeaderClick += table.HeaderClickEvent()
         return table
 
-    def SelectEvent(self, GUIDs, GUIDs2=None):
+    def SelectEvent(self, rhinoDiagram, guid_field1, guid_field2=None):
         def on_selected(sender, event):
             try:
                 rs.UnselectAllObjects()
                 key = event.Item.Values[0]
                 if key != '':
+                    GUIDs = getattr(rhinoDiagram, guid_field1)
                     find_object(GUIDs[key]).Select(True)
                 else:
                     key = event.Item.Values[1]
+                    GUIDs2 = getattr(rhinoDiagram, guid_field2)
                     find_object(GUIDs2[key]).Select(True)
                 rs.Redraw()
-                print(sender)
             except Exception as e:
                 print(e)
 
         return on_selected
 
-    def EditEvent(self, diagram, attributes):
+    def EditEvent(self, rhinoDiagram, attributes):
         def on_edited(sender, event):
+            # import traceback
             try:
-                raise NotImplementedError("still in dev")
-                # print('check0')
-                # key = event.Item.Values[0]
-                # values = event.Item.Values[1:]
-                # for attr, value in zip(attributes, values):
-                #     if value != '-':
-                #         try:
-                #             diagram.vertex_attribute(key, attr, ast.literal_eval(value))
-                #         except (ValueError, TypeError):
-                #             diagram.vertex_attribute(key, attr, value)
-
-                # # redraw diagram to update
-                # RV2 = sc.sticky["RV2"]
-                # form = RV2["data"]["form"]
-                # if not form:
-                #     return
-                # settings = RV2["settings"]
-                # rfdiagram = RhinoFormDiagram(form)
-                # rfdiagram.draw(settings)
-
+                # raise NotImplementedError("still in dev")
+                key = event.Item.Values[0]
+                values = event.Item.Values[1:]
+                for attr, value in zip(attributes, values):
+                    if value != '-':
+                        try:
+                            rhinoDiagram.diagram.vertex_attribute(key, attr, ast.literal_eval(value))
+                        except (ValueError, TypeError):
+                            rhinoDiagram.diagram.vertex_attribute(key, attr, value)
+                # redraw upaded diagram
+                RV2 = sc.sticky["RV2"]
+                settings = RV2["settings"]
+                rhinoDiagram.draw(settings)
             except Exception as e:
                 print(e)
+            # traceback.print_exc()
 
         return on_edited
 
