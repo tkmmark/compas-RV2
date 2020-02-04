@@ -22,10 +22,28 @@ __all__ = ["PropertySheet"]
 
 
 class Tree_Table(forms.TreeGridView):
-    def __init__(self, ShowHeader=True):
+    def __init__(self, ShowHeader=True, editable_attributes=[]):
         self.ShowHeader = ShowHeader
         self.Height = 300
         self.last_sorted_to = None
+
+        def OnCellFormatting(sender, e):
+            try:
+                if e.Column.HeaderText not in editable_attributes:
+                    e.ForegroundColor = drawing.Colors.DarkGray
+            except Exception as exc:
+                print(exc)
+
+        self.CellFormatting += OnCellFormatting
+
+    @classmethod
+    def get_editable_attributes(cls, rhinoDiagram):
+        attributes = list(rhinoDiagram.diagram.default_vertex_attributes.keys())
+        editables = []
+        for attr in attributes:
+            if rhinoDiagram.vertex_attribute_editable(attr):
+                editables.append(attr)
+        return editables
 
     @classmethod
     def from_rhinoDiagram(cls, rhinoDiagram):
@@ -51,7 +69,7 @@ class Tree_Table(forms.TreeGridView):
     def from_vertices(cls, rhinoDiagram):
 
         diagram = rhinoDiagram.diagram
-        table = cls()
+        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram))
         table.add_column('key')
         attributes = list(diagram.default_vertex_attributes.keys())
         attributes.sort()
@@ -72,7 +90,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_edges(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls()
+        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram))
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_edge_attributes.keys())
@@ -97,7 +115,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_faces(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls()
+        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram))
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_face_attributes.keys())
@@ -235,7 +253,7 @@ class PropertySheet(forms.Form):
         control.TabPosition = forms.DockPosition.Top
 
         tab = forms.TabPage()
-        tab.Text = "Basic"
+        tab.Text = "Diagram"
         tab.Content = Tree_Table.from_rhinoDiagram(rhinoDiagram)
         control.Pages.Add(tab)
 
