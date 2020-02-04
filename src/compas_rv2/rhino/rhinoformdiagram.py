@@ -107,6 +107,11 @@ class RhinoFormDiagram(RhinoDiagram):
         super(RhinoFormDiagram, self).__init__(diagram)
         self.artist = FormArtist(self.diagram)
 
+        self.vertex_attribute_editable('is_anchor', True)
+        self.vertex_attribute_editable('x', True)
+        self.vertex_attribute_editable('y', True)
+        self.vertex_attribute_editable('z', True)
+
     def draw(self, settings):
         self.artist.layer = settings.get("layers.form")
         self.artist.clear_layer()
