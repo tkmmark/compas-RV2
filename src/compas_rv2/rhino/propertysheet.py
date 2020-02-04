@@ -139,25 +139,33 @@ class Tree_Table(forms.TreeGridView):
 
     def EditEvent(self, rhinoDiagram, attributes):
         def on_edited(sender, event):
-            # import traceback
             try:
-                # raise NotImplementedError("still in dev")
                 key = event.Item.Values[0]
-                values = event.Item.Values[1:]
-                for attr, value in zip(attributes, values):
-                    if value != '-':
-                        try:
-                            rhinoDiagram.diagram.vertex_attribute(key, attr, ast.literal_eval(value))
-                        except (ValueError, TypeError):
-                            rhinoDiagram.diagram.vertex_attribute(key, attr, value)
+                attr = attributes[event.Column]
+                value = event.Item.Values[event.Column]
+                if value != '-':
+                    try:
+                        parsed = ast.literal_eval(value)
+                    except Exception:
+                        parsed = str(value)
+                    compas_value = rhinoDiagram.diagram.vertex_attribute(key, attr)
+                    if type(compas_value) == float and type(parsed) == int:
+                        parsed = float(parsed)
+                    if parsed != compas_value:
+                        if type(parsed) == rhinoDiagram.vertex_attributes_properties[attr]['type']:
+                            rhinoDiagram.diagram.vertex_attribute(key, attr, parsed)
+                            print('updated', parsed)
+                        else:
+                            print('invalid value type!')
+                            event.Item.Values[event.Column] = compas_value
+                    else:
+                        print('value not changed')
                 # redraw upaded diagram
                 RV2 = sc.sticky["RV2"]
                 settings = RV2["settings"]
                 rhinoDiagram.draw(settings)
             except Exception as e:
                 print(e)
-            # traceback.print_exc()
-
         return on_edited
 
     def HeaderClickEvent(self):
