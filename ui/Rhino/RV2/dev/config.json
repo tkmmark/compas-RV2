@@ -43,7 +43,60 @@
             {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": 7}
         ],
         "menus":
-        [],
+        [
+            {
+                "name": "RhinoVAULT 2",
+                "items":
+                [
+                    {
+                        "name": "RV2",
+                        "items":
+                        [
+                            {"name": "Init", "command": "RV2init"},
+                            {"name": "Settings", "command": "RV2settings"}
+                        ]
+                    },
+                    {
+                        "name": "File",
+                        "items":
+                        [
+                        ]
+                    },
+                    {"type": "separator"},
+                    {
+                        "name": "Skeleton",
+                        "items":
+                        [
+                        ]
+                    },
+                    {
+                        "name": "FormDiagram",
+                        "items":
+                        [
+                        ]
+                    },
+                    {
+                        "name": "ForceDiagram",
+                        "items":
+                        [
+                        ]
+                    },
+                    {"type": "separator"},
+                    {
+                        "name": "Horizontal",
+                        "items":
+                        [
+                        ]
+                    },
+                    {
+                        "name": "Vertical",
+                        "items":
+                        [
+                        ]
+                    }
+                ]
+            }
+        ],
         "toolbars":
         [
             {
