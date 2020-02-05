@@ -37,11 +37,12 @@ class Tree_Table(forms.TreeGridView):
         self.CellFormatting += OnCellFormatting
 
     @classmethod
-    def get_editable_attributes(cls, rhinoDiagram):
-        attributes = list(rhinoDiagram.diagram.default_vertex_attributes.keys())
+    def get_editable_attributes(cls, rhinoDiagram, _type='vertex'):
+        attributes = getattr(rhinoDiagram.diagram, 'default_%s_attributes'%_type).keys()
+        attributes = list(attributes)
         editables = []
         for attr in attributes:
-            if rhinoDiagram.vertex_attribute_editable(attr):
+            if getattr(rhinoDiagram, '%s_attribute_editable'%_type)(attr):
                 editables.append(attr)
         return editables
 
@@ -69,7 +70,7 @@ class Tree_Table(forms.TreeGridView):
     def from_vertices(cls, rhinoDiagram):
 
         diagram = rhinoDiagram.diagram
-        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram))
+        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram,'vertex'))
         table.add_column('key')
         attributes = list(diagram.default_vertex_attributes.keys())
         attributes.sort()
@@ -90,7 +91,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_edges(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram))
+        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram, 'edge'))
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_edge_attributes.keys())
@@ -115,7 +116,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_faces(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram))
+        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram, 'face'))
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_face_attributes.keys())
