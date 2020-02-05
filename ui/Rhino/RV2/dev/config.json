@@ -18,18 +18,18 @@
             {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": 2},
             {"name": "RV2file", "button_text": "file", "menu_text": "File", "icon": 3},
             {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
-            {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": 4},
-            {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": 5},
 
+            {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": 4},
+            {"name": "RV2form_from_obj", "button_text": "from_obj", "menu_text": "From OBJ"},
             {"name": "RV2form_attributes", "button_text": "form@", "menu_text": "Form Attributes"},
             {"name": "RV2form_attributes_diagram", "button_text": "form@D", "menu_text": "Form Diagram Attributes"},
             {"name": "RV2form_attributes_vertices", "button_text": "form@V", "menu_text": "Form Vertex Attributes"},
             {"name": "RV2form_attributes_edges", "button_text": "form@E", "menu_text": "Form Edge Attributes"},
             {"name": "RV2form_attributes_faces", "button_text": "form@F", "menu_text": "Form Face Attributes"},
             {"name": "RV2form_attributes_property", "button_text": "form@P", "menu_text": "Form Property Attributes"},
-
             {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Form Relax"},
 
+            {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": 5},
             {"name": "RV2force_attributes", "button_text": "force@", "menu_text": "Force Attributes"},
             {"name": "RV2force_attributes_diagram", "button_text": "force@D", "menu_text": "Force Diagram Attributes"},
             {"name": "RV2force_attributes_vertices", "button_text": "force@V", "menu_text": "Force Vertex Attributes"},
@@ -73,6 +73,7 @@
                         "name": "FormDiagram",
                         "items":
                         [
+                            {"name": "From OBJ", "command": "RV2form_from_obj"}
                         ]
                     },
                     {
