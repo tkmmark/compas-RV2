@@ -24,6 +24,7 @@ class Tree_Table(forms.TreeGridView):
         self.ShowHeader = ShowHeader
         self.Height = 300
         self.last_sorted_to = None
+        # self.AllowMultipleSelection=True
 
         editable_attributes = []
         if rhinoDiagram is not None:
@@ -86,6 +87,22 @@ class Tree_Table(forms.TreeGridView):
                 print('formating error',exc)
     
         self.CellFormatting += OnCellFormatting
+
+        self.set_toggle()
+        
+
+    def set_toggle(self):
+        def toggle(sender, event):
+            value = event.Item.Values[event.Column]
+            if value == 'True':
+                event.Item.Values[event.Column] = 'False'
+                self.CancelEdit()
+            elif value == 'False':
+                event.Item.Values[event.Column] = 'True'
+                self.CancelEdit()
+            print('set to', event.Item.Values[event.Column])
+        self.CellEditing += toggle
+
 
     def get_editable_attributes(self, rhinoDiagram, table_type='vertex'):
         attributes = getattr(rhinoDiagram.diagram, 'default_%s_attributes'%table_type).keys()
