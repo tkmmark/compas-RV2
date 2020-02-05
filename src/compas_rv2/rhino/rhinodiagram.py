@@ -24,6 +24,31 @@ class RhinoDiagram(object):
         self.diagram = diagram
         self.artist = MeshArtist(self.diagram)
 
+        def initialise_attributes_properties(default_attributes):
+            return {key: {'editable': False, 'type': type(default_attributes[key])} for key in default_attributes}
+
+        self.vertex_attributes_properties = initialise_attributes_properties(self.diagram.default_vertex_attributes)
+        self.edge_attributes_properties = initialise_attributes_properties(self.diagram.default_edge_attributes)
+        self.face_attributes_properties = initialise_attributes_properties(self.diagram.default_face_attributes)
+
+    def vertex_attribute_editable(self, attribute, editable=None):
+        if editable is None:
+            return self.vertex_attributes_properties[attribute]['editable']
+        elif type(editable) == bool:
+            self.vertex_attributes_properties[attribute]['editable'] = editable
+
+    def edge_attribute_editable(self, attribute, editable=None):
+        if editable is None:
+            return self.edge_attributes_properties[attribute]['editable']
+        elif type(editable) == bool:
+            self.edge_attributes_properties[attribute]['editable'] = editable
+
+    def face_attribute_editable(self, attribute, editable=None):
+        if editable is None:
+            return self.face_attributes_properties[attribute]['editable']
+        elif type(editable) == bool:
+            self.face_attributes_properties[attribute]['editable'] = editable
+
     def select_vertices(self):
         keys = VertexSelector.select_vertices(self.diagram)
         return keys
