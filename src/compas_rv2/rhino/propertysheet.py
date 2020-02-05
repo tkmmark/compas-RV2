@@ -15,34 +15,84 @@ try:
 except Exception:
     compas.raise_if_ironpython()
 
-from compas_rv2.rhino import RhinoFormDiagram
-
 
 __all__ = ["PropertySheet"]
 
 
 class Tree_Table(forms.TreeGridView):
-    def __init__(self, ShowHeader=True, editable_attributes=[]):
+    def __init__(self, ShowHeader=True, rhinoDiagram=None, table_type=None):
         self.ShowHeader = ShowHeader
         self.Height = 300
         self.last_sorted_to = None
 
+        editable_attributes = []
+        if rhinoDiagram is not None:
+            editable_attributes = self.get_editable_attributes(rhinoDiagram,table_type)
+
+        settings = sc.sticky["RV2"]["settings"]
+        color = {}
+        if rhinoDiagram.__class__.__name__=='RhinoFormDiagram':
+            if table_type == 'vertex':
+                color.update({key: settings.get("color.form.vertices") for key in rhinoDiagram.diagram.vertices()})
+                color.update({key: settings.get("color.form.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
+                color.update({key: settings.get("color.form.vertices:is_external") for key in rhinoDiagram.diagram.vertices_where({'is_external': True})})
+                color.update({key: settings.get("color.form.vertices:is_anchor") for key in rhinoDiagram.diagram.vertices_where({'is_anchor': True})})
+            if table_type == 'edge':
+                keys = list(rhinoDiagram.diagram.edges_where({'is_edge': True}))
+                for i, key in enumerate(keys):
+                    u, v = key
+                    if rhinoDiagram.diagram.vertex_attribute(u, 'is_external') or rhinoDiagram.diagram.vertex_attribute(v, 'is_external'):
+                        color[i] = settings.get("color.form.edges:is_external")
+                    else:
+                        color[i] = settings.get("color.form.edges")
+
+        if rhinoDiagram.__class__.__name__=='RhinoForceDiagram':
+            if table_type == 'vertex':
+                color.update({key: settings.get("color.force.vertices") for key in rhinoDiagram.diagram.vertices()})
+            if table_type == 'edge':
+                keys = list(rhinoDiagram.diagram.edges())
+                for i,key in enumerate(keys):
+                    u_, v_ = rhinoDiagram.diagram.primal.face_adjacency_halfedge(*key)
+                    if rhinoDiagram.diagram.primal.vertex_attribute(u_, 'is_external') or rhinoDiagram.diagram.primal.vertex_attribute(v_, 'is_external'):
+                        color[i] = settings.get("color.force.edges:is_external")
+                    else:
+                        color[i] = settings.get("color.force.edges")
+        
+        if rhinoDiagram.__class__.__name__=='RhinoThrustDiagram':
+            if table_type == 'vertex':
+                color.update({key: settings.get("color.thrust.vertices") for key in rhinoDiagram.diagram.vertices()})
+                color.update({key: settings.get("color.thrust.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
+                color.update({key: settings.get("color.thrust.vertices:is_anchor") for key in rhinoDiagram.diagram.vertices_where({'is_anchor': True})})
+            if table_type == 'edge':
+                keys = list(rhinoDiagram.diagram.edges_where({'is_edge': True, 'is_external': False}))
+                color.update({i: settings.get("color.thrust.edges") for i, key in enumerate(keys)})
+            if table_type == 'face':
+                keys = list(rhinoDiagram.diagram.faces_where({'is_loaded': True}))
+                color.update({key: settings.get("color.thrust.faces") for key in keys})
+
         def OnCellFormatting(sender, e):
             try:
-                if e.Column.HeaderText not in editable_attributes:
+                attr = e.Column.HeaderText
+                if attr not in editable_attributes:
                     e.ForegroundColor = drawing.Colors.DarkGray
+                
+                if attr == 'key':
+                    key = e.Item.Values[0]
+                    if key in color:
+                        rgb = color[key]
+                        rgb = [c/255. for c in rgb]
+                        e.BackgroundColor = drawing.Color(*rgb)
             except Exception as exc:
-                print(exc)
-
+                print('formating error',exc)
+    
         self.CellFormatting += OnCellFormatting
 
-    @classmethod
-    def get_editable_attributes(cls, rhinoDiagram, _type='vertex'):
-        attributes = getattr(rhinoDiagram.diagram, 'default_%s_attributes'%_type).keys()
+    def get_editable_attributes(self, rhinoDiagram, table_type='vertex'):
+        attributes = getattr(rhinoDiagram.diagram, 'default_%s_attributes'%table_type).keys()
         attributes = list(attributes)
         editables = []
         for attr in attributes:
-            if getattr(rhinoDiagram, '%s_attribute_editable'%_type)(attr):
+            if getattr(rhinoDiagram, '%s_attribute_editable'%table_type)(attr):
                 editables.append(attr)
         return editables
 
@@ -70,7 +120,7 @@ class Tree_Table(forms.TreeGridView):
     def from_vertices(cls, rhinoDiagram):
 
         diagram = rhinoDiagram.diagram
-        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram,'vertex'))
+        table = cls(rhinoDiagram = rhinoDiagram,table_type= 'vertex')
         table.add_column('key')
         attributes = list(diagram.default_vertex_attributes.keys())
         attributes.sort()
@@ -91,7 +141,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_edges(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram, 'edge'))
+        table = cls(rhinoDiagram=rhinoDiagram, table_type= 'edge')
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_edge_attributes.keys())
@@ -116,7 +166,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_faces(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls(editable_attributes=cls.get_editable_attributes(rhinoDiagram, 'face'))
+        table = cls(rhinoDiagram=rhinoDiagram, table_type= 'face')
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_face_attributes.keys())
@@ -150,6 +200,7 @@ class Tree_Table(forms.TreeGridView):
                     key = event.Item.Values[1]
                     GUIDs2 = getattr(rhinoDiagram, guid_field2)
                     find_object(GUIDs2[key]).Select(True)
+                print('selected', key)
                 rs.Redraw()
             except Exception as e:
                 print(e)
