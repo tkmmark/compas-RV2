@@ -297,7 +297,7 @@ class PropertySheet(forms.Form):
         layout.Items.Add(tab_items)
         self.Content = layout
         self.Padding = drawing.Padding(12)
-        self.Resizable = False
+        self.Resizable = True
         self.ClientSize = drawing.Size(400, 600)
 
     def from_rhinoDiagram(self, rhinoDiagram):
