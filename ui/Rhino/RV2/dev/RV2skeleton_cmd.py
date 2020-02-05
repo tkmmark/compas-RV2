@@ -200,6 +200,11 @@ config = {
             "name": "to_diagram",
             "message": "To_Diagram",
             "action": to_diagram
+        },
+        {
+            "name": "to_mesh",
+            "message": "To_Mesh",
+            "action": None
         }
      ]
 }
@@ -223,27 +228,30 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    if action['name'] != 'to_diagram':
-
-        skeleton = action['action'](session["cwd"])
-
-        if not skeleton:
-            return
-
-        rhinoskeleton = RhinoSkeleton(skeleton)
-        rhinoskeleton.draw_self()
-
-        scene["skeleton"] = skeleton
-
-    else:
+    if action['name'] == 'to_diagram':
         form = action['action'](session["cwd"])
         if not form:
             return
-
         rhinoform = RhinoFormDiagram(form)
         rhinoform.draw(settings)
-
         scene["form"] = rhinoform
+
+    elif action['name'] == 'to_mesh':
+        RV2 = sc.sticky["RV2"]
+        skeleton = RV2["scene"]["skeleton"]
+        if not skeleton:
+            return
+        rhinoskeleton = RhinoSkeleton(skeleton)        
+        rhinoskeleton.draw_rhino_mesh()
+
+    else:
+        skeleton = action['action'](session["cwd"])
+        if not skeleton:
+            return
+        rhinoskeleton = RhinoSkeleton(skeleton)
+        rhinoskeleton.draw_self()
+        scene["skeleton"] = skeleton
+        
 
 # ==============================================================================
 # Main
