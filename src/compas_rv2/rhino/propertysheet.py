@@ -87,21 +87,22 @@ class Tree_Table(forms.TreeGridView):
                 print('formating error',exc)
     
         self.CellFormatting += OnCellFormatting
-
-        self.set_toggle()
+        # self.set_toggle()
         
 
     def set_toggle(self):
         def toggle(sender, event):
             value = event.Item.Values[event.Column]
-            if value == 'True':
-                event.Item.Values[event.Column] = 'False'
-                self.CancelEdit()
-            elif value == 'False':
-                event.Item.Values[event.Column] = 'True'
-                self.CancelEdit()
+            column = self.Columns[event.Column]
+            if column.Editable:
+                if value == 'True':
+                    event.Item.Values[event.Column] = 'False'
+                    self.ReloadData()
+                elif value == 'False':
+                    event.Item.Values[event.Column] = 'True'
+                    self.ReloadData()
             print('set to', event.Item.Values[event.Column])
-        self.CellEditing += toggle
+        self.CellDoubleClick += toggle
 
 
     def get_editable_attributes(self, rhinoDiagram, table_type='vertex'):
@@ -225,6 +226,7 @@ class Tree_Table(forms.TreeGridView):
         return on_selected
 
     def EditEvent(self, rhinoDiagram, attributes):
+        #TODO: need to add situations for edge and face
         def on_edited(sender, event):
             try:
                 key = event.Item.Values[0]
@@ -246,7 +248,7 @@ class Tree_Table(forms.TreeGridView):
                             print('invalid value type!')
                             event.Item.Values[event.Column] = compas_value
                     else:
-                        print('value not changed')
+                        print('value not changed from', value)
                 # redraw upaded diagram
                 RV2 = sc.sticky["RV2"]
                 settings = RV2["settings"]
