@@ -17,27 +17,31 @@
             {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": 0},
             {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": 2},
             {"name": "RV2file", "button_text": "file", "menu_text": "File", "icon": 3},
+
             {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
 
             {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": 4},
             {"name": "RV2form_from_obj", "button_text": "from_obj", "menu_text": "From OBJ"},
-            {"name": "RV2form_attributes", "button_text": "form@", "menu_text": "Form Attributes"},
-            {"name": "RV2form_attributes_diagram", "button_text": "form@D", "menu_text": "Form Diagram Attributes"},
-            {"name": "RV2form_attributes_vertices", "button_text": "form@V", "menu_text": "Form Vertex Attributes"},
-            {"name": "RV2form_attributes_edges", "button_text": "form@E", "menu_text": "Form Edge Attributes"},
-            {"name": "RV2form_attributes_faces", "button_text": "form@F", "menu_text": "Form Face Attributes"},
-            {"name": "RV2form_attributes_property", "button_text": "form@P", "menu_text": "Form Property Attributes"},
-            {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Form Relax"},
+            {"name": "RV2form_from_json", "button_text": "from_json", "menu_text": "From JSON"},
+            {"name": "RV2form_from_mesh", "button_text": "from_mesh", "menu_text": "From Mesh"},
+            {"name": "RV2form_from_surface", "button_text": "from_surf", "menu_text": "From Surface"},
+            {"name": "RV2form_attributes", "button_text": "form_attr", "menu_text": "Attributes"},
+            {"name": "RV2form_update_vertices", "button_text": "form_update_V", "menu_text": "Update Vertices"},
+            {"name": "RV2form_update_edges", "button_text": "form_update_E", "menu_text": "Update Edges"},
+            {"name": "RV2form_update_faces", "button_text": "form_update_F", "menu_text": "Update Faces"},
+            {"name": "RV2form_select_vertices", "button_text": "form_select_V", "menu_text": "Select Vertices"},
+            {"name": "RV2form_select_edges", "button_text": "form_select_E", "menu_text": "Select Edges"},
+            {"name": "RV2form_select_faces", "button_text": "form_select_F", "menu_text": "Select Faces"},
+            {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Relax"},
+            {"name": "RV2form_update_boundaries", "button_text": "update_boundaries", "menu_text": "Update Boundaries"},
 
             {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": 5},
-            {"name": "RV2force_attributes", "button_text": "force@", "menu_text": "Force Attributes"},
-            {"name": "RV2force_attributes_diagram", "button_text": "force@D", "menu_text": "Force Diagram Attributes"},
-            {"name": "RV2force_attributes_vertices", "button_text": "force@V", "menu_text": "Force Vertex Attributes"},
-            {"name": "RV2force_attributes_edges", "button_text": "force@E", "menu_text": "Force Edge Attributes"},
-            {"name": "RV2force_attributes_faces", "button_text": "force@F", "menu_text": "Force Face Attributes"},
-            {"name": "RV2force_attributes_property", "button_text": "form@P", "menu_text": "Force Property Attributes"},
+            {"name": "RV2force_attributes", "button_text": "force_attr", "menu_text": "Attributes"},
+            {"name": "RV2force_update_vertices", "button_text": "force_update_V", "menu_text": "Update Vertices"},
+            {"name": "RV2force_update_edges", "button_text": "force_update_E", "menu_text": "Update Edges"},
+            {"name": "RV2force_update_faces", "button_text": "force_update_F", "menu_text": "Update Face"},
 
-            {"name": "RV2thrust_attributes_property", "button_text": "thrust@P", "menu_text": "Th Property Attributes"},
+            {"name": "RV2thrust_attributes", "button_text": "thrust_attr", "menu_text": "Attributes"},
 
             {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": 6},
             {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": 7}
@@ -48,20 +52,9 @@
                 "name": "RhinoVAULT 2",
                 "items":
                 [
-                    {
-                        "name": "RV2",
-                        "items":
-                        [
-                            {"name": "Init", "command": "RV2init"},
-                            {"name": "Settings", "command": "RV2settings"}
-                        ]
-                    },
-                    {
-                        "name": "File",
-                        "items":
-                        [
-                        ]
-                    },
+                    {"name": "Init", "command": "RV2init"},
+                    {"name": "Settings", "command": "RV2settings"},
+                    {"name": "File", "command": "RV2file"},
                     {"type": "separator"},
                     {
                         "name": "Skeleton",
@@ -73,7 +66,22 @@
                         "name": "FormDiagram",
                         "items":
                         [
-                            {"name": "From OBJ", "command": "RV2form_from_obj"}
+                            {"name": "From OBJ", "command": "RV2form_from_obj"},
+                            {"name": "From JSON", "command": "RV2form_from_json"},
+                            {"name": "From Mesh", "command": "RV2form_from_mesh"},
+                            {"name": "From Surface", "command": "RV2form_from_surface"},
+                            {"type": "separator"},
+                            {"name": "Select vertices", "command": "RV2form_select_vertices"},
+                            {"name": "Select edges", "command": "RV2form_select_edges"},
+                            {"name": "Select faces", "command": "RV2form_select_faces"},
+                            {"type": "separator"},
+                            {"name": "Attributes", "command": "RV2form_attributes"},
+                            {"name": "Update vertices", "command": "RV2form_update_vertices"},
+                            {"name": "Update edges", "command": "RV2form_update_edges"},
+                            {"name": "Update faces", "command": "RV2form_update_faces"},
+                            {"type": "separator"},
+                            {"name": "Relax", "command": "RV2form_relax"},
+                            {"name": "Update Boundaries", "command": "RV2form_update_boundaries"}
                         ]
                     },
                     {

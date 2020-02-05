@@ -9,7 +9,7 @@ import rhinoscriptsyntax as rs
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
-from compas_rhino.etoforms import TextForm
+from compas_rv2.rhino import get_rv2
 from compas_rv2.datastructures import Skeleton
 from compas_rv2.rhino import RhinoSkeleton
 from compas_rv2.rhino import RhinoFormDiagram
@@ -211,9 +211,8 @@ config = {
 
 
 def RunCommand(is_interactive):
-    if "RV2" not in sc.sticky:
-        form = TextForm('Initialise the plugin first!', 'RV2')
-        form.show()
+    RV2 = get_rv2()
+    if not RV2:
         return
 
     RV2 = sc.sticky["RV2"]
@@ -241,7 +240,7 @@ def RunCommand(is_interactive):
         skeleton = RV2["scene"]["skeleton"]
         if not skeleton:
             return
-        rhinoskeleton = RhinoSkeleton(skeleton)        
+        rhinoskeleton = RhinoSkeleton(skeleton)
         rhinoskeleton.draw_rhino_mesh()
 
     else:
@@ -251,7 +250,7 @@ def RunCommand(is_interactive):
         rhinoskeleton = RhinoSkeleton(skeleton)
         rhinoskeleton.draw_self()
         scene["skeleton"] = skeleton
-        
+
 
 # ==============================================================================
 # Main

@@ -5,19 +5,18 @@ from __future__ import division
 import scriptcontext as sc
 
 import compas_rhino
-from compas_rhino.etoforms import TextForm
+from compas_rv2.rhino import get_rv2
 
 
-__commandname__ = "RV2form_attributes_diagram"
+__commandname__ = "RV2form_update_vertices"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    if "RV2" not in sc.sticky:
-        form = TextForm('Initialise the plugin first!', 'RV2')
-        form.show()
+    RV2 = get_rv2()
+    if not RV2:
         return
 
     RV2 = sc.sticky["RV2"]
@@ -27,7 +26,7 @@ def RunCommand(is_interactive):
     if not rhinoform:
         return
 
-    if rhinoform.update_attributes():
+    if rhinoform.update_vertices_attributes():
         rhinoform.draw(settings)
 
 

@@ -6,10 +6,9 @@ import compas_rhino
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
-from compas_rv2.rhino import select_filepath_open
 from compas_rv2.rhino import get_rv2
 
-__commandname__ = "RV2form_from_obj"
+__commandname__ = "RV2form_from_mesh"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -20,16 +19,30 @@ def RunCommand(is_interactive):
     if not RV2:
         return
 
-    session = RV2["session"]
     settings = RV2["settings"]
     scene = RV2["scene"]
-    root = session["cwd"] or HERE
 
-    filepath = select_filepath_open(root, 'obj')
-    if not filepath:
+    guid = compas_rhino.select_mesh()
+    if not guid:
         return
 
-    form = FormDiagram.from_obj(filepath)
+    form = FormDiagram.from_rhinomesh(guid)
+
+    # scene.clear()
+    # scene.add(form)
+    # scene.add(thrust)
+    # scene.update()
+
+    # maybe the RV2 scene can be specialised for RV2
+
+    # add form to data
+    # store guids in scene nodes
+
+    # adding data to a scene creates
+    # node.artist
+    # node.data
+    # node.objects
+    # => objects are created with artist based on data
 
     rhinoform = RhinoFormDiagram(form)
     rhinothrust = RhinoThrustDiagram(form)

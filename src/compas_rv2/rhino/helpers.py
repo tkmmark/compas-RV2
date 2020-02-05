@@ -2,19 +2,27 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+import os
 from ast import literal_eval
-
-import scriptcontext as sc
-
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-from compas_rhino.ui import CommandMenu
 
 
-__commandname__ = "RV2form_select"
-
-
-HERE = compas_rhino.get_document_dirname()
+__all__ = [
+    "is_valid_file",
+    "select_filepath_open",
+    "get_rv2",
+    "select_vertices",
+    "select_edges",
+    "select_faces",
+    "select_boundary_vertices",
+    "select_continuous_vertices",
+    "select_boundary_edges",
+    "select_continuous_edges",
+    "select_parallel_edges",
+    "select_boundary_faces",
+    "select_parallel_faces",
+]
 
 
 def match_vertices(diagram, keys):
@@ -126,48 +134,67 @@ def select_parallel_faces(diagram):
     select_faces(diagram, faces)
 
 
-config = {
-    "message": "FormDiagram Select",
-    "options": [
-        {"name": "Vertices", "message": "Select Vertices", "options": [
-            {"name": "Boundary", "action": select_boundary_vertices},
-            {"name": "Continuous", "action": select_continuous_vertices}
-        ]},
-        {"name": "Edges", "message": "Select Edges", "options": [
-            {"name": "Boundary", "action": select_boundary_edges},
-            {"name": "Continuous", "action": select_continuous_edges},
-            {"name": "Parallel", "action": select_parallel_edges}
-        ]},
-        {"name": "Faces", "message": "Select Faces", "options": [
-            {"name": "Boundary", "action": select_boundary_faces},
-            {"name": "Parallel", "action": select_parallel_faces}
-        ]}
-    ]
-}
+def is_valid_file(filepath, ext):
+    """Is the selected path a valid file.
+
+    Parameters
+    ----------
+    filepath
+    """
+    if not filepath:
+        return False
+    if not os.path.exists(filepath):
+        return False
+    if not os.path.isfile(filepath):
+        return False
+    if not filepath.endswith(".{}".format(ext)):
+        return False
+    return True
 
 
-def RunCommand(is_interactive):
-    if "RV2" not in sc.sticky:
+def select_filepath_open(root, ext):
+    """Select a filepath for opening a session.
+
+    Parameters
+    ----------
+    root : str
+        Base directory from where the file selection is started.
+        If no directory is provided, the parent folder of the current
+        Rhino document will be used
+    ext : str
+        The type of file that can be openend.
+
+    Returns
+    -------
+    tuple
+        The parent directory.
+        The file name.
+    None
+        If the procedure fails.
+
+    Notes
+    -----
+    The file extension is only used to identify the type of session file.
+    Regardless of the provided extension, the file contents should be in JSON format.
+
+    """
+    ext = ext.split('.')[-1]
+
+    filepath = compas_rhino.select_file(folder=root, filter=ext)
+
+    if not is_valid_file(filepath, ext):
+        print("This is not a valid session file: {}".format(filepath))
+        return
+
+    return filepath
+
+
+def get_rv2():
+    if "RV2" not in compas_rhino.sc.sticky:
         form = TextForm('Initialise the plugin first!', 'RV2')
         form.show()
-        return
-
-    RV2 = sc.sticky["RV2"]
-    rhinoform = RV2["scene"]["form"]
-
-    if not rhinoform:
-        return
-
-    settings = RV2["settings"]
-
-    menu = CommandMenu(config)
-    action = menu.select_action()
-
-    if not action:
-        return
-
-    if action["action"](rhinoform):
-        rhinoform.draw(settings)
+        return None
+    return compas_rhino.sc.sticky["RV2"]
 
 
 # ==============================================================================
@@ -176,4 +203,4 @@ def RunCommand(is_interactive):
 
 if __name__ == "__main__":
 
-    RunCommand(True)
+    pass

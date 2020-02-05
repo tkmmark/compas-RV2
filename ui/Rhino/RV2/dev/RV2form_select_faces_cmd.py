@@ -2,16 +2,26 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import scriptcontext as sc
-
 import compas_rhino
+from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import select_boundary_faces
+from compas_rv2.rhino import select_parallel_faces
 
 
-__commandname__ = "RV2equilibrium_horizontal"
+__commandname__ = "RV2form_select_faces"
 
 
 HERE = compas_rhino.get_document_dirname()
+
+
+config = {
+    "message": "FormDiagram Select Faces",
+    "options": [
+        {"name": "Boundary", "action": select_boundary_faces},
+        {"name": "Parallel", "action": select_parallel_faces}
+    ]
+}
 
 
 def RunCommand(is_interactive):
@@ -19,32 +29,20 @@ def RunCommand(is_interactive):
     if not RV2:
         return
 
-    RV2 = sc.sticky["RV2"]
-    settings = RV2["settings"]
     rhinoform = RV2["scene"]["form"]
-    rhinoforce = RV2["scene"]["force"]
-
-    proxy = sc.sticky["RV2.proxy"]
-
     if not rhinoform:
         return
 
-    if not rhinoforce:
+    settings = RV2["settings"]
+
+    menu = CommandMenu(config)
+    action = menu.select_action()
+
+    if not action:
         return
 
-    if not proxy:
-        return
-
-    proxy.package = "compas_rv2.equilibrium"
-    horizontal = proxy.horizontal_nodal_proxy
-
-    formdata, forcedata = horizontal(rhinoform.diagram.data, rhinoforce.diagram.data)
-
-    rhinoform.diagram.data = formdata
-    rhinoforce.diagram.data = forcedata
-
-    rhinoform.draw(settings)
-    rhinoforce.draw(settings)
+    if action["action"](rhinoform):
+        rhinoform.draw(settings)
 
 
 # ==============================================================================

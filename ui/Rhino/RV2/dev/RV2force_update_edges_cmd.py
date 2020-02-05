@@ -5,30 +5,28 @@ from __future__ import division
 import scriptcontext as sc
 
 import compas_rhino
-from compas_rhino.etoforms import TextForm
+from compas_rv2.rhino import get_rv2
 
 
-__commandname__ = "RV2force_attributes_diagram"
+__commandname__ = "RV2force_update_edges"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    if "RV2" not in sc.sticky:
-        form = TextForm('Initialise the plugin first!', 'RV2')
-        form.show()
+    RV2 = get_rv2()
+    if not RV2:
         return
 
     RV2 = sc.sticky["RV2"]
+    settings = RV2["settings"]
     rhinoforce = RV2["scene"]["force"]
 
     if not rhinoforce:
         return
 
-    settings = RV2["settings"]
-
-    if rhinoforce.update_attributes():
+    if rhinoforce.update_edges_attributes():
         rhinoforce.draw(settings)
 
 

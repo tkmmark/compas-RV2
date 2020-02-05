@@ -9,7 +9,7 @@ import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
-from compas_rhino.etoforms import TextForm
+from compas_rv2.rhino import get_rv2
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
 from compas_rv2.datastructures import FormDiagram
@@ -119,9 +119,8 @@ config = {
 
 def RunCommand(is_interactive):
     # can this be moved to a decorator
-    if "RV2" not in sc.sticky:
-        form = TextForm('Initialise the plugin first!', 'RV2')
-        form.show()
+    RV2 = get_rv2()
+    if not RV2:
         return
 
     RV2 = sc.sticky["RV2"]
