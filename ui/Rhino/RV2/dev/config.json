@@ -14,17 +14,21 @@
         },
         "commands":
         [
-            {"name": "RV2init", "button_text": "init", "menu_text": "Init", "icon": 0},
-            {"name": "RV2settings", "button_text": "settings", "menu_text": "Settings", "icon": 2},
-            {"name": "RV2file", "button_text": "file", "menu_text": "File", "icon": 3},
+            {"name": "RV2init", "button_text": "rv2_init", "menu_text": "Init", "icon": 0},
+            {"name": "RV2settings", "button_text": "rv2_settings", "menu_text": "Settings", "icon": 2},
+            {"name": "RV2file", "button_text": "rv2_file", "menu_text": "File", "icon": 3},
 
             {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
+            {"name": "RV2skeleton_from_lines", "button_text": "skeleton_from_lines", "menu_text": "From Lines"},
+            {"name": "RV2skeleton_modify", "button_text": "skeleton_modify", "menu_text": "Modify"},
+            {"name": "RV2skeleton_todiagram", "button_text": "skeleton_todiagram", "menu_text": "To Diagram"},
+            {"name": "RV2skeleton_tomesh", "button_text": "skeleton_tomesh", "menu_text": "To Mesh"},
 
-            {"name": "RV2form", "button_text": "form", "menu_text": "Form", "icon": 4},
-            {"name": "RV2form_from_obj", "button_text": "from_obj", "menu_text": "From OBJ"},
-            {"name": "RV2form_from_json", "button_text": "from_json", "menu_text": "From JSON"},
-            {"name": "RV2form_from_mesh", "button_text": "from_mesh", "menu_text": "From Mesh"},
-            {"name": "RV2form_from_surface", "button_text": "from_surf", "menu_text": "From Surface"},
+            {"name": "RV2form", "button_text": "form", "menu_text": "FormDiagram", "icon": 4},
+            {"name": "RV2form_from_obj", "button_text": "form_from_obj", "menu_text": "From OBJ"},
+            {"name": "RV2form_from_json", "button_text": "form_from_json", "menu_text": "From JSON"},
+            {"name": "RV2form_from_mesh", "button_text": "form_from_mesh", "menu_text": "From Mesh"},
+            {"name": "RV2form_from_surface", "button_text": "from_from_surf", "menu_text": "From Surface"},
             {"name": "RV2form_attributes", "button_text": "form_attr", "menu_text": "Attributes"},
             {"name": "RV2form_update_vertices", "button_text": "form_update_V", "menu_text": "Update Vertices"},
             {"name": "RV2form_update_edges", "button_text": "form_update_E", "menu_text": "Update Edges"},
@@ -32,10 +36,12 @@
             {"name": "RV2form_select_vertices", "button_text": "form_select_V", "menu_text": "Select Vertices"},
             {"name": "RV2form_select_edges", "button_text": "form_select_E", "menu_text": "Select Edges"},
             {"name": "RV2form_select_faces", "button_text": "form_select_F", "menu_text": "Select Faces"},
+
             {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Relax"},
             {"name": "RV2form_update_boundaries", "button_text": "update_boundaries", "menu_text": "Update Boundaries"},
 
-            {"name": "RV2force", "button_text": "force", "menu_text": "Force", "icon": 5},
+            {"name": "RV2force", "button_text": "force", "menu_text": "ForceDiagram", "icon": 5},
+            {"name": "RV2force_from_form", "button_text": "force_from_form", "menu_text": "From FormDiagram"},
             {"name": "RV2force_attributes", "button_text": "force_attr", "menu_text": "Attributes"},
             {"name": "RV2force_update_vertices", "button_text": "force_update_V", "menu_text": "Update Vertices"},
             {"name": "RV2force_update_edges", "button_text": "force_update_E", "menu_text": "Update Edges"},
@@ -52,42 +58,56 @@
                 "name": "RhinoVAULT 2",
                 "items":
                 [
-                    {"name": "Init", "command": "RV2init"},
-                    {"name": "Settings", "command": "RV2settings"},
-                    {"name": "File", "command": "RV2file"},
+                    {"name": "RV2init", "command": "RV2init"},
+                    {"name": "RV2settings", "command": "RV2settings"},
+                    {"name": "RV2file", "command": "RV2file"},
                     {"type": "separator"},
                     {
                         "name": "Skeleton",
                         "items":
                         [
+                            {"name": "RV2skeleton_from_lines", "command": "RV2skeleton_from_lines"},
+                            {"type": "separator"},
+                            {"name": "RV2skeleton_modify", "command": "RV2skeleton_modify"},
+                            {"type": "separator"},
+                            {"name": "RV2skeleton_todiagram", "command": "RV2skeleton_todiagram"},
+                            {"name": "RV2skeleton_tomesh", "command": "RV2skeleton_tomesh"}
                         ]
                     },
                     {
                         "name": "FormDiagram",
                         "items":
                         [
-                            {"name": "From OBJ", "command": "RV2form_from_obj"},
-                            {"name": "From JSON", "command": "RV2form_from_json"},
-                            {"name": "From Mesh", "command": "RV2form_from_mesh"},
-                            {"name": "From Surface", "command": "RV2form_from_surface"},
+                            {"name": "RV2form_from_obj", "command": "RV2form_from_obj"},
+                            {"name": "RV2form_from_json", "command": "RV2form_from_json"},
+                            {"name": "RV2form_from_mesh", "command": "RV2form_from_mesh"},
+                            {"name": "RV2form_from_surface", "command": "RV2form_from_surface"},
                             {"type": "separator"},
-                            {"name": "Select vertices", "command": "RV2form_select_vertices"},
-                            {"name": "Select edges", "command": "RV2form_select_edges"},
-                            {"name": "Select faces", "command": "RV2form_select_faces"},
+                            {"name": "RV2form_attributes", "command": "RV2form_attributes"},
                             {"type": "separator"},
-                            {"name": "Attributes", "command": "RV2form_attributes"},
-                            {"name": "Update vertices", "command": "RV2form_update_vertices"},
-                            {"name": "Update edges", "command": "RV2form_update_edges"},
-                            {"name": "Update faces", "command": "RV2form_update_faces"},
+                            {"name": "RV2form_select_vertices", "command": "RV2form_select_vertices"},
+                            {"name": "RV2form_select_edges", "command": "RV2form_select_edges"},
+                            {"name": "RV2form_select_faces", "command": "RV2form_select_faces"},
                             {"type": "separator"},
-                            {"name": "Relax", "command": "RV2form_relax"},
-                            {"name": "Update Boundaries", "command": "RV2form_update_boundaries"}
+                            {"name": "RV2form_update_vertices", "command": "RV2form_update_vertices"},
+                            {"name": "RV2form_update_edges", "command": "RV2form_update_edges"},
+                            {"name": "RV2form_update_faces", "command": "RV2form_update_faces"},
+                            {"type": "separator"},
+                            {"name": "RV2form_relax", "command": "RV2form_relax"},
+                            {"name": "RV2form_update_boundaries", "command": "RV2form_update_boundaries"}
                         ]
                     },
                     {
                         "name": "ForceDiagram",
                         "items":
                         [
+                            {"name": "RV2force_from_form", "command": "RV2force_from_form"},
+                            {"type": "separator"},
+                            {"name": "RV2force_attributes", "command": "RV2form_attributes"},
+                            {"type": "separator"},
+                            {"name": "RV2force_update_vertices", "command": "RV2force_update_vertices"},
+                            {"name": "RV2force_update_edges", "command": "RV2force_update_edges"},
+                            {"name": "RV2force_update_faces", "command": "RV2force_update_faces"}
                         ]
                     },
                     {"type": "separator"},

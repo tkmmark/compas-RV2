@@ -8,7 +8,7 @@ from compas_rv2.skeleton import Skeleton
 from compas_rv2.rhino import RhinoSkeleton
 
 
-__commandname__ = "RV2skeleton"
+__commandname__ = "RV2skeleton_from_lines"
 
 
 HERE = compas_rhino.get_document_dirname()

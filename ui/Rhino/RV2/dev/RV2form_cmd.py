@@ -3,12 +3,11 @@ from __future__ import absolute_import
 from __future__ import division
 
 import os
-import scriptcontext as sc
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_rv2
-from compas_rv2.datastructures import FormDiagram
+from compas_rv2.diagrams import FormDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
 
@@ -125,14 +124,12 @@ def from_features(root):
 
 
 def from_skeleton(root):
-    RV2 = sc.sticky["RV2"]
+    RV2 = get_rv2()
     skeleton = RV2["scene"]["skeleton"]
     if not skeleton:
         print('There is not skeleton to be found!')
         return
-
     form = skeleton.to_diagram()
-
     return form
 
 
@@ -183,8 +180,6 @@ def RunCommand(is_interactive):
     RV2 = get_rv2()
     if not RV2:
         return
-
-    RV2 = sc.sticky["RV2"]
 
     session = RV2["session"]
     settings = RV2["settings"]

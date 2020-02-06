@@ -5,15 +5,13 @@ from __future__ import division
 import os
 import json
 
-import scriptcontext as sc
-
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_rv2
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
-from compas_rv2.datastructures import FormDiagram
-from compas_rv2.datastructures import ForceDiagram
+from compas_rv2.diagrams import FormDiagram
+from compas_rv2.diagrams import ForceDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoForceDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
@@ -122,8 +120,6 @@ def RunCommand(is_interactive):
     RV2 = get_rv2()
     if not RV2:
         return
-
-    RV2 = sc.sticky["RV2"]
 
     menu = CommandMenu(config)
     action = menu.select_action()

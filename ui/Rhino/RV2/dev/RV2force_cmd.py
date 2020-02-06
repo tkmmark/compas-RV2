@@ -2,11 +2,9 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import scriptcontext as sc
-
 import compas_rhino
+from compas_rv2.diagrams import ForceDiagram
 from compas_rv2.rhino import get_rv2
-from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.rhino import RhinoForceDiagram
 from compas.geometry import subtract_vectors
 from compas.geometry import scale_vector
@@ -24,7 +22,6 @@ def RunCommand(is_interactive):
     if not RV2:
         return
 
-    RV2 = sc.sticky["RV2"]
     settings = RV2["settings"]
     rhinoform = RV2["scene"]["form"]
 

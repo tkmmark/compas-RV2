@@ -6,7 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_rv2
 
 
-__commandname__ = "RV2form_update_vertices"
+__commandname__ = "RV2skeleton_tomesh"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -17,14 +17,10 @@ def RunCommand(is_interactive):
     if not RV2:
         return
 
-    settings = RV2["settings"]
-    rhinoform = RV2["scene"]["form"]
-
-    if not rhinoform:
+    rhinoskeleton = RV2["scene"]["skeleton"]
+    if not rhinoskeleton:
         return
-
-    if rhinoform.update_vertices_attributes():
-        rhinoform.draw(settings)
+    rhinoskeleton.draw_rhino_mesh()
 
 
 # ==============================================================================
