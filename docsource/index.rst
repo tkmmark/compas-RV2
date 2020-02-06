@@ -8,6 +8,7 @@ compas_rv2
 
    intro
    gettingstarted
+   tutorial
    examples
    api
    license

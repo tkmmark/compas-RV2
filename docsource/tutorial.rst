@@ -1,5 +1,5 @@
 ********************************************************************************
-Examples
+Tutorial
 ********************************************************************************
 
 .. toctree::
@@ -7,7 +7,4 @@ Examples
    :titlesonly:
    :glob:
 
-   examples/barrelvault/*
-   examples/dome/*
-   examples/crossvault/*
-   examples/pavilionvault/*
+   tutorial/*
