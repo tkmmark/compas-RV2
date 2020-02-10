@@ -357,7 +357,6 @@ class Skeleton(Mesh):
 
         for fkey in highpoly_mesh.face:
             mesh.add_face(highpoly_mesh.face[fkey])
-        # mesh = Mesh.from_vertices_and_faces(highpoly_mesh.vertex, highpoly_mesh.face)
 
         return mesh
 
@@ -368,7 +367,7 @@ class Skeleton(Mesh):
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:
             form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
-        
+
         return form
 
     def to_lines(self):
@@ -376,7 +375,6 @@ class Skeleton(Mesh):
         for u, v in self.to_diagram().edges():
             lines.append(self.to_diagram().edge_coordinates(u, v))
         return lines
-
 
     def get_anchor_vertices(self):
         anchor_vertices = []

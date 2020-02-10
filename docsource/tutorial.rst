@@ -7,4 +7,8 @@ Tutorial
    :titlesonly:
    :glob:
 
-   tutorial/*
+   tutorial/init/*
+   tutorial/settings/*
+   tutorial/skeleton/*
+   tutorial/form/*
+   turorial/force/*

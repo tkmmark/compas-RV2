@@ -1,5 +1,5 @@
-from compas_rv2.datastructures import FormDiagram
-from compas_rv2.datastructures import ForceDiagram
+from compas_rv2.diagrams import FormDiagram
+from compas_rv2.diagrams import ForceDiagram
 
 from compas_tna.equilibrium import horizontal_nodal
 
