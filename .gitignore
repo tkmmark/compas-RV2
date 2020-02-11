@@ -115,3 +115,5 @@ temp/**
 .vscode
 
 .DS_Store
+
+*.rhi
