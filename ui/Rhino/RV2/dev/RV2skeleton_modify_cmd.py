@@ -121,7 +121,7 @@ def RunCommand(is_interactive):
             break
 
         # rename this to 'handler'
-        action['action']()
+        action['action'](rhinoskeleton)
         rhinoskeleton.draw_self()
 
     # rhinoskeleton.draw_self()
