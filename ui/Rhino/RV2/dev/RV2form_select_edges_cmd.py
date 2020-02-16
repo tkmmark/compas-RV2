@@ -21,7 +21,7 @@ config = {
     "options": [
         {"name": "Boundary", "action": select_boundary_edges},
         {"name": "Continuous", "action": select_continuous_edges},
-        {"name": "Continuous", "action": select_parallel_edges}
+        {"name": "Parallel", "action": select_parallel_edges}
     ]
 }
 
@@ -43,8 +43,7 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    if action["action"](rhinoform):
-        rhinoform.draw(settings)
+    action["action"](rhinoform)
 
 
 # ==============================================================================

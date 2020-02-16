@@ -96,8 +96,8 @@ def RunCommand(is_interactive):
     layers = [settings[name] for name in settings if name.startswith("layers")]
     compas_rhino.clear_layers(layers)
 
-    browser = BrowserForm('https://compas-dev.github.io/main/', width=960, height=720)
-    browser.show()
+    # browser = BrowserForm('https://compas-dev.github.io/main/', width=960, height=720)
+    # browser.show()
 
 
 # ==============================================================================

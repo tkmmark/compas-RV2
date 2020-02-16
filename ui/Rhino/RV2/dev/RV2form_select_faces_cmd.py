@@ -41,8 +41,7 @@ def RunCommand(is_interactive):
     if not action:
         return
 
-    if action["action"](rhinoform):
-        rhinoform.draw(settings)
+    action["action"](rhinoform)
 
 
 # ==============================================================================
