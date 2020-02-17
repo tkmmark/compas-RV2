@@ -7,10 +7,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='RhinoVault2 Installation command-line utility.')
 
+    parser.add_argument('--dev',action='store_true', help="install dev version of RV2 from current env")
     parser.add_argument('--plugin_path', help="The path to the plugin directory.")
     args = parser.parse_args()
 
-    if args.plugin_path:
+    if args.dev:
+        install_plugin('ui/Rhino/RV2', version="6.0")
+    elif args.plugin_path:
         install_plugin(args.plugin_path, version="6.0")
 
 
