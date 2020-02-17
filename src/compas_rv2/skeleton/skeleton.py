@@ -117,19 +117,19 @@ class Skeleton(Mesh):
         self._add_mesh_faces(network)
 
     def _add_skeleton_vertices(self, network):
-        duality._sort_neighbors(network, True)
+        duality.network_sort_neighbors(network, True)
 
-        for key in network.vertices():
-            if network.is_vertex_leaf(key):
-                network.vertex[key].update({'type': 'skeleton_leaf'})
+        for key in network.nodes():
+            if network.is_leaf(key):
+                network.node[key].update({'type': 'skeleton_leaf'})
             else:
-                network.vertex[key].update({'type': 'skeleton_node'})
+                network.node[key].update({'type': 'skeleton_node'})
 
             self.add_vertex(key)
-            self.vertex[key].update(network.vertex[key])
+            self.vertex[key].update(network.node[key])
 
     def _add_skeleton_branches(self, network):
-        self.halfedge = copy.deepcopy(network.halfedge)
+        self.halfedge = copy.deepcopy(network.adjacency)
         self.update_default_edge_attributes({'type': None})
         for key, attr in self.edges(True):
             attr.update({'type': 'skeleton_branch'})
@@ -151,7 +151,7 @@ class Skeleton(Mesh):
         after all iterations, each halfedge will have a 'sp' and an 'ep'. A face = [u, v, 'ep', 'sp'] could be added to skeleton.
         """
         def get_boundary_vertex_keys(network, u, v, sp=None, ep=None):
-            attr = network.halfedge[u][v]
+            attr = network.adjacency[u][v]
             if attr is None:
                 attr = {}
             if sp is not None:
@@ -159,13 +159,13 @@ class Skeleton(Mesh):
             if ep is not None:
                 attr['ep'] = ep
 
-            network.halfedge[u][v] = attr
+            network.adjacency[u][v] = attr
 
-        current_key = network.number_of_vertices()
+        current_key = network.number_of_nodes()
         node_vertices, leaf_vertices = self.skeleton_vertices()
 
         for u in node_vertices:
-            for v in network.halfedge[u]:
+            for v in network.adjacency[u]:
 
                 vertex_prvs = self._find_previous_vertex(u, v)
                 get_boundary_vertex_keys(network, u, v, sp=current_key)
@@ -177,7 +177,7 @@ class Skeleton(Mesh):
                 current_key += 1
 
         for u in leaf_vertices:
-            v = network.halfedge[u].items()[0][0]
+            v = network.adjacency[u].items()[0][0]
 
             get_boundary_vertex_keys(network, u, v, sp=current_key)
             get_boundary_vertex_keys(network, v, u, ep=current_key+1)
@@ -192,12 +192,12 @@ class Skeleton(Mesh):
         return network
 
     def _add_mesh_faces(self, network):
-        for u in network.halfedge:
-            for v in network.halfedge[u]:
+        for u in network.adjacency:
+            for v in network.adjacency[u]:
                 self.add_face([
                     u, v,
-                    network.halfedge[u][v]['ep'],
-                    network.halfedge[u][v]['sp']
+                    network.adjacency[u][v]['ep'],
+                    network.adjacency[u][v]['sp']
                 ])
 
     # --------------------------------------------------------------------------
@@ -302,7 +302,7 @@ class Skeleton(Mesh):
 
     def _find_previous_vertex(self, u, v):
         """ Find the previous vertex of a halfedge[u][v] through sorted nbrs. """
-        nbrs = self.vertex[u]['sorted_neighbors']
+        nbrs = self.vertex[u]['neighbors']
         prvs = nbrs[(nbrs.index(v) + 1) % len(nbrs)]
         return prvs
 
@@ -362,7 +362,9 @@ class Skeleton(Mesh):
 
     def to_form_diagram(self):
         mesh = self.to_diagram()
-        form = FormDiagram.from_vertices_and_faces(mesh.vertex, mesh.face)
+        # form = FormDiagram.from_vertices_and_faces(mesh.vertex, mesh.face)
+        key_xyz = {key: mesh.vertex_attributes(key, 'xyz') for key in mesh.vertices()}
+        form = FormDiagram.from_vertices_and_faces(key_xyz, mesh.face)
 
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:

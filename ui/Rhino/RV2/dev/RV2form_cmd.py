@@ -129,7 +129,7 @@ def from_skeleton(root):
     if not skeleton:
         print('There is not skeleton to be found!')
         return
-    form = skeleton.to_diagram()
+    form = skeleton.diagram.to_form_diagram()
     return form
 
 

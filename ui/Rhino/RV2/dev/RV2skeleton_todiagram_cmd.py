@@ -5,6 +5,7 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino import get_rv2
 from compas_rv2.rhino import RhinoFormDiagram
+from compas_rv2.rhino import RhinoThrustDiagram
 
 
 __commandname__ = "RV2skeleton_tomesh"
@@ -27,7 +28,12 @@ def RunCommand(is_interactive):
         return
     rhinoform = RhinoFormDiagram(form)
     rhinoform.draw(settings)
+
+    rhinothrust = RhinoThrustDiagram(form)
+
     scene["form"] = rhinoform
+    scene["force"] = None
+    scene["thrust"] = rhinothrust
 
 
 # ==============================================================================
