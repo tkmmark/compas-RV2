@@ -18,7 +18,7 @@ except ImportError:
 else:
     # replace this by from compas_cloud import Proxy
     from compas.rpc import Proxy
-    from compas_rhino.forms import BrowserForm
+    from compas_rv2.forms import BrowserForm
 
 
 __commandname__ = "RV2init"
@@ -96,7 +96,7 @@ def RunCommand(is_interactive):
     layers = [settings[name] for name in settings if name.startswith("layers")]
     compas_rhino.clear_layers(layers)
 
-    browser = BrowserForm('https://compas-dev.github.io/main/', width=960, height=720)
+    browser = BrowserForm(width=960, height=720)
     browser.show()
 
 
