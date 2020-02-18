@@ -345,7 +345,7 @@ class Skeleton(Mesh):
     # exporting digrams
     # --------------------------------------------------------------------------
 
-    def to_diagram(self):
+    def to_mesh(self):
         """ Diagram mesh(high poly) is a mesh without any additional attr or functions from class Skeleton.
         It cannot be edited again once exported as diagram for further analysis.
         """
@@ -360,11 +360,12 @@ class Skeleton(Mesh):
 
         return mesh
 
-    def to_form_diagram(self):
-        mesh = self.to_diagram()
+    def to_form(self):
+        mesh = self.to_mesh()
         # form = FormDiagram.from_vertices_and_faces(mesh.vertex, mesh.face)
-        key_xyz = {key: mesh.vertex_attributes(key, 'xyz') for key in mesh.vertices()}
-        form = FormDiagram.from_vertices_and_faces(key_xyz, mesh.face)
+        xyz = mesh.vertices_attributes('xyz')
+        faces = [mesh.face_vertices(fkey) for fkey in mesh.faces()]
+        form = FormDiagram.from_vertices_and_faces(xyz, faces)
 
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:
@@ -374,8 +375,8 @@ class Skeleton(Mesh):
 
     def to_lines(self):
         lines = []
-        for u, v in self.to_diagram().edges():
-            lines.append(self.to_diagram().edge_coordinates(u, v))
+        for u, v in self.to_mesh().edges():
+            lines.append(self.to_mesh().edge_coordinates(u, v))
         return lines
 
     def get_anchor_vertices(self):
