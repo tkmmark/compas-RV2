@@ -115,3 +115,26 @@ temp/**
 .vscode
 
 .DS_Store
+*.doctree
+docs/.buildinfo
+docs/.doctrees/api/compas_rv2.doctree
+docs/.doctrees/examples.doctree
+docs/.doctrees/examples/barrelvault/barrelvault.doctree
+docs/.doctrees/examples/crossvault/crossvault.doctree
+docs/.doctrees/examples/dome/dome.doctree
+docs/.doctrees/gettingstarted.doctree
+docs/.doctrees/index.doctree
+docs/.doctrees/intro.doctree
+docs/.doctrees/license.doctree
+docs/.doctrees/tutorial.doctree
+docs/.doctrees/tutorial/crossvault/crossvault.doctree
+docs/.doctrees/tutorial/crossvault2/crossvault.doctree
+docs/.doctrees/tutorial/force/crossvault.doctree
+docs/.doctrees/tutorial/force/force.doctree
+docs/.doctrees/tutorial/form/form.doctree
+docs/.doctrees/tutorial/form/init.doctree
+docs/.doctrees/tutorial/init/init.doctree
+docs/.doctrees/tutorial/settings/init.doctree
+docs/.doctrees/tutorial/settings/settings.doctree
+docs/.doctrees/tutorial/skeleton/init.doctree
+docs/.doctrees/tutorial/skeleton/skeleton.doctree

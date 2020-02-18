@@ -2,58 +2,41 @@
 Skeleton
 ================================================================================
 
-
-Sketch your own form diagram
----------------------
+Sketch a form diagram
+----------------------------
 
 Skeleton is a tool allowing user to quickly sketch and modify a form diagram. 
-
 
 Create
 ======
 
-Create a skeleton diagram from scracth. It takes Rhino lines as branch skeleton. Use mouse cursor to assgin inital width to the diagram. 
+Create a skeleton diagram from scracth. It takes Rhino lines as input. Drag the mouse cursor to assgin inital width to the diagram. 
+
 
 .. figure:: /_images/skeleton_create.gif
     :figclass: figure
     :class: figure-img img-fluid
 
 
-* type ``RV2skeleton`` in Rhino command line / or click ``skeleton`` on the tool bar / or select from the drop down menu
-* choose ``create``
-* select lines in Rhino to initiate a Skeleton
-* click on the leaf end, move cursor, click again to confirm the width of diagram leaf
-* click on the node, move cursor, click again to confirm the width of diagram node 
+* select ``Skeleton`` --> ``From lines`` from the drop down menu
+* select all the lines
+* click on the leaf end, move the cursor to get an ideal leaf width, click again to confirm
+* click on the node, repeat last step to get the node width
 
 
 Modify
 ======
 
 Skeleton digarm can be modified to follow the design decision or to fit the site condition. 
-Branch lines can be added to or removed from the current skeleton.
 
 
-.. figure:: /_images/skeleton_modify01.gif
+.. figure:: /_images/skeleton_modify.gif
     :figclass: figure
     :class: figure-img img-fluid
 
-
-.. figure:: /_images/skeleton_modify02.gif
-    :figclass: figure
-    :class: figure-img img-fluid
-
-
-* type ``RV2skeleton`` in Rhino command line / or click ``skeleton`` on the tool bar / or select from the drop down menu
-* choose ``modify``
-* choose the operation from the options, end this round of modify with ``finish``
-* Note that ``move vertex`` should always be the last step as the modification of the local details. 
-
-
-To Diagram
-======
-
-After finalizing the sketch, export a form diagram from the skeleton. 
-The skeleton can be edited again and be used to generate more form diagrams. 
-
-* type ``RV2skeleton`` in Rhino command line / or click ``skeleton`` on the tool bar / or select from the drop down menu
-* choose ``to_diagram``
+* select ``Skeleton`` --> ``Modify`` from the drop down menu
+* choose ``move_skeleton``, select a skeleton vertex, move it to the new locaiton
+* choose ``move_vertex``, select any vertex, move it to the new locaiton. notice the difference between ``move_skeleton`` and ``move_vertex``
+* choose ``subidivide``, the diagram will be subdivided and smoothed
+* repeat modifications until you get the ideal form, end it by clicking on ``finish``
+* Note that ``move_vertex`` should always be the last step as the modification to local details
