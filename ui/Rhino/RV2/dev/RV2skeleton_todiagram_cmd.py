@@ -23,7 +23,7 @@ def RunCommand(is_interactive):
     scene = RV2["scene"]
 
     rhinoskeleton = RV2["scene"]["skeleton"]
-    form = rhinoskeleton.diagram.to_form_diagram()
+    form = rhinoskeleton.diagram.to_form()
     if not form:
         return
     rhinoform = RhinoFormDiagram(form)
