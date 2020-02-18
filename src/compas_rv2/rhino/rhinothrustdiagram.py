@@ -46,7 +46,7 @@ class RhinoThrustDiagram(RhinoDiagram):
             color.update({key: settings.get("color.thrust.vertices") for key in self.diagram.vertices()})
             color.update({key: settings.get("color.thrust.vertices:is_fixed") for key in self.diagram.vertices_where({'is_fixed': True})})
             color.update({key: settings.get("color.thrust.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
-            self.guid_vertices = self.artist.draw_vertices(color=color)
+            self.guid_vertices = self.artist.draw_vertices(color=color, keys=keys)
 
         if settings.get("show.thrust.edges", True):
             keys = list(self.diagram.edges_where({'is_edge': True, 'is_external': False}))
@@ -61,7 +61,7 @@ class RhinoThrustDiagram(RhinoDiagram):
             self.guid_faces = self.artist.draw_faces(keys=keys, color=color)
 
         if settings.get("show.thrust.external", True):
-            self.artist.draw_external(scale=settings.get("scale.thrust.external"))
+            self.artist.draw_external(scale=settings.get("scale.thrust.external", 1.0))
 
         self.artist.redraw()
 
