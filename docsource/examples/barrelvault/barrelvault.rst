@@ -21,9 +21,9 @@ Make sure the lines are individual line segments and properly connected.
 Alternatively, the form diagram can be created from an OBJ file, from a JSON file,
 from a Rhino mesh, or a Rhino surface.
 
-.. literalinclude:: barrelvault.py
-    :language: python
-    :lines: 60-65
+* Initialze RV2
+* click ``form`` on the tool bar / or select `FormDiagram` from the drop down menu
+* choose `from_lines`, slelect all the lines from Layer ``Lines``
 
 
 Identify the supports
@@ -33,9 +33,7 @@ After initialising the form diagram, we identify the supports.
 The identify the supports, we select the relevant vertices and change their attribute
 ``is_anchor`` to ``True``.
 
-.. literalinclude:: barrelvault.py
-    :language: python
-    :lines: 67-74
+* from the drop down menu, choose `FormDiagram`-->`Select Edges`, select two edge lines from layer `Constraints`
 
 
 Update the boundary conditions
@@ -55,9 +53,7 @@ and the form diagram edges in this example are organised in an orthogonal grid,
 the horizontal reaction forces at the supports can only lie in the direction of the
 spanning arches.
 
-.. literalinclude:: barrelvault.py
-    :language: python
-    :lines: 76-91
+* from the drop down menu, selelct `Update Boundaries`
 
 
 Make the force diagram

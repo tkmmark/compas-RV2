@@ -8,7 +8,8 @@ Tutorial
    :glob:
 
    tutorial/init/*
-   tutorial/settings/*
    tutorial/skeleton/*
    tutorial/form/*
-   turorial/force/*
+   tutorial/force/*
+   tutorial/horizontal/*
+   tutorial/vertical/*

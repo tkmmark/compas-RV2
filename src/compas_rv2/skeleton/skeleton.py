@@ -69,6 +69,13 @@ class Skeleton(Mesh):
 
         return skeleton
 
+    @classmethod
+    def from_center_point(cls, pt=None):
+        skeleton = cls()
+        skeleton.mesh_from_center_point(pt)
+
+        return skeleton
+
     def add_skeleton_lines(self, lines=[]):
         """ Update skeleton mesh structure from a new network which is created with the currrent skeleton lines and added lines.
         The leaf_width, node_width, sub_level will remain the same.
@@ -116,20 +123,36 @@ class Skeleton(Mesh):
         network = self._add_boundary_vertices(network)
         self._add_mesh_faces(network)
 
-    def _add_skeleton_vertices(self, network):
-        duality._sort_neighbors(network, True)
+    def mesh_from_center_point(self, pt):
+        # add the point as the skeleton node
+        self.add_vertex(0)
+        self.vertex[0].update({'x': pt[0], 'y': pt[1], 'z': pt[2], 'type': 'skeleton_node'})
 
-        for key in network.vertices():
-            if network.is_vertex_leaf(key):
-                network.vertex[key].update({'type': 'skeleton_leaf'})
+        # add four more vertices to compose a mesh
+        for index in range(1, 5):
+            self.add_vertex(index)
+            self.vertex[index].update({'type': None})
+
+        from compas.utilities import pairwise
+
+        keys = range(1, 5) + [1]
+        for u, v in pairwise(keys):
+            self.add_face([0, u, v])
+
+    def _add_skeleton_vertices(self, network):
+        duality.network_sort_neighbors(network, True)
+
+        for key in network.nodes():
+            if network.is_leaf(key):
+                network.node[key].update({'type': 'skeleton_leaf'})
             else:
-                network.vertex[key].update({'type': 'skeleton_node'})
+                network.node[key].update({'type': 'skeleton_node'})
 
             self.add_vertex(key)
-            self.vertex[key].update(network.vertex[key])
+            self.vertex[key].update(network.node[key])
 
     def _add_skeleton_branches(self, network):
-        self.halfedge = copy.deepcopy(network.halfedge)
+        self.halfedge = copy.deepcopy(network.adjacency)
         self.update_default_edge_attributes({'type': None})
         for key, attr in self.edges(True):
             attr.update({'type': 'skeleton_branch'})
@@ -151,7 +174,7 @@ class Skeleton(Mesh):
         after all iterations, each halfedge will have a 'sp' and an 'ep'. A face = [u, v, 'ep', 'sp'] could be added to skeleton.
         """
         def get_boundary_vertex_keys(network, u, v, sp=None, ep=None):
-            attr = network.halfedge[u][v]
+            attr = network.adjacency[u][v]
             if attr is None:
                 attr = {}
             if sp is not None:
@@ -159,13 +182,13 @@ class Skeleton(Mesh):
             if ep is not None:
                 attr['ep'] = ep
 
-            network.halfedge[u][v] = attr
+            network.adjacency[u][v] = attr
 
-        current_key = network.number_of_vertices()
+        current_key = network.number_of_nodes()
         node_vertices, leaf_vertices = self.skeleton_vertices()
 
         for u in node_vertices:
-            for v in network.halfedge[u]:
+            for v in network.adjacency[u]:
 
                 vertex_prvs = self._find_previous_vertex(u, v)
                 get_boundary_vertex_keys(network, u, v, sp=current_key)
@@ -177,7 +200,7 @@ class Skeleton(Mesh):
                 current_key += 1
 
         for u in leaf_vertices:
-            v = network.halfedge[u].items()[0][0]
+            v = network.adjacency[u].items()[0][0]
 
             get_boundary_vertex_keys(network, u, v, sp=current_key)
             get_boundary_vertex_keys(network, v, u, ep=current_key+1)
@@ -192,12 +215,12 @@ class Skeleton(Mesh):
         return network
 
     def _add_mesh_faces(self, network):
-        for u in network.halfedge:
-            for v in network.halfedge[u]:
+        for u in network.adjacency:
+            for v in network.adjacency[u]:
                 self.add_face([
                     u, v,
-                    network.halfedge[u][v]['ep'],
-                    network.halfedge[u][v]['sp']
+                    network.adjacency[u][v]['ep'],
+                    network.adjacency[u][v]['sp']
                 ])
 
     # --------------------------------------------------------------------------
@@ -239,16 +262,26 @@ class Skeleton(Mesh):
             self.vertex[key1].update({'x': pt1[0], 'y': pt1[1], 'z': pt1[2]})
             self.vertex[key2].update({'x': pt2[0], 'y': pt2[1], 'z': pt2[2]})
 
+        def update_dome_boundary_vertex():
+            pts = self._get_dome_boundary_vertex_pos()
+
+            for key in range(1, 5):
+                self.vertex[key].update({'x': pts[key-1][0], 'y': pts[key-1][1], 'z': pts[key-1][2]})
+
         skeleton_branches = self.skeleton_branches()
-        for u, v in skeleton_branches:
-            if self.vertex[u]['type'] == 'skeleton_node':
-                update_node_boundary_vertex(u, v)
-            else:
-                update_leaf_boundary_vertex(u, v)
-            if self.vertex[v]['type'] == 'skeleton_node':
-                update_node_boundary_vertex(v, u)
-            else:
-                update_leaf_boundary_vertex(v, u)
+        if skeleton_branches != []:
+            for u, v in skeleton_branches:
+                if self.vertex[u]['type'] == 'skeleton_node':
+                    update_node_boundary_vertex(u, v)
+                else:
+                    update_leaf_boundary_vertex(u, v)
+                if self.vertex[v]['type'] == 'skeleton_node':
+                    update_node_boundary_vertex(v, u)
+                else:
+                    update_leaf_boundary_vertex(v, u)
+
+        else:
+            update_dome_boundary_vertex()
 
     def _get_node_boundary_vertex_pos(self, u, v):
         """ Find the xyz coordinates for a boundary vertex around a skeleton node.
@@ -300,9 +333,27 @@ class Skeleton(Mesh):
 
         return pt_leaf_right, pt_leaf_left
 
+    def _get_dome_boundary_vertex_pos(self):
+        from compas.geometry import Frame
+
+        vec_x = Frame.worldXY().xaxis
+        vec_y = Frame.worldXY().yaxis
+
+        vec_x.scale(self.attributes['node_width'])
+        vec_y.scale(self.attributes['node_width'])
+
+        pts = [
+            add_vectors(self.vertex_coordinates(0), vec_x),
+            add_vectors(self.vertex_coordinates(0), vec_y),
+            add_vectors(self.vertex_coordinates(0), vec_x * -1),
+            add_vectors(self.vertex_coordinates(0), vec_y * -1)
+        ]
+
+        return pts
+
     def _find_previous_vertex(self, u, v):
         """ Find the previous vertex of a halfedge[u][v] through sorted nbrs. """
-        nbrs = self.vertex[u]['sorted_neighbors']
+        nbrs = self.vertex[u]['neighbors']
         prvs = nbrs[(nbrs.index(v) + 1) % len(nbrs)]
         return prvs
 
@@ -345,7 +396,7 @@ class Skeleton(Mesh):
     # exporting digrams
     # --------------------------------------------------------------------------
 
-    def to_diagram(self):
+    def to_mesh(self):
         """ Diagram mesh(high poly) is a mesh without any additional attr or functions from class Skeleton.
         It cannot be edited again once exported as diagram for further analysis.
         """
@@ -360,9 +411,12 @@ class Skeleton(Mesh):
 
         return mesh
 
-    def to_form_diagram(self):
-        mesh = self.to_diagram()
-        form = FormDiagram.from_vertices_and_faces(mesh.vertex, mesh.face)
+    def to_form(self):
+        mesh = self.to_mesh()
+        # form = FormDiagram.from_vertices_and_faces(mesh.vertex, mesh.face)
+        xyz = mesh.vertices_attributes('xyz')
+        faces = [mesh.face_vertices(fkey) for fkey in mesh.faces()]
+        form = FormDiagram.from_vertices_and_faces(xyz, faces)
 
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:
@@ -372,33 +426,39 @@ class Skeleton(Mesh):
 
     def to_lines(self):
         lines = []
-        for u, v in self.to_diagram().edges():
-            lines.append(self.to_diagram().edge_coordinates(u, v))
+        for u, v in self.to_mesh().edges():
+            lines.append(self.to_mesh().edge_coordinates(u, v))
         return lines
 
     def get_anchor_vertices(self):
         anchor_vertices = []
         leaf_vertices = list(self.vertices_where({'type': 'skeleton_leaf'}))
-        iterations = self.attributes['sub_level']
 
-        for key in leaf_vertices:
-            vertices_on_edge = [key]
-            for nbr in self.vertex_neighbors(key):
-                if self.vertex[nbr]['type'] != 'skeleton_node':
-                    vertices_on_edge.append(nbr)
+        if leaf_vertices == []:  # this is a dome
+            mesh = self.to_mesh()
+            anchor_vertices = mesh.vertices_on_boundary()
 
-            vertices_temp = [key]
-            for i in range(iterations):
-                vertices_temp_2 = []
-                mesh = self._subdivide(i+1)
-                for v in vertices_temp:
-                    for nbr in mesh.vertex_neighbors(v):
-                        if mesh.vertex_degree(nbr) == 3:
-                            vertices_on_edge.append(nbr)
-                            vertices_temp_2.append(nbr)
-                vertices_temp = vertices_temp_2
+        else:
+            iterations = self.attributes['sub_level']
 
-            anchor_vertices.extend(vertices_on_edge)
+            for key in leaf_vertices:
+                vertices_on_edge = [key]
+                for nbr in self.vertex_neighbors(key):
+                    if self.vertex[nbr]['type'] != 'skeleton_node':
+                        vertices_on_edge.append(nbr)
+
+                vertices_temp = [key]
+                for i in range(iterations):
+                    vertices_temp_2 = []
+                    mesh = self._subdivide(i+1)
+                    for v in vertices_temp:
+                        for nbr in mesh.vertex_neighbors(v):
+                            if mesh.vertex_degree(nbr) == 3:
+                                vertices_on_edge.append(nbr)
+                                vertices_temp_2.append(nbr)
+                    vertices_temp = vertices_temp_2
+
+                anchor_vertices.extend(vertices_on_edge)
 
         return anchor_vertices
 
