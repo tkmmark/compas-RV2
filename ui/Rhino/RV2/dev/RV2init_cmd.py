@@ -25,6 +25,10 @@ __commandname__ = "RV2init"
 
 
 def RunCommand(is_interactive):
+
+    browser = BrowserForm()
+    browser.Show()
+
     p = Proxy()
 
     sc.sticky["RV2.proxy"] = p
@@ -95,10 +99,6 @@ def RunCommand(is_interactive):
     settings = sc.sticky["RV2"]["settings"]
     layers = [settings[name] for name in settings if name.startswith("layers")]
     compas_rhino.clear_layers(layers)
-
-    browser = BrowserForm(width=960, height=720)
-    browser.show()
-
 
 # ==============================================================================
 # Main
