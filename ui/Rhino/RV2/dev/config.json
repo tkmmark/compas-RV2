@@ -20,6 +20,7 @@
 
             {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
             {"name": "RV2skeleton_from_lines", "button_text": "skeleton_from_lines", "menu_text": "From Lines"},
+            {"name": "RV2skeleton_from_point", "button_text": "skeleton_from_point", "menu_text": "From Point"},
             {"name": "RV2skeleton_modify", "button_text": "skeleton_modify", "menu_text": "Modify"},
             {"name": "RV2skeleton_todiagram", "button_text": "skeleton_todiagram", "menu_text": "To Diagram"},
             {"name": "RV2skeleton_tomesh", "button_text": "skeleton_tomesh", "menu_text": "To Mesh"},
@@ -67,6 +68,7 @@
                         "items":
                         [
                             {"name": "RV2skeleton_from_lines", "command": "RV2skeleton_from_lines"},
+                            {"name": "RV2skeleton_from_point", "command": "RV2skeleton_from_point"},
                             {"type": "separator"},
                             {"name": "RV2skeleton_modify", "command": "RV2skeleton_modify"},
                             {"type": "separator"},
