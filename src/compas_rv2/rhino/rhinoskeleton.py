@@ -215,9 +215,10 @@ class RhinoSkeleton(object):
         artist.clear_layer()
         artist.draw_vertices(keys=skeleton_vertices, color=(255, 0, 0))
 
-        artist.layer = 'RV2::Skeleton::skeleton_edges'
-        artist.clear_layer()
-        artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
+        if skeleton_branches != []:
+            artist.layer = 'RV2::Skeleton::skeleton_edges'
+            artist.clear_layer()
+            artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
 
         artist = MeshArtist(self.diagram.to_mesh())
 
