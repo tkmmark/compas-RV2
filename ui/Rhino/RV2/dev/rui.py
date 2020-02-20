@@ -301,7 +301,7 @@ class Rui(object):
 
     def add_toolbar(self, toolbar):
         options = {
-            "item_display_style": "control_and_text"
+            "item_display_style": "control"
         }
         guid = uuid.uuid4()
         s_tb = TPL_TOOLBAR.format(guid, toolbar["name"], options)
