@@ -211,7 +211,7 @@ class Rui(object):
 
     def add_bitmap(self, path):
         with open(path, "rb") as f:
-            bitmap = base64.encodebytes(f.read()).decode("utf-8")
+            bitmap = base64.b64encode(f.read()).decode("utf-8")
         self.root_bitmaps.find("large_bitmap").find("bitmap").text = bitmap
 
     def add_bitmap_items(self, items):

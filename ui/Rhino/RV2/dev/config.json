@@ -9,14 +9,17 @@
     {
         "icons":
         {
-            "bitmap": "icons/grid.png",
+            "bitmap": "grid.png",
             "images": ["init", "init", "settings", "files", "form", "force", "horizontal", "vertical"]
         },
+
         "commands":
         [
             {"name": "RV2init", "button_text": "rv2_init", "menu_text": "Init", "icon": 0},
-            {"name": "RV2settings", "button_text": "rv2_settings", "menu_text": "Settings", "icon": 2},
-            {"name": "RV2file", "button_text": "rv2_file", "menu_text": "File", "icon": 3},
+            {"name": "RV2settings", "button_text": "rv2_settings", "menu_text": "Settings", "icon": 1},
+            {"name": "RV2settings", "button_text": "rv2_settings", "menu_text": "Main", "icon": 1},
+            {"name": "RV2settingsVisualisation", "button_text": "rv2_settings_vis", "menu_text": "Visualisation", "icon": 1},
+            {"name": "RV2file", "button_text": "rv2_file", "menu_text": "File", "icon": 2},
 
             {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
             {"name": "RV2skeleton_from_lines", "button_text": "skeleton_from_lines", "menu_text": "From Lines"},
@@ -28,12 +31,17 @@
             {"name": "RV2form", "button_text": "form", "menu_text": "FormDiagram", "icon": 4},
             {"name": "RV2form_from_obj", "button_text": "form_from_obj", "menu_text": "From OBJ"},
             {"name": "RV2form_from_json", "button_text": "form_from_json", "menu_text": "From JSON"},
+            {"name": "RV2form_from_lines", "button_text": "form_from_lines", "menu_text": "From Lines"},
             {"name": "RV2form_from_mesh", "button_text": "form_from_mesh", "menu_text": "From Mesh"},
             {"name": "RV2form_from_surface", "button_text": "from_from_surf", "menu_text": "From Surface"},
+            {"name": "RV2form_from_features", "button_text": "from_from_surf", "menu_text": "From Features"},
+            {"name": "RV2form_from_skeleton", "button_text": "from_from_surf", "menu_text": "From Features"},
+
             {"name": "RV2form_attributes", "button_text": "form_attr", "menu_text": "Attributes"},
             {"name": "RV2form_update_vertices", "button_text": "form_update_V", "menu_text": "Update Vertices"},
             {"name": "RV2form_update_edges", "button_text": "form_update_E", "menu_text": "Update Edges"},
             {"name": "RV2form_update_faces", "button_text": "form_update_F", "menu_text": "Update Faces"},
+
             {"name": "RV2form_select_vertices", "button_text": "form_select_V", "menu_text": "Select Vertices"},
             {"name": "RV2form_select_edges", "button_text": "form_select_E", "menu_text": "Select Edges"},
             {"name": "RV2form_select_faces", "button_text": "form_select_F", "menu_text": "Select Faces"},
@@ -42,7 +50,8 @@
             {"name": "RV2form_update_boundaries", "button_text": "update_boundaries", "menu_text": "Update Boundaries"},
 
             {"name": "RV2force", "button_text": "force", "menu_text": "ForceDiagram", "icon": 5},
-            {"name": "RV2force_from_form", "button_text": "force_from_form", "menu_text": "From FormDiagram"},
+
+            {"name": "RV2force_from_form", "button_text": "force_from_form", "menu_text": "Make force diagram"},
             {"name": "RV2force_attributes", "button_text": "force_attr", "menu_text": "Attributes"},
             {"name": "RV2force_update_vertices", "button_text": "force_update_V", "menu_text": "Update Vertices"},
             {"name": "RV2force_update_edges", "button_text": "force_update_E", "menu_text": "Update Edges"},
@@ -53,78 +62,116 @@
             {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": 6},
             {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": 7}
         ],
+
         "menus":
         [
             {
-                "name": "RhinoVAULT 2",
-                "items":
-                [
+                "name" : "RhinoVAULT 2",
+                "items": [
+
                     {"name": "RV2init", "command": "RV2init"},
-                    {"name": "RV2settings", "command": "RV2settings"},
-                    {"name": "RV2file", "command": "RV2file"},
-                    {"type": "separator"},
+
                     {
-                        "name": "Skeleton",
-                        "items":
-                        [
-                            {"name": "RV2skeleton_from_lines", "command": "RV2skeleton_from_lines"},
-                            {"name": "RV2skeleton_from_point", "command": "RV2skeleton_from_point"},
-                            {"type": "separator"},
-                            {"name": "RV2skeleton_modify", "command": "RV2skeleton_modify"},
-                            {"type": "separator"},
-                            {"name": "RV2skeleton_todiagram", "command": "RV2skeleton_todiagram"},
-                            {"name": "RV2skeleton_tomesh", "command": "RV2skeleton_tomesh"}
+                        "name" : "Settings",
+                        "items": [
+                            {"name": "RV2settings", "command": "RV2settings"},
+                            {"name": "RV2settingsVisualisation", "command": "RV2settingsVisualisation"}
                         ]
                     },
+
+                    {"name": "RV2file", "command": "RV2file"},
+
+
+                    {"type": "separator"},
+
+
                     {
-                        "name": "FormDiagram",
-                        "items":
-                        [
+                        "name" : "Make form diagram",
+                        "items": [
                             {"name": "RV2form_from_obj", "command": "RV2form_from_obj"},
                             {"name": "RV2form_from_json", "command": "RV2form_from_json"},
+
+                            {"type": "separator"},
+
+                            {"name": "RV2form_from_lines", "command": "RV2form_from_lines"},
                             {"name": "RV2form_from_mesh", "command": "RV2form_from_mesh"},
                             {"name": "RV2form_from_surface", "command": "RV2form_from_surface"},
+
                             {"type": "separator"},
+
+                            {"name": "RV2form_from_features", "command": "RV2form_from_features"},
+
+                            {"type": "separator"},
+
+                            {"name": "RV2skeleton_from_lines", "command": "RV2skeleton_from_lines"}
+                        ]
+                    },
+
+                    {"name": "RV2force_from_form", "command": "RV2force_from_form"},
+
+
+                    {"type": "separator"},
+
+
+                    {"name": "RV2equilibrium_horizontal", "command": "RV2equilibrium_horizontal"},
+                    {"name": "RV2equilibrium_vertical", "command": "RV2equilibrium_vertical"},
+
+
+                    {"type": "separator"},
+
+
+
+                    {
+                        "name" : "Modify form diagram",
+                        "items": [
+
                             {"name": "RV2form_attributes", "command": "RV2form_attributes"},
                             {"type": "separator"},
+
                             {"name": "RV2form_select_vertices", "command": "RV2form_select_vertices"},
                             {"name": "RV2form_select_edges", "command": "RV2form_select_edges"},
                             {"name": "RV2form_select_faces", "command": "RV2form_select_faces"},
+
                             {"type": "separator"},
+
                             {"name": "RV2form_update_vertices", "command": "RV2form_update_vertices"},
                             {"name": "RV2form_update_edges", "command": "RV2form_update_edges"},
                             {"name": "RV2form_update_faces", "command": "RV2form_update_faces"},
+
                             {"type": "separator"},
+
+                            {"name": "RV2skeleton_modify", "command": "RV2skeleton_modify"},
+
+                            {"type": "separator"},
+
                             {"name": "RV2form_relax", "command": "RV2form_relax"},
                             {"name": "RV2form_update_boundaries", "command": "RV2form_update_boundaries"}
+
                         ]
                     },
+
                     {
-                        "name": "ForceDiagram",
-                        "items":
-                        [
-                            {"name": "RV2force_from_form", "command": "RV2force_from_form"},
-                            {"type": "separator"},
+                        "name" : "Modify force diagram",
+                        "items": [
+
                             {"name": "RV2force_attributes", "command": "RV2form_attributes"},
+
                             {"type": "separator"},
+
                             {"name": "RV2force_update_vertices", "command": "RV2force_update_vertices"},
                             {"name": "RV2force_update_edges", "command": "RV2force_update_edges"},
                             {"name": "RV2force_update_faces", "command": "RV2force_update_faces"}
+
                         ]
                     },
-                    {"type": "separator"},
+
                     {
-                        "name": "Horizontal",
-                        "items":
-                        [
-                        ]
-                    },
-                    {
-                        "name": "Vertical",
-                        "items":
-                        [
+                        "name" : "Modify thrust diagram",
+                        "items": [
                         ]
                     }
+
+
                 ]
             }
         ],
@@ -137,9 +184,14 @@
                     {"left": "RV2init"},
                     {"left": "RV2settings"},
                     {"left": "RV2file"},
-                    {"left": "RV2skeleton"},
+
+                    {"type": "separator"},
+
                     {"left": "RV2form"},
                     {"left": "RV2force"},
+
+                    {"type": "separator"},
+
                     {"left": "RV2equilibrium_horizontal"},
                     {"left": "RV2equilibrium_vertical"}
                 ]
