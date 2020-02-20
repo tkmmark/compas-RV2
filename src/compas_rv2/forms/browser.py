@@ -18,16 +18,15 @@ except Exception:
 
 
 # Using SampleEtoRoomNumber dialog Example as guide
-class BrowserForm(forms.Dialog[bool]):
-    def __init__(self, url=None, width=400, height=600):
+class BrowserForm(forms.Form):
+    def __init__(self, url=None, width=600, height=300):
         self.Title = 'RhinoVault2'
-        self.Padding = drawing.Padding(10)
-        self.Resizable = True
-
-        self.DefaultButton = forms.Button(Text = 'OK')
-        self.DefaultButton.Click += self.OnOKButtonClick
-
-        # self.AbortButton = forms.Button(Text = 'Cancel')
+        self.Padding = drawing.Padding(0)
+        # self.Resizable = True
+        
+        # self.DefaultButton = forms.Button(Text = 'OK')
+        # self.DefaultButton.Click += self.OnOKButtonClick
+        # # self.AbortButton = forms.Button(Text = 'Cancel')
 
         self.m_webview = forms.WebView()
         self.m_webview.Size = drawing.Size(width, height)
@@ -41,25 +40,26 @@ class BrowserForm(forms.Dialog[bool]):
         layout.BeginVertical()
         layout.AddRow(self.m_webview)
         layout.EndVertical()
-        layout.AddRow(None) # spacer
 
-        layout.BeginVertical()
-        layout.AddRow(None, self.DefaultButton)
-        layout.EndVertical()
+
+        # layout.AddRow(None) # spacer
+        # layout.BeginVertical()
+        # layout.AddRow(None, self.DefaultButton)
+        # layout.EndVertical()
 
         self.Content = layout
 
-    def OnCloseButtonClick(self, sender, e):
-        self.Close(False)
+    # def OnCloseButtonClick(self, sender, e):
+    #     self.Close(False)
 
-    def OnOKButtonClick(self, sender, e):
-        self.Close(True)
+    # def OnOKButtonClick(self, sender, e):
+    #     self.Close(True)
     
-    def show(self):
-        self.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow)
+    # def show(self):
+    #     self.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow)
 
 
 if __name__ == "__main__":
-    dialog = BrowserForm()
-    rc = dialog.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow)
+    browser = BrowserForm()
+    browser.Show()
 
