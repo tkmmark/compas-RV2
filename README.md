@@ -4,8 +4,8 @@ RhinoVault for Rhino 6 based on COMPAS
 
 ## Alpha release install(Windows Only)
 
-Release URL:   
-[release_url](release_url)
+Get the latest release from:   
+https://github.com/BlockResearchGroup/compas-RV2/releases
 
 
 1. Install RV2
