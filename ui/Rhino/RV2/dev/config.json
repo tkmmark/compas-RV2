@@ -64,8 +64,14 @@
             {"name": "RV2file", "button_text": "rv2_file", "menu_text": "File", "icon": 4},
 
             {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
+<<<<<<< HEAD
             {"name": "RV2skeleton_from_lines", "button_text": "skeleton_from_lines", "menu_text": "From Skeleton", "icon": 11},
             {"name": "RV2skeleton_modify", "button_text": "skeleton_modify", "menu_text": "Modify skeleton", "icon": 22},
+=======
+            {"name": "RV2skeleton_from_lines", "button_text": "skeleton_from_lines", "menu_text": "From Lines"},
+            {"name": "RV2skeleton_from_point", "button_text": "skeleton_from_point", "menu_text": "From Point"},
+            {"name": "RV2skeleton_modify", "button_text": "skeleton_modify", "menu_text": "Modify"},
+>>>>>>> fc9ab6d03c5c164f5cc0f473ae6e8c146b3cf590
             {"name": "RV2skeleton_todiagram", "button_text": "skeleton_todiagram", "menu_text": "To Diagram"},
             {"name": "RV2skeleton_tomesh", "button_text": "skeleton_tomesh", "menu_text": "To Mesh"},
 

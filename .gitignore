@@ -138,3 +138,5 @@ docs/.doctrees/tutorial/settings/init.doctree
 docs/.doctrees/tutorial/settings/settings.doctree
 docs/.doctrees/tutorial/skeleton/init.doctree
 docs/.doctrees/tutorial/skeleton/skeleton.doctree
+
+*.rhi
