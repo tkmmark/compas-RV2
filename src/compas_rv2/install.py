@@ -20,5 +20,5 @@ if __name__ == '__main__':
     print('installing compas_rv2')
     
 
-    packages = ['compas','compas_rhino','compas_tna','compas_ags','compas_pattern','compas_rv2']
+    packages = ['compas','compas_rhino','compas_tna','compas_ags','compas_pattern','compas_cloud','compas_rv2']
     install(packages=packages)
