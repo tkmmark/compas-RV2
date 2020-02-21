@@ -73,7 +73,7 @@ These installation instructions assume that Anaconda/conda are available on your
 3. Install requirements.
 
    Since no requirements are explicitly listed in a "requirements" file, we will install all required packages manually "from source".
-   Therefore, for each of `compas`, `compas_ags`, `compas_tna`, `compas_pattern`, and `compas_cloud` navigate to the root of the corresponding repo, and do
+   Therefore, for each of `compas`, `compas_ags`, `compas_tna`, `compas_pattern`, navigate to the root of the corresponding repo, and do
 
    ```bash
    pip install -e .
@@ -86,7 +86,6 @@ These installation instructions assume that Anaconda/conda are available on your
    >>> import compas_ags
    >>> import compas_tna
    >>> import compas_pattern
-   >>> import compas_cloud
    >>> exit()
    ```
 
@@ -110,7 +109,7 @@ These installation instructions assume that Anaconda/conda are available on your
    From the root of `compas-RV2`, do
 
    ```bash
-   python -m compas_rhino.install -p compas compas_rhino compas_ags compas_tna compas_pattern compas_rv2 compas_cloud
+   python -m compas_rhino.install -p compas compas_rhino compas_ags compas_tna compas_pattern compas_rv2
    ```
 
 6. Install RV2 command plugin.
