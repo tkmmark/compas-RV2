@@ -4,6 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.diagrams import FormDiagram
+from compas_rv2.diagrams import ThrustDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
 from compas_rv2.rhino import get_rv2
@@ -27,11 +28,14 @@ def RunCommand(is_interactive):
         return
 
     form = FormDiagram.from_rhinomesh(guid)
+    thrust = ThrustDiagram.from_rhinomesh(guid)
 
-    # scene.clear()
-    # scene.add(form)
-    # scene.add(thrust)
-    # scene.update()
+    from compas_rv2.scene import Scene
+    scene = Scene(settings)
+
+    scene.add(form)
+    scene.add(thrust)
+    scene.update()
 
     # maybe the RV2 scene can be specialised for RV2
 
@@ -44,14 +48,14 @@ def RunCommand(is_interactive):
     # node.objects
     # => objects are created with artist based on data
 
-    rhinoform = RhinoFormDiagram(form)
-    rhinothrust = RhinoThrustDiagram(form)
+    # rhinoform = RhinoFormDiagram(form)
+    # rhinothrust = RhinoThrustDiagram(form)
 
-    rhinoform.draw(settings)
+    # rhinoform.draw(settings)
 
-    scene["form"] = rhinoform
-    scene["force"] = None
-    scene["thrust"] = rhinothrust
+    # scene["form"] = rhinoform
+    # scene["force"] = None
+    # scene["thrust"] = rhinothrust
 
 
 # ==============================================================================

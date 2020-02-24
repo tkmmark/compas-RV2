@@ -9,6 +9,9 @@ from compas_rhino.artists import Artist
 __all__ = ['Scene', 'SceneNode']
 
 
+_ITEM_WRAPPER = {}
+
+
 class SceneNode(object):
 
     def __init__(self, scene, item, **kwargs):
@@ -29,19 +32,30 @@ class Scene(object):
     * Add "camera": ...
     """
 
-    def __init__(self):
+    def __init__(self, settings=None):
         self.nodes = []
+        self.settings = settings
 
     def add(self, item, **kwargs):
-        node = SceneNode(self, item, **kwargs)
+        # node = SceneNode(item, **kwargs)
+        node = Scene.build(item, **kwargs)
         self.nodes.append(node)
         return node
 
     def update(self):
         compas_rhino.rs.EnableRedraw(False)
         for node in self.nodes:
-            node.artist.draw()
-        compas_rhino.rs.EnableRedraw(True)
+            node.draw(self.settings)
+        # compas_rhino.rs.EnableRedraw(True)
+
+    @staticmethod
+    def register(item_type, wrapper_type):
+        _ITEM_WRAPPER[item_type] = wrapper_type
+
+    @staticmethod
+    def build(item, **kwargs):
+        wrapper = _ITEM_WRAPPER[type(item)]
+        return wrapper(item, **kwargs)
 
     def save(self, path, width=1920, height=1080, scale=1,
              draw_grid=False, draw_world_axes=False, draw_cplane_axes=False, background=False):
