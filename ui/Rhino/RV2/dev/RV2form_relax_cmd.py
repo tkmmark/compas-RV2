@@ -22,8 +22,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    proxy.package = "compas_tna.utilities"
-    relax = proxy.relax_boundary_openings_proxy
+    relax = proxy.package("compas_tna.utilities.relax_boundary_openings_proxy")
 
     settings = RV2["settings"]
     rhinoform = RV2["scene"]["form"]

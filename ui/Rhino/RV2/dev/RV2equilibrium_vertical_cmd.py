@@ -22,8 +22,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    proxy.package = "compas_tna.equilibrium"
-    vertical = proxy.vertical_from_zmax_proxy
+    vertical = proxy.package("compas_tna.equilibrium.vertical_from_zmax_proxy")
 
     settings = RV2["settings"]
     rhinoform = RV2["scene"]["form"]

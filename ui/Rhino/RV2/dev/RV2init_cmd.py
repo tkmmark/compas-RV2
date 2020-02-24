@@ -16,8 +16,7 @@ except ImportError:
     raise
 
 else:
-    # replace this by from compas_cloud import Proxy
-    from compas.rpc import Proxy
+    from compas_cloud import Proxy
     from compas_rv2.forms import BrowserForm
 
 
