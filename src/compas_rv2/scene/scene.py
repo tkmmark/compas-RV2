@@ -32,21 +32,36 @@ class Scene(object):
     * Add "camera": ...
     """
 
-    def __init__(self, settings=None):
-        self.nodes = []
+    def __init__(self, settings={}):
+        self.nodes = {}
         self.settings = settings
 
-    def add(self, item, **kwargs):
-        # node = SceneNode(item, **kwargs)
+    def add(self, item, key=None, **kwargs):
         node = Scene.build(item, **kwargs)
-        self.nodes.append(node)
+        if key is None:
+            key = len(self.nodes)
+        self.nodes[key] = node
         return node
+
+    def get(self, key):
+        if key in self.nodes:
+            return self.nodes[key]
+        else:
+            return None
 
     def update(self):
         compas_rhino.rs.EnableRedraw(False)
-        for node in self.nodes:
-            node.draw(self.settings)
-        # compas_rhino.rs.EnableRedraw(True)
+        for key in self.nodes:
+            self.nodes[key].draw(self.settings)
+
+    def clear(self):
+        layers = [self.settings[name] for name in self.settings if name.startswith("layers")]
+        compas_rhino.clear_layers(layers)
+        #TODO: maybe clear and dispose each nodes first
+        self.nodes = {}
+
+    def update_settings(self):
+        return compas_rhino.update_settings(self.settings)
 
     @staticmethod
     def register(item_type, wrapper_type):
