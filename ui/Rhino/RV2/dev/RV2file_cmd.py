@@ -8,10 +8,12 @@ import json
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
 from compas_rv2.diagrams import FormDiagram
 from compas_rv2.diagrams import ForceDiagram
+from compas_rv2.diagrams import ThrustDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoForceDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
@@ -121,6 +123,10 @@ def RunCommand(is_interactive):
     if not RV2:
         return
 
+    scene = get_scene()
+    if not scene:
+        return
+
     menu = CommandMenu(config)
     action = menu.select_action()
 
@@ -141,32 +147,26 @@ def RunCommand(is_interactive):
             settings = session.get("settings")
             data = session.get("data")
 
-        if settings:
-            RV2["settings"].update(settings)
+        scene.clear()
 
-        form, force = None, None
+        if settings:
+            scene.settings = settings
 
         if data:
             formdata = data.get("form")
             forcedata = data.get("force")
-
             if formdata:
                 form = FormDiagram.from_data(formdata)
-                rhinoform = RhinoFormDiagram(form)
-                rhinoform.draw(RV2["settings"])
-
-                rhinothrust = RhinoThrustDiagram(form)
-                rhinothrust.draw(RV2["settings"])
+                thrust = form.copy(cls=ThrustDiagram)
+                scene.add(form, key='form')
+                scene.add(thrust, key='thrust')
 
             if forcedata:
                 force = ForceDiagram.from_data(forcedata)
                 force.primal = form
-                rhinoforce = RhinoForceDiagram(force)
-                rhinoforce.draw(RV2["settings"])
+                scene.add(force, key='force')
 
-        RV2["scene"]["form"] = rhinoform
-        RV2["scene"]["force"] = rhinoforce
-        RV2["scene"]["thrust"] = rhinothrust
+        scene.update()
 
     # only ask for a filepath if there is none
     elif action["name"] == "save":
@@ -176,13 +176,7 @@ def RunCommand(is_interactive):
         if not filepath:
             return
 
-        data = {"session": RV2["session"], "settings": RV2["settings"], "data": {"form": None, "force": None}}
-
-        if RV2["scene"]["form"]:
-            data["data"]["form"] = RV2["scene"]["form"].diagram.to_data()
-
-        if RV2["scene"]["force"]:
-            data["data"]["force"] = RV2["scene"]["force"].diagram.to_data()
+        data = {"session": RV2["session"], "settings": scene.settings, "data": scene.to_data(['form','force'])}
 
         with open(filepath, 'w+') as f:
             json.dump(data, f, cls=DataEncoder)
@@ -193,13 +187,7 @@ def RunCommand(is_interactive):
         if not filepath:
             return
 
-        data = {"session": RV2["session"], "settings": RV2["settings"], "data": {"form": None, "force": None}}
-
-        if RV2["scene"]["form"]:
-            data["data"]["form"] = RV2["scene"]["form"].diagram.to_data()
-
-        if RV2["scene"]["force"]:
-            data["data"]["force"] = RV2["scene"]["force"].diagram.to_data()
+        data = {"session": RV2["session"], "settings": scene.settings, "data": scene.to_data(['form','force'])}
 
         with open(filepath, 'w+') as f:
             json.dump(data, f, cls=DataEncoder)
