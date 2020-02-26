@@ -1,6 +1,43 @@
 body{
-    /* font-family: Arial, Helvetica, sans-serif;
-    background-color: dodgerblue; */
+    font-family: Arial, Helvetica, sans-serif;
+    color: #656565;
     margin: 0;
     padding: 0;
+    font-size: xx-small;
+    overflow: hidden;
+}
+h2{
+    font-weight: bolder;
+    margin-bottom: 0;
+}
+
+img{
+    position: absolute;
+    left: 15%;
+    width: 100%;
+    top: 0;
+    z-index: -100;
+}
+
+#content{
+    margin: 3%;
+    line-height: 1.5;
+}
+
+a:link:visited{
+    color: #0092D2;
+}
+
+#version{
+    line-height: 0.1;
+}
+#links{
+    margin-top: 10%;
+}
+
+#terms{
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
+    font-size: xx-small;
 }

@@ -34,6 +34,7 @@ class BrowserForm(forms.Form):
         if not url:
             url = os.path.join(os.path.dirname(os.path.abspath(__file__)),'index.html')
         self.m_webview.Url = System.Uri(url)
+        self.m_webview.BrowserContextMenuEnabled = True
 
         layout = forms.DynamicLayout()
         layout.Spacing = drawing.Size(5, 5)
