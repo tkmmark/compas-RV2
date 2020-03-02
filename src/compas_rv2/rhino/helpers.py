@@ -198,9 +198,11 @@ def get_rv2():
         return None
     return compas_rhino.sc.sticky["RV2"]
 
+
 def get_scene():
     rv2 = get_rv2()
-    return rv2['_scene']
+    return rv2['scene']
+
 
 def get_proxy():
     if "RV2.proxy" not in compas_rhino.sc.sticky:

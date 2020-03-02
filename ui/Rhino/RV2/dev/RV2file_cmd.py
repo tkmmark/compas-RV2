@@ -11,12 +11,6 @@ from compas_rv2.rhino import get_rv2
 from compas_rv2.rhino import get_scene
 from compas.utilities import DataEncoder
 from compas.utilities import DataDecoder
-from compas_rv2.diagrams import FormDiagram
-from compas_rv2.diagrams import ForceDiagram
-from compas_rv2.diagrams import ThrustDiagram
-from compas_rv2.rhino import RhinoFormDiagram
-from compas_rv2.rhino import RhinoForceDiagram
-from compas_rv2.rhino import RhinoThrustDiagram
 
 
 __commandname__ = "RV2file"
@@ -144,28 +138,9 @@ def RunCommand(is_interactive):
 
         with open(filepath, "r") as f:
             session = json.load(f, cls=DataDecoder)
-            settings = session.get("settings")
             data = session.get("data")
 
-        scene.clear()
-
-        if settings:
-            scene.settings = settings
-
-        if data:
-            formdata = data.get("form")
-            forcedata = data.get("force")
-            if formdata:
-                form = FormDiagram.from_data(formdata)
-                thrust = form.copy(cls=ThrustDiagram)
-                scene.add(form, name='form')
-                scene.add(thrust, name='thrust')
-
-            if forcedata:
-                force = ForceDiagram.from_data(forcedata)
-                force.primal = form
-                scene.add(force, name='force')
-
+        scene.from_data(data)
         scene.update()
 
     # only ask for a filepath if there is none
@@ -176,7 +151,7 @@ def RunCommand(is_interactive):
         if not filepath:
             return
 
-        data = {"session": RV2["session"], "settings": scene.settings, "data": scene.to_data(['form','force'])}
+        data = {"session": RV2["session"], "data": scene.to_data(['form', 'force'])}
 
         with open(filepath, 'w+') as f:
             json.dump(data, f, cls=DataEncoder)
@@ -187,7 +162,7 @@ def RunCommand(is_interactive):
         if not filepath:
             return
 
-        data = {"session": RV2["session"], "settings": scene.settings, "data": scene.to_data(['form','force'])}
+        data = {"session": RV2["session"], "data": scene.to_data(['form', 'force'])}
 
         with open(filepath, 'w+') as f:
             json.dump(data, f, cls=DataEncoder)

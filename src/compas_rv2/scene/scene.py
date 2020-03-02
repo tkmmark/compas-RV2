@@ -6,6 +6,10 @@ import compas_rhino
 from compas_rhino.artists import Artist
 import uuid
 
+from compas_rv2.diagrams import FormDiagram
+from compas_rv2.diagrams import ForceDiagram
+from compas_rv2.diagrams import ThrustDiagram
+
 
 __all__ = ['Scene', 'SceneNode']
 
@@ -51,6 +55,7 @@ class Scene(object):
         compas_rhino.rs.EnableRedraw(False)
         for key in self.nodes:
             self.nodes[key].draw(self.settings)
+        compas_rhino.rs.EnableRedraw(True)
 
     def clear(self):
         layers = [self.settings[name] for name in self.settings if name.startswith("layers")]
@@ -72,13 +77,37 @@ class Scene(object):
 
     def to_data(self, include=None):
         if include is None:
-            return {key: self.nodes[key].diagram.to_data() for key in self.nodes}
+            data = {key: self.nodes[key].diagram.to_data() for key in self.nodes}
+
         else:
             data = {}
-            for key in self.nodes:
-                if key in include:
-                    data[key] = self.nodes[key].diagram.to_data()
-            return data
+            for name in include:
+                node = self.get(name)
+                data[name] = node.diagram.to_data()
+
+        data["settings"] = self.settings
+        return data
+
+    def from_data(self, data):
+
+        self.clear()
+        formdata = data.get("form")
+        forcedata = data.get("force")
+        settings = data.get("settings")
+
+        if settings:
+            self.settings = settings
+
+        if formdata:
+            form = FormDiagram.from_data(formdata)
+            thrust = form.copy(cls=ThrustDiagram)
+            self.add(form, name='form')
+            self.add(thrust, name='thrust')
+
+        if forcedata:
+            force = ForceDiagram.from_data(forcedata)
+            force.primal = form
+            self.add(force, name='force')
 
 
 # ==============================================================================
