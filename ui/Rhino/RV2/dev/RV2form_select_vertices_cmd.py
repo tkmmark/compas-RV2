@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_boundary_vertices
 from compas_rv2.rhino import select_continuous_vertices
 
@@ -25,15 +25,13 @@ config = {
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
 
-    rhinoform = RV2["scene"]["form"]
+    rhinoform = scene.get("form")
     if not rhinoform:
         return
-
-    settings = RV2["settings"]
 
     menu = CommandMenu(config)
     action = menu.select_action()

@@ -3,7 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
+
 
 
 __commandname__ = "RV2form_update_vertices"
@@ -13,18 +14,15 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
-        return
 
-    settings = RV2["settings"]
-    rhinoform = RV2["scene"]["form"]
+    scene = get_scene()
+    rhinoform = scene.get("form")
 
     if not rhinoform:
         return
 
     if rhinoform.update_vertices_attributes():
-        rhinoform.draw(settings)
+        scene.update()
 
 
 # ==============================================================================

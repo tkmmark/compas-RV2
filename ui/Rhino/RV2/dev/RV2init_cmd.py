@@ -18,6 +18,7 @@ except ImportError:
 else:
     from compas_cloud import Proxy
     from compas_rv2.forms import BrowserForm
+    from compas_rv2.scene import Scene
 
 
 __commandname__ = "RV2init"
@@ -96,8 +97,9 @@ def RunCommand(is_interactive):
     }
 
     settings = sc.sticky["RV2"]["settings"]
-    layers = [settings[name] for name in settings if name.startswith("layers")]
-    compas_rhino.clear_layers(layers)
+    scene = Scene(settings)
+    scene.clear()
+    sc.sticky["RV2"]["_scene"] = scene
 
 # ==============================================================================
 # Main
