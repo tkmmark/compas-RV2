@@ -29,8 +29,8 @@ def RunCommand(is_interactive):
     thrust = form.copy(cls=ThrustDiagram)
 
     scene.clear()
-    scene.add(form, key='form')
-    scene.add(thrust, key='thrust')
+    scene.add(form, name='form')
+    scene.add(thrust, name='thrust')
     scene.update()
 
     # maybe the RV2 scene can be specialised for RV2

@@ -40,7 +40,7 @@ def RunCommand(is_interactive):
 
     force.transform(T)
 
-    scene.add(force,key='force')
+    scene.add(force,name='force')
     scene.update()
 
 

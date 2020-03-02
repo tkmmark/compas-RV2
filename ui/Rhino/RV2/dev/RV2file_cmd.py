@@ -158,13 +158,13 @@ def RunCommand(is_interactive):
             if formdata:
                 form = FormDiagram.from_data(formdata)
                 thrust = form.copy(cls=ThrustDiagram)
-                scene.add(form, key='form')
-                scene.add(thrust, key='thrust')
+                scene.add(form, name='form')
+                scene.add(thrust, name='thrust')
 
             if forcedata:
                 force = ForceDiagram.from_data(forcedata)
                 force.primal = form
-                scene.add(force, key='force')
+                scene.add(force, name='force')
 
         scene.update()
 

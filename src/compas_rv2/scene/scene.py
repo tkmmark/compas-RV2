@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import compas_rhino
 from compas_rhino.artists import Artist
+import uuid
 
 
 __all__ = ['Scene', 'SceneNode']
@@ -27,18 +28,22 @@ class Scene(object):
         self.nodes = {}
         self.settings = settings
 
-    def add(self, item, key=None, **kwargs):
+    def add(self, item, name=None, **kwargs):
         node = Scene.build(item, **kwargs)
-        if key is None:
-            key = len(self.nodes)
-        self.nodes[key] = node
+        _id = uuid.uuid4()
+        self.nodes[_id] = node
+        node.name = name
         return node
 
-    def get(self, key):
-        if key in self.nodes:
-            return self.nodes[key]
+    def get(self, name):
+        selected = []
+        for _id in self.nodes:
+            if name == self.nodes[_id].name:
+                selected.append(self.nodes[_id])
+        if len(selected) == 1:
+            return selected[0]
         else:
-            return None
+            return selected
 
     def update(self):
         compas_rhino.rs.EnableRedraw(False)
