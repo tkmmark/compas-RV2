@@ -30,7 +30,7 @@ def RunCommand(is_interactive):
 
     scene.clear()
     scene.add(form, name='form')
-    scene.add(thrust, name='thrust')
+    scene.add(thrust, name='thrust', visible=False)
     scene.update()
 
     # maybe the RV2 scene can be specialised for RV2

@@ -32,11 +32,12 @@ class Scene(object):
         self.nodes = {}
         self.settings = settings
 
-    def add(self, item, name=None, **kwargs):
+    def add(self, item, name=None, visible=True, **kwargs):
         node = Scene.build(item, **kwargs)
         _id = uuid.uuid4()
         self.nodes[_id] = node
         node.name = name
+        node.visible = visible
         return node
 
     def get(self, name):
@@ -54,7 +55,9 @@ class Scene(object):
     def update(self):
         compas_rhino.rs.EnableRedraw(False)
         for key in self.nodes:
-            self.nodes[key].draw(self.settings)
+            node = self.nodes[key]
+            if node.visible:
+                node.draw(self.settings)
         compas_rhino.rs.EnableRedraw(True)
 
     def clear(self):

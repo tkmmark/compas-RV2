@@ -45,7 +45,7 @@ def RunCommand(is_interactive):
 
     rhinoform.diagram.data = formdata
     rhinothrust.diagram.data = formdata
-
+    rhinothrust.visible = True
     scene.update()
 
 # ==============================================================================
