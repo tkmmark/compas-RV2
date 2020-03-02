@@ -3,9 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 from compas_rv2.skeleton import Skeleton
-from compas_rv2.rhino import RhinoSkeleton
 
 
 __commandname__ = "RV2skeleton_from_point"
@@ -15,11 +14,9 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
-
-    scene = RV2["scene"]
 
     guids = compas_rhino.select_point()
     if not guids:
@@ -32,11 +29,9 @@ def RunCommand(is_interactive):
 
     compas_rhino.delete_objects([guids])
 
-    rhinoskeleton = RhinoSkeleton(skeleton)
+    rhinoskeleton = scene.add(skeleton, 'skeleton')
     rhinoskeleton.dynamic_draw_self()
     rhinoskeleton.draw_self()
-
-    scene["skeleton"] = rhinoskeleton
 
 
 # ==============================================================================

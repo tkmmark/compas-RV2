@@ -40,7 +40,9 @@ class Scene(object):
         for _id in self.nodes:
             if name == self.nodes[_id].name:
                 selected.append(self.nodes[_id])
-        if len(selected) == 1:
+        if len(selected) == 0:
+            return None
+        elif len(selected) == 1:
             return selected[0]
         else:
             return selected

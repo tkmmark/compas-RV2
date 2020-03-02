@@ -277,6 +277,9 @@ class RhinoSkeleton(object):
 
             self.draw_self()
 
+    def draw(self):
+        # PLACEHOLDER
+        pass
 
 if __name__ == '__main__':
     pass

@@ -13,11 +13,14 @@ from compas_rv2.diagrams import ThrustDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoForceDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
+from compas_rv2.skeleton import Skeleton
+from compas_rv2.rhino import RhinoSkeleton
 
 
 Scene.register(FormDiagram, RhinoFormDiagram)
 Scene.register(ForceDiagram, RhinoForceDiagram)
 Scene.register(ThrustDiagram, RhinoThrustDiagram)
+Scene.register(Skeleton, RhinoSkeleton)
 
 
 __all__ = [name for name in dir() if not name.startswith('_')]

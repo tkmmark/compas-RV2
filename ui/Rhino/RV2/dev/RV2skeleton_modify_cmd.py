@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rhino.ui import CommandMenu
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 
 
 __commandname__ = "RV2skeleton_modify"
@@ -102,14 +102,14 @@ config = {
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
 
-    scene = RV2["scene"]
+    rhinoskeleton = scene.get('skeleton')
 
-    RV2 = get_rv2()
-    rhinoskeleton = RV2["scene"]["skeleton"]
+    if not rhinoskeleton:
+        return
 
     while True:
         menu = CommandMenu(config)
@@ -125,7 +125,7 @@ def RunCommand(is_interactive):
         rhinoskeleton.draw_self()
 
     # rhinoskeleton.draw_self()
-    scene["skeleton"] = rhinoskeleton
+    # scene["skeleton"] = rhinoskeleton
 
 
 # ==============================================================================
