@@ -17,7 +17,7 @@ except Exception:
     compas.raise_if_ironpython()
 
 
-__all__ = ["AttributeForm"]
+__all__ = ["AttributesForm"]
 
 
 class Tree_Table(forms.TreeGridView):
@@ -296,7 +296,7 @@ class Tree_Table(forms.TreeGridView):
         self.DataStore = forms.TreeGridItemCollection(items)
 
 
-class AttributeForm(forms.Form):
+class AttributesForm(forms.Form):
 
     @classmethod
     def from_diagram(cls, rhinoDiagram):
@@ -364,6 +364,6 @@ if __name__ == "__main__":
     rhinoDiagram = RhinoFormDiagram(form)
     rhinoDiagram.draw({})
 
-    dialog = AttributeForm()
+    dialog = AttributesForm()
     dialog.setup(rhinoDiagram)
     dialog.Show()
