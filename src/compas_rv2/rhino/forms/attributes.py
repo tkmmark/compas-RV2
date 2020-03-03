@@ -229,7 +229,7 @@ class Tree_Table(forms.TreeGridView):
         def on_edited(sender, event):
             try:
                 key = event.Item.Values[0]
-                attr = attributes[event.Column]
+                attr = attributes[event.Column-1]
                 value = event.Item.Values[event.Column]
                 if value != '-':
                     try:
@@ -243,15 +243,13 @@ class Tree_Table(forms.TreeGridView):
                         if type(parsed) == rhinoDiagram.vertex_attributes_properties[attr]['type']:
                             rhinoDiagram.diagram.vertex_attribute(key, attr, parsed)
                             print('updated', parsed)
+                            get_scene().update()
                         else:
                             print('invalid value type!')
                             event.Item.Values[event.Column] = compas_value
                     else:
                         print('value not changed from', value)
-                # redraw upaded diagram
-                RV2 = sc.sticky["RV2"]
-                settings = RV2["settings"]
-                rhinoDiagram.draw(settings)
+
             except Exception as e:
                 print(e)
         return on_edited
