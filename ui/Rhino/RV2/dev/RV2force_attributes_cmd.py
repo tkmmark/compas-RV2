@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.rhino import PropertySheet
+from compas_rv2.rhino import AttributeForm
 
 
 __commandname__ = "RV2force_attributes"
@@ -23,7 +23,7 @@ def RunCommand(is_interactive):
     if not rhinoform:
         return
 
-    PropertySheet.from_diagram(rhinoform)
+    AttributeForm.from_diagram(rhinoform)
 
 
 # ==============================================================================
