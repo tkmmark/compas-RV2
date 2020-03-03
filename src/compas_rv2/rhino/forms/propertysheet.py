@@ -5,6 +5,7 @@ from __future__ import division
 
 import compas
 import ast
+from compas_rv2.rhino import get_scene
 
 try:
     import rhinoscriptsyntax as rs
@@ -28,11 +29,11 @@ class Tree_Table(forms.TreeGridView):
 
         editable_attributes = []
         if rhinoDiagram is not None:
-            editable_attributes = self.get_editable_attributes(rhinoDiagram,table_type)
+            editable_attributes = self.get_editable_attributes(rhinoDiagram, table_type)
 
-        settings = sc.sticky["RV2"]["settings"]
+        settings = get_scene().settings
         color = {}
-        if rhinoDiagram.__class__.__name__=='RhinoFormDiagram':
+        if rhinoDiagram.__class__.__name__ == 'RhinoFormDiagram':
             if table_type == 'vertex':
                 color.update({key: settings.get("color.form.vertices") for key in rhinoDiagram.diagram.vertices()})
                 color.update({key: settings.get("color.form.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
@@ -47,19 +48,19 @@ class Tree_Table(forms.TreeGridView):
                     else:
                         color[i] = settings.get("color.form.edges")
 
-        if rhinoDiagram.__class__.__name__=='RhinoForceDiagram':
+        if rhinoDiagram.__class__.__name__ == 'RhinoForceDiagram':
             if table_type == 'vertex':
                 color.update({key: settings.get("color.force.vertices") for key in rhinoDiagram.diagram.vertices()})
             if table_type == 'edge':
                 keys = list(rhinoDiagram.diagram.edges())
-                for i,key in enumerate(keys):
+                for i, key in enumerate(keys):
                     u_, v_ = rhinoDiagram.diagram.primal.face_adjacency_halfedge(*key)
                     if rhinoDiagram.diagram.primal.vertex_attribute(u_, 'is_external') or rhinoDiagram.diagram.primal.vertex_attribute(v_, 'is_external'):
                         color[i] = settings.get("color.force.edges:is_external")
                     else:
                         color[i] = settings.get("color.force.edges")
-        
-        if rhinoDiagram.__class__.__name__=='RhinoThrustDiagram':
+
+        if rhinoDiagram.__class__.__name__ == 'RhinoThrustDiagram':
             if table_type == 'vertex':
                 color.update({key: settings.get("color.thrust.vertices") for key in rhinoDiagram.diagram.vertices()})
                 color.update({key: settings.get("color.thrust.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
@@ -76,7 +77,7 @@ class Tree_Table(forms.TreeGridView):
                 attr = e.Column.HeaderText
                 if attr not in editable_attributes:
                     e.ForegroundColor = drawing.Colors.DarkGray
-                
+
                 if attr == 'key':
                     key = e.Item.Values[0]
                     if key in color:
@@ -84,11 +85,10 @@ class Tree_Table(forms.TreeGridView):
                         rgb = [c/255. for c in rgb]
                         e.BackgroundColor = drawing.Color(*rgb)
             except Exception as exc:
-                print('formating error',exc)
-    
+                print('formating error', exc)
+
         self.CellFormatting += OnCellFormatting
         # self.set_toggle()
-        
 
     def set_toggle(self):
         def toggle(sender, event):
@@ -104,13 +104,12 @@ class Tree_Table(forms.TreeGridView):
             print('set to', event.Item.Values[event.Column])
         self.CellDoubleClick += toggle
 
-
     def get_editable_attributes(self, rhinoDiagram, table_type='vertex'):
-        attributes = getattr(rhinoDiagram.diagram, 'default_%s_attributes'%table_type).keys()
+        attributes = getattr(rhinoDiagram.diagram, 'default_%s_attributes' % table_type).keys()
         attributes = list(attributes)
         editables = []
         for attr in attributes:
-            if getattr(rhinoDiagram, '%s_attribute_editable'%table_type)(attr):
+            if getattr(rhinoDiagram, '%s_attribute_editable' % table_type)(attr):
                 editables.append(attr)
         return editables
 
@@ -138,7 +137,7 @@ class Tree_Table(forms.TreeGridView):
     def from_vertices(cls, rhinoDiagram):
 
         diagram = rhinoDiagram.diagram
-        table = cls(rhinoDiagram = rhinoDiagram,table_type= 'vertex')
+        table = cls(rhinoDiagram=rhinoDiagram, table_type='vertex')
         table.add_column('key')
         attributes = list(diagram.default_vertex_attributes.keys())
         attributes.sort()
@@ -159,7 +158,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_edges(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls(rhinoDiagram=rhinoDiagram, table_type= 'edge')
+        table = cls(rhinoDiagram=rhinoDiagram, table_type='edge')
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_edge_attributes.keys())
@@ -184,7 +183,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def from_faces(cls, rhinoDiagram):
         diagram = rhinoDiagram.diagram
-        table = cls(rhinoDiagram=rhinoDiagram, table_type= 'face')
+        table = cls(rhinoDiagram=rhinoDiagram, table_type='face')
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(diagram.default_face_attributes.keys())
@@ -226,7 +225,7 @@ class Tree_Table(forms.TreeGridView):
         return on_selected
 
     def EditEvent(self, rhinoDiagram, attributes):
-        #TODO: need to add situations for edge and face
+        # TODO: need to add situations for edge and face
         def on_edited(sender, event):
             try:
                 key = event.Item.Values[0]
