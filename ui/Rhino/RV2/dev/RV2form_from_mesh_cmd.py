@@ -4,9 +4,10 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.diagrams import FormDiagram
+from compas_rv2.diagrams import ThrustDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 
 __commandname__ = "RV2form_from_mesh"
 
@@ -15,23 +16,22 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
-        return
 
-    settings = RV2["settings"]
-    scene = RV2["scene"]
+    scene = get_scene()
+    if not scene:
+        return
 
     guid = compas_rhino.select_mesh()
     if not guid:
         return
 
     form = FormDiagram.from_rhinomesh(guid)
+    thrust = form.copy(cls=ThrustDiagram)
 
-    # scene.clear()
-    # scene.add(form)
-    # scene.add(thrust)
-    # scene.update()
+    scene.clear()
+    scene.add(form, name='form')
+    scene.add(thrust, name='thrust', visible=False)
+    scene.update()
 
     # maybe the RV2 scene can be specialised for RV2
 
@@ -44,14 +44,14 @@ def RunCommand(is_interactive):
     # node.objects
     # => objects are created with artist based on data
 
-    rhinoform = RhinoFormDiagram(form)
-    rhinothrust = RhinoThrustDiagram(form)
+    # rhinoform = RhinoFormDiagram(form)
+    # rhinothrust = RhinoThrustDiagram(form)
 
-    rhinoform.draw(settings)
+    # rhinoform.draw(settings)
 
-    scene["form"] = rhinoform
-    scene["force"] = None
-    scene["thrust"] = rhinothrust
+    # scene["form"] = rhinoform
+    # scene["force"] = None
+    # scene["thrust"] = rhinothrust
 
 
 # ==============================================================================

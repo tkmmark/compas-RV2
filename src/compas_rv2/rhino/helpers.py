@@ -12,6 +12,7 @@ __all__ = [
     "is_valid_file",
     "select_filepath_open",
     "get_rv2",
+    "get_scene",
     "get_proxy",
     "select_vertices",
     "select_edges",
@@ -196,6 +197,11 @@ def get_rv2():
         form.show()
         return None
     return compas_rhino.sc.sticky["RV2"]
+
+
+def get_scene():
+    rv2 = get_rv2()
+    return rv2['scene']
 
 
 def get_proxy():

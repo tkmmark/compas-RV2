@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 
 
@@ -14,8 +14,8 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
 
     proxy = get_proxy()
@@ -24,8 +24,7 @@ def RunCommand(is_interactive):
 
     relax = proxy.package("compas_tna.utilities.relax_boundary_openings_proxy")
 
-    settings = RV2["settings"]
-    rhinoform = RV2["scene"]["form"]
+    rhinoform = scene.get("form")
 
     if not rhinoform:
         return
@@ -33,7 +32,7 @@ def RunCommand(is_interactive):
     fixed = list(rhinoform.diagram.vertices_where({'is_fixed': True}))
     rhinoform.diagram.data = relax(rhinoform.diagram.data, fixed)
 
-    rhinoform.draw(settings)
+    scene.update()
 
 
 # ==============================================================================

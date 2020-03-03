@@ -20,6 +20,9 @@ __all__ = ["RhinoDiagram"]
 
 class RhinoDiagram(object):
 
+    name = None
+    visible = True
+
     def __init__(self, diagram):
         self.diagram = diagram
         self.artist = MeshArtist(self.diagram)

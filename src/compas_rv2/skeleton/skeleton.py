@@ -11,7 +11,7 @@ from compas.geometry import centroid_points
 from compas.geometry import Vector
 from compas.geometry import add_vectors
 
-from compas_tna.diagrams import FormDiagram
+from compas_rv2.diagrams import FormDiagram
 
 import copy
 
