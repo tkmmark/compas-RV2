@@ -58,17 +58,32 @@
 
                     <div class="section" id="vertical-equilibrium">
 <h1>Vertical equilibrium</h1>
+<div class="figure align-default">
+<img alt="_images/flowchart.png" class="figure-img img-fluid" src="_images/flowchart.png" />
+</div>
 <div class="section" id="compute-vertical-equilibrium">
 <h2>Compute vertical equilibrium</h2>
-<p>Compute vertical equilibrium for a chosen maximum height of the solution.</p>
 <div class="figure align-default">
 <img alt="../../_images/vertical.png" class="figure-img img-fluid" src="../../_images/vertical.png" />
 </div>
+<p>Compute vertical equilibrium for a chosen maximum height of the solution.</p>
 <ul class="simple">
 <li><p>click <code class="docutils literal notranslate"><span class="pre">force</span></code> on the tool bar, a three-dimensional network will be created.</p></li>
 <li><p>click <code class="docutils literal notranslate"><span class="pre">rv2_settings</span></code>, scroll down to the end, change the vertical.zmax value.</p></li>
 <li><p>click <code class="docutils literal notranslate"><span class="pre">force</span></code> again to see the different results.</p></li>
 </ul>
+<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="n">vertical</span> <span class="o">=</span> <span class="n">proxy</span><span class="o">.</span><span class="n">package</span><span class="p">(</span><span class="s2">&quot;compas_tna.equilibrium.vertical_from_zmax_proxy&quot;</span><span class="p">)</span>
+
+<span class="n">rhinothrust</span> <span class="o">=</span> <span class="n">RhinoThrustDiagram</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+<span class="n">zmax</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">formdata</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">vertical</span><span class="p">(</span><span class="n">rhinoform</span><span class="o">.</span><span class="n">diagram</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">zmax</span><span class="p">)</span>
+<span class="n">rhinoforce</span><span class="o">.</span><span class="n">diagram</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span>
+<span class="n">rhinoform</span><span class="o">.</span><span class="n">diagram</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">formdata</span>
+<span class="n">rhinothrust</span><span class="o">.</span><span class="n">diagram</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">formdata</span>
+<span class="n">rhinothrust</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+</code></pre></div>
+</div>
 </div>
 </div>
 
@@ -102,9 +117,9 @@
 <li class="nav-item"><a class="nav-link reference internal" href="../../intro.html">Introduction</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../../gettingstarted.html">Getting Started</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../../tutorial.html">Tutorial</a><ul class="nav active">
-<li class="nav-item"><a class="nav-link reference internal" href="../init/init.html">Init</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="../skeleton/skeleton.html">Skeleton</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="../form/form.html">Form Diagram</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../setup/setup.html">Set Up</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../form_part1/form_part1.html">Form Diagram: Part 1</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../form_part2/form_part2.html">Form Diagram: Part 2</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../force/force.html">Force Diagram</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../horizontal/horizontal.html">Horizontal equilibrium</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">Vertical equilibrium</a></li>
@@ -146,7 +161,7 @@
     <footer class="bg-dark pb-5">
         <div class="container text-center pt-5 pb-5 text-muted">
             
-                Last updated on Feb 20, 2020.
+                Last updated on Mar 05, 2020.
             
 
             
