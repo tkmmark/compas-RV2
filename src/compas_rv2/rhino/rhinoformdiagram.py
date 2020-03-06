@@ -108,6 +108,7 @@ class RhinoFormDiagram(RhinoDiagram):
         self.artist = FormArtist(self.diagram)
 
         self.vertex_attribute_editable('is_anchor', True)
+        self.vertex_attribute_editable('is_fixed', True)
         self.vertex_attribute_editable('x', True)
         self.vertex_attribute_editable('y', True)
         self.vertex_attribute_editable('z', True)

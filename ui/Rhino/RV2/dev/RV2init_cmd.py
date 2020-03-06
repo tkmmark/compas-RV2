@@ -17,7 +17,7 @@ except ImportError:
 
 else:
     from compas_cloud import Proxy
-    from compas_rv2.forms import BrowserForm
+    from compas_rv2.rhino import BrowserForm
     from compas_rv2.scene import Scene
 
 

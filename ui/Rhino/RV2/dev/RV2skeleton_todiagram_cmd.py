@@ -6,7 +6,7 @@ import compas_rhino
 from compas_rv2.diagrams import ThrustDiagram
 from compas_rv2.rhino import get_scene
 
-__commandname__ = "RV2skeleton_tomesh"
+__commandname__ = "RV2skeleton_todiagram"
 
 
 HERE = compas_rhino.get_document_dirname()

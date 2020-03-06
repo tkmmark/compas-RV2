@@ -29,6 +29,13 @@ class ThrustArtist(MeshArtist):
             })
         return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
 
+    # def draw_pipes(self, scale=1.0):
+    #     pipes = []
+    #     for u, v in self.mesh.edges_where({'is_edge': True}):
+    #         pipes.append({
+    #             'start':
+    #         })
+
     def draw_residual(self, scale=1.0):
         lines = []
         for key in self.mesh.vertices_where({'is_anchor': False, 'is_external': False}):
