@@ -3,8 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_rv2
-from compas_rv2.rhino import PropertySheet
+from compas_rv2.rhino import get_scene
+from compas_rv2.rhino import AttributesForm
 
 
 __commandname__ = "RV2force_attributes"
@@ -14,16 +14,16 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
 
-    rhinoform = RV2["scene"]["force"]
+    rhinoform = scene.get("force")
 
     if not rhinoform:
         return
 
-    PropertySheet.from_diagram(rhinoform)
+    AttributesForm.from_diagram(rhinoform)
 
 
 # ==============================================================================

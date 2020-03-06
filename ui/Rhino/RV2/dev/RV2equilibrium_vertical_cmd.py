@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 
 
@@ -14,22 +14,21 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
 
     proxy = get_proxy()
     if not proxy:
         return
 
-    proxy.package = "compas_tna.equilibrium"
-    vertical = proxy.vertical_from_zmax_proxy
+    vertical = proxy.package("compas_tna.equilibrium.vertical_from_zmax_proxy")
 
-    settings = RV2["settings"]
-    rhinoform = RV2["scene"]["form"]
-    rhinoforce = RV2["scene"]["force"]
-    rhinothrust = RV2["scene"]["thrust"]
-    zmax = settings["vertical.zmax"]
+    rhinoform = scene.get("form")
+    rhinoforce = scene.get("force")
+    rhinothrust = scene.get("thrust")
+
+    zmax = scene.settings["vertical.zmax"]
 
     if not rhinoform:
         return
@@ -46,10 +45,8 @@ def RunCommand(is_interactive):
 
     rhinoform.diagram.data = formdata
     rhinothrust.diagram.data = formdata
-
-    rhinoform.draw(settings)
-    rhinothrust.draw(settings)
-
+    rhinothrust.visible = True
+    scene.update()
 
 # ==============================================================================
 # Main

@@ -63,7 +63,7 @@
 </div>
 <p><strong>Downloads</strong></p>
 <ul class="simple">
-<li><p><a class="reference download internal" download="" href="../../_downloads/c77aed5a49a77bb2efb5a033c809469e/barrelvault.3dm"><code class="xref download docutils literal notranslate"><span class="pre">barrelvault.3dm</span></code></a></p></li>
+<li><p><code class="xref download docutils literal notranslate"><span class="pre">barrelvault.3dm</span></code></p></li>
 <li><p><a class="reference download internal" download="" href="../../_downloads/9e025a87a04a539ee3093e11ae6120f1/barrelvault.py"><code class="xref download docutils literal notranslate"><span class="pre">barrelvault.py</span></code></a></p></li>
 </ul>
 <div class="section" id="make-the-form-diagram">
@@ -72,30 +72,20 @@
 Make sure the lines are individual line segments and properly connected.
 Alternatively, the form diagram can be created from an OBJ file, from a JSON file,
 from a Rhino mesh, or a Rhino surface.</p>
-<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="n">form</span> <span class="o">=</span> <span class="n">FormDiagram</span><span class="o">.</span><span class="n">from_rhinolines</span><span class="p">(</span><span class="n">guids</span><span class="p">)</span>
-<span class="n">form</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="s1">&#39;TNA::FormDiagram&#39;</span><span class="p">,</span> <span class="n">clear_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># identify the supports</span>
-
-<span class="n">guids</span> <span class="o">=</span> <span class="n">compas_rhino</span><span class="o">.</span><span class="n">select_curves</span><span class="p">()</span>
-</code></pre></div>
-</div>
+<ul class="simple">
+<li><p>Initialze RV2</p></li>
+<li><p>click <code class="docutils literal notranslate"><span class="pre">form</span></code> on the tool bar / or select <cite>FormDiagram</cite> from the drop down menu</p></li>
+<li><p>choose <cite>from_lines</cite>, slelect all the lines from Layer <code class="docutils literal notranslate"><span class="pre">Lines</span></code></p></li>
+</ul>
 </div>
 <div class="section" id="identify-the-supports">
 <h2>Identify the supports</h2>
 <p>After initialising the form diagram, we identify the supports.
 The identify the supports, we select the relevant vertices and change their attribute
 <code class="docutils literal notranslate"><span class="pre">is_anchor</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<div class="language-python notranslate"><div class="highlight"><pre><code><span></span>
-<span class="k">if</span> <span class="n">keys</span><span class="p">:</span>
-    <span class="n">form</span><span class="o">.</span><span class="n">vertices_attributes</span><span class="p">([</span><span class="s1">&#39;is_anchor&#39;</span><span class="p">,</span> <span class="s1">&#39;is_fixed&#39;</span><span class="p">],</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span> <span class="n">keys</span><span class="o">=</span><span class="n">keys</span><span class="p">)</span>
-    <span class="n">form</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="s1">&#39;TNA::FormDiagram&#39;</span><span class="p">,</span> <span class="n">clear_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># update the boundaries</span>
-<span class="c1"># Note: add only one foot per support to control the direction of the horizontal component</span>
-<span class="c1">#       of the reaction force</span>
-</code></pre></div>
-</div>
+<ul class="simple">
+<li><p>from the drop down menu, choose <cite>FormDiagram</cite>–&gt;`Select Edges`, select two edge lines from layer <cite>Constraints</cite></p></li>
+</ul>
 </div>
 <div class="section" id="update-the-boundary-conditions">
 <h2>Update the boundary conditions</h2>
@@ -110,24 +100,9 @@ If two feet are added, the horizontal component of the reaction force can be any
 and the form diagram edges in this example are organised in an orthogonal grid,
 the horizontal reaction forces at the supports can only lie in the direction of the
 spanning arches.</p>
-<div class="language-python notranslate"><div class="highlight"><pre><code><span></span><span class="n">form</span><span class="o">.</span><span class="n">update_boundaries</span><span class="p">(</span><span class="n">feet</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">form</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="s1">&#39;TNA::FormDiagram&#39;</span><span class="p">,</span> <span class="n">clear_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># move the &quot;feet&quot; such that the horizontal reaction forces are constrained in the correct direction</span>
-
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">DiagramHelper</span><span class="o">.</span><span class="n">select_vertex</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">break</span>
-
-    <span class="k">if</span> <span class="n">DiagramHelper</span><span class="o">.</span><span class="n">move_vertex</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="n">form</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="s1">&#39;TNA::FormDiagram&#39;</span><span class="p">,</span> <span class="n">clear_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># set the constraints</span>
-<span class="c1"># Note: you should apply 3 sets of constraints</span>
-<span class="c1">#       1. the edges in the spanning direction                 =&gt; fmin := 2, fmax := 2</span>
-</code></pre></div>
-</div>
+<ul class="simple">
+<li><p>from the drop down menu, selelct <cite>Update Boundaries</cite></p></li>
+</ul>
 </div>
 <div class="section" id="make-the-force-diagram">
 <h2>Make the force diagram</h2>
@@ -281,7 +256,7 @@ they carry only half of the load (set <code class="docutils literal notranslate"
     <footer class="bg-dark pb-5">
         <div class="container text-center pt-5 pb-5 text-muted">
             
-                Last updated on Feb 06, 2020.
+                Last updated on Mar 05, 2020.
             
 
             

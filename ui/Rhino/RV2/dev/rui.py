@@ -211,7 +211,7 @@ class Rui(object):
 
     def add_bitmap(self, path):
         with open(path, "rb") as f:
-            bitmap = base64.encodebytes(f.read()).decode("utf-8")
+            bitmap = base64.b64encode(f.read()).decode("utf-8")
         self.root_bitmaps.find("large_bitmap").find("bitmap").text = bitmap
 
     def add_bitmap_items(self, items):
@@ -301,7 +301,7 @@ class Rui(object):
 
     def add_toolbar(self, toolbar):
         options = {
-            "item_display_style": "control_and_text"
+            "item_display_style": "control"
         }
         guid = uuid.uuid4()
         s_tb = TPL_TOOLBAR.format(guid, toolbar["name"], options)

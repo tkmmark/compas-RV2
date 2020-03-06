@@ -75,7 +75,7 @@ class RhinoSkeleton(object):
         """ Update the skeleton leaf width and node width with dynamic draw. """
         if self.diagram.skeleton_vertices()[1] != []:
             self.dynamic_draw('both_width')
-            artist = MeshArtist(self.diagram.to_diagram())
+            artist = MeshArtist(self.diagram.to_mesh())
             artist.layer = 'RV2::Skeleton::diagram_edges'
             artist.clear_layer()
             artist.draw_edges()
@@ -170,7 +170,7 @@ class RhinoSkeleton(object):
 
     def _get_edge_lines_in_rhino(self):
         """ Get rhino object lines for dynamic darw. """
-        sub_mesh = self.diagram.to_diagram()
+        sub_mesh = self.diagram.to_mesh()
         edge_lines = []
         for u, v in sub_mesh.edges():
             pts = sub_mesh.edge_coordinates(u, v)
@@ -215,11 +215,12 @@ class RhinoSkeleton(object):
         artist.clear_layer()
         artist.draw_vertices(keys=skeleton_vertices, color=(255, 0, 0))
 
-        artist.layer = 'RV2::Skeleton::skeleton_edges'
-        artist.clear_layer()
-        artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
+        if skeleton_branches != []:
+            artist.layer = 'RV2::Skeleton::skeleton_edges'
+            artist.clear_layer()
+            artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
 
-        artist = MeshArtist(self.diagram.to_diagram())
+        artist = MeshArtist(self.diagram.to_mesh())
 
         artist.layer = 'RV2::Skeleton::diagram_vertices'
         artist.clear_layer()
@@ -231,7 +232,7 @@ class RhinoSkeleton(object):
         artist.redraw()
 
     def draw_rhino_mesh(self):
-        artist = MeshArtist(self.diagram.to_diagram())
+        artist = MeshArtist(self.diagram.to_mesh())
         artist.layer = 'RV2::Skeleton::mesh'
         artist.draw_mesh()
         artist.redraw()
@@ -264,7 +265,7 @@ class RhinoSkeleton(object):
             # elif operation == 'export':
             #     rs.PurgeLayer('RV2::Skeleton::skeleton_vertices')
             #     rs.PurgeLayer('RV2::Skeleton::diagram_vertices')
-            #     diagram = self.diagram.to_diagram()
+            #     diagram = self.diagram.to_mesh()
             #     mesh_draw_edges(diagram, layer='form diagram')
             #     mesh_draw_vertices(diagram, color=(0, 0, 255), layer='form diagram')
             elif operation == 'stop':
@@ -276,6 +277,9 @@ class RhinoSkeleton(object):
 
             self.draw_self()
 
+    def draw(self):
+        # PLACEHOLDER
+        pass
 
 if __name__ == '__main__':
     pass

@@ -3,27 +3,19 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 
 
 __commandname__ = "RV2settings"
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+    scene = get_scene()
+    if not scene:
         return
 
-    rhinoform = RV2["scene"]["form"]
-    rhinoforce = RV2["scene"]["force"]
-
-    settings = RV2["settings"]
-
-    if compas_rhino.update_settings(settings):
-        if rhinoform:
-            rhinoform.draw(settings)
-        if rhinoforce:
-            rhinoforce.draw(settings)
+    if scene.update_settings():
+        scene.update()
 
 
 # ==============================================================================

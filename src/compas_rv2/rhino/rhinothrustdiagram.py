@@ -36,6 +36,20 @@ class ThrustArtist(MeshArtist):
     #             'start':
     #         })
 
+    def draw_residual(self, scale=1.0):
+        lines = []
+        for key in self.mesh.vertices_where({'is_anchor': False, 'is_external': False}):
+            a = self.mesh.vertex_attributes(key, 'xyz')
+            r = self.mesh.vertex_attributes(key, ['rx', 'ry', 'rz'])
+            b = add_vectors(a, scale_vector([0, 0, r[2]], scale))
+            lines.append({
+                "start": a,
+                "end": b,
+                "color": (0, 255, 255),
+                "arrow": "start"
+            })
+        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
+
 
 class RhinoThrustDiagram(RhinoDiagram):
 
@@ -46,6 +60,9 @@ class RhinoThrustDiagram(RhinoDiagram):
     def draw(self, settings):
         self.artist.layer = settings.get("layers.thrust")
         self.artist.clear_layer()
+
+        print(settings)
+        print(self.artist.layer)
 
         if settings.get("show.thrust.vertices", True):
             keys = list(self.diagram.vertices_where({'is_external': False}))
@@ -68,7 +85,10 @@ class RhinoThrustDiagram(RhinoDiagram):
             self.guid_faces = self.artist.draw_faces(keys=keys, color=color)
 
         if settings.get("show.thrust.external", True):
-            self.artist.draw_external(scale=settings.get("scale.thrust.external"))
+            self.artist.draw_external(scale=settings.get("scale.thrust.external", 1.0))
+
+        if settings.get("show.thrust.residual", True):
+            self.artist.draw_residual(scale=settings.get("scale.thrust.residual", 1.0))
 
         self.artist.redraw()
 

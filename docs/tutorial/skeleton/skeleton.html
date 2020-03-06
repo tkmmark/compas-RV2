@@ -23,7 +23,7 @@
     
     
     
-        <link rel="prev" title="Settings" href="../settings/settings.html" />
+        <link rel="prev" title="Init" href="../init/init.html" />
     
 
     <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -58,47 +58,35 @@
 
                     <div class="section" id="skeleton">
 <h1>Skeleton</h1>
-<div class="section" id="sketch-your-own-form-diagram">
-<h2>Sketch your own form diagram</h2>
+<div class="section" id="sketch-a-form-diagram">
+<h2>Sketch a form diagram</h2>
 <p>Skeleton is a tool allowing user to quickly sketch and modify a form diagram.</p>
 <div class="section" id="create">
 <h3>Create</h3>
-<p>Create a skeleton diagram from scracth. It takes Rhino lines as branch skeleton. Use mouse cursor to assgin inital width to the diagram.</p>
+<p>Create a skeleton diagram from scracth. It takes Rhino lines as input. Drag the mouse cursor to assgin inital width to the diagram.</p>
 <div class="figure align-default">
 <img alt="../../_images/skeleton_create.gif" class="figure-img img-fluid" src="../../_images/skeleton_create.gif" />
 </div>
 <ul class="simple">
-<li><p>type <code class="docutils literal notranslate"><span class="pre">RV2skeleton</span></code> in Rhino command line / or click <code class="docutils literal notranslate"><span class="pre">skeleton</span></code> on the tool bar / or select from the drop down menu</p></li>
-<li><p>choose <code class="docutils literal notranslate"><span class="pre">create</span></code></p></li>
-<li><p>select lines in Rhino to initiate a Skeleton</p></li>
-<li><p>click on the leaf end, move cursor, click again to confirm the width of diagram leaf</p></li>
-<li><p>click on the node, move cursor, click again to confirm the width of diagram node</p></li>
+<li><p>select <code class="docutils literal notranslate"><span class="pre">Skeleton</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">lines</span></code> from the drop down menu</p></li>
+<li><p>select all the lines</p></li>
+<li><p>click on the leaf end, move the cursor to get an ideal leaf width, click again to confirm</p></li>
+<li><p>click on the node, repeat last step to get the node width</p></li>
 </ul>
 </div>
 <div class="section" id="modify">
 <h3>Modify</h3>
-<p>Skeleton digarm can be modified to follow the design decision or to fit the site condition.
-Branch lines can be added to or removed from the current skeleton.</p>
+<p>Skeleton digarm can be modified to follow the design decision or to fit the site condition.</p>
 <div class="figure align-default">
-<img alt="../../_images/skeleton_modify01.gif" class="figure-img img-fluid" src="../../_images/skeleton_modify01.gif" />
-</div>
-<div class="figure align-default">
-<img alt="../../_images/skeleton_modify02.gif" class="figure-img img-fluid" src="../../_images/skeleton_modify02.gif" />
+<img alt="../../_images/skeleton_modify.gif" class="figure-img img-fluid" src="../../_images/skeleton_modify.gif" />
 </div>
 <ul class="simple">
-<li><p>type <code class="docutils literal notranslate"><span class="pre">RV2skeleton</span></code> in Rhino command line / or click <code class="docutils literal notranslate"><span class="pre">skeleton</span></code> on the tool bar / or select from the drop down menu</p></li>
-<li><p>choose <code class="docutils literal notranslate"><span class="pre">modify</span></code></p></li>
-<li><p>choose the operation from the options, end this round of modify with <code class="docutils literal notranslate"><span class="pre">finish</span></code></p></li>
-<li><p>Note that <code class="docutils literal notranslate"><span class="pre">move</span> <span class="pre">vertex</span></code> should always be the last step as the modification of the local details.</p></li>
-</ul>
-</div>
-<div class="section" id="to-diagram">
-<h3>To Diagram</h3>
-<p>After finalizing the sketch, export a form diagram from the skeleton.
-The skeleton can be edited again and be used to generate more form diagrams.</p>
-<ul class="simple">
-<li><p>type <code class="docutils literal notranslate"><span class="pre">RV2skeleton</span></code> in Rhino command line / or click <code class="docutils literal notranslate"><span class="pre">skeleton</span></code> on the tool bar / or select from the drop down menu</p></li>
-<li><p>choose <code class="docutils literal notranslate"><span class="pre">to_diagram</span></code></p></li>
+<li><p>select <code class="docutils literal notranslate"><span class="pre">Skeleton</span></code> –&gt; <code class="docutils literal notranslate"><span class="pre">Modify</span></code> from the drop down menu</p></li>
+<li><p>choose <code class="docutils literal notranslate"><span class="pre">move_skeleton</span></code>, select a skeleton vertex, move it to the new locaiton</p></li>
+<li><p>choose <code class="docutils literal notranslate"><span class="pre">move_vertex</span></code>, select any vertex, move it to the new locaiton. notice the difference between <code class="docutils literal notranslate"><span class="pre">move_skeleton</span></code> and <code class="docutils literal notranslate"><span class="pre">move_vertex</span></code></p></li>
+<li><p>choose <code class="docutils literal notranslate"><span class="pre">subidivide</span></code>, the diagram will be subdivided and smoothed</p></li>
+<li><p>repeat modifications until you get the ideal form, end it by clicking on <code class="docutils literal notranslate"><span class="pre">finish</span></code></p></li>
+<li><p>Note that <code class="docutils literal notranslate"><span class="pre">move_vertex</span></code> should always be the last step as the modification to local details</p></li>
 </ul>
 </div>
 </div>
@@ -135,9 +123,11 @@ The skeleton can be edited again and be used to generate more form diagrams.</p>
 <li class="nav-item"><a class="nav-link reference internal" href="../../gettingstarted.html">Getting Started</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../../tutorial.html">Tutorial</a><ul class="nav active">
 <li class="nav-item"><a class="nav-link reference internal" href="../init/init.html">Init</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="../settings/settings.html">Settings</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">Skeleton</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../form/form.html">Form Diagram</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../force/force.html">Force Diagram</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../horizontal/horizontal.html">Horizontal equilibrium</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../vertical/vertical.html">Vertical equilibrium</a></li>
 </ul>
 </li>
 <li class="nav-item"><a class="nav-link reference internal" href="../../examples.html">Examples</a></li>
@@ -162,10 +152,9 @@ The skeleton can be edited again and be used to generate more form diagrams.</p>
 
                 <ul class="nav flex-column" id="compas-localnav">
 <li class="nav-item"><a class="nav-link reference internal" href="#">Skeleton</a><ul class="nav">
-<li class="nav-item"><a class="nav-link reference internal" href="#sketch-your-own-form-diagram">Sketch your own form diagram</a><ul class="nav">
+<li class="nav-item"><a class="nav-link reference internal" href="#sketch-a-form-diagram">Sketch a form diagram</a><ul class="nav">
 <li class="nav-item"><a class="nav-link reference internal" href="#create">Create</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#modify">Modify</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#to-diagram">To Diagram</a></li>
 </ul>
 </li>
 </ul>
@@ -181,7 +170,7 @@ The skeleton can be edited again and be used to generate more form diagrams.</p>
     <footer class="bg-dark pb-5">
         <div class="container text-center pt-5 pb-5 text-muted">
             
-                Last updated on Feb 07, 2020.
+                Last updated on Feb 20, 2020.
             
 
             
