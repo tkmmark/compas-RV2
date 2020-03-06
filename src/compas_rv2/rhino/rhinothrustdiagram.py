@@ -29,6 +29,13 @@ class ThrustArtist(MeshArtist):
             })
         return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
 
+    # def draw_pipes(self, scale=1.0):
+    #     pipes = []
+    #     for u, v in self.mesh.edges_where({'is_edge': True}):
+    #         pipes.append({
+    #             'start':
+    #         })
+
 
 class RhinoThrustDiagram(RhinoDiagram):
 
@@ -46,7 +53,7 @@ class RhinoThrustDiagram(RhinoDiagram):
             color.update({key: settings.get("color.thrust.vertices") for key in self.diagram.vertices()})
             color.update({key: settings.get("color.thrust.vertices:is_fixed") for key in self.diagram.vertices_where({'is_fixed': True})})
             color.update({key: settings.get("color.thrust.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
-            self.guid_vertices = self.artist.draw_vertices(color=color)
+            self.guid_vertices = self.artist.draw_vertices(color=color, keys=keys)
 
         if settings.get("show.thrust.edges", True):
             keys = list(self.diagram.edges_where({'is_edge': True, 'is_external': False}))

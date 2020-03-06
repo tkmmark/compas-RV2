@@ -8,7 +8,7 @@ from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
 
 
-__commandname__ = "RV2skeleton_tomesh"
+__commandname__ = "RV2skeleton_todiagram"
 
 
 HERE = compas_rhino.get_document_dirname()
