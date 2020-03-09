@@ -24,7 +24,7 @@ def RunCommand(is_interactive):
 
     relax = proxy.package("compas_tna.utilities.relax_boundary_openings_proxy")
 
-    rhinoform = scene.get("form")
+    rhinoform = scene.get("form")[0]
 
     if not rhinoform:
         return

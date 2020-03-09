@@ -17,7 +17,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    rhinoform = scene.get("form")
+    rhinoform = scene.get("form")[0]
 
     if not rhinoform:
         return

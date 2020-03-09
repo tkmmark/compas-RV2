@@ -24,9 +24,9 @@ def RunCommand(is_interactive):
 
     vertical = proxy.package("compas_tna.equilibrium.vertical_from_zmax_proxy")
 
-    rhinoform = scene.get("form")
-    rhinoforce = scene.get("force")
-    rhinothrust = scene.get("thrust")
+    rhinoform = scene.get("form")[0]
+    rhinoforce = scene.get("force")[0]
+    rhinothrust = scene.get("thrust")[0]
 
     zmax = scene.settings["vertical.zmax"]
 

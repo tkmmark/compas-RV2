@@ -18,7 +18,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    rhinothrustform = scene.get("thrust")
+    rhinothrustform = scene.get("thrust")[0]
 
     if not rhinothrustform:
         return

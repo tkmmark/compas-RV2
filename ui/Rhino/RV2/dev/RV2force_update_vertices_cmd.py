@@ -17,7 +17,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    rhinoforce = scene.get("force")
+    rhinoforce = scene.get("force")[0]
 
     if not rhinoforce:
         return

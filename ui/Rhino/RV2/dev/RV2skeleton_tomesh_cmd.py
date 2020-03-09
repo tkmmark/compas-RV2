@@ -17,7 +17,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    rhinoskeleton = scene.get('skeleton')
+    rhinoskeleton = scene.get('skeleton')[0]
     if not rhinoskeleton:
         return
     rhinoskeleton.draw_rhino_mesh()
