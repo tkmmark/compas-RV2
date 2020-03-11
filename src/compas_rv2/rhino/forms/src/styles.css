@@ -1,19 +1,11 @@
 body{
     font-family:  Helvetica;
-    color: white;
+    color: lightgrey;
     margin: 0;
     padding: 0;
-    font-size: xx-small;
-    overflow: hidden;
-}
-h2{
+    font-size: x-small;
     font-weight: 100;
-    margin-bottom: 0;
-}
-
-h2 b{
-    font-family:  Arial, Helvetica, sans-serif;
-    font-weight: bolder;
+    overflow: hidden;
 }
 
 img{
@@ -25,38 +17,39 @@ img{
 }
 
 #content{
-    margin: 3%;
-    line-height: 1.5;
+    /* margin: 3%; */
+    /* line-height: 1.5; */
+    width: 100%;
+    height: 100%;
 }
 
-#logo{
-
-}
 
 a:link{
-    color: white;
+    color: lightgrey;
     text-decoration: none;
 }
 
 a:link:visited{
-    color: white;
+    color: lightgrey;
 }
 
-#version{
-    line-height: 0.1;
-}
+
 #links{
-    margin-top: 10%;
+    position: absolute;
+    top: 60%;
+    left: 8%;
+    line-height: 1.3;
+    /* margin-top: 30%; */
 }
 
 #terms{
     position: absolute;
-    bottom: 3%;
-    right: 3%;
+    top: 83%;
+    left: 8%;
     font-size: xx-small;
 }
 
 #terms a:link{
-    color: white;
+    color: lightgrey;
     text-decoration: underline;
 }
