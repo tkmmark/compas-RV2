@@ -1,19 +1,24 @@
 body{
-    font-family: Arial, Helvetica, sans-serif;
-    color: #656565;
+    font-family:  Helvetica;
+    color: white;
     margin: 0;
     padding: 0;
     font-size: xx-small;
     overflow: hidden;
 }
 h2{
-    font-weight: bolder;
+    font-weight: 100;
     margin-bottom: 0;
+}
+
+h2 b{
+    font-family:  Arial, Helvetica, sans-serif;
+    font-weight: bolder;
 }
 
 img{
     position: absolute;
-    left: 15%;
+    left: 0;
     width: 100%;
     top: 0;
     z-index: -100;
@@ -24,8 +29,17 @@ img{
     line-height: 1.5;
 }
 
+#logo{
+
+}
+
+a:link{
+    color: white;
+    text-decoration: none;
+}
+
 a:link:visited{
-    color: #0092D2;
+    color: white;
 }
 
 #version{
@@ -40,4 +54,9 @@ a:link:visited{
     bottom: 3%;
     right: 3%;
     font-size: xx-small;
+}
+
+#terms a:link{
+    color: white;
+    text-decoration: underline;
 }
