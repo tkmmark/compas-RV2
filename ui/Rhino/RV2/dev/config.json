@@ -130,7 +130,7 @@
                         "name" : "Settings",
                         "items": [
                             {"name": "RV2settings", "command": "RV2settings"},
-                            {"name": "RV2settingsVisualisation", "command": "RV2settingsVisualisation"}
+                            {"name": "RV2settings_visualisation", "command": "RV2settingsVisualisation"}
                         ]
                     },
 

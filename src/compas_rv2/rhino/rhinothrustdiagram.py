@@ -87,8 +87,8 @@ class RhinoThrustDiagram(RhinoDiagram):
         if settings.get("show.thrust.external", True):
             self.artist.draw_external(scale=settings.get("scale.thrust.external", 1.0))
 
-        if settings.get("show.thrust.residual", True):
-            self.artist.draw_residual(scale=settings.get("scale.thrust.residual", 1.0))
+        # if settings.get("show.thrust.residual", True):
+        #     self.artist.draw_residual(scale=settings.get("scale.thrust.residual", 1.0))
 
         self.artist.redraw()
 
