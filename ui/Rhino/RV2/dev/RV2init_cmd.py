@@ -17,7 +17,8 @@ except ImportError:
 
 else:
     from compas_cloud import Proxy
-    from compas_rv2.rhino import BrowserForm
+    # from compas_rv2.rhino import BrowserForm
+    from compas_rv2.web import Browser
     from compas_rv2.scene import Scene
 
 
@@ -26,8 +27,9 @@ __commandname__ = "RV2init"
 
 def RunCommand(is_interactive):
 
-    browser = BrowserForm()
-    browser.Show()
+    # browser = BrowserForm()
+    # browser.Show()
+    Browser()
 
     sc.sticky["RV2.proxy"] = Proxy()
 
