@@ -60,7 +60,20 @@ SETTINGS = {
     "vertical.zmax": 4.0,
     "vertical.kmax": 100,
     "horizontal.kmax": 100,
-    "horizontal.alpha": 100
+    "horizontal.alpha": 100,
+
+    # there is always only one pattern, form, force, thrust (, skeleton?)
+    'pattern.show.vertices': True,
+    'pattern.show.edges': True,
+    'pattern.show.faces': True,
+    'pattern.show.faces:joined': False,
+    'pattern.color.vertices': [255, 255, 255],
+    'pattern.color.vertices:is_anchor': [255, 0, 0],
+    'pattern.color.vertices:is_fixed': [0, 0, 255],
+    'pattern.color.edges': [0, 0, 0],
+    'pattern.color.faces': [200, 200, 200],
+    'pattern.layer': "RV2::Pattern",
+
 }
 
 

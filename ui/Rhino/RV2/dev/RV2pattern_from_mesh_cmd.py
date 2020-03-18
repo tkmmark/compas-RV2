@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rhino.geometry import RhinoMesh
 from compas_rv2.patterns import Pattern
 from compas_rv2.rhino import get_scene
 
@@ -23,7 +24,7 @@ def RunCommand(is_interactive):
     if not guid:
         return
 
-    pattern = Pattern.from_rhinomesh(guid)
+    pattern = RhinoMesh.from_guid(guid).to_compas(cls=Pattern)
 
     # should the scene not be cleared at the start of this procedure?
     scene.clear()

@@ -61,7 +61,7 @@ class Scene(object):
     def clear(self):
         layers = [self.settings[name] for name in self.settings if name.startswith("layers")]
         compas_rhino.clear_layers(layers)
-        #TODO: maybe clear and dispose each nodes first
+        # TODO: maybe clear and dispose each nodes first
         self.nodes = {}
 
     def update_settings(self, settings=None):

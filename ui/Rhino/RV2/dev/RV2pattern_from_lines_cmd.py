@@ -23,7 +23,8 @@ def RunCommand(is_interactive):
     if not guids:
         return
 
-    pattern = Pattern.from_rhinolines(guids)
+    lines = compas_rhino.get_line_coordinates(guids)
+    pattern = Pattern.from_lines(lines, delete_boundary_face=True)
 
     # should the scene not be cleared at the start of this procedure?
     scene.clear()

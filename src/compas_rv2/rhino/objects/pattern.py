@@ -103,6 +103,21 @@ class PatternObject(object):
             keys = self.select_faces()
         return FaceModifier.update_face_attributes(self.mesh, keys, names)
 
+    def draw(self, settings):
+        layer = settings.get('pattern.layer')
+        if layer:
+            self.artist.layer = layer
+            self.artist.clear_layer()
+        if settings.get('pattern.show.vertices', True):
+            self.artist.draw_vertices()
+        if settings.get('pattern.show.edges', True):
+            self.artist.draw_edges()
+        if settings.get('pattern.show.faces', True):
+            self.artist.draw_faces()
+        # self.artist.draw_vertices()
+        # self.artist.draw_edges()
+        # self.artist.draw_faces()
+
 
 # ==============================================================================
 # Main
