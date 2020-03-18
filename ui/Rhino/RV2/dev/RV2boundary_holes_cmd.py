@@ -3,33 +3,32 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.diagrams import FormDiagram
-from compas_rv2.diagrams import ThrustDiagram
-from compas_rv2.rhino import RhinoFormDiagram
-from compas_rv2.rhino import RhinoThrustDiagram
 from compas_rv2.rhino import get_scene
+from compas_rv2.rhino import select_vertices
 
-__commandname__ = "RV2form_from_surface"
+
+__commandname__ = "RV2boundary_holes"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
-    guid = compas_rhino.select_surface()
-    if not guid:
+    pattern = scene.get("pattern")
+
+    if not pattern:
         return
 
-    form = FormDiagram.from_rhinosurface(guid)
-    thrust = form.copy(cls=ThrustDiagram)
+    # how about any previously identified holes?
 
-    scene.clear()
-    scene.add(form, name='form')
-    scene.add(thrust, name='thrust', visible=False)
+    keys = pattern.select_faces()
+    pattern.mesh.faces_attribute('is_unloaded', True, keys=keys)
+
     scene.update()
 
 

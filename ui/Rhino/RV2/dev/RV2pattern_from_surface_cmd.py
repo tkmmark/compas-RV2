@@ -3,27 +3,32 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rv2.patterns import Pattern
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2form_update_edges"
+__commandname__ = "RV2pattern_from_surface"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
-    rhinoform = scene.get("form")
-
-    if not rhinoform:
+    guid = compas_rhino.select_surface()
+    if not guid:
         return
 
-    if rhinoform.update_edges_attributes():
-        scene.update()
+    pattern = Pattern.from_rhinosurface(guid)
+
+    # should the scene not be cleared at the start of this procedure?
+    scene.clear()
+    scene.add(pattern, name='pattern')
+    scene.update()
 
 
 # ==============================================================================

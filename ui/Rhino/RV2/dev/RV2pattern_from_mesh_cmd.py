@@ -3,26 +3,31 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rv2.patterns import Pattern
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2form_update_boundaries"
+__commandname__ = "RV2pattern_from_mesh"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
-    rhinoform = scene.get("form")
-
-    if not rhinoform:
+    guid = compas_rhino.select_mesh()
+    if not guid:
         return
 
-    rhinoform.diagram.update_boundaries(feet=2)
+    pattern = Pattern.from_rhinomesh(guid)
+
+    # should the scene not be cleared at the start of this procedure?
+    scene.clear()
+    scene.add(pattern, name='pattern')
     scene.update()
 
 

@@ -6,23 +6,27 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2force_update_faces"
+__commandname__ = "RV2force_modify_edges"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
-    rhinoforce = scene.get("force")
+    force = scene.get("force")
 
-    if not rhinoforce:
+    if not force:
         return
 
-    if rhinoforce.update_faces_attributes():
+    # add selection options
+    # rename to modify
+
+    if force.update_edges_attributes():
         scene.update()
 
 

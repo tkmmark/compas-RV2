@@ -4,9 +4,10 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
+from compas_rv2.rhino import select_vertices
 
 
-__commandname__ = "RV2skeleton_tomesh"
+__commandname__ = "RV2boundary_openings"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -17,10 +18,22 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    rhinoskeleton = scene.get('skeleton')
-    if not rhinoskeleton:
+    pattern = scene.get("pattern")
+
+    if not pattern:
         return
-    rhinoskeleton.draw_rhino_mesh()
+
+    # how about any previously identified openings?
+    # this only works if the outside space ahs already been broken up
+    # using the anchors
+    # and if the pattern has been relaxed
+
+    # => this function might be redundant
+
+    keys = pattern.select_faces()
+    pattern.mesh.faces_attribute('is_unloaded', True, keys=keys)
+
+    scene.update()
 
 
 # ==============================================================================

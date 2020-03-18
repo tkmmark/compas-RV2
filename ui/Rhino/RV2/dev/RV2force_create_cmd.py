@@ -4,31 +4,32 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.diagrams import ForceDiagram
-from compas_rv2.rhino import get_rv2
+from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import RhinoForceDiagram
 from compas.geometry import subtract_vectors
 from compas.geometry import scale_vector
 from compas.geometry import Translation
 
 
-__commandname__ = "RV2force"
+__commandname__ = "RV2force_create"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-    RV2 = get_rv2()
-    if not RV2:
+
+    scene = get_scene()
+    if not scene:
         return
 
-    settings = RV2["settings"]
-    rhinoform = RV2["scene"]["form"]
+    form = scene.get("form")
 
-    if not rhinoform:
+    if not form:
         return
 
-    force = ForceDiagram.from_formdiagram(rhinoform.diagram)
+    force = ForceDiagram.from_formdiagram(form.diagram)
+
     bbox = force.bounding_box()
 
     a = bbox[0]
@@ -41,10 +42,8 @@ def RunCommand(is_interactive):
 
     force.transform(T)
 
-    rhinoforce = RhinoForceDiagram(force)
-    rhinoforce.draw(settings)
-
-    RV2["scene"]["force"] = rhinoforce
+    scene.add(force, name='force')
+    scene.update()
 
 
 # ==============================================================================

@@ -6,23 +6,27 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2form_update_faces"
+__commandname__ = "RV2force_modify_faces"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
-    rhinoform = scene.get("form")
+    force = scene.get("force")
 
-    if not rhinoform:
+    if not force:
         return
 
-    if rhinoform.update_faces_attributes():
+    # add selection options
+    # rename to modify
+
+    if force.update_faces_attributes():
         scene.update()
 
 

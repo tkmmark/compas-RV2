@@ -6,23 +6,27 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2force_update_edges"
+
+__commandname__ = "RV2form_move_vertices"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
-    rhinoforce = scene.get("force")
+    form = scene.get("form")
 
-    if not rhinoforce:
+    if not form:
         return
 
-    if rhinoforce.update_edges_attributes():
+    # add selection options
+
+    if form.move_vertices():
         scene.update()
 
 

@@ -7,7 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 
 
-__commandname__ = "RV2equilibrium_vertical"
+__commandname__ = "RV2pattern_relax"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -22,29 +22,17 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    vertical = proxy.package("compas_tna.equilibrium.vertical_from_zmax_proxy")
+    # replace this by simple FD
+    # add version using DR for more control
+    relax = proxy.package("compas_tna.utilities.relax_boundary_openings_proxy")
 
-    rhinoform = scene.get("form")
-    rhinoforce = scene.get("force")
-    rhinothrust = scene.get("thrust")
+    rhinopattern = scene.get("pattern")
 
-    if not rhinoform:
+    if not rhinopattern:
         return
 
-    if not rhinoforce:
-        return
-
-    if not rhinothrust:
-        return
-
-    zmax = scene.settings["vertical.zmax"]
-
-    formdata, scale = vertical(rhinoform.diagram.data, zmax)
-
-    rhinoforce.diagram.attributes['scale'] = scale
-    rhinoform.diagram.data = formdata
-    rhinothrust.diagram.data = formdata
-    rhinothrust.visible = True
+    fixed = list(rhinopattern.mesh.vertices_where({'is_fixed': True}))
+    rhinopattern.mesh.data = relax(rhinopattern.mesh.data, fixed)
 
     scene.update()
 
