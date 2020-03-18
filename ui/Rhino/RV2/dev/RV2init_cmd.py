@@ -20,6 +20,7 @@ else:
     # from compas_rv2.rhino import BrowserForm
     from compas_rv2.web import Browser
     from compas_rv2.scene import Scene
+    from compas_rv2.rhino import get_logger
 
 
 __commandname__ = "RV2init"
@@ -27,74 +28,78 @@ __commandname__ = "RV2init"
 
 def RunCommand(is_interactive):
 
-    # browser = BrowserForm()
-    # browser.Show()
-    Browser()
+    try:
 
-    sc.sticky["RV2.proxy"] = Proxy()
+        Browser()
 
-    settings = {
-        "layers.skeleton": "RV2::Skeleton",
-        "layers.form": "RV2::FormDiagram",
-        "layers.force": "RV2::ForceDiagram",
-        "layers.thrust": "RV2::ThrustNetwork",
+        sc.sticky["RV2.proxy"] = Proxy()
 
-        "show.form.vertices": True,
-        "show.form.edges": True,
-        "show.form.faces": False,
+        settings = {
+            "layers.skeleton": "RV2::Skeleton",
+            "layers.form": "RV2::FormDiagram",
+            "layers.force": "RV2::ForceDiagram",
+            "layers.thrust": "RV2::ThrustNetwork",
 
-        "show.force.vertices": True,
-        "show.force.edges": True,
-        "show.force.faces": False,
+            "show.form.vertices": True,
+            "show.form.edges": True,
+            "show.form.faces": False,
 
-        "show.thrust.vertices": True,
-        "show.thrust.edges": True,
-        "show.thrust.faces": True,
+            "show.force.vertices": True,
+            "show.force.edges": True,
+            "show.force.faces": False,
 
-        "color.form.vertices": (0, 255, 0),
-        "color.form.vertices:is_fixed": (0, 255, 255),
-        "color.form.vertices:is_external": (0, 0, 255),
-        "color.form.vertices:is_anchor": (255, 255, 255),
+            "show.thrust.vertices": True,
+            "show.thrust.edges": True,
+            "show.thrust.faces": True,
 
-        "color.form.edges": (0, 255, 0),
-        "color.form.edges:is_external": (0, 0, 255),
+            "color.form.vertices": (0, 255, 0),
+            "color.form.vertices:is_fixed": (0, 255, 255),
+            "color.form.vertices:is_external": (0, 0, 255),
+            "color.form.vertices:is_anchor": (255, 255, 255),
 
-        "color.thrust.vertices": (255, 0, 255),
-        "color.thrust.vertices:is_fixed": (0, 255, 0),
-        "color.thrust.vertices:is_anchor": (255, 0, 0),
+            "color.form.edges": (0, 255, 0),
+            "color.form.edges:is_external": (0, 0, 255),
 
-        "color.thrust.edges": (255, 0, 255),
-        "color.thrust.faces": (255, 0, 255),
+            "color.thrust.vertices": (255, 0, 255),
+            "color.thrust.vertices:is_fixed": (0, 255, 0),
+            "color.thrust.vertices:is_anchor": (255, 0, 0),
 
-        "color.force.vertices": (0, 255, 0),
-        "color.force.vertices:is_fixed": (0, 255, 255),
+            "color.thrust.edges": (255, 0, 255),
+            "color.thrust.faces": (255, 0, 255),
 
-        "color.force.edges": (0, 255, 0),
-        "color.force.edges:is_external": (0, 0, 255),
+            "color.force.vertices": (0, 255, 0),
+            "color.force.vertices:is_fixed": (0, 255, 255),
 
-        "scale.thrust.external": 0.25,
+            "color.force.edges": (0, 255, 0),
+            "color.force.edges:is_external": (0, 0, 255),
 
-        "vertical.zmax": 4.0,
-        "vertical.kmax": 100,
+            "scale.thrust.external": 0.25,
 
-        "horizontal.kmax": 100,
-        "horizontal.alpha": 100
-    }
+            "vertical.zmax": 4.0,
+            "vertical.kmax": 100,
 
-    scene = Scene(settings)
-    scene.clear()
+            "horizontal.kmax": 100,
+            "horizontal.alpha": 100
+        }
 
-    sc.sticky["RV2"] = {
+        scene = Scene(settings)
+        scene.clear()
 
-        "session": {
-            "cwd": None,
-            "ext": 'rv2',
-            "current": None
-        },
+        sc.sticky["RV2"] = {
 
-        "scene": scene
-        # "data": DATA
-    }
+            "session": {
+                "cwd": None,
+                "ext": 'rv2',
+                "current": None
+            },
+
+            "scene": scene
+            # "data": DATA
+        }
+
+    except Exception as error:
+        get_logger().exception(error)
+        raise error
 
 
 # ==============================================================================

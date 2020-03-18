@@ -6,7 +6,7 @@ import os
 from ast import literal_eval
 import compas_rhino
 from compas_rhino.etoforms import TextForm
-
+import logging
 
 __all__ = [
     "is_valid_file",
@@ -14,6 +14,7 @@ __all__ = [
     "get_rv2",
     "get_scene",
     "get_proxy",
+    "get_logger",
     "select_vertices",
     "select_edges",
     "select_faces",
@@ -211,6 +212,9 @@ def get_proxy():
         return None
     return compas_rhino.sc.sticky["RV2.proxy"]
 
+
+def get_logger():
+    return logging.getLogger("RV2")
 
 # ==============================================================================
 # Main
