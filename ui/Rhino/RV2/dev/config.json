@@ -42,7 +42,7 @@
                 "modify_form_faces",
                 "modify_form_skeleton",
 
-                "moidfy_force",
+                "modify_force",
                 "modify_force_attributes",
                 "modify_force_vertices",
                 "modify_force_edges",
@@ -58,243 +58,147 @@
 
         "commands":
         [
-            {"name": "RV2init", "button_text": "rv2_init", "menu_text": "Init", "icon": 0},
-            {"name": "RV2settings", "button_text": "rv2_settings", "menu_text": "Settings", "icon": 2},
-            {"name": "RV2settingsVisualisation", "button_text": "rv2_settings_vis", "menu_text": "Visualisation", "icon": 3},
-            {"name": "RV2file", "button_text": "rv2_file", "menu_text": "File", "icon": 4},
+            {"name": "RV2boundary_anchors", "menu_text": "Anchors",        "icon": 15},
+            {"name": "RV2boundary_holes",   "menu_text": "Holes/Openings", "icon": 16},
 
-            {"name": "RV2skeleton", "button_text": "skeleton", "menu_text": "Skeleton"},
-            {"name": "RV2skeleton_from_lines", "button_text": "skeleton_from_lines", "menu_text": "From Skeleton", "icon": 11},
-            {"name": "RV2skeleton_modify", "button_text": "skeleton_modify", "menu_text": "Modify skeleton", "icon": 22},
-            {"name": "RV2skeleton_todiagram", "button_text": "skeleton_todiagram", "menu_text": "To Diagram"},
-            {"name": "RV2skeleton_tomesh", "button_text": "skeleton_tomesh", "menu_text": "To Mesh"},
+            {"name": "RV2equilibrium_horizontal", "menu_text": "Horizontal Equilibrium", "icon": 15},
+            {"name": "RV2equilibrium_vertical",   "menu_text": "Vertical Equilibrium",   "icon": 16},
 
-            {"name": "RV2form_from_obj", "button_text": "form_from_obj", "menu_text": "From OBJ", "icon": 5},
-            {"name": "RV2form_from_json", "button_text": "form_from_json", "menu_text": "From JSON", "icon": 6},
-            {"name": "RV2form_from_lines", "button_text": "form_from_lines", "menu_text": "From Lines", "icon": 7},
-            {"name": "RV2form_from_mesh", "button_text": "form_from_mesh", "menu_text": "From Mesh", "icon": 8},
-            {"name": "RV2form_from_surface", "button_text": "from_from_surf", "menu_text": "From Surface", "icon": 9},
-            {"name": "RV2form_from_features", "button_text": "from_from_surf", "menu_text": "From Features", "icon": 10},
+            {"name": "RV2file", "menu_text": "File", "icon": 4},
 
-            {"name": "RV2form", "button_text": "form", "menu_text": "FormDiagram", "icon": 13},
-            {"name": "RV2force", "button_text": "force", "menu_text": "ForceDiagram", "icon": 14},
+            {"name": "RV2force_create",          "menu_text": "ForceDiagram Create",          "icon": 14},
+            {"name": "RV2force_modify_edges",    "menu_text": "ForceDiagram Modify Edges",    "icon": 26},
+            {"name": "RV2force_modify_vertices", "menu_text": "ForceDiagram Modify Vertices", "icon": 25},
+            {"name": "RV2force_move_vertices",   "menu_text": "ForceDiagram Move Vertices",   "icon": 25},
 
-            {"name": "RV2modify_form", "button_text": "modify_form", "menu_text": "Modify form diagram", "icon": 17},
+            {"name": "RV2form_create",          "menu_text": "FormDiagram Create",          "icon": 5},
+            {"name": "RV2form_modify_edges",    "menu_text": "FormDiagram Modify Edges",    "icon": 20},
+            {"name": "RV2form_modify_faces",    "menu_text": "FormDiagram Modify Faces",    "icon": 21},
+            {"name": "RV2form_modify_vertices", "menu_text": "FormDiagram Modify Vertices", "icon": 19},
+            {"name": "RV2form_move_vertices",   "menu_text": "FormDiagram Move Vertices",   "icon": 19},
 
-            {"name": "RV2form_attributes", "button_text": "form_attr", "menu_text": "Attributes", "icon": 18},
-            {"name": "RV2form_select_vertices", "button_text": "form_select_V", "menu_text": "Select Vertices"},
-            {"name": "RV2form_select_edges", "button_text": "form_select_E", "menu_text": "Select Edges"},
-            {"name": "RV2form_select_faces", "button_text": "form_select_F", "menu_text": "Select Faces"},
+            {"name": "RV2init", "menu_text": "Initialize RV2", "icon": 0},
 
-            {"name": "RV2form_update_vertices", "button_text": "form_update_V", "menu_text": "Update Vertices", "icon": 19},
-            {"name": "RV2form_update_edges", "button_text": "form_update_E", "menu_text": "Update Edges", "icon": 20},
-            {"name": "RV2form_update_faces", "button_text": "form_update_F", "menu_text": "Update Faces", "icon": 21},
+            {"name": "RV2pattern_from_lines",    "menu_text": "Pattern From Lines",    "icon": 7},
+            {"name": "RV2pattern_from_mesh",     "menu_text": "Pattern From Mesh",     "icon": 8},
+            {"name": "RV2pattern_from_surface",  "menu_text": "Pattern From Surface",  "icon": 9},
+            {"name": "RV2pattern_from_skeleton", "menu_text": "Pattern From Skeleton", "icon": 10},
 
-            {"name": "RV2form_relax", "button_text": "relax", "menu_text": "Relax"},
-            {"name": "RV2form_update_boundaries", "button_text": "update_boundaries", "menu_text": "Update Boundaries", "icon": 12},
+            {"name": "RV2pattern_modify_edges",    "menu_text": "Pattern Modify Edges",    "icon": 20},
+            {"name": "RV2pattern_modify_faces",    "menu_text": "Pattern Modify Faces",    "icon": 21},
+            {"name": "RV2pattern_modify_vertices", "menu_text": "Pattern Modify Vertices", "icon": 19},
+            {"name": "RV2pattern_move_vertices",   "menu_text": "Pattern Move Vertices",   "icon": 19},
 
-            {"name": "RV2modify_force", "button_text": "modify_force", "menu_text": "Modify force diagram", "icon": 23},
+            {"name": "RV2pattern_relax",  "menu_text": "Pattern Relax"},
+            {"name": "RV2pattern_smooth", "menu_text": "Pattern Smooth"},
 
-            {"name": "RV2force_from_form", "button_text": "force_from_form", "menu_text": "Make force diagram", "icon": 14},
-            {"name": "RV2force_attributes", "button_text": "force_attr", "menu_text": "Attributes", "icon": 24},
-            {"name": "RV2force_update_vertices", "button_text": "force_update_V", "menu_text": "Update Vertices", "icon": 25},
-            {"name": "RV2force_update_edges", "button_text": "force_update_E", "menu_text": "Update Edges", "icon": 26},
-            {"name": "RV2force_update_faces", "button_text": "force_update_F", "menu_text": "Update Face"},
+            {"name": "RV2settings", "menu_text": "Settings", "icon": 2},
 
-            {"name": "RV2modify_thrust", "button_text": "modify_thrust", "menu_text": "Modify thrust diagram", "icon": 27},
+            {"name": "RV2skeleton_from_lines", "menu_text": "Skeleton From Lines", "icon": 11},
+            {"name": "RV2skeleton_modify",     "menu_text": "Skeleton Modify",     "icon": 22},
 
-            {"name": "RV2thrust_attributes", "button_text": "thrust_attr", "menu_text": "Attributes", "icon": 28},
-            {"name": "RV2thrust_update_vertices", "button_text": "thrust_update_V", "menu_text": "Update Vertices", "icon": 29},
-            {"name": "RV2thrust_update_edges", "button_text": "thrust_update_E", "menu_text": "Update Edges", "icon": 30},
-            {"name": "RV2thrust_update_faces", "button_text": "thrust_update_F", "menu_text": "Update Faces", "icon": 31},
-
-            {"name": "RV2equilibrium_horizontal", "button_text": "horizontal", "menu_text": "Horizontal", "icon": 15},
-            {"name": "RV2equilibrium_vertical", "button_text": "vertical", "menu_text": "Vertical", "icon": 16},
-
-            {"name": "RV2optimization_bestfit", "button_text": "bestfit", "menu_text": "Best-fit TNA"},
-            {"name": "RV2optimization_loadpath", "button_text": "loadpath", "menu_text": "Load path"}
-
-
-
+            {"name": "RV2thrust_modify_edges",    "menu_text": "ThrustDiagram Modify Edges",    "icon": 30},
+            {"name": "RV2thrust_modify_faces",    "menu_text": "ThrustDiagram Modify Faces",    "icon": 31},
+            {"name": "RV2thrust_modify_vertices", "menu_text": "ThrustDiagram Modify Vertices", "icon": 29},
+            {"name": "RV2thrust_move_vertices",   "menu_text": "ThrustDiagram Move Vertices",   "icon": 29}
         ],
 
         "menus":
         [
             {
+                "name": "COMPAS",
+                "items":
+                [
+                ]
+            },
+            {
                 "name" : "RhinoVAULT 2",
-                "items": [
-
-                    {"name": "RV2init", "command": "RV2init"},
-
+                "items":
+                [
+                    {"command": "RV2init"},
+                    {"command": "RV2file"},
                     {
                         "name" : "Settings",
-                        "items": [
-                            {"name": "RV2settings", "command": "RV2settings"},
-                            {"name": "RV2settings_visualisation", "command": "RV2settingsVisualisation"}
+                        "items":
+                        [
+                            {"command": "RV2settings"}
                         ]
                     },
-
-                    {"name": "RV2file", "command": "RV2file"},
-
-
                     {"type": "separator"},
-
-
                     {
-                        "name" : "Make form diagram",
-                        "items": [
-                            {"name": "RV2form_from_obj", "command": "RV2form_from_obj"},
-                            {"name": "RV2form_from_json", "command": "RV2form_from_json"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2form_from_lines", "command": "RV2form_from_lines"},
-                            {"name": "RV2form_from_mesh", "command": "RV2form_from_mesh"},
-                            {"name": "RV2form_from_surface", "command": "RV2form_from_surface"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2form_from_features", "command": "RV2form_from_features"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2skeleton_from_lines", "command": "RV2skeleton_from_lines"}
+                        "name" : "Make Pattern",
+                        "items":
+                        [
+                            {"command": "RV2pattern_from_lines"},
+                            {"command": "RV2pattern_from_mesh"},
+                            {"command": "RV2pattern_from_surface"},
+                            {"command": "RV2pattern_from_skeleton"}
                         ]
                     },
-
-                    {"name": "RV2force_from_form", "command": "RV2force_from_form"},
-
-
+                    {
+                        "name" : "Modify Pattern",
+                        "items":
+                        [
+                            {"command": "RV2pattern_modify_vertices"},
+                            {"command": "RV2pattern_modify_edges"},
+                            {"command": "RV2pattern_modify_faces"},
+                            {"type": "separator"},
+                            {"command": "RV2pattern_smooth"},
+                            {"command": "RV2pattern_relax"}
+                        ]
+                    },
                     {"type": "separator"},
-
-
-                    {"name": "RV2equilibrium_horizontal", "command": "RV2equilibrium_horizontal"},
-                    {"name": "RV2equilibrium_vertical", "command": "RV2equilibrium_vertical"},
-
-
                     {"type": "separator"},
-
-
-
-                    {
-                        "name" : "Modify form diagram",
-                        "items": [
-
-                            {"name": "RV2form_attributes", "command": "RV2form_attributes"},
-                            {"type": "separator"},
-
-                            {"name": "RV2form_select_vertices", "command": "RV2form_select_vertices"},
-                            {"name": "RV2form_select_edges", "command": "RV2form_select_edges"},
-                            {"name": "RV2form_select_faces", "command": "RV2form_select_faces"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2form_update_vertices", "command": "RV2form_update_vertices"},
-                            {"name": "RV2form_update_edges", "command": "RV2form_update_edges"},
-                            {"name": "RV2form_update_faces", "command": "RV2form_update_faces"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2skeleton_modify", "command": "RV2skeleton_modify"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2form_relax", "command": "RV2form_relax"},
-                            {"name": "RV2form_update_boundaries", "command": "RV2form_update_boundaries"}
-
-                        ]
-                    },
-
-                    {
-                        "name" : "Modify force diagram",
-                        "items": [
-
-                            {"name": "RV2force_attributes", "command": "RV2force_attributes"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2force_update_vertices", "command": "RV2force_update_vertices"},
-                            {"name": "RV2force_update_edges", "command": "RV2force_update_edges"},
-                            {"name": "RV2force_update_faces", "command": "RV2force_update_faces"}
-
-                        ]
-                    },
-
-                    {
-                        "name" : "Modify thrust diagram",
-                        "items": [
-
-                            {"name": "RV2thrust_attributes", "command": "RV2thrust_attributes"},
-
-                            {"type": "separator"},
-
-                            {"name": "RV2thrust_update_vertices", "command": "RV2thrust_update_vertices"},
-                            {"name": "RV2thrust_update_edges", "command": "RV2thrust_update_edges"},
-                            {"name": "RV2thrust_update_faces", "command": "RV2thrust_update_faces"}
-
-                        ]
-                    },
-
-
+                    {"command": "RV2form_create"},
+                    {"command": "RV2force_create"},
                     {"type": "separator"},
-
-
+                    {"command": "RV2equilibrium_horizontal"},
+                    {"command": "RV2equilibrium_vertical"},
+                    {"type": "separator"},
                     {
-                        "name" : "Optimization",
-                        "items": [
-
-                            {"name": "RV2optimization_bestfit", "command": "RV2optimization_bestfit"},
-                            {"name": "RV2optimization_loadpath", "command": "RV2optimization_loadpath"}
-
+                        "name" : "Modify Form Diagram",
+                        "items":
+                        [
+                            {"command": "RV2form_modify_vertices"},
+                            {"command": "RV2form_modify_edges"},
+                            {"command": "RV2form_modify_faces"}
+                        ]
+                    },
+                    {
+                        "name" : "Modify Force Diagram",
+                        "items":
+                        [
+                            {"command": "RV2force_modify_vertices"},
+                            {"command": "RV2force_modify_edges"}
+                        ]
+                    },
+                    {
+                        "name" : "Modify Thrust Diagram",
+                        "items":
+                        [
+                            {"command": "RV2thrust_modify_vertices"},
+                            {"command": "RV2thrust_modify_edges"},
+                            {"command": "RV2thrust_modify_faces"}
+                        ]
+                    },
+                    {"type": "separator"},
+                    {
+                        "name" : "Extensions",
+                        "items":
+                        [
                         ]
                     }
-
-
                 ]
             }
         ],
         "toolbars":
         [
-            {
-                "name": "RV2",
-                "items":
-                [
-                    {"left": "RV2init"},
-                    {"left": "RV2settings"},
-                    {"left": "RV2file"},
-
-                    {"type": "separator"},
-
-                    {"left": "RV2form"},
-                    {"left": "RV2force"},
-
-                    {"type": "separator"},
-
-                    {"left": "RV2equilibrium_horizontal"},
-                    {"left": "RV2equilibrium_vertical"},
-
-                    {"type": "separator"},
-
-                    {"left": "RV2modify_form"},
-                    {"left": "RV2modify_force"},
-                    {"left": "RV2modify_thrust"}
-
-                ]
-            }
         ],
         "toolbargroups":
         [
-            {
-                "name": "RV2",
-                "toolbars":
-                [
-                    "RV2"
-                ]
-            }
         ]
     },
     "settings":
     {
-
     }
 }

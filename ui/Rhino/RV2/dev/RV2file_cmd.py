@@ -48,8 +48,6 @@ def select_filepath_open(root, ext):
     tuple
         The parent directory.
         The file name.
-    None
-        If the procedure fails.
 
     Notes
     -----
@@ -77,7 +75,7 @@ def select_filepath_save(root, ext):
         root = HERE
 
     dirname = compas_rhino.select_folder(default=root)
-    filename = compas_rhino.rs.GetString('File name (w/o extension)')
+    filename = compas_rhino.rs.GetString('File name (w/o extension!)')
 
     if not filename:
         return
@@ -129,6 +127,7 @@ def RunCommand(is_interactive):
 
     # store the filepath of the opened session
     if action["name"] == "open":
+
         filepath = action["action"](RV2["session"]["cwd"], RV2["session"]["ext"])
         if not filepath:
             return
@@ -145,6 +144,7 @@ def RunCommand(is_interactive):
 
     # only ask for a filepath if there is none
     elif action["name"] == "save":
+
         filepath = RV2["session"]["current"]
         if not filepath:
             filepath = action["action"](RV2["session"]["cwd"], RV2["session"]["ext"])
@@ -158,6 +158,7 @@ def RunCommand(is_interactive):
 
     # always ask for a filepath
     elif action["name"] == "saveas":
+
         filepath = action["action"](RV2["session"]["cwd"], RV2["session"]["ext"])
         if not filepath:
             return

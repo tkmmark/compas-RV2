@@ -90,18 +90,14 @@ def select_boundary_vertices(rhinodiagram):
     select_vertices(rhinodiagram.diagram, vertices)
 
 
-def select_continuous_vertices(rhinodiagram):
-    edges = rhinodiagram.select_edges()
-    vertices = []
-    for edge in edges:
-        continuous = rhinodiagram.diagram.continuous_vertices(edge)
-        vertices.extend(continuous)
-    select_vertices(rhinodiagram.diagram, vertices)
-
-
 def select_boundary_edges(rhinodiagram):
     edges = rhinodiagram.diagram.edges_on_boundary()
     select_edges(rhinodiagram.diagram, edges)
+
+
+def select_boundary_faces(rhinodiagram):
+    faces = rhinodiagram.diagram.faces_on_boundary()
+    select_faces(rhinodiagram.diagram, faces)
 
 
 def select_continuous_edges(rhinodiagram):
@@ -113,6 +109,15 @@ def select_continuous_edges(rhinodiagram):
     select_edges(rhinodiagram.diagram, edges)
 
 
+def select_continuous_vertices(rhinodiagram):
+    edges = rhinodiagram.select_edges()
+    vertices = []
+    for edge in edges:
+        continuous = rhinodiagram.diagram.continuous_vertices(edge)
+        vertices.extend(continuous)
+    select_vertices(rhinodiagram.diagram, vertices)
+
+
 def select_parallel_edges(rhinodiagram):
     selected = rhinodiagram.select_edges()
     edges = []
@@ -120,11 +125,6 @@ def select_parallel_edges(rhinodiagram):
         parallel = rhinodiagram.diagram.parallel_edges(edge)
         edges.extend(parallel)
     select_edges(rhinodiagram.diagram, edges)
-
-
-def select_boundary_faces(rhinodiagram):
-    faces = rhinodiagram.diagram.faces_on_boundary()
-    select_faces(rhinodiagram.diagram, faces)
 
 
 def select_parallel_faces(rhinodiagram):

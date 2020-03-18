@@ -28,8 +28,6 @@ def RunCommand(is_interactive):
     rhinoforce = scene.get("force")[0]
     rhinothrust = scene.get("thrust")[0]
 
-    zmax = scene.settings["vertical.zmax"]
-
     if not rhinoform:
         return
 
@@ -39,14 +37,17 @@ def RunCommand(is_interactive):
     if not rhinothrust:
         return
 
+    zmax = scene.settings["vertical.zmax"]
+
     formdata, scale = vertical(rhinoform.diagram.data, zmax)
 
     rhinoforce.diagram.attributes['scale'] = scale
-
     rhinoform.diagram.data = formdata
     rhinothrust.diagram.data = formdata
     rhinothrust.visible = True
+
     scene.update()
+
 
 # ==============================================================================
 # Main

@@ -389,7 +389,7 @@ if __name__ == "__main__":
             "script": "-_{}".format(cmd["name"]),
             "tooltip": cmd.get("tooltip"),
             "help_text": cmd.get("help_text"),
-            "button_text": cmd["button_text"],
+            "button_text": cmd.get("button_text"),
             "menu_text": cmd.get("menu_text"),
             "icon": cmd.get("icon"),
         })
