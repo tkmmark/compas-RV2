@@ -16,9 +16,10 @@ except Exception:
 
 class BrowserForm(forms.Form):
 
-    def __init__(self, url=None, width=600, height=300):
+    def __init__(self, url=None, width=800, height=400):
         self.Title = 'RhinoVault2'
         self.Padding = drawing.Padding(0)
+        self.Resizable = False
 
         self.m_webview = forms.WebView()
         self.m_webview.Size = drawing.Size(width, height)

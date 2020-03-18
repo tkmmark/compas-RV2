@@ -70,16 +70,22 @@ class RhinoDiagram(object):
     def update_vertices_attributes(self, keys=None, names=None):
         if not keys:
             keys = self.select_vertices()
+            if len(keys) == 0:
+                return
         return VertexModifier.update_vertex_attributes(self.diagram, keys, names)
 
     def update_edges_attributes(self, keys=None, names=None):
         if not keys:
             keys = self.select_edges()
+            if len(keys) == 0:
+                return
         return EdgeModifier.update_edge_attributes(self.diagram, keys, names)
 
     def update_faces_attributes(self, keys=None, names=None):
         if not keys:
             keys = self.select_faces()
+            if len(keys) == 0:
+                return
         return FaceModifier.update_face_attributes(self.diagram, keys, names)
 
 

@@ -114,5 +114,8 @@ temp/**
 .vscode
 
 .DS_Store
+docs/.doctrees/**
 
 *.rhi
+
+electron/
