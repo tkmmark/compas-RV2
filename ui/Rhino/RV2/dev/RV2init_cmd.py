@@ -17,7 +17,7 @@ except ImportError:
 
 else:
     from compas_cloud import Proxy
-    from compas_rv2.rhino import BrowserForm
+    from compas_rv2.web import Browser
     from compas_rv2.scene import Scene
 
 
@@ -77,8 +77,8 @@ def RunCommand(is_interactive):
     # RV2.scene
     # => serialize to session.rv2 ?
 
-    browser = BrowserForm()
-    browser.Show()
+    # perhaps we should make this specificly about a "splash" window
+    Browser()
 
     sc.sticky["RV2.proxy"] = Proxy()
 
