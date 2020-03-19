@@ -6,7 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2form_modify_edges"
+__commandname__ = "RV2pattern_modify_edges"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -18,14 +18,18 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    form = scene.get("form")
+    pattern = scene.get("pattern")[0]
 
-    if not form:
+    if not pattern:
         return
 
     # add selection options
     # rename to modify
-    if form.update_edges_attributes():
+
+    # keys = ...
+    # name = ...
+
+    if pattern.update_edges_attributes():
         scene.update()
 
 

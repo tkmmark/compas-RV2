@@ -4,31 +4,20 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.rhino import select_vertices
+from compas_rv2.patterns import Pattern
 
 
-__commandname__ = "RV2boundary_anchors"
+__commandname__ = "RV2pattern_from_singularities"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
-
-    pattern = scene.get("pattern")[0]
-
-    if not pattern:
-        return
-
-    # how about any previously "anchored" vertices?
-    # this procedure should allow to select vertices on a curve
-    keys = pattern.select_vertices()
-    pattern.mesh.vertices_attribute('is_anchor', True, keys=keys)
-
-    scene.update()
 
 
 # ==============================================================================

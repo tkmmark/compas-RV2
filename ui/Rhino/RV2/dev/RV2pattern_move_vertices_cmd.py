@@ -7,7 +7,7 @@ from compas_rv2.rhino import get_scene
 
 
 
-__commandname__ = "RV2form_move_vertices"
+__commandname__ = "RV2pattern_move_vertices"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -19,14 +19,12 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    form = scene.get("form")
+    pattern = scene.get("pattern")[0]
 
-    if not form:
+    if not pattern:
         return
 
-    # add selection options
-
-    if form.move_vertices():
+    if pattern.move_vertices():
         scene.update()
 
 

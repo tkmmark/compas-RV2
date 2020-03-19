@@ -19,7 +19,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    pattern = scene.get('pattern')
+    pattern = scene.get('pattern')[0]
 
     if not pattern:
         return

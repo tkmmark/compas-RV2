@@ -18,15 +18,12 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    form = scene.get("form")
+    pattern = scene.get("pattern")
 
-    if not form:
+    if not pattern:
         return
 
-    # add selection options
-    # rename to modify
-
-    if form.update_faces_attributes():
+    if pattern.update_faces_attributes():
         scene.update()
 
 

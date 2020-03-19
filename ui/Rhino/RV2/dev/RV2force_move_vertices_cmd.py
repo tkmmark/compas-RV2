@@ -18,7 +18,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    force = scene.get("force")
+    force = scene.get("force")[0]
 
     if not force:
         return

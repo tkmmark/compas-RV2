@@ -19,7 +19,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    form = scene.get("form")
+    form = scene.get("form")[0]
 
     if not form:
         return
