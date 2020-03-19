@@ -23,13 +23,31 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    # add selection options
-    # rename to modify
+    option = compas_rhino.rs.GetString("Select Edges", "Boundary", ["Boundary", "Continuous", "Parallel"])
 
-    # keys = ...
-    # name = ...
+    if option == "Boundary":
+        keys = list(pattern.mesh.edges_on_boundary())
 
-    if pattern.update_edges_attributes():
+    elif option == "Continuous":
+        temp = pattern.select_edges()
+        if temp:
+            temp[:] = list(set(temp))
+            keys = []
+            for key in temp:
+                keys += pattern.mesh.continuous_edges(key)
+
+    elif option == "Parallel":
+        temp = pattern.select_edges()
+        if temp:
+            temp[:] = list(set(temp))
+            keys = []
+            for key in temp:
+                keys += pattern.mesh.parallel_edges(key)
+
+    else:
+        keys = None
+
+    if pattern.update_edges_attributes(keys=keys):
         scene.update()
 
 

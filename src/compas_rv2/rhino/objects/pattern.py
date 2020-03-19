@@ -65,23 +65,38 @@ class PatternObject(object):
 
         Examples
         --------
-        >>> scene = Scene()
-        >>> pattern = Pattern.from_rhinomesh(guid)
-        >>> scene.add(pattern, name='pattern')
-        >>> scene.update()
-        >>> obj = scene.get('pattern')
-        >>> obj.mesh is pattern
-        True
-        >>> keys = obj.select_vertices()
+        >>>
         """
         keys = VertexSelector.select_vertices(self.mesh)
         return keys
 
     def select_edges(self):
+        """Manually select edges in the Rhino model view.
+
+        Returns
+        -------
+        list
+            The keys of the selected edges.
+
+        Examples
+        --------
+        >>>
+        """
         keys = EdgeSelector.select_edges(self.mesh)
         return keys
 
     def select_faces(self):
+        """Manually select faces in the Rhino model view.
+
+        Returns
+        -------
+        list
+            The keys of the selected faces.
+
+        Examples
+        --------
+        >>>
+        """
         keys = FaceSelector.select_faces(self.mesh)
         return keys
 

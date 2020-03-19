@@ -24,15 +24,18 @@ def RunCommand(is_interactive):
 
     # replace this by simple FD
     # add version using DR for more control
+
+    # simple smoothing should be a separate command!
+
     relax = proxy.package("compas_tna.utilities.relax_boundary_openings_proxy")
 
-    rhinopattern = scene.get("pattern")
+    pattern = scene.get("pattern")[0]
 
-    if not rhinopattern:
+    if not pattern:
         return
 
-    fixed = list(rhinopattern.mesh.vertices_where({'is_fixed': True}))
-    rhinopattern.mesh.data = relax(rhinopattern.mesh.data, fixed)
+    fixed = list(pattern.mesh.vertices_where({'is_fixed': True}))
+    pattern.mesh.data = relax(pattern.mesh.data, fixed)
 
     scene.update()
 

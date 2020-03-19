@@ -23,7 +23,23 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    if pattern.update_vertices_attributes():
+    option = compas_rhino.rs.GetString("Select Vertices", "Boundary", ["Boundary", "Continuous"])
+
+    if option == "Boundary":
+        keys = list(pattern.mesh.vertices_on_boundary(chained=False))
+
+    elif option == "Continuous":
+        temp = pattern.select_edges()
+        if temp:
+            temp[:] = list(set(temp))
+            keys = []
+            for key in temp:
+                keys += pattern.mesh.continuous_vertices(key)
+
+    else:
+        keys = None
+
+    if pattern.update_vertices_attributes(keys=keys):
         scene.update()
 
 
