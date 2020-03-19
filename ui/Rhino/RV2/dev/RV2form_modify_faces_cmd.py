@@ -13,6 +13,7 @@ HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
@@ -24,6 +25,7 @@ def RunCommand(is_interactive):
 
     # add selection options
     # rename to modify
+
     if form.update_faces_attributes():
         scene.update()
 

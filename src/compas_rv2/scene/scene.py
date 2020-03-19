@@ -76,35 +76,35 @@ class Scene(object):
         wrapper = _ITEM_WRAPPER[type(item)]
         return wrapper(item, **kwargs)
 
-    def to_data(self, include=None):
-        if include is None:
-            data = {key: self.nodes[key].diagram.to_data() for key in self.nodes}
-        else:
-            data = {}
-            for name in include:
-                node = self.get(name)
-                data[name] = node.diagram.to_data()
-        data["settings"] = self.settings
-        return data
+    # def to_data(self, include=None):
+    #     if include is None:
+    #         data = {key: self.nodes[key].diagram.to_data() for key in self.nodes}
+    #     else:
+    #         data = {}
+    #         for name in include:
+    #             node = self.get(name)
+    #             data[name] = node.diagram.to_data()
+    #     data["settings"] = self.settings
+    #     return data
 
-    def from_data(self, data):
-        # should this not be done explicitly by the user?
-        self.clear()
-        # this all seems extremely specific to the current case
-        formdata = data.get("form")
-        forcedata = data.get("force")
-        settings = data.get("settings")
-        if settings:
-            self.settings = settings
-        if formdata:
-            form = FormDiagram.from_data(formdata)
-            thrust = form.copy(cls=ThrustDiagram)
-            self.add(form, name='form')
-            self.add(thrust, name='thrust')
-        if forcedata:
-            force = ForceDiagram.from_data(forcedata)
-            force.primal = form
-            self.add(force, name='force')
+    # def from_data(self, data):
+    #     # should this not be done explicitly by the user?
+    #     self.clear()
+    #     # this all seems extremely specific to the current case
+    #     formdata = data.get("form")
+    #     forcedata = data.get("force")
+    #     settings = data.get("settings")
+    #     if settings:
+    #         self.settings = settings
+    #     if formdata:
+    #         form = FormDiagram.from_data(formdata)
+    #         thrust = form.copy(cls=ThrustDiagram)
+    #         self.add(form, name='form')
+    #         self.add(thrust, name='thrust')
+    #     if forcedata:
+    #         force = ForceDiagram.from_data(forcedata)
+    #         force.primal = form
+    #         self.add(force, name='force')
 
 
 # ==============================================================================

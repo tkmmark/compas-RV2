@@ -114,9 +114,6 @@ class PatternObject(object):
             self.artist.draw_edges()
         if settings.get('pattern.show.faces', True):
             self.artist.draw_faces()
-        # self.artist.draw_vertices()
-        # self.artist.draw_edges()
-        # self.artist.draw_faces()
 
 
 # ==============================================================================

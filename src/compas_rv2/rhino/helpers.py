@@ -11,9 +11,11 @@ from compas_rhino.etoforms import TextForm
 __all__ = [
     "is_valid_file",
     "select_filepath_open",
+    "select_filepath_save",
     "get_rv2",
     "get_scene",
     "get_proxy",
+    "get_system",
     "select_vertices",
     "select_edges",
     "select_faces",
@@ -191,6 +193,23 @@ def select_filepath_open(root, ext):
     return filepath
 
 
+def select_filepath_save(root, ext):
+    """Select a filepath for saving a session."""
+    if not root:
+        root = HERE
+
+    dirname = compas_rhino.select_folder(default=root)
+    filename = compas_rhino.rs.GetString('File name (w/o extension!)')
+
+    if not filename:
+        return
+
+    basename = "{}.{}".format(filename, ext)
+    filepath = os.path.join(dirname, basename)
+
+    return filepath
+
+
 def get_rv2():
     if "RV2" not in compas_rhino.sc.sticky:
         form = TextForm('Initialise the plugin first!', 'RV2')
@@ -210,6 +229,14 @@ def get_proxy():
         form.show()
         return None
     return compas_rhino.sc.sticky["RV2.proxy"]
+
+
+def get_system():
+    if "RV2.system" not in compas_rhino.sc.sticky:
+        form = TextForm('Initialise the plugin first!', 'RV2')
+        form.show()
+        return None
+    return compas_rhino.sc.sticky["RV2.system"]
 
 
 # ==============================================================================

@@ -22,10 +22,10 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    horizontal = proxy.package("compas_rv2.equilibrium.horizontal_nodal_proxy")
+    horizontal = proxy.package('compas_rv2.equilibrium.horizontal_nodal_proxy')
 
-    rhinoform = scene.get("form")[0]
-    rhinoforce = scene.get("force")[0]
+    rhinoform = scene.get('form')[0]
+    rhinoforce = scene.get('force')[0]
 
     if not rhinoform:
         return

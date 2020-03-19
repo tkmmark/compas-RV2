@@ -80,7 +80,6 @@ class FormArtist(MeshArtist):
         All edges are named using the following template:
         ``"{}.edge.{}-{}".fromat(self.mesh.name, u, v)``.
         This name is used afterwards to identify edges in the Rhino model.
-
         """
         keys = keys or list(self.mesh.edges())
         colordict = color_to_colordict(color,
@@ -114,27 +113,27 @@ class RhinoFormDiagram(RhinoDiagram):
         self.vertex_attribute_editable('z', True)
 
     def draw(self, settings):
-        self.artist.layer = settings.get("layers.form")
+        self.artist.layer = settings.get('form.layer')
         self.artist.clear_layer()
 
-        if settings.get("show.form.vertices", True):
+        if settings.get('form.show.vertices', True):
             color = {}
-            color.update({key: settings.get("color.form.vertices") for key in self.diagram.vertices()})
-            color.update({key: settings.get("color.form.vertices:is_fixed") for key in self.diagram.vertices_where({'is_fixed': True})})
-            color.update({key: settings.get("color.form.vertices:is_external") for key in self.diagram.vertices_where({'is_external': True})})
-            color.update({key: settings.get("color.form.vertices:is_anchor") for key in self.diagram.vertices_where({'is_anchor': True})})
+            color.update({key: settings.get('form.color.vertices') for key in self.diagram.vertices()})
+            color.update({key: settings.get('form.color.vertices:is_fixed') for key in self.diagram.vertices_where({'is_fixed': True})})
+            color.update({key: settings.get('form.color.vertices:is_external') for key in self.diagram.vertices_where({'is_external': True})})
+            color.update({key: settings.get('form.color.vertices:is_anchor') for key in self.diagram.vertices_where({'is_anchor': True})})
             self.guid_vertices = self.artist.draw_vertices(color=color)
 
-        if settings.get("show.form.edges", True):
+        if settings.get('form.show.edges', True):
             keys = list(self.diagram.edges_where({'is_edge': True}))
             color = {}
             color = {}
             for key in keys:
                 u, v = key
                 if self.diagram.vertex_attribute(u, 'is_external') or self.diagram.vertex_attribute(v, 'is_external'):
-                    color[key] = settings.get("color.form.edges:is_external")
+                    color[key] = settings.get('form.color.edges:is_external')
                 else:
-                    color[key] = settings.get("color.form.edges")
+                    color[key] = settings.get('form.color.edges')
             self.guid_edges = self.artist.draw_edges(keys=keys, color=color)
 
         self.artist.redraw()

@@ -10,6 +10,7 @@ __commandname__ = "RV2settings"
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return

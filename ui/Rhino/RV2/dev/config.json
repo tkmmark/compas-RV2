@@ -64,7 +64,8 @@
             {"name": "RV2equilibrium_horizontal", "menu_text": "Horizontal Equilibrium", "icon": 15},
             {"name": "RV2equilibrium_vertical",   "menu_text": "Vertical Equilibrium",   "icon": 16},
 
-            {"name": "RV2file", "menu_text": "File", "icon": 4},
+            {"name": "RV2file_open", "menu_text": "File Open", "icon": 4},
+            {"name": "RV2file_save", "menu_text": "File Save", "icon": 4},
 
             {"name": "RV2force_create",          "menu_text": "ForceDiagram Create",          "icon": 14},
             {"name": "RV2force_modify_edges",    "menu_text": "ForceDiagram Modify Edges",    "icon": 26},
@@ -116,7 +117,14 @@
                 "items":
                 [
                     {"command": "RV2init"},
-                    {"command": "RV2file"},
+                    {
+                        "name": "File",
+                        "items":
+                        [
+                            {"command": "RV2file_open"},
+                            {"command": "RV2file_save"}
+                        ]
+                    },
                     {
                         "name" : "Settings",
                         "items":
