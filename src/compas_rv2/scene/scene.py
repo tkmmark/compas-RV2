@@ -82,7 +82,7 @@ class Scene(object):
         else:
             data = {}
             for name in include:
-                node = self.get(name)
+                node = self.get(name)[0]
                 data[name] = node.diagram.to_data()
         data["settings"] = self.settings
         return data
