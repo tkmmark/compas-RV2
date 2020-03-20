@@ -32,7 +32,9 @@ def trimesh_remesh_triangle(mesh, target, segments=None):
 
 if __name__ == '__main__':
 
+    from compas.utilities import flatten
     from compas.datastructures import Mesh
+    from compas.datastructures import mesh_smooth_area
     from compas_plotters import MeshPlotter
 
     vertices = [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (6.0, 10.0, 0.0), (0.0, 10.0, 0.0)]
@@ -45,6 +47,8 @@ if __name__ == '__main__':
     segments = list(mesh.edges())
 
     finer = trimesh_remesh_triangle(mesh, area/200, segments=segments)
+
+    mesh_smooth_area(finer, fixed=list(flatten(finer.vertices_on_boundaries())))
 
     plotter = MeshPlotter(finer, figsize=(8, 5))
     plotter.draw_edges()
