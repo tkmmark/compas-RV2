@@ -409,6 +409,20 @@ class Skeleton(Mesh):
 
         return mesh
 
+    def to_pattern(self):
+        from compas_rv2.datastructures import Pattern
+
+        pattern = Pattern()
+        highpoly_mesh = self._subdivide(self.attributes['sub_level'])
+
+        for key, attr in highpoly_mesh.vertices(True):
+            pattern.add_vertex(key, x=attr['x'], y=attr['y'], z=attr['z'])
+
+        for fkey in highpoly_mesh.face:
+            pattern.add_face(highpoly_mesh.face[fkey])
+
+        return pattern
+
     def to_form(self):
         from compas_rv2.datastructures import FormDiagram
 
