@@ -51,15 +51,15 @@ def RunCommand(is_interactive):
 
     pattern = scene.get('pattern')
     if pattern:
-        session['data']['pattern'] = pattern.mesh.to_data()
+        session['data']['pattern'] = pattern.datastructure.to_data()
 
     form = scene.get('form')
     if form:
-        session['data']['form'] = form.diagram.to_data()
+        session['data']['form'] = form.datastructure.to_data()
 
     force = scene.get('force')
     if force:
-        session['data']['force'] = force.diagram.to_data()
+        session['data']['force'] = force.datastructure.to_data()
 
     with open(filepath, 'w+') as f:
         json.dump(session, f, cls=DataEncoder)

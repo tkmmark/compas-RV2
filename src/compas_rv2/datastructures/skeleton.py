@@ -11,8 +11,6 @@ from compas.geometry import centroid_points
 from compas.geometry import Vector
 from compas.geometry import add_vectors
 
-from compas_rv2.diagrams import FormDiagram
-
 import copy
 
 __all__ = ['Skeleton']
@@ -412,16 +410,15 @@ class Skeleton(Mesh):
         return mesh
 
     def to_form(self):
+        from compas_rv2.datastructures import FormDiagram
+
         mesh = self.to_mesh()
-        # form = FormDiagram.from_vertices_and_faces(mesh.vertex, mesh.face)
         xyz = mesh.vertices_attributes('xyz')
         faces = [mesh.face_vertices(fkey) for fkey in mesh.faces()]
         form = FormDiagram.from_vertices_and_faces(xyz, faces)
-
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:
             form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
-
         return form
 
     def to_lines(self):

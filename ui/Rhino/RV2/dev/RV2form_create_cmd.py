@@ -4,8 +4,8 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.diagrams import FormDiagram
-from compas_rv2.diagrams import ThrustDiagram
+from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import ThrustDiagram
 
 __commandname__ = "RV2form_create"
 
@@ -25,7 +25,7 @@ def RunCommand(is_interactive):
         # notify the user
         return
 
-    form = FormDiagram.from_pattern(pattern.mesh)
+    form = FormDiagram.from_pattern(pattern.datastructure)
     thrust = FormDiagram.copy(cls=ThrustDiagram)
 
     scene.add(form, name='form')

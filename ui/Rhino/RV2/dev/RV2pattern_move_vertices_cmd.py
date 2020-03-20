@@ -27,7 +27,7 @@ def RunCommand(is_interactive):
     option = compas_rhino.rs.GetString("Select Vertices", "Boundary", ["Boundary", "Continuous"])
 
     if option == "Boundary":
-        keys = list(pattern.mesh.vertices_on_boundary(chained=False))
+        keys = list(pattern.datastructure.vertices_on_boundary(chained=False))
 
     elif option == "Continuous":
         temp = pattern.select_edges()
@@ -35,7 +35,7 @@ def RunCommand(is_interactive):
             temp[:] = list(set(temp))
             keys = []
             for key in temp:
-                keys += pattern.mesh.continuous_vertices(key)
+                keys += pattern.datastructure.continuous_vertices(key)
 
     else:
         keys = None

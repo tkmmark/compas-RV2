@@ -3,21 +3,16 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import get_scene
-from compas_rv2.datastructures import Pattern
+from compas.utilities import color_to_colordict
+from compas_rhino.artists import MeshArtist
 
 
-__commandname__ = "RV2pattern_from_singularities"
+__all__ = ['ForceArtist']
 
 
-HERE = compas_rhino.get_document_dirname()
+class ForceArtist(MeshArtist):
 
-
-def RunCommand(is_interactive):
-
-    scene = get_scene()
-    if not scene:
-        return
+    pass
 
 
 # ==============================================================================
@@ -25,5 +20,4 @@ def RunCommand(is_interactive):
 # ==============================================================================
 
 if __name__ == "__main__":
-
-    RunCommand(True)
+    pass

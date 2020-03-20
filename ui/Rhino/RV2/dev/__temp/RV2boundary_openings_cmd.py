@@ -31,7 +31,7 @@ def RunCommand(is_interactive):
     # => this function might be redundant
 
     keys = pattern.select_faces()
-    pattern.mesh.faces_attribute('is_unloaded', True, keys=keys)
+    pattern.datastructure.faces_attribute('is_unloaded', True, keys=keys)
 
     scene.update()
 

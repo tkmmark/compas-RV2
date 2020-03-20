@@ -26,7 +26,7 @@ def RunCommand(is_interactive):
     # how about any previously "anchored" vertices?
     # this procedure should allow to select vertices on a curve
     keys = pattern.select_vertices()
-    pattern.mesh.vertices_attribute('is_anchor', True, keys=keys)
+    pattern.datastructure.vertices_attribute('is_anchor', True, keys=keys)
 
     scene.update()
 

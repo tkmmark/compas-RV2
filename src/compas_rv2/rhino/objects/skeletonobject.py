@@ -19,13 +19,13 @@ from System.Drawing.Color import FromArgb
 import rhinoscriptsyntax as rs
 
 
-__all__ = ["RhinoSkeleton"]
+__all__ = ["SkeletonObject"]
 
 
-class RhinoSkeleton(object):
+class SkeletonObject(object):
 
-    def __init__(self, diagram):
-        self.diagram = diagram
+    def __init__(self, skeleton):
+        self.datastructure = skeleton
         # self.draw_skeleton_branches()
 
     def add_lines(self):
@@ -41,10 +41,10 @@ class RhinoSkeleton(object):
             return
         lines = compas_rhino.get_line_coordinates(guids)
         rs.DeleteObjects(guids)
-        self.diagram.add_skeleton_lines(lines)
+        self.datastructure.add_skeleton_lines(lines)
 
     def remove_lines(self):
-        skeleton_branches = self.diagram.skeleton_branches()
+        skeleton_branches = self.datastructure.skeleton_branches()
         branch_names = []
         for branch in skeleton_branches:
             branch_names.append('Mesh.edge.{0}-{1}'.format(branch[0], branch[1]))
@@ -69,13 +69,13 @@ class RhinoSkeleton(object):
             branch = (int(name[-3]), int(name[-1]))
             remove_branches.append(branch)
 
-        self.diagram.remove_skeleton_lines(remove_branches)
+        self.datastructure.remove_skeleton_lines(remove_branches)
 
     def dynamic_draw_self(self):
         """ Update the skeleton leaf width and node width with dynamic draw. """
-        if self.diagram.skeleton_vertices()[1] != []:
+        if self.datastructure.skeleton_vertices()[1] != []:
             self.dynamic_draw('both_width')
-            artist = MeshArtist(self.diagram.to_mesh())
+            artist = MeshArtist(self.datastructure.to_mesh())
             artist.layer = 'RV2::Skeleton::diagram_edges'
             artist.clear_layer()
             artist.draw_edges()
@@ -88,12 +88,12 @@ class RhinoSkeleton(object):
 
         gp = Rhino.Input.Custom.GetPoint()
         if flag == 'node_width':
-            node_vertex = self.diagram.skeleton_vertices()[0][0]
-            sp = Point3d(*(self.diagram.vertex_coordinates(node_vertex)))
+            node_vertex = self.datastructure.skeleton_vertices()[0][0]
+            sp = Point3d(*(self.datastructure.vertex_coordinates(node_vertex)))
             gp.SetCommandPrompt('select the node vertex')
         else:
-            leaf_vertex = self.diagram.skeleton_vertices()[1][0]
-            sp = Point3d(*(self.diagram.vertex_coordinates(leaf_vertex)))
+            leaf_vertex = self.datastructure.skeleton_vertices()[1][0]
+            sp = Point3d(*(self.datastructure.vertex_coordinates(leaf_vertex)))
             gp.SetCommandPrompt('select the leaf vertex')
 
         gp.SetBasePoint(sp, False)
@@ -116,8 +116,8 @@ class RhinoSkeleton(object):
             dist = cp.DistanceTo(sp)
             e.Display.Draw2dText(str(dist), FromArgb(0, 0, 0), mp, False, 20)
 
-            self.diagram._update_width(dist, flag)
-            self.diagram.update_mesh_vertices_pos()
+            self.datastructure._update_width(dist, flag)
+            self.datastructure.update_mesh_vertices_pos()
             lines = self._get_edge_lines_in_rhino()
 
             for line in lines:
@@ -126,15 +126,15 @@ class RhinoSkeleton(object):
         if flag != 'node_width':
             u = leaf_vertex
             v = None
-            for key in self.diagram.halfedge[u]:
-                if self.diagram.vertex[key]['type'] == 'skeleton_node':
+            for key in self.datastructure.halfedge[u]:
+                if self.datastructure.vertex[key]['type'] == 'skeleton_node':
                     v = key
 
-            vec_along_edge = Vector(*(self.diagram.edge_vector(v, u)))
+            vec_along_edge = Vector(*(self.datastructure.edge_vector(v, u)))
             vec_offset = vec_along_edge.cross(Vector.Zaxis())
             vec_rhino = Rhino.Geometry.Vector3d(vec_offset[0], vec_offset[1], vec_offset[2])
 
-            pt_leaf = Point3d(*(self.diagram.vertex_coordinates(u)))
+            pt_leaf = Point3d(*(self.datastructure.vertex_coordinates(u)))
             line = Line(pt_leaf, vec_rhino)
             gp.Constrain(line)
 
@@ -144,14 +144,14 @@ class RhinoSkeleton(object):
         ep = gp.Point()
         dist = ep.DistanceTo(sp)
 
-        self.diagram._update_width(dist, flag)
-        self.diagram.update_mesh_vertices_pos()
+        self.datastructure._update_width(dist, flag)
+        self.datastructure.update_mesh_vertices_pos()
 
     def move_skeleton_vertex(self):
         """ Change the position of a skeleton vertex and update all the other vertices. """
-        key = mesh_select_vertex(self.diagram)
-        if self.diagram.vertex[key]['type'] == 'skeleton_node' or self.diagram.vertex[key]['type'] == 'skeleton_leaf':
-            mesh_move_vertex(self.diagram, key)
+        key = mesh_select_vertex(self.datastructure)
+        if self.datastructure.vertex[key]['type'] == 'skeleton_node' or self.datastructure.vertex[key]['type'] == 'skeleton_leaf':
+            mesh_move_vertex(self.datastructure, key)
             self.update_diagram()
         else:
             print('Not a skeleton vertex! Please select again:')
@@ -162,15 +162,15 @@ class RhinoSkeleton(object):
         Notice that by this function, change of selected vertex won't affect others.
         This is different from the Skeleton.move_skeleton_vertex().
         """
-        keys = mesh_select_vertex(self.diagram)
-        mesh_move_vertex(self.diagram, keys)
+        keys = mesh_select_vertex(self.datastructure)
+        mesh_move_vertex(self.datastructure, keys)
 
     def update_diagram(self):
-        self.diagram.update_mesh_vertices_pos()
+        self.datastructure.update_mesh_vertices_pos()
 
     def _get_edge_lines_in_rhino(self):
         """ Get rhino object lines for dynamic darw. """
-        sub_mesh = self.diagram.to_mesh()
+        sub_mesh = self.datastructure.to_mesh()
         edge_lines = []
         for u, v in sub_mesh.edges():
             pts = sub_mesh.edge_coordinates(u, v)
@@ -180,19 +180,19 @@ class RhinoSkeleton(object):
         return edge_lines
 
     def draw_skeleton_branches(self):
-        skeleton_vertices = self.diagram.skeleton_vertices()[0] + self.diagram.skeleton_vertices()[1]
-        skeleton_branches = self.diagram.skeleton_branches()
+        skeleton_vertices = self.datastructure.skeleton_vertices()[0] + self.datastructure.skeleton_vertices()[1]
+        skeleton_branches = self.datastructure.skeleton_branches()
 
         pts = []
         for key in skeleton_vertices:
-            pts.append({'pos': self.diagram.vertex_coordinates(key), 'color': (255, 0, 0)})
+            pts.append({'pos': self.datastructure.vertex_coordinates(key), 'color': (255, 0, 0)})
         draw_points(pts, layer='RV2::Skeleton::skeleton_vertices', clear=True, redraw=False)
 
         lines = []
         for u, v in skeleton_branches:
             lines.append({
-                'start': self.diagram.vertex_coordinates(u),
-                'end': self.diagram.vertex_coordinates(v),
+                'start': self.datastructure.vertex_coordinates(u),
+                'end': self.datastructure.vertex_coordinates(v),
                 'color': (0, 255, 0)
             })
         draw_lines(lines, layer='RV2::Skeleton::skeleton_edges', clear=True, redraw=True)
@@ -205,11 +205,11 @@ class RhinoSkeleton(object):
             low poly mesh vertices
             high poly mesh edges
         """
-        skeleton_vertices = self.diagram.skeleton_vertices()[0] + self.diagram.skeleton_vertices()[1]
-        skeleton_branches = self.diagram.skeleton_branches()
-        boundary_vertices = list(set(range(0, self.diagram.number_of_vertices())) - set(skeleton_vertices))
+        skeleton_vertices = self.datastructure.skeleton_vertices()[0] + self.datastructure.skeleton_vertices()[1]
+        skeleton_branches = self.datastructure.skeleton_branches()
+        boundary_vertices = list(set(range(0, self.datastructure.number_of_vertices())) - set(skeleton_vertices))
 
-        artist = MeshArtist(self.diagram)
+        artist = MeshArtist(self.datastructure)
 
         artist.layer = 'RV2::Skeleton::skeleton_vertices'
         artist.clear_layer()
@@ -220,7 +220,7 @@ class RhinoSkeleton(object):
             artist.clear_layer()
             artist.draw_edges(keys=skeleton_branches, color=(0, 255, 0))
 
-        artist = MeshArtist(self.diagram.to_mesh())
+        artist = MeshArtist(self.datastructure.to_mesh())
 
         artist.layer = 'RV2::Skeleton::diagram_vertices'
         artist.clear_layer()
@@ -232,7 +232,7 @@ class RhinoSkeleton(object):
         artist.redraw()
 
     def draw_rhino_mesh(self):
-        artist = MeshArtist(self.diagram.to_mesh())
+        artist = MeshArtist(self.datastructure.to_mesh())
         artist.layer = 'RV2::Skeleton::mesh'
         artist.draw_mesh()
         artist.redraw()
@@ -247,16 +247,16 @@ class RhinoSkeleton(object):
             elif operation == 'move_diagram':
                 self.move_diagram_vertex()
             elif operation == 'leaf_width':
-                if self.diagram.skeleton_vertices()[1] != []:
+                if self.datastructure.skeleton_vertices()[1] != []:
                     self.dynamic_draw('leaf_width')
                 else:
                     print('this skeleton doesn\'t have any leaf!')
             elif operation == 'node_width':
                 self.dynamic_draw('node_width')
             elif operation == 'subdivide':
-                self.diagram.subdivide(k=1)
+                self.datastructure.subdivide(k=1)
             elif operation == 'merge':
-                self.diagram.merge(k=1)
+                self.datastructure.merge(k=1)
             elif operation == 'add_lines':
                 self.add_lines()
             elif operation == 'remove_lines':
@@ -265,7 +265,7 @@ class RhinoSkeleton(object):
             # elif operation == 'export':
             #     rs.PurgeLayer('RV2::Skeleton::skeleton_vertices')
             #     rs.PurgeLayer('RV2::Skeleton::diagram_vertices')
-            #     diagram = self.diagram.to_mesh()
+            #     diagram = self.datastructure.to_mesh()
             #     mesh_draw_edges(diagram, layer='form diagram')
             #     mesh_draw_vertices(diagram, color=(0, 0, 255), layer='form diagram')
             elif operation == 'stop':

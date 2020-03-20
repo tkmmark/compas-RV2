@@ -33,10 +33,10 @@ def RunCommand(is_interactive):
     if not rhinoforce:
         return
 
-    formdata, forcedata = horizontal(rhinoform.diagram.data, rhinoforce.diagram.data)
+    formdata, forcedata = horizontal(rhinoform.datastructure.data, rhinoforce.datastructure.data)
 
-    rhinoform.diagram.data = formdata
-    rhinoforce.diagram.data = forcedata
+    rhinoform.datastructure.data = formdata
+    rhinoforce.datastructure.data = forcedata
 
     scene.update()
 

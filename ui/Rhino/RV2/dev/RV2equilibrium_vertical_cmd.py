@@ -39,11 +39,11 @@ def RunCommand(is_interactive):
 
     zmax = scene.settings['tna.vertical.zmax']
 
-    formdata, scale = vertical(rhinoform.diagram.data, zmax)
+    formdata, scale = vertical(rhinoform.datastructure.data, zmax)
 
-    rhinoforce.diagram.attributes['scale'] = scale
-    rhinoform.diagram.data = formdata
-    rhinothrust.diagram.data = formdata
+    rhinoforce.datastructure.attributes['scale'] = scale
+    rhinoform.datastructure.data = formdata
+    rhinothrust.datastructure.data = formdata
     rhinothrust.visible = True
 
     scene.update()

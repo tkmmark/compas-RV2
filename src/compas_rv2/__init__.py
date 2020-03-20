@@ -9,6 +9,10 @@ compas_rv2
 .. toctree::
     :maxdepth: 1
 
+    compas_rv2.datastructures
+    compas_rv2.equilibrium
+    compas_rv2.rhino
+    compas_rv2.scene
 
 """
 

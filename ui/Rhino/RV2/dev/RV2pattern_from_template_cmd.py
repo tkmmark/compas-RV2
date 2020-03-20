@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.patterns import Pattern
+from compas_rv2.datastructures import Pattern
 
 
 __commandname__ = "RV2pattern_from_template"

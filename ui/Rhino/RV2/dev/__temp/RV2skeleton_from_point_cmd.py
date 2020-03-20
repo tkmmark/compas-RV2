@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.skeleton import Skeleton
+from compas_rv2.datastructures import Skeleton
 
 
 __commandname__ = "RV2skeleton_from_point"

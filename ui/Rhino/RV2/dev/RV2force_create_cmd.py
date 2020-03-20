@@ -3,12 +3,13 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.diagrams import ForceDiagram
-from compas_rv2.rhino import get_scene
-from compas_rv2.rhino import RhinoForceDiagram
+
 from compas.geometry import subtract_vectors
 from compas.geometry import scale_vector
 from compas.geometry import Translation
+
+from compas_rv2.datastructures import ForceDiagram
+from compas_rv2.rhino import get_scene
 
 
 __commandname__ = "RV2force_create"
@@ -28,7 +29,7 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    force = ForceDiagram.from_formdiagram(form.diagram)
+    force = ForceDiagram.from_formdiagram(form.datastructure)
 
     bbox = force.bounding_box()
 

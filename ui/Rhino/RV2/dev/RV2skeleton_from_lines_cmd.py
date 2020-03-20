@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.skeleton import Skeleton
+from compas_rv2.datastructures import Skeleton
 from compas_rv2.rhino import RhinoSkeleton
 
 
@@ -34,6 +34,7 @@ def RunCommand(is_interactive):
     rhinoskeleton.draw_skeleton_branches()
     rhinoskeleton.dynamic_draw_self()
     rhinoskeleton.draw_self()
+
 
 # ==============================================================================
 # Main

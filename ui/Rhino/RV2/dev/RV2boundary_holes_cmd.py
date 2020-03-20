@@ -27,7 +27,7 @@ def RunCommand(is_interactive):
     # how about any previously identified holes?
 
     keys = pattern.select_faces()
-    pattern.mesh.faces_attribute('is_unloaded', True, keys=keys)
+    pattern.datastructure.faces_attribute('is_unloaded', True, keys=keys)
 
     scene.update()
 

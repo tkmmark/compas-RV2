@@ -17,27 +17,17 @@ __all__ = ['Scene',]
 _ITEM_WRAPPER = {}
 
 
-# class SceneNode(object):
-
-#     def __init__(self, scene, item, **kwargs):
-#         self.scene = scene
-#         self.item = item
-#         self.artist = Artist.build(item, **kwargs)
-#         self.nodes = []
-
-
+# ventually, this should inherit from the base scene object in COMPAS
 class Scene(object):
 
     def __init__(self, settings={}):
         self.nodes = {}
         self.settings = settings
 
-    def add(self, item, name=None, visible=True, **kwargs):
+    def add(self, item, **kwargs):
         node = Scene.build(item, **kwargs)
         _id = uuid.uuid4()
         self.nodes[_id] = node
-        node.name = name
-        node.visible = visible
         return node
 
     def get(self, name):
@@ -58,6 +48,8 @@ class Scene(object):
                 node.draw(self.settings)
         compas_rhino.rs.EnableRedraw(True)
 
+    # this should be related to clearing objects by GUID
+    # layer clearing should be deferred to the objects/artists
     def clear(self):
         layers = [self.settings[name] for name in self.settings if name.startswith("layers")]
         compas_rhino.clear_layers(layers)
@@ -67,6 +59,7 @@ class Scene(object):
     def update_settings(self, settings=None):
         return compas_rhino.update_settings(settings or self.settings)
 
+    # register object_type AND artist_type (or register artist_type with object_type)
     @staticmethod
     def register(item_type, wrapper_type):
         _ITEM_WRAPPER[item_type] = wrapper_type

@@ -34,8 +34,8 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    fixed = list(pattern.mesh.vertices_where({'is_fixed': True}))
-    pattern.mesh.data = relax(pattern.mesh.data, fixed)
+    fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
+    pattern.datastructure.data = relax(pattern.datastructure.data, fixed)
 
     scene.update()
 

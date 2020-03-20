@@ -4,12 +4,10 @@ from __future__ import division
 
 import compas_rhino
 from compas.utilities import color_to_colordict
-
 from compas_rhino.artists import MeshArtist
-from compas_rv2.rhino import RhinoDiagram
 
 
-__all__ = ["RhinoFormDiagram"]
+__all__ = ['FormArtist']
 
 
 class FormArtist(MeshArtist):
@@ -100,48 +98,9 @@ class FormArtist(MeshArtist):
         return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
 
 
-class RhinoFormDiagram(RhinoDiagram):
-
-    def __init__(self, diagram):
-        super(RhinoFormDiagram, self).__init__(diagram)
-        self.artist = FormArtist(self.diagram)
-
-        self.vertex_attribute_editable('is_anchor', True)
-        self.vertex_attribute_editable('is_fixed', True)
-        self.vertex_attribute_editable('x', True)
-        self.vertex_attribute_editable('y', True)
-        self.vertex_attribute_editable('z', True)
-
-    def draw(self, settings):
-        self.artist.layer = settings.get('form.layer')
-        self.artist.clear_layer()
-
-        if settings.get('form.show.vertices', True):
-            color = {}
-            color.update({key: settings.get('form.color.vertices') for key in self.diagram.vertices()})
-            color.update({key: settings.get('form.color.vertices:is_fixed') for key in self.diagram.vertices_where({'is_fixed': True})})
-            color.update({key: settings.get('form.color.vertices:is_external') for key in self.diagram.vertices_where({'is_external': True})})
-            color.update({key: settings.get('form.color.vertices:is_anchor') for key in self.diagram.vertices_where({'is_anchor': True})})
-            self.guid_vertices = self.artist.draw_vertices(color=color)
-
-        if settings.get('form.show.edges', True):
-            keys = list(self.diagram.edges_where({'is_edge': True}))
-            color = {}
-            color = {}
-            for key in keys:
-                u, v = key
-                if self.diagram.vertex_attribute(u, 'is_external') or self.diagram.vertex_attribute(v, 'is_external'):
-                    color[key] = settings.get('form.color.edges:is_external')
-                else:
-                    color[key] = settings.get('form.color.edges')
-            self.guid_edges = self.artist.draw_edges(keys=keys, color=color)
-
-        self.artist.redraw()
-
-
 # ==============================================================================
 # Main
 # ==============================================================================
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

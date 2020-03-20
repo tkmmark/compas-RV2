@@ -26,7 +26,7 @@ def RunCommand(is_interactive):
     option = compas_rhino.rs.GetString("Select Edges", "Boundary", ["Boundary", "Continuous", "Parallel"])
 
     if option == "Boundary":
-        keys = list(pattern.mesh.edges_on_boundary())
+        keys = list(pattern.datastructure.edges_on_boundary())
 
     elif option == "Continuous":
         temp = pattern.select_edges()
@@ -34,7 +34,7 @@ def RunCommand(is_interactive):
             temp[:] = list(set(temp))
             keys = []
             for key in temp:
-                keys += pattern.mesh.continuous_edges(key)
+                keys += pattern.datastructure.continuous_edges(key)
 
     elif option == "Parallel":
         temp = pattern.select_edges()
@@ -42,7 +42,7 @@ def RunCommand(is_interactive):
             temp[:] = list(set(temp))
             keys = []
             for key in temp:
-                keys += pattern.mesh.parallel_edges(key)
+                keys += pattern.datastructure.parallel_edges(key)
 
     else:
         keys = None

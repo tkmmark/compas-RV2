@@ -7,7 +7,7 @@ import os
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_rv2
-from compas_rv2.diagrams import FormDiagram
+from compas_rv2.datastructures import FormDiagram
 from compas_rv2.rhino import RhinoFormDiagram
 from compas_rv2.rhino import RhinoThrustDiagram
 
