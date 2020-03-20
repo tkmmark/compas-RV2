@@ -55,7 +55,7 @@ class Scene(object):
 
     def update_settings(self, settings=None):
         # return compas_rhino.update_settings(settings or self.settings)
-        SettingsForm.from_settings(scene.settings)
+        SettingsForm.from_settings(self.settings)
 
     # register object_type AND artist_type (or register artist_type with object_type)
     @staticmethod
