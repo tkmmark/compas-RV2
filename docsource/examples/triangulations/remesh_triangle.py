@@ -8,22 +8,28 @@ except ImportError:
     pass
 
 from compas.utilities import pairwise
+from compas.utilities import flatten
 from compas.geometry import centroid_points_xy
 
 
-__all__ = ['trimesh_remesh_triangle']
+__all__ = ['remesh_triangle']
 
 
-def trimesh_remesh_triangle(mesh, target, segments=None):
-    tri = {
-        'vertices': list(mesh.vertices_attributes('xy')),
-        'segments': segments,
-    }
-    result = triangulate(tri, opts='pa{}q'.format(target))
+def remesh_triangle(vertices, target, boundary=None):
+    vertices = [vertex[:2] for vertex in vertices]
+
+    if boundary:
+        data = {'vertices': vertices, 'segments': boundary}
+        result = triangulate(data, opts='pa{}q'.format(target))
+
+    else:
+        data = {'vertices': vertices}
+        result = triangulate(data, opts='a{}q'.format(target))
+
     vertices = [[x, y, 0] for x, y in result['vertices']]
     triangles = result['triangles'].tolist()
-    cls = type(mesh)
-    return cls.from_vertices_and_faces(vertices, triangles)
+
+    return vertices, triangles
 
 
 # ==============================================================================
@@ -32,24 +38,23 @@ def trimesh_remesh_triangle(mesh, target, segments=None):
 
 if __name__ == '__main__':
 
-    from compas.utilities import flatten
+    from compas.geometry import Polygon
     from compas.datastructures import Mesh
-    from compas.datastructures import mesh_smooth_area
+    from compas.utilities import pairwise
     from compas_plotters import MeshPlotter
 
-    vertices = [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (6.0, 10.0, 0.0), (0.0, 10.0, 0.0)]
-    faces = [[0, 1, 2, 3]]
+    points = [(0.0, 0.0, 0.0), (10.0, 0.0, 0.0), (6.0, 10.0, 0.0), (0.0, 10.0, 0.0)]
+    polygon = Polygon(points)
+
+    p = len(points)
+
+    area = polygon.area
+    boundary = list(pairwise(range(p))) + [(p - 1, 0)]
+
+    vertices, faces = remesh_triangle(polygon.points, area/500, boundary=boundary)
 
     mesh = Mesh.from_vertices_and_faces(vertices, faces)
-    key = mesh.insert_vertex(0)
 
-    area = sum(mesh.face_area(fkey) for fkey in mesh.faces()) / mesh.number_of_faces()
-    segments = list(mesh.edges())
-
-    finer = trimesh_remesh_triangle(mesh, area/200, segments=segments)
-
-    mesh_smooth_area(finer, fixed=list(flatten(finer.vertices_on_boundaries())))
-
-    plotter = MeshPlotter(finer, figsize=(8, 5))
-    plotter.draw_edges()
+    plotter = MeshPlotter(mesh, figsize=(8, 5))
+    plotter.draw_faces()
     plotter.show()
