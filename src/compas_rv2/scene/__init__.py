@@ -10,18 +10,18 @@ from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.datastructures import ThrustDiagram
 
-from compas_rv2.rhino import RhinoFormDiagram
-from compas_rv2.rhino import RhinoForceDiagram
-from compas_rv2.rhino import RhinoThrustDiagram
-from compas_rv2.rhino import RhinoSkeleton
+from compas_rv2.rhino import SkeletonObject
 from compas_rv2.rhino import PatternObject
+from compas_rv2.rhino import FormObject
+from compas_rv2.rhino import ForceObject
+from compas_rv2.rhino import ThrustObject
 
 
-Scene.register(Skeleton, RhinoSkeleton)
+Scene.register(Skeleton, SkeletonObject)
 Scene.register(Pattern, PatternObject)
-Scene.register(FormDiagram, RhinoFormDiagram)
-Scene.register(ForceDiagram, RhinoForceDiagram)
-Scene.register(ThrustDiagram, RhinoThrustDiagram)
+Scene.register(FormDiagram, FormObject)
+Scene.register(ForceDiagram, ForceObject)
+Scene.register(ThrustDiagram, ThrustObject)
 
 
 __all__ = [name for name in dir() if not name.startswith('_')]

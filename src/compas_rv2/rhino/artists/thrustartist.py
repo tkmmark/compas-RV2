@@ -5,7 +5,6 @@ from __future__ import division
 import compas_rhino
 from compas.geometry import add_vectors
 from compas.geometry import scale_vector
-from compas.utilities import color_to_colordict
 from compas_rhino.artists import MeshArtist
 
 

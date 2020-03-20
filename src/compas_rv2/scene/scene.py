@@ -3,21 +3,16 @@ from __future__ import division
 from __future__ import print_function
 
 import compas_rhino
-from compas_rhino.artists import Artist
 import uuid
 
-from compas_rv2.diagrams import FormDiagram
-from compas_rv2.diagrams import ForceDiagram
-from compas_rv2.diagrams import ThrustDiagram
 
-
-__all__ = ['Scene',]
+__all__ = ['Scene']
 
 
 _ITEM_WRAPPER = {}
 
 
-# ventually, this should inherit from the base scene object in COMPAS
+# eventually, this should inherit from the base scene object in COMPAS
 class Scene(object):
 
     def __init__(self, settings={}):

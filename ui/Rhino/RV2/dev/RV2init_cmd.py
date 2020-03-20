@@ -8,9 +8,10 @@ import scriptcontext as sc
 try:
     import compas        # noqa: F401
     import compas_rhino  # noqa: F401
+    import compas_cloud  # noqa: F401
     import compas_ags    # noqa: F401
     import compas_tna    # noqa: F401
-    import compas_cloud  # noqa: F401
+    import compas_rv2    # noqa: F401
 
 except ImportError:
     # do something here to fix the problem
