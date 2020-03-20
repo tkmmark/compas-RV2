@@ -14,7 +14,7 @@ __all__ = ['Scene']
 _ITEM_WRAPPER = {}
 
 
-# ventually, this should inherit from the base scene object in COMPAS
+# eventually, this should inherit from the base scene object in COMPAS
 class Scene(object):
 
     def __init__(self, settings={}):
@@ -22,7 +22,7 @@ class Scene(object):
         self.settings = settings
 
     def add(self, item, **kwargs):
-        node = Scene.build(item, **kwargs)
+        node = Scene.build(self, item, **kwargs)
         _id = uuid.uuid4()
         self.nodes[_id] = node
         return node
@@ -63,9 +63,9 @@ class Scene(object):
         _ITEM_WRAPPER[item_type] = wrapper_type
 
     @staticmethod
-    def build(item, **kwargs):
+    def build(scene, item, **kwargs):
         wrapper = _ITEM_WRAPPER[type(item)]
-        return wrapper(item, **kwargs)
+        return wrapper(scene, item, **kwargs)
 
 
 # ==============================================================================
