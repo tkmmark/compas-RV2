@@ -19,11 +19,12 @@ def RunCommand(is_interactive):
         return
 
     force = scene.get("force")[0]
-
     if not force:
         return
 
-    if force.move_vertices():
+    keys = force.select_vertices()
+
+    if force.move_vertices(keys):
         scene.update()
 
 
