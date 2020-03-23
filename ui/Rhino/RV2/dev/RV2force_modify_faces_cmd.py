@@ -19,14 +19,13 @@ def RunCommand(is_interactive):
         return
 
     force = scene.get("force")[0]
-
     if not force:
         return
 
-    # add selection options
-    # rename to modify
+    keys = force.select_faces()
 
-    if force.update_faces_attributes():
+    public = [name for name in force.datastructures.default_face_attributes.keys() if not name.startswith('_')]
+    if force.update_faces_attributes(keys, names=public):
         scene.update()
 
 

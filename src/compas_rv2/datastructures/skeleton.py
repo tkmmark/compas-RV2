@@ -409,17 +409,19 @@ class Skeleton(Mesh):
 
         return mesh
 
-    def to_form(self):
-        from compas_rv2.datastructures import FormDiagram
+    def to_pattern(self):
+        from compas_rv2.datastructures import Pattern
 
         mesh = self.to_mesh()
         xyz = mesh.vertices_attributes('xyz')
         faces = [mesh.face_vertices(fkey) for fkey in mesh.faces()]
-        form = FormDiagram.from_vertices_and_faces(xyz, faces)
+        pattern = Pattern.from_vertices_and_faces(xyz, faces)
+
         anchor_vertices = self.get_anchor_vertices()
         if anchor_vertices != []:
-            form.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
-        return form
+            pattern.vertices_attributes(['is_anchor', 'is_fixed'], [True, True], keys=anchor_vertices)
+
+        return pattern
 
     def to_lines(self):
         lines = []

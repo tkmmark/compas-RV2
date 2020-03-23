@@ -2,99 +2,28 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-from compas.utilities import pairwise
-from compas_tna.diagrams import ForceDiagram as _ForceDiagram
+from compas_tna.diagrams import ForceDiagram
+from compas_rv2.datastructures.meshmixin import MeshMixin
 
 
 __all__ = ['ForceDiagram']
 
 
-class ForceDiagram(_ForceDiagram):
+class ForceDiagram(MeshMixin, ForceDiagram):
+    """The RV2 ForceDiagram.
 
-    def continuous_vertices(self, uv):
-        vertices = []
-        current, previous = uv
-        while True:
-            vertices.append(current)
-            nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
-                break
-            i = nbrs.index(previous)
-            previous = current
-            current = nbrs[i - 2]
-        vertices[:] = vertices[::-1]
-        previous, current = uv
-        while True:
-            vertices.append(current)
-            nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
-                break
-            i = nbrs.index(previous)
-            previous = current
-            current = nbrs[i - 2]
-        return vertices
+    Examples
+    --------
+    The :class:`ForceDiagram` is constructed from the :class:`FormDiagram` using
+    :func:`ForceDiagram.from_formdiagram`. In RV2 this is dones as part of the
+    TNA initialisation process.
 
-    def continuous_edges(self, uv):
-        vertices = self.continuous_vertices(uv)
-        return list(pairwise(vertices))
+    >>> form = FormDiagram.from_pattern(pattern)
+    >>> force = FroceDiagram.from_formdiagram(form)
 
-    def parallel_edges(self, uv):
-        edges = []
-        v, u = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            edges.append((u, v))
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        edges[:] = edges[::-1]
-        u, v = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            edges.append((u, v))
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        return edges
-
-    def parallel_faces(self, uv):
-        faces = []
-        v, u = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            faces.append(fkey)
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        faces[:] = faces[::-1]
-        u, v = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            faces.append(fkey)
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        return faces
+    Note that these two diagrams are dual, but not reciprocal.
+    To make them reciprocal, run :func:`horizontal_nodal_proxy`.
+    """
 
 
 # ==============================================================================

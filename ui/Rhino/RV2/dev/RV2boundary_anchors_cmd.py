@@ -4,7 +4,6 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.rhino import select_vertices
 
 
 __commandname__ = "RV2boundary_anchors"
@@ -23,8 +22,6 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    # how about any previously "anchored" vertices?
-    # this procedure should allow to select vertices on a curve
     keys = pattern.select_vertices()
     pattern.datastructure.vertices_attribute('is_anchor', True, keys=keys)
 

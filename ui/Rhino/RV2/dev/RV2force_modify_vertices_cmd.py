@@ -19,14 +19,13 @@ def RunCommand(is_interactive):
         return
 
     force = scene.get("force")[0]
-
     if not force:
         return
 
-    # add selection options
-    # rename to modify
+    keys = force.select_vertices()
 
-    if force.update_vertices_attributes():
+    public = [name for name in force.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+    if force.update_vertices_attributes(keys, names=public):
         scene.update()
 
 

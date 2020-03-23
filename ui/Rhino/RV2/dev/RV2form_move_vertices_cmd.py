@@ -20,13 +20,12 @@ def RunCommand(is_interactive):
         return
 
     form = scene.get("form")[0]
-
     if not form:
         return
 
-    # add selection options
+    keys = form.select_vertices()
 
-    if form.move_vertices():
+    if form.move_vertices(keys):
         scene.update()
 
 

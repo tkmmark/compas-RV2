@@ -45,17 +45,22 @@ class Scene(object):
                 node.draw(self.settings)
         compas_rhino.rs.EnableRedraw(True)
 
-    # this should be related to clearing objects by GUID
-    # layer clearing should be deferred to the objects/artists
     def clear(self):
-        layers = [self.settings[name] for name in self.settings if name.startswith("layers")]
-        compas_rhino.clear_layers(layers)
-        # TODO: maybe clear and dispose each nodes first
+        for key in list(self.nodes.keys()):
+            node = self.nodes[key]
+            node.clear()
+            del self.nodes[key]
         self.nodes = {}
 
     def update_settings(self, settings=None):
-        # return compas_rhino.update_settings(settings or self.settings)
-        SettingsForm.from_settings(scene.settings)
+        # should this not produce some kind of result we can react to?
+        SettingsForm.from_settings(self.settings)
+
+    def clear_selection(self):
+        compas_rhino.rs.UnselectAllObjects()
+
+    def update_selection(self, guids):
+        compas_rhino.rs.SelectObjects(guids)
 
     # register object_type AND artist_type (or register artist_type with object_type)
     @staticmethod

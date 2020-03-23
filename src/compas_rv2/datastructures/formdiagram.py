@@ -2,99 +2,44 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-from compas.utilities import pairwise
-from compas_tna.diagrams import FormDiagram as _FormDiagram
+from compas_tna.diagrams import FormDiagram
+from compas_rv2.datastructures.meshmixin import MeshMixin
 
 
 __all__ = ['FormDiagram']
 
 
-class FormDiagram(_FormDiagram):
+class FormDiagram(MeshMixin, FormDiagram):
+    """The RV2 FormDiagram.
 
-    def continuous_vertices(self, uv):
-        vertices = []
-        current, previous = uv
-        while True:
-            vertices.append(current)
-            nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
-                break
-            i = nbrs.index(previous)
-            previous = current
-            current = nbrs[i - 2]
-        vertices[:] = vertices[::-1]
-        previous, current = uv
-        while True:
-            vertices.append(current)
-            nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
-                break
-            i = nbrs.index(previous)
-            previous = current
-            current = nbrs[i - 2]
-        return vertices
+    Examples
+    --------
+    In RV2, a FormDiagram is created from a Pattern.
+    The Pattern contains all information to be able to initialise the form diagram
+    and update its boundaries.
 
-    def continuous_edges(self, uv):
-        vertices = self.continuous_vertices(uv)
-        return list(pairwise(vertices))
+    >>> form = FormDiagram.from_pattern(pattern)
+    """
 
-    def parallel_edges(self, uv):
-        edges = []
-        v, u = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            edges.append((u, v))
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        edges[:] = edges[::-1]
-        u, v = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            edges.append((u, v))
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        return edges
+    @classmethod
+    def from_pattern(cls, pattern, feet=2):
+        """Construct a FormDiagram from a Pattern.
 
-    def parallel_faces(self, uv):
-        faces = []
-        v, u = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            faces.append(fkey)
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        faces[:] = faces[::-1]
-        u, v = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            faces.append(fkey)
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        return faces
+        Parameters
+        ----------
+        pattern : :class:`compas_rv2.datastructures.Pattern`
+            The input pattern.
+        feet : {1, 2}, optional
+            The number of feet to be added to the anchor vertices.
+
+        Returns
+        -------
+        :class:`compas_rv2.datastructures.FormDiagram`
+            The form diagram.
+        """
+        form = cls.from_mesh(pattern)
+        form.update_boundaries(feet=feet)
+        return form
 
 
 # ==============================================================================

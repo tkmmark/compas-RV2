@@ -36,4 +36,4 @@ DOCS = os.path.abspath(os.path.join(HOME, 'docs'))
 TEMP = os.path.abspath(os.path.join(HOME, 'temp'))
 
 
-__all__ = ['HOME', 'DATA', 'DOCS', 'TEMP']
+# __all__ = ['HOME', 'DATA', 'DOCS', 'TEMP']

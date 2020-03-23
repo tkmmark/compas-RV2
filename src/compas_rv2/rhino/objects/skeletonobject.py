@@ -22,6 +22,10 @@ import rhinoscriptsyntax as rs
 __all__ = ["SkeletonObject"]
 
 
+# needs to have a draw function
+# needs to have a clear funtion
+# needs to keep track of guids
+
 class SkeletonObject(object):
 
     def __init__(self, skeleton):
@@ -36,6 +40,7 @@ class SkeletonObject(object):
         except:  # noqa E722
             pass
 
+        # why are the input lines deleted?
         guids = compas_rhino.select_lines()
         if not guids:
             return
@@ -195,6 +200,8 @@ class SkeletonObject(object):
                 'end': self.datastructure.vertex_coordinates(v),
                 'color': (0, 255, 0)
             })
+
+        # store the guids?
         draw_lines(lines, layer='RV2::Skeleton::skeleton_edges', clear=True, redraw=True)
 
     def draw_self(self):

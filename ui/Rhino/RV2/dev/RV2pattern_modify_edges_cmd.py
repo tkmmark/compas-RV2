@@ -19,35 +19,43 @@ def RunCommand(is_interactive):
         return
 
     pattern = scene.get("pattern")[0]
-
     if not pattern:
         return
 
-    option = compas_rhino.rs.GetString("Select Edges", "Boundary", ["Boundary", "Continuous", "Parallel"])
+    options = ['Manual', 'All', 'Openings', 'Holes', 'Continuous', 'Parallel']
+    option = compas_rhino.rs.GetString("Select Edges", options[0], options)
 
-    if option == "Boundary":
-        keys = list(pattern.datastructure.edges_on_boundary())
+    if option == 'All':
+        keys = list(pattern.datastructure.edges())
 
-    elif option == "Continuous":
+    elif option == 'Openings':
+        # draw a dot for every opening
+        # allow user to select dots
+        # find edges related to opening
+        # pass on the keys
+        raise NotImplementedError
+
+    elif option == 'Holes':
+        # draw a dot for every opening
+        # allow user to select dots
+        # find edges related to hole
+        # pass on the keys
+        raise NotImplementedError
+
+    elif option == 'Continuous':
         temp = pattern.select_edges()
-        if temp:
-            temp[:] = list(set(temp))
-            keys = []
-            for key in temp:
-                keys += pattern.datastructure.continuous_edges(key)
+        keys = list(set(flatten([pattern.datastructure.continuous_edges(key) for key in temp])))
 
-    elif option == "Parallel":
+    elif option == 'Parallel':
         temp = pattern.select_edges()
-        if temp:
-            temp[:] = list(set(temp))
-            keys = []
-            for key in temp:
-                keys += pattern.datastructure.parallel_edges(key)
+        keys = list(set(flatten([pattern.datastructure.parallel_edges(key) for key in temp])))
 
     else:
-        keys = None
+        keys = pattern.select_edges()
 
-    if pattern.update_edges_attributes(keys=keys):
+    # is this necessary with the special update dialogs?
+    public = [name for name in pattern.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
+    if pattern.update_edges_attributes(keys, names=public):
         scene.update()
 
 

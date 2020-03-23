@@ -4,7 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-
+from compas.utilities import flatten
 
 __commandname__ = "RV2force_modify_edges"
 
@@ -19,14 +19,14 @@ def RunCommand(is_interactive):
         return
 
     force = scene.get("force")[0]
-
     if not force:
         return
 
-    # add selection options
-    # rename to modify
+    keys = force.select_edges()
 
-    if force.update_edges_attributes():
+    # is this necessary with the special update dialogs?
+    public = [name for name in force.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
+    if force.update_edges_attributes(keys, names=public):
         scene.update()
 
 

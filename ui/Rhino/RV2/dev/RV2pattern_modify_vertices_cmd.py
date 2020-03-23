@@ -19,27 +19,42 @@ def RunCommand(is_interactive):
         return
 
     pattern = scene.get("pattern")[0]
-
     if not pattern:
         return
 
-    option = compas_rhino.rs.GetString("Select Vertices", "Boundary", ["Boundary", "Continuous"])
+    options = ['Manual', 'All', 'Openings', 'Holes', 'Continuous', 'Fixed', 'Anchors']
+    option = compas_rhino.rs.GetString("Select Faces.", options[0], options)
 
-    if option == "Boundary":
-        keys = list(pattern.datastructure.vertices_on_boundary(chained=False))
+    if option == 'All':
+        keys = list(pattern.datastructure.vertices())
 
-    elif option == "Continuous":
+    elif option == 'Openings':
+        # select the vertices around an opening
+        # draw dots in openings
+        # allow user to select dots
+        raise NotImplementedError
+
+    elif option == 'Holes':
+        # select the vertices around a hole
+        # draw dots in holes
+        # allow user to select dots
+        raise NotImplementedError
+
+    elif option == 'Continuous':
         temp = pattern.select_edges()
-        if temp:
-            temp[:] = list(set(temp))
-            keys = []
-            for key in temp:
-                keys += pattern.datastructure.continuous_vertices(key)
+        keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+
+    elif option == 'Fixed':
+        keys = list(pattern.datastructure.vertices_where({'is_fixed': True}))
+
+    elif option == 'Anchors':
+        keys = list(pattern.datastructure.vertices_where({'is_anchor': True}))
 
     else:
-        keys = None
+        keys = pattern.select_vertices()
 
-    if pattern.update_vertices_attributes(keys=keys):
+    public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+    if pattern.update_vertices_attributes(keys, names=public):
         scene.update()
 
 
