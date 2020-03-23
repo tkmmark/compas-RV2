@@ -2,6 +2,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import ThrustArtist
 
@@ -24,7 +25,7 @@ class ThrustObject(MeshObject):
 
     @guid_reaction.setter
     def guid_reaction(self, values):
-        return self._guid_reaction = {guid: key for key, guid in values}
+        self._guid_reaction = {guid: key for key, guid in values}
 
     @property
     def guid_residual(self):
@@ -32,7 +33,7 @@ class ThrustObject(MeshObject):
 
     @guid_residual.setter
     def guid_residual(self, values):
-        return self._guid_residual = {guid: key for key, guid in values}
+        self._guid_residual = {guid: key for key, guid in values}
 
     @property
     def guid_pipe(self):
@@ -40,7 +41,7 @@ class ThrustObject(MeshObject):
 
     @guid_pipe.setter
     def guid_pipe(self, values):
-        return self._guid_pipe = {guid: key for key, guid in values}
+        self._guid_pipe = {guid: key for key, guid in values}
 
     def draw(self):
         layer = self.settings['thrust.layer']

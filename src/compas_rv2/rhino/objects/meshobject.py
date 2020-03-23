@@ -3,9 +3,6 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rhino.selectors import VertexSelector
-from compas_rhino.selectors import EdgeSelector
-from compas_rhino.selectors import FaceSelector
 from compas_rhino.modifiers import VertexModifier
 from compas_rhino.modifiers import EdgeModifier
 from compas_rhino.modifiers import FaceModifier
@@ -88,7 +85,7 @@ class MeshObject(object):
 
     @guid_vertex.setter
     def guid_vertex(self, values):
-        return self._guid_vertex = {guid: key for key, guid in values}
+        self._guid_vertex = {guid: key for key, guid in values}
 
     @property
     def guid_edge(self):
@@ -96,7 +93,7 @@ class MeshObject(object):
 
     @guid_edge.setter
     def guid_edge(self, values):
-        return self._guid_edge = {guid: key for key, guid in values}
+        self._guid_edge = {guid: key for key, guid in values}
 
     @property
     def guid_face(self):
@@ -104,7 +101,7 @@ class MeshObject(object):
 
     @guid_face.setter
     def guid_face(self, values):
-        return self._guid_face = {guid: key for key, guid in values}
+        self._guid_face = {guid: key for key, guid in values}
 
     # ==========================================================================
     # Mesh
@@ -121,7 +118,7 @@ class MeshObject(object):
         guids_edgelabels = list(self.guid_edgelabel.keys())
         guids_facelabels = list(self.guid_facelabel.keys())
         guids_vertexnormals = list(self.guid_vertexnormal.keys())
-        guids_vertexnormals = list(self.guid_vertexnormal.keys())
+        guids_facenormals = list(self.guid_facenormal.keys())
         guids = guids_vertices + guids_edges + guids_faces + guids_vertexlabels + guids_edgelabels + guids_facelabels + guids_vertexnormals + guids_facenormals
         compas_rhino.delete_objects(guids, purge=True)
 
