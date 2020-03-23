@@ -25,7 +25,7 @@ class ThrustObject(MeshObject):
 
     @guid_reaction.setter
     def guid_reaction(self, values):
-        self._guid_reaction = {guid: key for key, guid in values}
+        self._guid_reaction = dict(values)
 
     @property
     def guid_residual(self):
@@ -33,7 +33,7 @@ class ThrustObject(MeshObject):
 
     @guid_residual.setter
     def guid_residual(self, values):
-        self._guid_residual = {guid: key for key, guid in values}
+        self._guid_residual = dict(values)
 
     @property
     def guid_pipe(self):
@@ -41,7 +41,7 @@ class ThrustObject(MeshObject):
 
     @guid_pipe.setter
     def guid_pipe(self, values):
-        self._guid_pipe = {guid: key for key, guid in values}
+        self._guid_pipe = dict(values)
 
     def draw(self):
         layer = self.settings['thrust.layer']

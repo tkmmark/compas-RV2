@@ -4,7 +4,6 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas.utilities import flatten
 
 __commandname__ = "RV2force_modify_edges"
 

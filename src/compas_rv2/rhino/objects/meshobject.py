@@ -3,6 +3,9 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rv2.rhino import select_vertices as rv2_select_vertices
+from compas_rv2.rhino import select_faces as rv2_select_faces
+from compas_rv2.rhino import select_edges as rv2_select_edges
 from compas_rhino.modifiers import VertexModifier
 from compas_rhino.modifiers import EdgeModifier
 from compas_rhino.modifiers import FaceModifier
@@ -85,7 +88,7 @@ class MeshObject(object):
 
     @guid_vertex.setter
     def guid_vertex(self, values):
-        self._guid_vertex = {guid: key for key, guid in values}
+        self._guid_vertex = dict(values)
 
     @property
     def guid_edge(self):
@@ -93,7 +96,7 @@ class MeshObject(object):
 
     @guid_edge.setter
     def guid_edge(self, values):
-        self._guid_edge = {guid: key for key, guid in values}
+        self._guid_edge = dict(values)
 
     @property
     def guid_face(self):
@@ -101,7 +104,47 @@ class MeshObject(object):
 
     @guid_face.setter
     def guid_face(self, values):
-        self._guid_face = {guid: key for key, guid in values}
+        self._guid_face = dict(values)
+
+    @property
+    def guid_vertexlabel(self):
+        return self._guid_vertexlabel
+
+    @guid_vertexlabel.setter
+    def guid_vertexlabel(self, values):
+        self._guid_vertexlabel = dict(values)
+
+    @property
+    def guid_facelabel(self):
+        return self._guid_facelabel
+
+    @guid_facelabel.setter
+    def guid_facelabel(self, values):
+        self._guid_facelabel = dict(values)
+
+    @property
+    def guid_edgelabel(self):
+        return self._guid_edgelabel
+
+    @guid_edgelabel.setter
+    def guid_edgelabel(self, values):
+        self._guid_edgelabel = dict(values)
+
+    @property
+    def guid_vertexnormal(self):
+        return self._guid_vertexnormal
+
+    @guid_vertexnormal.setter
+    def guid_vertexnormal(self, values):
+        self._guid_vertexnormal = dict(values)
+
+    @property
+    def guid_facenormal(self):
+        return self._guid_facenormal
+
+    @guid_facenormal.setter
+    def guid_facenormal(self, values):
+        self._guid_facenormal = dict(values)
 
     # ==========================================================================
     # Mesh
@@ -150,8 +193,11 @@ class MeshObject(object):
         >>>
         """
         _filter = compas_rhino.rs.filter.point
-        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, filter=_filter)
-        keys = [self.guid_vertex[guid] for guid in guids if guid in self.guid_vertex]
+        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, filter=_filter)
+        if guids:
+            keys = [self.guid_vertex[guid] for guid in guids if guid in self.guid_vertex]
+        else:
+            keys = []
         return keys
 
     def update_vertices_attributes(self, keys, names=None):
@@ -171,8 +217,9 @@ class MeshObject(object):
             True if the update was successful.
             False otherwise.
         """
-        # this needs to be rewritten
-        return VertexModifier.update_vertex_attributes(self.datastructure, keys, names)
+        if keys:
+            rv2_select_vertices(self.datastructure, keys)
+            return VertexModifier.update_vertex_attributes(self.datastructure, keys, names)
 
     # ==========================================================================
     # Edges
@@ -191,8 +238,11 @@ class MeshObject(object):
         >>>
         """
         _filter = compas_rhino.rs.filter.curve
-        guids = compas_rhino.rs.GetObjects(message="Select Edges.", preselect=True, filter=_filter)
-        keys = [self.guid_edge[guid] for guid in guids if guid in self.guid_edge]
+        guids = compas_rhino.rs.GetObjects(message="Select Edges.", preselect=True, select=True, filter=_filter)
+        if guids:
+            keys = [self.guid_edge[guid] for guid in guids if guid in self.guid_edge]
+        else:
+            keys = []
         return keys
 
     def update_edges_attributes(self, keys, names=None):
@@ -212,8 +262,9 @@ class MeshObject(object):
             True if the update was successful.
             False otherwise.
         """
-        # this needs to be rewritten
-        return EdgeModifier.update_edge_attributes(self.datastructure, keys, names)
+        if keys:
+            rv2_select_edges(self.datastructure, keys)
+            return EdgeModifier.update_edge_attributes(self.datastructure, keys, names)
 
     # ==========================================================================
     # Faces
@@ -232,8 +283,11 @@ class MeshObject(object):
         >>>
         """
         _filter = compas_rhino.rs.filter.mesh
-        guids = compas_rhino.rs.GetObjects(message="Select Faces.", preselect=True, filter=_filter)
-        keys = [self.guid_face[guid] for guid in guids if guid in self.guid_face]
+        guids = compas_rhino.rs.GetObjects(message="Select Faces.", preselect=True, select=True, filter=_filter)
+        if guids:
+            keys = [self.guid_face[guid] for guid in guids if guid in self.guid_face]
+        else:
+            keys = []
         return keys
 
     def update_faces_attributes(self, keys, names=None):
@@ -253,8 +307,9 @@ class MeshObject(object):
             True if the update was successful.
             False otherwise.
         """
-        # this needs to be rewritten
-        return FaceModifier.update_face_attributes(self.datastructure, keys, names)
+        if keys:
+            rv2_select_faces(self.datastructure, keys)
+            return FaceModifier.update_face_attributes(self.datastructure, keys, names)
 
 
 # ==============================================================================
