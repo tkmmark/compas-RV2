@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from __future__ import division
 
 from .meshobject import MeshObject  # noqa: F401
-
 from .skeletonobject import SkeletonObject  # noqa: F401
 from .patternobject import PatternObject  # noqa: F401
 from .formobject import FormObject  # noqa: F401

@@ -19,10 +19,9 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    pattern = scene.get("pattern")
+    pattern = scene.get("pattern")[0]
 
     if not pattern:
-        # notify the user
         return
 
     form = FormDiagram.from_pattern(pattern.datastructure)

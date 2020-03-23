@@ -10,22 +10,66 @@ __all__ = ["PatternObject"]
 
 
 class PatternObject(MeshObject):
+    """Scene object for mesh-based data structures in RV2.
+
+    Parameters
+    ----------
+    scene : :class:`compas_rv2.scene.Scene`
+        The RhinoVault 2 scene.
+    pattern : :class:`compas_rv2.datastructures.Pattern`
+        The pattern data structure.
+
+    Attributes
+    ----------
+    scene : :class:`compas_rv2.scene.Scene`
+        The RhinoVault 2 scene.
+    pattern : :class:`compas_rv2.datastructures.Pattern`
+        The pattern data structure.
+    artist : :class:`compas_rv2.rhino.PatternArtist`
+        The specialised pasttern artist.
+    """
+
+    __module__ = 'compas_rv2.rhino'
 
     def __init__(self, scene, pattern, **kwargs):
         super(PatternObject, self).__init__(scene, pattern, **kwargs)
         self.artist = MeshArtist(self.datastructure)
 
-    def draw(self, settings):
-        layer = settings.get('pattern.layer')
+    def draw(self):
+        """Draw the pattern in the Rhino scene using the current settings."""
+        layer = self.settings['pattern.layer']
         if layer:
             self.artist.layer = layer
             self.artist.clear_layer()
-        if settings.get('pattern.show.vertices', True):
-            self.artist.draw_vertices()
-        if settings.get('pattern.show.edges', True):
-            self.artist.draw_edges()
-        if settings.get('pattern.show.faces', True):
-            self.artist.draw_faces()
+
+        if self.settings['pattern.show.vertices']:
+            keys = list(self.datastructure.vertices())
+            color = {key: self.settings['pattern.color.vertices'] for key in keys}
+            color.update({key: self.settings['pattern.color.vertices:is_fixed'] for key in self.datastructures.vertices_where({'is_fixed': True})})
+            color.update({key: self.settings['pattern.color.vertices:is_anchor'] for key in self.datastructures.vertices_where({'is_anchor': True})})
+            guids = self.artist.draw_vertices(keys, color)
+            self.guid_vertex = zip(guids, keys)
+        else:
+            guids_vertices = list(self.guid_vertex.keys())
+            compas_rhino.delete_objects(guids_vertices, purge=True)
+
+        if self.settings['pattern.show.edges']:
+            keys = list(self.datastructure.edges())
+            color = {key: self.settings['pattern.color.edges'] for key in keys}
+            guids = self.artist.draw_edges(keys, color)
+            self.guid_edge = zip(guids, keys)
+        else:
+            guids_edges = list(self.guid_edge.keys())
+            compas_rhino.delete_objects(guids_edges, purge=True)
+
+        if self.settings['pattern.show.faces']:
+            keys = list(self.datastructure.faces())
+            color = {key: self.settings['pattern.color.faces'] for key in keys}
+            guids = self.artist.draw_faces(keys, color)
+            self.guid_face = zip(guids, keys)
+        else:
+            guids_faces = list(self.guid_face.keys())
+            compas_rhino.delete_objects(guids_faces, purge=True)
 
 
 # ==============================================================================

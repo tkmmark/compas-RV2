@@ -23,8 +23,6 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    # add selection options
-    # rename to modify
     if form.update_edges_attributes():
         scene.update()
 

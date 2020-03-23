@@ -23,8 +23,6 @@ def RunCommand(is_interactive):
     if not force:
         return
 
-    # add selection options
-
     if force.move_vertices():
         scene.update()
 

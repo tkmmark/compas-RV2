@@ -2,102 +2,27 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-from compas.utilities import pairwise
 from compas.datastructures import Mesh
+from compas_rv2.datastructures.meshmixin import MeshMixin
+
 
 
 __all__ = ['Pattern']
 
 
-class Pattern(Mesh):
+class Pattern(MeshMixin, Mesh):
+    """Customised mesh data structure for RV2."""
 
-    def __init__(self):
-        super(Pattern, self).__init__()
+    # def collapse_small_edges(self, tol=1e-2):
+    #     boundaries = self.vertices_on_boundaries()
+    #     for boundary in boundaries:
+    #         for u, v in pairwise(boundary):
+    #             l = self.edge_length(u, v)
+    #             if l < tol:
+    #                 mesh_collapse_edge(self, v, u, t=0.5, allow_boundary=True)
 
-    def continuous_vertices(self, uv):
-        vertices = []
-        current, previous = uv
-        while True:
-            vertices.append(current)
-            nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
-                break
-            i = nbrs.index(previous)
-            previous = current
-            current = nbrs[i - 2]
-        vertices[:] = vertices[::-1]
-        previous, current = uv
-        while True:
-            vertices.append(current)
-            nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
-                break
-            i = nbrs.index(previous)
-            previous = current
-            current = nbrs[i - 2]
-        return vertices
-
-    def continuous_edges(self, uv):
-        vertices = self.continuous_vertices(uv)
-        return list(pairwise(vertices))
-
-    def parallel_edges(self, uv):
-        edges = []
-        v, u = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            edges.append((u, v))
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        edges[:] = edges[::-1]
-        u, v = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            edges.append((u, v))
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        return edges
-
-    def parallel_faces(self, uv):
-        faces = []
-        v, u = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            faces.append(fkey)
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        faces[:] = faces[::-1]
-        u, v = uv
-        while True:
-            fkey = self.halfedge[u][v]
-            if fkey is None:
-                break
-            vertices = self.face_vertices(fkey)
-            if len(vertices) != 4:
-                break
-            faces.append(fkey)
-            i = vertices.index(u)
-            u = vertices[i - 1]
-            v = vertices[i - 2]
-        return faces
+    # def smooth(self, fixed, kmax=10):
+    #     mesh_smooth_area(self, fixed=fixed, kmax=kmax)
 
 
 # ==============================================================================

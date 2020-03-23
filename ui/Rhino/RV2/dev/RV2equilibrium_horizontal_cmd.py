@@ -24,19 +24,19 @@ def RunCommand(is_interactive):
 
     horizontal = proxy.package('compas_rv2.equilibrium.horizontal_nodal_proxy')
 
-    rhinoform = scene.get('form')[0]
-    rhinoforce = scene.get('force')[0]
+    form = scene.get('form')[0]
+    force = scene.get('force')[0]
 
-    if not rhinoform:
+    if not form:
         return
 
-    if not rhinoforce:
+    if not force:
         return
 
-    formdata, forcedata = horizontal(rhinoform.datastructure.data, rhinoforce.datastructure.data)
+    formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data)
 
-    rhinoform.datastructure.data = formdata
-    rhinoforce.datastructure.data = forcedata
+    form.datastructure.data = formdata
+    force.datastructure.data = forcedata
 
     scene.update()
 

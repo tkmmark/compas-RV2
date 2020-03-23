@@ -1,6 +1,6 @@
-**********
-compas_rv2
-**********
+************
+RhinoVault 2
+************
 
 .. toctree::
    :maxdepth: 3

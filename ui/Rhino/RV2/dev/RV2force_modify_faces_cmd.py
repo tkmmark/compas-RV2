@@ -23,9 +23,6 @@ def RunCommand(is_interactive):
     if not force:
         return
 
-    # add selection options
-    # rename to modify
-
     if force.update_faces_attributes():
         scene.update()
 
