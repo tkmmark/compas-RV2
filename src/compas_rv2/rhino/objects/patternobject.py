@@ -46,13 +46,14 @@ class PatternObject(MeshObject):
         if self.settings['pattern.show.vertices']:
             keys = list(self.datastructure.vertices())
             color = {key: self.settings['pattern.color.vertices'] for key in keys}
-            color.update({key: self.settings['pattern.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True})})
-            color.update({key: self.settings['pattern.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True})})
+            color.update({key: self.settings['pattern.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
+            color.update({key: self.settings['pattern.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
             guids = self.artist.draw_vertices(keys, color)
             self.guid_vertex = zip(guids, keys)
         else:
             guids_vertices = list(self.guid_vertex.keys())
             compas_rhino.delete_objects(guids_vertices, purge=True)
+            self._guid_vertex = {}
 
         if self.settings['pattern.show.edges']:
             keys = list(self.datastructure.edges())
@@ -62,6 +63,7 @@ class PatternObject(MeshObject):
         else:
             guids_edges = list(self.guid_edge.keys())
             compas_rhino.delete_objects(guids_edges, purge=True)
+            self._guid_edge = {}
 
         if self.settings['pattern.show.faces']:
             keys = list(self.datastructure.faces())
@@ -71,6 +73,7 @@ class PatternObject(MeshObject):
         else:
             guids_faces = list(self.guid_face.keys())
             compas_rhino.delete_objects(guids_faces, purge=True)
+            self._guid_face = {}
 
 
 # ==============================================================================

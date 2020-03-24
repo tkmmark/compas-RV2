@@ -60,7 +60,7 @@ SETTINGS = {
     'thrust.show.edges': True,
     'thrust.show.faces': True,
     'thrust.show.reactions': True,
-    'thrust.show.residuals': True,
+    'thrust.show.residuals': False,
     'thrust.show.pipes': True,
     'thrust.color.vertices': [255, 0, 255],
     'thrust.color.vertices:is_fixed': [0, 255, 0],

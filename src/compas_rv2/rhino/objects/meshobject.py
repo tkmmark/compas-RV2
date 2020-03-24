@@ -164,6 +164,14 @@ class MeshObject(object):
         guids_facenormals = list(self.guid_facenormal.keys())
         guids = guids_vertices + guids_edges + guids_faces + guids_vertexlabels + guids_edgelabels + guids_facelabels + guids_vertexnormals + guids_facenormals
         compas_rhino.delete_objects(guids, purge=True)
+        self._guid_vertex = {}
+        self._guid_edge = {}
+        self._guid_face = {}
+        self._guid_vertexlabel = {}
+        self._guid_edgelabel = {}
+        self._guid_facelabel = {}
+        self._guid_vertexnormal = {}
+        self._guid_facenormal = {}
 
     def update_attributes(self):
         """Update the attributes of the data structure through a Rhino dialog.

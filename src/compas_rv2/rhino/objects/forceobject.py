@@ -67,19 +67,21 @@ class ForceObject(MeshObject):
         else:
             guids_vertices = list(self.guid_vertex.keys())
             compas_rhino.delete_objects(guids_vertices, purge=True)
+            self._guid_vertex = {}
 
         if self.settings["force.show.edges"]:
             keys = list(self.datastructure.edges())
             color = {key: self.settings['force.color.edges'] for key in keys}
             for key in keys:
                 key_ = self.datastructure.primal.face_adjacency_halfedge(*key)
-                if self.datastructure.primal.edge_attribute(key_, 'is_external'):
+                if self.datastructure.primal.edge_attribute(key_, '_is_external'):
                     color[key] = self.settings["force.color.edges:is_external"]
             guids = self.artist.draw_edges(keys, color)
             self.guid_edge = zip(guids, keys)
         else:
             guids_edges = list(self.guid_edge.keys())
             compas_rhino.delete_objects(guids_edges, purge=True)
+            self._guid_edge = {}
 
 
 # ==============================================================================

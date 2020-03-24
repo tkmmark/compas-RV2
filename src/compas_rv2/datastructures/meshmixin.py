@@ -2,7 +2,6 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas.datastructures
 from compas.utilities import pairwise
 
 
@@ -11,6 +10,45 @@ __all__ = ['MeshMixin']
 
 class MeshMixin(object):
     """Mixin for all mesh-based data structure in RV2."""
+
+    def continuous_vertices_on_boundary(self, uv):
+        vertices = []
+        current, previous = uv
+        vertices.append(current)
+        if not self.vertex_attribute(current, 'is_fixed'):
+            while True:
+                nbrs = self.vertex_neighbors(current)
+                for nbr in nbrs:
+                    if nbr == previous:
+                        continue
+                    if self.is_edge_on_boundary(current, nbr):
+                        vertices.append(nbr)
+                        break
+                if vertices[-1] == vertices[0]:
+                    break
+                if self.vertex_attribute(vertices[-1], 'is_fixed'):
+                    break
+                previous = current
+                current = nbr
+            vertices[:] = vertices[::-1]
+        previous, current = uv
+        vertices.append(current)
+        if not self.vertex_attribute(current, 'is_fixed'):
+            while True:
+                nbrs = self.vertex_neighbors(current)
+                for nbr in nbrs:
+                    if nbr == previous:
+                        continue
+                    if self.is_edge_on_boundary(current, nbr):
+                        vertices.append(nbr)
+                        break
+                if vertices[-1] == vertices[0]:
+                    break
+                if self.vertex_attribute(vertices[-1], 'is_fixed'):
+                    break
+                previous = current
+                current = nbr
+        return vertices
 
     def continuous_vertices(self, uv):
         """Ordered vertices along the direction of an edge.
@@ -33,6 +71,9 @@ class MeshMixin(object):
             The last vertex is the vertex at the end of the v-direction.
 
         """
+        if self.is_edge_on_boundary(*uv):
+            return self.continuous_vertices_on_boundary(uv)
+
         vertices = []
         current, previous = uv
         while True:

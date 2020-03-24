@@ -63,27 +63,29 @@ class FormObject(MeshObject):
         if self.settings['form.show.vertices']:
             keys = list(self.datastructure.vertices())
             color = {key: self.settings['form.color.vertices'] for key in keys}
-            color.update({key: self.settings['form.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True})})
-            color.update({key: self.settings['form.color.vertices:is_external'] for key in self.datastructure.vertices_where({'is_external': True})})
-            color.update({key: self.settings['form.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True})})
+            color.update({key: self.settings['form.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
+            color.update({key: self.settings['form.color.vertices:is_external'] for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
+            color.update({key: self.settings['form.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
             guids = self.artist.draw_vertices(keys, color)
             self.guid_vertex = zip(guids, keys)
         else:
             guids_vertices = list(self.guid_vertex.keys())
             compas_rhino.delete_objects(guids_vertices, purge=True)
+            self._guid_vertex = {}
 
         if self.settings['form.show.edges']:
-            keys = list(self.datastructure.edges_where({'is_edge': True}))
+            keys = list(self.datastructure.edges_where({'_is_edge': True}))
             color = {key: self.settings['form.color.edges'] for key in keys}
-            color.update({key: self.settings['form.color.edges:is_external'] for key in self.datastructure.edges_where({'is_external': True})})
+            color.update({key: self.settings['form.color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
             guids = self.artist.draw_edges(keys, color)
             self.guid_edge = zip(guids, keys)
         else:
             guids_edges = list(self.guid_edge.keys())
             compas_rhino.delete_objects(guids_edges, purge=True)
+            self._guid_edge = {}
 
-        if self.settings['form.show.angles']:
-            keys = list()
+        # if self.settings['form.show.angles']:
+        #     keys = list()
 
 
 # ==============================================================================

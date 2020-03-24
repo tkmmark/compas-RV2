@@ -37,13 +37,13 @@ class Tree_Table(forms.TreeGridView):
             if table_type == 'vertex':
                 color.update({key: settings.get("color.form.vertices") for key in rhinoDiagram.diagram.vertices()})
                 color.update({key: settings.get("color.form.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
-                color.update({key: settings.get("color.form.vertices:is_external") for key in rhinoDiagram.diagram.vertices_where({'is_external': True})})
+                color.update({key: settings.get("color.form.vertices:is_external") for key in rhinoDiagram.diagram.vertices_where({'_is_external': True})})
                 color.update({key: settings.get("color.form.vertices:is_anchor") for key in rhinoDiagram.diagram.vertices_where({'is_anchor': True})})
             if table_type == 'edge':
-                keys = list(rhinoDiagram.diagram.edges_where({'is_edge': True}))
+                keys = list(rhinoDiagram.diagram.edges_where({'_is_edge': True}))
                 for i, key in enumerate(keys):
                     u, v = key
-                    if rhinoDiagram.diagram.vertex_attribute(u, 'is_external') or rhinoDiagram.diagram.vertex_attribute(v, 'is_external'):
+                    if rhinoDiagram.diagram.vertex_attribute(u, '_is_external') or rhinoDiagram.diagram.vertex_attribute(v, '_is_external'):
                         color[i] = settings.get("color.form.edges:is_external")
                     else:
                         color[i] = settings.get("color.form.edges")
@@ -55,7 +55,7 @@ class Tree_Table(forms.TreeGridView):
                 keys = list(rhinoDiagram.diagram.edges())
                 for i, key in enumerate(keys):
                     u_, v_ = rhinoDiagram.diagram.primal.face_adjacency_halfedge(*key)
-                    if rhinoDiagram.diagram.primal.vertex_attribute(u_, 'is_external') or rhinoDiagram.diagram.primal.vertex_attribute(v_, 'is_external'):
+                    if rhinoDiagram.diagram.primal.vertex_attribute(u_, '_is_external') or rhinoDiagram.diagram.primal.vertex_attribute(v_, '_is_external'):
                         color[i] = settings.get("color.force.edges:is_external")
                     else:
                         color[i] = settings.get("color.force.edges")
@@ -66,10 +66,10 @@ class Tree_Table(forms.TreeGridView):
                 color.update({key: settings.get("color.thrust.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
                 color.update({key: settings.get("color.thrust.vertices:is_anchor") for key in rhinoDiagram.diagram.vertices_where({'is_anchor': True})})
             if table_type == 'edge':
-                keys = list(rhinoDiagram.diagram.edges_where({'is_edge': True, 'is_external': False}))
+                keys = list(rhinoDiagram.diagram.edges_where({'_is_edge': True, '_is_external': False}))
                 color.update({i: settings.get("color.thrust.edges") for i, key in enumerate(keys)})
             if table_type == 'face':
-                keys = list(rhinoDiagram.diagram.faces_where({'is_loaded': True}))
+                keys = list(rhinoDiagram.diagram.faces_where({'_is_loaded': True}))
                 color.update({key: settings.get("color.thrust.faces") for key in keys})
 
         def OnCellFormatting(sender, e):
