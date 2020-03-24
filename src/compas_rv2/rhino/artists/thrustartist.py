@@ -37,10 +37,21 @@ class ThrustArtist(MeshArtist):
         The residual force components are stored per vertex in the `rx`, `ry`, and `rz` attributes.
 
         """
+        # add horizontal components of connected external edges
         lines = []
         for key in keys:
             a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
+            V = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
+            H = [0.0, 0.0, 0.0]
+            nbrs = self.mesh.vertex_neighbors(key)
+            for nbr in nbrs:
+                if not self.mesh.vertex_attribute(nbr, '_is_external'):
+                    continue
+                h = self.mesh.vertex_attributes(nbr, ['_rx', '_ry', '_rz'])
+                H[0] += h[0]
+                H[1] += h[1]
+                H[2] += h[2]
+            r = add_vectors(V, H)
             b = add_vectors(a, scale_vector(r, scale))
             lines.append({
                 'start': a,
