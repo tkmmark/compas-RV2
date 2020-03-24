@@ -40,7 +40,7 @@ class ThrustArtist(MeshArtist):
         lines = []
         for key in keys:
             a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['rx', 'ry', 'rz'])
+            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
             b = add_vectors(a, scale_vector(r, scale))
             lines.append({
                 'start': a,
@@ -77,7 +77,7 @@ class ThrustArtist(MeshArtist):
         lines = []
         for key in keys:
             a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['rx', 'ry', 'rz'])
+            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
             b = add_vectors(a, scale_vector([0, 0, r[2]], scale))
             lines.append({
                 'start': a,
@@ -113,7 +113,7 @@ class ThrustArtist(MeshArtist):
         lines = []
         for key in keys:
             a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['rx', 'ry', 'rz'])
+            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
             b = add_vectors(a, scale_vector(r, scale))
             lines.append({
                 'start': a,
@@ -149,7 +149,7 @@ class ThrustArtist(MeshArtist):
         lines = []
         for key in keys:
             a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['rx', 'ry', 'rz'])
+            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
             b = add_vectors(a, scale_vector([0, 0, r[2]], scale))
             lines.append({
                 'start': a,

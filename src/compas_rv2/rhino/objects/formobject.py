@@ -82,8 +82,8 @@ class FormObject(MeshObject):
             guids_edges = list(self.guid_edge.keys())
             compas_rhino.delete_objects(guids_edges, purge=True)
 
-        if self.settings['form.show.angles']:
-            keys = list()
+        # if self.settings['form.show.angles']:
+        #     keys = list()
 
 
 # ==============================================================================

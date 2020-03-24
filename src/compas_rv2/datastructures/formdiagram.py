@@ -13,6 +13,12 @@ class FormDiagram(MeshMixin, FormDiagram):
     """The RV2 FormDiagram.
     """
 
+    @classmethod
+    def from_pattern(cls, pattern, feet=2):
+        form = pattern.copy(cls=cls)
+        form.update_boundaries(feet=2)
+        return form
+
 
 # ==============================================================================
 # Main

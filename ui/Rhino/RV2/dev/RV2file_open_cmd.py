@@ -9,6 +9,10 @@ import compas_rhino
 from compas_rv2.rhino import get_system
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_filepath_open
+from compas_rv2.datastructures import Pattern
+from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import ForceDiagram
+from compas_rv2.datastructures import ThrustDiagram
 from compas.utilities import DataDecoder
 
 
@@ -60,8 +64,8 @@ def RunCommand(is_interactive):
         if 'form' in data and 'force' in data:
 
             form = FormDiagram.from_data(data['form'])
-            force = FormDiagram.from_data(data['force'])
-            thrust = form.copy(cls=ThrustDiagram)
+            force = ForceDiagram.from_data(data['force'])
+            thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
 
             scene.add(form, name="form")
             scene.add(force, name="force")

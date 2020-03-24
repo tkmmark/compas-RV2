@@ -49,15 +49,15 @@ def RunCommand(is_interactive):
         "settings": scene.settings,
     }
 
-    pattern = scene.get('pattern')
+    pattern = scene.get('pattern')[0]
     if pattern:
         session['data']['pattern'] = pattern.datastructure.to_data()
 
-    form = scene.get('form')
+    form = scene.get('form')[0]
     if form:
         session['data']['form'] = form.datastructure.to_data()
 
-    force = scene.get('force')
+    force = scene.get('force')[0]
     if force:
         session['data']['force'] = force.datastructure.to_data()
 

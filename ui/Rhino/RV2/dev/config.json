@@ -132,7 +132,7 @@
                     },
                     {"type": "separator"},
                     {
-                        "name" : "Make Pattern",
+                        "name" : "Pattern Create",
                         "items":
                         [
                             {"command": "RV2pattern_from_lines"},
@@ -142,7 +142,7 @@
                         ]
                     },
                     {
-                        "name" : "Modify Pattern",
+                        "name" : "Pattern Modify",
                         "items":
                         [
                             {"command": "RV2pattern_modify_vertices"},
@@ -155,8 +155,7 @@
                     },
 
                     {"type": "separator"},
-                    {"command": "RV2_supports"},
-                    {"type": "separator"},
+                    {"command": "RV2supports"},
                     {"command": "RV2thrust_create"},
                     {"type": "separator"},
                     {"command": "RV2equilibrium_horizontal"},

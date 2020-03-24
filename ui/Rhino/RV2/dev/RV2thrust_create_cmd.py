@@ -7,6 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import ThrustDiagram
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
+from compas.geometry import Translation
 
 __commandname__ = "RV2thrust_create"
 
@@ -24,13 +25,15 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    form = FormDiagram.from_mesh(pattern.datastructure)
-    form.update_boundaries(feet=2)
-
+    form = FormDiagram.from_pattern(pattern.datastructure)
     force = ForceDiagram.from_formdiagram(form)
+    thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
 
-    # this is not a good idea
-    thrust = form.copy(cls=ThrustDiagram)
+    bbox = force.bounding_box_xy()
+    xmin, xmax = bbox[0][0], bbox[2][0]
+    dx = 1.2 * (xmax - xmin)
+
+    force.transform(Translation([dx, 0, 0]))
 
     scene.add(form, name='form')
     scene.add(force, name='force')

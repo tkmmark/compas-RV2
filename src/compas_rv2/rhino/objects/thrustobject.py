@@ -98,15 +98,15 @@ class ThrustObject(MeshObject):
             guids_residuals = list(self.guid_residual)
             compas_rhino.delete_objects(guids_residuals, purge=True)
 
-        if self.settings['thrust.show.pipes']:
-            keys = list(self.datastructure.edges_where({'is_edge': True}))
-            color = self.settings['thrust.color.pipes']
-            scale = self.settings['thrust.scale.pipes']
-            guids = self.artist.draw_pipes(keys, color, scale)
-            self.guid_pipe = zip(guids, keys)
-        else:
-            guids_pipes = list(self.guid_pipe)
-            compas_rhino.delete_objects(guids_pipes, purge=True)
+        # if self.settings['thrust.show.pipes']:
+        #     keys = list(self.datastructure.edges_where({'is_edge': True}))
+        #     color = self.settings['thrust.color.pipes']
+        #     scale = self.settings['thrust.scale.pipes']
+        #     guids = self.artist.draw_pipes(keys, color, scale)
+        #     self.guid_pipe = zip(guids, keys)
+        # else:
+        #     guids_pipes = list(self.guid_pipe)
+        #     compas_rhino.delete_objects(guids_pipes, purge=True)
 
 
 # ==============================================================================

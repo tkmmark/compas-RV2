@@ -30,9 +30,9 @@ def RunCommand(is_interactive):
 
     key_index = pattern.datastructure.key_index()
     xyz = pattern.datastructure.vertices_attributes('xyz')
-    loads = pattern.datastructure.vertices_attributes(['px', 'py', 'pz'])
+    loads = [[0.0, 0.0, 0.0] for _ in xyz]
     fixed = [key_index[key] for key in pattern.datastructure.vertices_where({'is_fixed': True})]
-    edges = [(key_index[u], key_index[v]) for u, v in pattern.edges()]
+    edges = [(key_index[u], key_index[v]) for u, v in pattern.datastructure.edges()]
     q = pattern.datastructure.edges_attribute('q')
 
     xyz, q, f, l, r = relax(xyz, edges, fixed, q, loads)
