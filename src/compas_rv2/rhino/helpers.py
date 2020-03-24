@@ -195,14 +195,13 @@ def select_filepath_open(root, ext):
 
 def select_filepath_save(root, ext):
     """Select a filepath for saving a session."""
-    dirname = compas_rhino.select_folder(default=root)
-    filename = compas_rhino.rs.GetString('File name (w/o extension!)')
+    filepath = compas_rhino.rs.SaveFileName('save', filter=ext, folder=root)
 
-    if not filename:
+    if not filepath:
         return
 
-    basename = "{}.{}".format(filename, ext)
-    filepath = os.path.join(dirname, basename)
+    if filepath.split('.')[-1] != ext:
+        filepath = "%s.%s" % (filepath, ext)
 
     return filepath
 
