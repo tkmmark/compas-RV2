@@ -6,7 +6,6 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-
 __commandname__ = "RV2form_move_vertices"
 
 

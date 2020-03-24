@@ -19,13 +19,13 @@ __all__ = [
     "select_vertices",
     "select_edges",
     "select_faces",
-    "select_boundary_vertices",
-    "select_continuous_vertices",
-    "select_boundary_edges",
-    "select_continuous_edges",
-    "select_parallel_edges",
-    "select_boundary_faces",
-    "select_parallel_faces",
+    # "select_boundary_vertices",
+    # "select_continuous_vertices",
+    # "select_boundary_edges",
+    # "select_continuous_edges",
+    # "select_parallel_edges",
+    # "select_boundary_faces",
+    # "select_parallel_faces",
 ]
 
 
@@ -87,55 +87,55 @@ def select_faces(diagram, keys):
     compas_rhino.rs.EnableRedraw(True)
 
 
-def select_boundary_vertices(rhinodiagram):
-    vertices = rhinodiagram.diagram.vertices_on_boundary()
-    select_vertices(rhinodiagram.diagram, vertices)
+# def select_boundary_vertices(rhinodiagram):
+#     vertices = rhinodiagram.diagram.vertices_on_boundary()
+#     select_vertices(rhinodiagram.diagram, vertices)
 
 
-def select_boundary_edges(rhinodiagram):
-    edges = rhinodiagram.diagram.edges_on_boundary()
-    select_edges(rhinodiagram.diagram, edges)
+# def select_boundary_edges(rhinodiagram):
+#     edges = rhinodiagram.diagram.edges_on_boundary()
+#     select_edges(rhinodiagram.diagram, edges)
 
 
-def select_boundary_faces(rhinodiagram):
-    faces = rhinodiagram.diagram.faces_on_boundary()
-    select_faces(rhinodiagram.diagram, faces)
+# def select_boundary_faces(rhinodiagram):
+#     faces = rhinodiagram.diagram.faces_on_boundary()
+#     select_faces(rhinodiagram.diagram, faces)
 
 
-def select_continuous_edges(rhinodiagram):
-    selected = rhinodiagram.select_edges()
-    edges = []
-    for edge in selected:
-        continuous = rhinodiagram.diagram.continuous_edges(edge)
-        edges.extend(continuous)
-    select_edges(rhinodiagram.diagram, edges)
+# def select_continuous_edges(rhinodiagram):
+#     selected = rhinodiagram.select_edges()
+#     edges = []
+#     for edge in selected:
+#         continuous = rhinodiagram.diagram.continuous_edges(edge)
+#         edges.extend(continuous)
+#     select_edges(rhinodiagram.diagram, edges)
 
 
-def select_continuous_vertices(rhinodiagram):
-    edges = rhinodiagram.select_edges()
-    vertices = []
-    for edge in edges:
-        continuous = rhinodiagram.diagram.continuous_vertices(edge)
-        vertices.extend(continuous)
-    select_vertices(rhinodiagram.diagram, vertices)
+# def select_continuous_vertices(rhinodiagram):
+#     edges = rhinodiagram.select_edges()
+#     vertices = []
+#     for edge in edges:
+#         continuous = rhinodiagram.diagram.continuous_vertices(edge)
+#         vertices.extend(continuous)
+#     select_vertices(rhinodiagram.diagram, vertices)
 
 
-def select_parallel_edges(rhinodiagram):
-    selected = rhinodiagram.select_edges()
-    edges = []
-    for edge in selected:
-        parallel = rhinodiagram.diagram.parallel_edges(edge)
-        edges.extend(parallel)
-    select_edges(rhinodiagram.diagram, edges)
+# def select_parallel_edges(rhinodiagram):
+#     selected = rhinodiagram.select_edges()
+#     edges = []
+#     for edge in selected:
+#         parallel = rhinodiagram.diagram.parallel_edges(edge)
+#         edges.extend(parallel)
+#     select_edges(rhinodiagram.diagram, edges)
 
 
-def select_parallel_faces(rhinodiagram):
-    selected = rhinodiagram.select_edges()
-    faces = []
-    for edge in selected:
-        parallel = rhinodiagram.diagram.parallel_faces(edge)
-        faces.extend(parallel)
-    select_faces(rhinodiagram.diagram, faces)
+# def select_parallel_faces(rhinodiagram):
+#     selected = rhinodiagram.select_edges()
+#     faces = []
+#     for edge in selected:
+#         parallel = rhinodiagram.diagram.parallel_faces(edge)
+#         faces.extend(parallel)
+#     select_faces(rhinodiagram.diagram, faces)
 
 
 def is_valid_file(filepath, ext):
@@ -195,9 +195,6 @@ def select_filepath_open(root, ext):
 
 def select_filepath_save(root, ext):
     """Select a filepath for saving a session."""
-    if not root:
-        root = HERE
-
     dirname = compas_rhino.select_folder(default=root)
     filename = compas_rhino.rs.GetString('File name (w/o extension!)')
 
