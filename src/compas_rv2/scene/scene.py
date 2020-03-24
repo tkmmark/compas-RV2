@@ -14,8 +14,8 @@ __all__ = ['Scene']
 _ITEM_WRAPPER = {}
 
 
-# eventually, this should inherit from the base scene object in COMPAS
 class Scene(object):
+    """"""
 
     def __init__(self, settings={}):
         self.nodes = {}

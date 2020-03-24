@@ -7,7 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 
 
-__commandname__ = "RV2pattern_relax"
+__commandname__ = "RV2pattern_smooth"
 
 
 HERE = compas_rhino.get_document_dirname()
