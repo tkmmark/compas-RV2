@@ -61,6 +61,10 @@
             {"name": "RV2boundaryconditions_supports", "menu_text": "Identify Supports", "icon": 16},
             {"name": "RV2boundaryconditions_loads",    "menu_text": "Define Loads",      "icon": 16},
 
+            {"name": "RV2cloud_check",    "menu_text": "Cloud Check", "icon": 4},
+            {"name": "RV2cloud_restart",  "menu_text": "Cloud Restart", "icon": 4},
+            {"name": "RV2cloud_shutdown", "menu_text": "Cloud Shutdown", "icon": 4},
+
             {"name": "RV2file_open", "menu_text": "File Open", "icon": 4},
             {"name": "RV2file_save", "menu_text": "File Save", "icon": 4},
 
@@ -83,6 +87,7 @@
             {"name": "RV2pattern_modify_edges",    "menu_text": "Pattern Modify Edges",    "icon": 20},
             {"name": "RV2pattern_modify_faces",    "menu_text": "Pattern Modify Faces",    "icon": 21},
             {"name": "RV2pattern_modify_vertices", "menu_text": "Pattern Modify Vertices", "icon": 19},
+            {"name": "RV2pattern_set_fixed",       "menu_text": "Pattern Set Fixed",       "icon": 19},
             {"name": "RV2pattern_move_vertices",   "menu_text": "Pattern Move Vertices",   "icon": 19},
 
             {"name": "RV2pattern_relax",  "menu_text": "Relax Pattern"},
@@ -131,6 +136,15 @@
                             {"command": "RV2settings"}
                         ]
                     },
+                    {
+                        "name" : "Cloud",
+                        "items":
+                        [
+                            {"command": "RV2cloud_check"},
+                            {"command": "RV2cloud_restart"},
+                            {"command": "RV2cloud_shutdown"}
+                        ]
+                    },
                     {"type": "separator"},
                     {
                         "name" : "Create Pattern",
@@ -149,9 +163,14 @@
                             {"command": "RV2pattern_modify_vertices"},
                             {"command": "RV2pattern_modify_edges"},
                             {"command": "RV2pattern_modify_faces"},
+
                             {"type": "separator"},
+
+                            {"command": "RV2pattern_set_fixed"},
                             {"command": "RV2pattern_move_vertices"},
+
                             {"type": "separator"},
+
                             {"command": "RV2pattern_smooth"},
                             {"command": "RV2pattern_relax"}
                         ]
@@ -182,7 +201,9 @@
                             {"command": "RV2form_modify_vertices"},
                             {"command": "RV2form_modify_edges"},
                             {"command": "RV2form_modify_faces"},
+
                             {"type": "separator"},
+
                             {"command": "RV2form_move_vertices"}
                         ]
                     },
@@ -192,7 +213,9 @@
                         [
                             {"command": "RV2force_modify_vertices"},
                             {"command": "RV2force_modify_edges"},
+
                             {"type": "separator"},
+
                             {"command": "RV2force_move_vertices"}
                         ]
                     },

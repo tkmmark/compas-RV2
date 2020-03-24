@@ -29,11 +29,14 @@ def RunCommand(is_interactive):
     force = ForceDiagram.from_formdiagram(form)
     thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
 
-    bbox = force.bounding_box_xy()
-    xmin, xmax = bbox[0][0], bbox[2][0]
-    dx = 1.2 * (xmax - xmin)
+    bbox_form = form.bounding_box_xy()
+    bbox_force = force.bounding_box_xy()
+    xmax_form = bbox_form[1][0]
+    xmin_force = bbox_force[0][0]
 
-    force.transform(Translation([dx, 0, 0]))
+    dx = [1.2 * (xmax_form - xmin_force), 0, 0]
+
+    force.transform(Translation(dx))
 
     scene.add(form, name='form')
     scene.add(force, name='force')

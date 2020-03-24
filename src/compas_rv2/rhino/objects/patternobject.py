@@ -38,6 +38,10 @@ class PatternObject(MeshObject):
 
     def draw(self):
         """Draw the pattern in the Rhino scene using the current settings."""
+        group = self.settings['pattern.group']
+        if not compas_rhino.rs.IsGroup(group):
+            compas_rhino.rs.AddGroup(group)
+
         layer = self.settings['pattern.layer']
         if layer:
             self.artist.layer = layer
@@ -49,10 +53,12 @@ class PatternObject(MeshObject):
             color.update({key: self.settings['pattern.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
             color.update({key: self.settings['pattern.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
             guids = self.artist.draw_vertices(keys, color)
+            compas_rhino.rs.AddObjectsToGroup(guids, group)
             self.guid_vertex = zip(guids, keys)
         else:
             guids_vertices = list(self.guid_vertex.keys())
             compas_rhino.delete_objects(guids_vertices, purge=True)
+            compas_rhino.rs.DeleteGroup(group)
             self._guid_vertex = {}
 
         if self.settings['pattern.show.edges']:

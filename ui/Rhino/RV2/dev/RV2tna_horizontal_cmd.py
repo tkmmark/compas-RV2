@@ -33,7 +33,10 @@ def RunCommand(is_interactive):
     if not force:
         return
 
-    formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data)
+    kmax = scene.settings['tna.horizontal.kmax']
+    alpha = scene.settings['tna.horizontal.alpha']
+
+    formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data, kmax=kmax, alpha=alpha)
 
     form.datastructure.data = formdata
     force.datastructure.data = forcedata

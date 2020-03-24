@@ -201,7 +201,8 @@ class MeshObject(object):
         >>>
         """
         _filter = compas_rhino.rs.filter.point
-        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, filter=_filter)
+        objects = list(self.guid_vertex.keys())
+        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, objects=objects, group=False, filter=_filter)
         if guids:
             keys = [self.guid_vertex[guid] for guid in guids if guid in self.guid_vertex]
         else:
@@ -234,7 +235,7 @@ class MeshObject(object):
     # Edges
     # ==========================================================================
 
-    def select_edges(self):
+    def select_edges(self, keys=None):
         """Manually select edges in the Rhino model view.
 
         Returns
@@ -246,6 +247,9 @@ class MeshObject(object):
         --------
         >>>
         """
+        if keys:
+            rv2_select_edges(self.datastructure, keys)
+
         _filter = compas_rhino.rs.filter.curve
         guids = compas_rhino.rs.GetObjects(message="Select Edges.", preselect=True, select=True, filter=_filter)
         if guids:
