@@ -63,14 +63,14 @@ class PatternObject(MeshObject):
             guids_edges = list(self.guid_edge.keys())
             compas_rhino.delete_objects(guids_edges, purge=True)
 
-        # if self.settings['pattern.show.faces']:
-        #     keys = list(self.datastructure.faces())
-        #     color = {key: self.settings['pattern.color.faces'] for key in keys}
-        #     guids = self.artist.draw_faces(keys, color)
-        #     self.guid_face = zip(guids, keys)
-        # else:
-        #     guids_faces = list(self.guid_face.keys())
-        #     compas_rhino.delete_objects(guids_faces, purge=True)
+        if self.settings['pattern.show.faces']:
+            keys = list(self.datastructure.faces())
+            color = {key: self.settings['pattern.color.faces'] for key in keys}
+            guids = self.artist.draw_faces(keys, color)
+            self.guid_face = zip(guids, keys)
+        else:
+            guids_faces = list(self.guid_face.keys())
+            compas_rhino.delete_objects(guids_faces, purge=True)
 
 
 # ==============================================================================

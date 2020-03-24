@@ -26,7 +26,6 @@ def RunCommand(is_interactive):
     lines = compas_rhino.get_line_coordinates(guids)
     pattern = Pattern.from_lines(lines, delete_boundary_face=True)
 
-    # should the scene not be cleared at the start of this procedure?
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()

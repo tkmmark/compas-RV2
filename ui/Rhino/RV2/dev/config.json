@@ -58,21 +58,16 @@
 
         "commands":
         [
-            {"name": "RV2boundary_anchors", "menu_text": "Anchors",        "icon": 15},
-            {"name": "RV2boundary_holes",   "menu_text": "Holes/Openings", "icon": 16},
-
             {"name": "RV2equilibrium_horizontal", "menu_text": "Horizontal Equilibrium", "icon": 15},
             {"name": "RV2equilibrium_vertical",   "menu_text": "Vertical Equilibrium",   "icon": 16},
 
             {"name": "RV2file_open", "menu_text": "File Open", "icon": 4},
             {"name": "RV2file_save", "menu_text": "File Save", "icon": 4},
 
-            {"name": "RV2force_create",          "menu_text": "ForceDiagram Create",          "icon": 14},
             {"name": "RV2force_modify_edges",    "menu_text": "ForceDiagram Modify Edges",    "icon": 26},
             {"name": "RV2force_modify_vertices", "menu_text": "ForceDiagram Modify Vertices", "icon": 25},
             {"name": "RV2force_move_vertices",   "menu_text": "ForceDiagram Move Vertices",   "icon": 25},
 
-            {"name": "RV2form_create",          "menu_text": "FormDiagram Create",          "icon": 5},
             {"name": "RV2form_modify_edges",    "menu_text": "FormDiagram Modify Edges",    "icon": 20},
             {"name": "RV2form_modify_faces",    "menu_text": "FormDiagram Modify Faces",    "icon": 21},
             {"name": "RV2form_modify_vertices", "menu_text": "FormDiagram Modify Vertices", "icon": 19},
@@ -98,6 +93,9 @@
             {"name": "RV2skeleton_from_lines", "menu_text": "Skeleton From Lines", "icon": 11},
             {"name": "RV2skeleton_modify",     "menu_text": "Skeleton Modify",     "icon": 22},
 
+            {"name": "RV2supports", "menu_text": "Support Conditions", "icon": 16},
+
+            {"name": "RV2thrust_create",          "menu_text": "ThrustDiagram Create",          "icon": 30},
             {"name": "RV2thrust_modify_edges",    "menu_text": "ThrustDiagram Modify Edges",    "icon": 30},
             {"name": "RV2thrust_modify_faces",    "menu_text": "ThrustDiagram Modify Faces",    "icon": 31},
             {"name": "RV2thrust_modify_vertices", "menu_text": "ThrustDiagram Modify Vertices", "icon": 29},
@@ -155,10 +153,11 @@
                             {"command": "RV2pattern_relax"}
                         ]
                     },
+
                     {"type": "separator"},
+                    {"command": "RV2_supports"},
                     {"type": "separator"},
-                    {"command": "RV2form_create"},
-                    {"command": "RV2force_create"},
+                    {"command": "RV2thrust_create"},
                     {"type": "separator"},
                     {"command": "RV2equilibrium_horizontal"},
                     {"command": "RV2equilibrium_vertical"},

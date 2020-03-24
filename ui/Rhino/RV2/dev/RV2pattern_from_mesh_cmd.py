@@ -26,7 +26,6 @@ def RunCommand(is_interactive):
 
     pattern = RhinoMesh.from_guid(guid).to_compas(cls=Pattern)
 
-    # should the scene not be cleared at the start of this procedure?
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()

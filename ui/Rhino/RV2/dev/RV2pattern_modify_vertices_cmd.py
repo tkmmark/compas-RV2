@@ -30,15 +30,9 @@ def RunCommand(is_interactive):
         keys = list(pattern.datastructure.vertices())
 
     elif option == 'Openings':
-        # select the vertices around an opening
-        # draw dots in openings
-        # allow user to select dots
         raise NotImplementedError
 
     elif option == 'Holes':
-        # select the vertices around a hole
-        # draw dots in holes
-        # allow user to select dots
         raise NotImplementedError
 
     elif option == 'Continuous':

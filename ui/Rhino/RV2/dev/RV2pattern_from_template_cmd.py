@@ -30,7 +30,6 @@ def RunCommand(is_interactive):
 
     pattern = Pattern.from_template()
 
-    # should the scene not be cleared at the start of this procedure?
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()

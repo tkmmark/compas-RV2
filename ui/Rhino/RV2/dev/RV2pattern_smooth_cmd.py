@@ -5,6 +5,7 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
+from compas.datastructures import mesh_smooth_area
 
 
 __commandname__ = "RV2pattern_smooth"
@@ -26,20 +27,8 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    relax = proxy.package("compas.numerical.fd_numpy")
-
-    key_index = pattern.datastructure.key_index()
-    xyz = pattern.datastructure.vertices_attributes('xyz')
-    loads = pattern.datastructure.vertices_attributes(['px', 'py', 'pz'])
-    fixed = [key_index[key] for key in pattern.datastructure.vertices_where({'is_fixed': True})]
-    edges = [(key_index[u], key_index[v]) for u, v in pattern.edges()]
-    q = pattern.datastructure.edges_attribute('q')
-
-    xyz, q, f, l, r = relax(xyz, edges, fixed, q, loads)
-
-    for key in pattern.datastructure.vertices():
-        index = key_index[key]
-        pattern.datastructure.vertex_attributes(key, 'xyz', xyz[index])
+    fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
+    mesh_smooth_area(pattern.datastructure, fixed=fixed)
 
     scene.update()
 

@@ -6,7 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2boundary_anchors"
+__commandname__ = "RV2supports"
 
 
 HERE = compas_rhino.get_document_dirname()

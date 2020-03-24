@@ -26,9 +26,7 @@ def RunCommand(is_interactive):
 
     density = 10, 10
     pattern = RhinoSurface.from_guid(guid).uv_to_compas(cls=Pattern, density=density)
-    # pattern = Pattern.from_rhinosurface(guid)
 
-    # should the scene not be cleared at the start of this procedure?
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
