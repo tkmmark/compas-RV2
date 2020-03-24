@@ -5,6 +5,8 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import ThrustDiagram
+from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import ForceDiagram
 
 __commandname__ = "RV2thrust_create"
 
@@ -22,11 +24,17 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    thrust = ThrustDiagram.from_pattern(pattern.datastructure)
+    form = FormDiagram.from_mesh(pattern.datastructure)
+    form.update_boundaries(feet=2)
 
+    force = ForceDiagram.from_formdiagram(form)
+
+    # this is not a good idea
+    thrust = form.copy(cls=ThrustDiagram)
+
+    scene.add(form, name='form')
+    scene.add(force, name='force')
     scene.add(thrust, name='thrust')
-    scene.add(thrust.form, name='form')
-    scene.add(thrust.force, name='force')
 
     scene.update()
 

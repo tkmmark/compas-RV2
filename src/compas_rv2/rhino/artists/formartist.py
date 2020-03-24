@@ -11,7 +11,22 @@ __all__ = ['FormArtist']
 
 
 class FormArtist(MeshArtist):
-    pass
+
+    def draw_vertices(self, keys, color):
+        points = []
+        for key in keys:
+            xy = self.mesh.vertex_attributes(key, 'xy')
+            points.append({'pos': xy + [0], 'name': "FormDiagram.vertex", 'color': color[key]})
+        return compas_rhino.draw_points(points, layer=self.settings['form.layer'], clear=False, redraw=False)
+
+    def draw_edges(self, keys, color):
+        lines = []
+        for key in keys:
+            u, v = key
+            start = self.mesh.vertex_attributes(u, 'xy') + [0]
+            end = self.mesh.vertex_attributes(v, 'xy') + [0]
+            lines.append({'start': start, 'end': end, 'name': "FormDiagram.edge", 'color': color[key]})
+        return compas_rhino.draw_lines(lines, layer=self.settings['form.layer'], clear=False, redraw=False)
 
 
 # ==============================================================================
