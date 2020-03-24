@@ -7,7 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas.utilities import flatten
 
 
-__commandname__ = "RV2form_modify_vertices"
+__commandname__ = "RV2thrust_modify_vertices"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -20,21 +20,22 @@ def RunCommand(is_interactive):
         return
 
     form = scene.get("form")[0]
-    if not form:
+    thrust = scene.get("thrust")[0]
+    if not form or not thrust:
         return
 
     options = ['All', 'Continuous', 'ESC']
     option = compas_rhino.rs.GetString("Select Vertices.", options[-1], options)
 
     if option == 'All':
-        keys = list(form.datastructure.vertices())
+        keys = list(thrust.datastructure.vertices())
 
     elif option == 'Continuous':
-        temp = form.select_edges()
-        keys = list(set(flatten([form.datastructure.continuous_vertices(key) for key in temp])))
+        temp = thrust.select_edges()
+        keys = list(set(flatten([thrust.datastructure.continuous_vertices(key) for key in temp])))
 
     else:
-        keys = form.select_vertices()
+        keys = thrust.select_vertices()
 
     public = [name for name in form.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
     if form.update_vertices_attributes(keys, names=public):

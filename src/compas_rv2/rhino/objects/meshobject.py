@@ -218,6 +218,7 @@ class MeshObject(object):
             False otherwise.
         """
         if keys:
+            compas_rhino.rs.UnselectAllObjects()
             rv2_select_vertices(self.datastructure, keys)
             return VertexModifier.update_vertex_attributes(self.datastructure, keys, names)
 
@@ -263,6 +264,7 @@ class MeshObject(object):
             False otherwise.
         """
         if keys:
+            compas_rhino.rs.UnselectAllObjects()
             rv2_select_edges(self.datastructure, keys)
             return EdgeModifier.update_edge_attributes(self.datastructure, keys, names)
 
@@ -308,6 +310,7 @@ class MeshObject(object):
             False otherwise.
         """
         if keys:
+            compas_rhino.rs.UnselectAllObjects()
             rv2_select_faces(self.datastructure, keys)
             return FaceModifier.update_face_attributes(self.datastructure, keys, names)
 

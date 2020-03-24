@@ -23,27 +23,15 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    options = ['Manual', 'All', 'Openings', 'Holes', 'Continuous', 'Fixed', 'Anchors']
-    option = compas_rhino.rs.GetString("Select Faces.", options[0], options)
+    options = ['All', 'Continuous', 'ESC']
+    option = compas_rhino.rs.GetString("Select Vertices.", options[-1], options)
 
     if option == 'All':
         keys = list(pattern.datastructure.vertices())
 
-    elif option == 'Openings':
-        raise NotImplementedError
-
-    elif option == 'Holes':
-        raise NotImplementedError
-
     elif option == 'Continuous':
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
-
-    elif option == 'Fixed':
-        keys = list(pattern.datastructure.vertices_where({'is_fixed': True}))
-
-    elif option == 'Anchors':
-        keys = list(pattern.datastructure.vertices_where({'is_anchor': True}))
 
     else:
         keys = pattern.select_vertices()

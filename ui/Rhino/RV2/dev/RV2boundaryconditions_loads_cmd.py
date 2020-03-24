@@ -6,26 +6,23 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2pattern_move_vertices"
+__commandname__ = "RV2boundaryconditions_loads"
 
 
 HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
-
     scene = get_scene()
     if not scene:
         return
 
     pattern = scene.get("pattern")[0]
+
     if not pattern:
         return
 
-    keys = pattern.select_vertices()
-
-    if pattern.move_vertices(keys):
-        scene.update()
+    # scene.update()
 
 
 # ==============================================================================

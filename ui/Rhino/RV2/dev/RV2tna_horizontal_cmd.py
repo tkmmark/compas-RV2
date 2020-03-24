@@ -7,7 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 
 
-__commandname__ = "RV2equilibrium_horizontal"
+__commandname__ = "RV2tna_horizontal"
 
 
 HERE = compas_rhino.get_document_dirname()

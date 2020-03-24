@@ -23,23 +23,11 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    options = ['Manual', 'All', 'Openings', 'Holes', 'Parallel']
-    option = compas_rhino.rs.GetString("Select Faces.", options[0], options)
+    options = ['All', 'Parallel', 'ESC']
+    option = compas_rhino.rs.GetString("Select Faces.", options[-1], options)
 
     if option == 'All':
         keys = list(pattern.datastructure.faces())
-
-    elif option == 'Openings':
-        # select the faces around an opening
-        # draw dots in openings
-        # allow user to select dots
-        raise NotImplementedError
-
-    elif option == 'Holes':
-        # select the faces around a hole
-        # draw dots in holes
-        # allow user to select dots
-        raise NotImplementedError
 
     elif option == 'Parallel':
         temp = pattern.select_edges()

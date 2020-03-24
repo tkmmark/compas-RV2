@@ -59,6 +59,7 @@ def RunCommand(is_interactive):
 
         if 'pattern' in data:
             pattern = Pattern.from_data(data['pattern'])
+
             scene.add(pattern, name="pattern")
 
         if 'form' in data and 'force' in data:

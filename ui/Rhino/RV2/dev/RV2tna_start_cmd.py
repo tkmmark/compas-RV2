@@ -9,7 +9,7 @@ from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas.geometry import Translation
 
-__commandname__ = "RV2thrust_create"
+__commandname__ = "RV2tna_start"
 
 
 HERE = compas_rhino.get_document_dirname()
