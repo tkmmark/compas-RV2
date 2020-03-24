@@ -26,7 +26,7 @@ def RunCommand(is_interactive):
     # is_loaded should be _is_loaded
 
     options = ['All', 'Parallel', 'ESC']
-    option = compas_rhino.rs.GetString("Select Faces.", options[-1], options)
+    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 
     if option == 'All':
         keys = list(form.datastructure.faces())

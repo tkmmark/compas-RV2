@@ -66,6 +66,7 @@ def RunCommand(is_interactive):
 
             form = FormDiagram.from_data(data['form'])
             force = ForceDiagram.from_data(data['force'])
+            force.primal = form
             thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
 
             scene.add(form, name="form")

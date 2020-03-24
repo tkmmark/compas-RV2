@@ -24,7 +24,7 @@ def RunCommand(is_interactive):
         return
 
     options = ['All', 'Continuous', 'Parallel', 'ESC']
-    option = compas_rhino.rs.GetString("Select Edges", options[-1], options)
+    option = compas_rhino.rs.GetString("Selection Type", options[-1], options)
 
     if option == 'All':
         keys = list(pattern.datastructure.edges())

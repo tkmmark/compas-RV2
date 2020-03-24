@@ -150,6 +150,8 @@
                             {"command": "RV2pattern_modify_edges"},
                             {"command": "RV2pattern_modify_faces"},
                             {"type": "separator"},
+                            {"command": "RV2pattern_move_vertices"},
+                            {"type": "separator"},
                             {"command": "RV2pattern_smooth"},
                             {"command": "RV2pattern_relax"}
                         ]
@@ -179,7 +181,9 @@
                         [
                             {"command": "RV2form_modify_vertices"},
                             {"command": "RV2form_modify_edges"},
-                            {"command": "RV2form_modify_faces"}
+                            {"command": "RV2form_modify_faces"},
+                            {"type": "separator"},
+                            {"command": "RV2form_move_vertices"}
                         ]
                     },
                     {
@@ -187,16 +191,9 @@
                         "items":
                         [
                             {"command": "RV2force_modify_vertices"},
-                            {"command": "RV2force_modify_edges"}
-                        ]
-                    },
-                    {
-                        "name" : "Modify Thrust Diagram",
-                        "items":
-                        [
-                            {"command": "RV2thrust_modify_vertices"},
-                            {"command": "RV2thrust_modify_edges"},
-                            {"command": "RV2thrust_modify_faces"}
+                            {"command": "RV2force_modify_edges"},
+                            {"type": "separator"},
+                            {"command": "RV2force_move_vertices"}
                         ]
                     },
                     {"type": "separator"},
