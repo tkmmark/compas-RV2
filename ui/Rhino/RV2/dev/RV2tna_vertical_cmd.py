@@ -38,8 +38,9 @@ def RunCommand(is_interactive):
         return
 
     zmax = scene.settings['tna.vertical.zmax']
+    kmax = scene.settings['tna.vertical.kmax']
 
-    formdata, scale = vertical(form.datastructure.data, zmax)
+    formdata, scale = vertical(form.datastructure.data, zmax, kmax=kmax)
 
     force.datastructure.attributes['scale'] = scale
     form.datastructure.data = formdata

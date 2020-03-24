@@ -36,8 +36,9 @@ SETTINGS = {
     'pattern.color.edges': [0, 0, 0],
     'pattern.color.faces': [200, 200, 200],
     'pattern.layer': "RV2::Pattern",
+    'pattern.group': "RV2_pattern",
 
-    'form.show.vertices': True,
+    'form.show.vertices': False,
     'form.show.edges': True,
     'form.show.angles': False,
     'form.color.vertices': [0, 255, 0],
@@ -48,7 +49,7 @@ SETTINGS = {
     'form.color.edges:is_external': [0, 0, 255],
     'form.layer': "RV2::FormDiagram",
 
-    'force.show.vertices': True,
+    'force.show.vertices': False,
     'force.show.edges': True,
     'force.color.vertices': [0, 255, 0],
     'force.color.vertices:is_fixed': [0, 255, 255],
@@ -70,9 +71,9 @@ SETTINGS = {
     'thrust.color.reactions': [0, 255, 255],
     'thrust.color.residuals': [0, 255, 255],
     'thrust.color.pipes': [0, 0, 255],
-    'thrust.scale.reactions': 1.0,
+    'thrust.scale.reactions': 0.1,
     'thrust.scale.residuals': 1.0,
-    'thrust.scale.pipes': 1.0,
+    'thrust.scale.pipes': 0.01,
     'thrust.layer': "RV2::ThrustDiagram",
 
     "tna.vertical.kmax": 100,
