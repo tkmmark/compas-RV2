@@ -13,12 +13,36 @@ __all__ = ["ThrustObject"]
 
 class ThrustObject(MeshObject):
 
-    def __init__(self, scene, diagram, **kwargs):
+    def __init__(self, scene, diagram, settings={}, **kwargs):
         super(ThrustObject, self).__init__(scene, diagram, **kwargs)
         self.artist = ThrustArtist(self.datastructure)
         self._guid_reaction = {}
         self._guid_residual = {}
         self._guid_pipe = {}
+        self.settings = {
+            'thrust.layer': "RV2::ThrustDiagram",
+            'thrust.show.vertices': False,
+            'thrust.show.edges': True,
+            'thrust.show.faces': True,
+            'thrust.show.reactions': True,
+            'thrust.show.residuals': False,
+            'thrust.show.pipes': False,
+            'thrust.color.vertices': [255, 0, 255],
+            'thrust.color.vertices:is_fixed': [0, 255, 0],
+            'thrust.color.vertices:is_anchor': [255, 0, 0],
+            'thrust.color.edges': [255, 0, 255],
+            'thrust.color.faces': [255, 0, 255],
+            'thrust.color.reactions': [0, 255, 255],
+            'thrust.color.residuals': [0, 255, 255],
+            'thrust.color.pipes': [0, 0, 255],
+            'thrust.scale.reactions': 0.1,
+            'thrust.scale.residuals': 1.0,
+            'thrust.scale.pipes': 0.01,
+            'thrust.tol.reactions': 1e-3,
+            'thrust.tol.residuals': 1e-3,
+            'thrust.tol.pipes': 1e-3,
+        }
+        self.settings.update(settings)
 
     @property
     def guid_reaction(self):

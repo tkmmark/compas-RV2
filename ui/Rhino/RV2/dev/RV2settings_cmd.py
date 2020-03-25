@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 from compas_rv2.rhino import get_scene
-
+from compas_rv2.rhino import SettingsForm
 
 __commandname__ = "RV2settings"
 
@@ -14,8 +14,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    if scene.update_settings():
-        scene.update()
+    SettingsForm.from_scene(scene)
 
 
 # ==============================================================================
