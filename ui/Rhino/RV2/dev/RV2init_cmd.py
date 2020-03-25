@@ -36,7 +36,6 @@ SETTINGS = {
     'pattern.color.edges': [0, 0, 0],
     'pattern.color.faces': [200, 200, 200],
     'pattern.layer': "RV2::Pattern",
-    'pattern.group': "RV2_pattern",
 
     'form.show.vertices': False,
     'form.show.edges': True,
@@ -57,7 +56,7 @@ SETTINGS = {
     'force.color.edges:is_external': [0, 0, 255],
     'force.layer': "RV2::ForceDiagram",
 
-    'thrust.show.vertices': True,
+    'thrust.show.vertices': False,
     'thrust.show.edges': True,
     'thrust.show.faces': True,
     'thrust.show.reactions': True,

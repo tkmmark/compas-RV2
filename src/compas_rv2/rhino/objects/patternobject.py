@@ -38,9 +38,10 @@ class PatternObject(MeshObject):
 
     def draw(self):
         """Draw the pattern in the Rhino scene using the current settings."""
-        group = self.settings['pattern.group']
+        group = self.settings['pattern.layer']
         if not compas_rhino.rs.IsGroup(group):
             compas_rhino.rs.AddGroup(group)
+        compas_rhino.rs.UnlockGroup(group)
 
         layer = self.settings['pattern.layer']
         if layer:
@@ -80,6 +81,9 @@ class PatternObject(MeshObject):
             guids_faces = list(self.guid_face.keys())
             compas_rhino.delete_objects(guids_faces, purge=True)
             self._guid_face = {}
+
+        compas_rhino.rs.LockGroup(group)
+
 
 
 # ==============================================================================
