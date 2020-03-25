@@ -96,9 +96,15 @@ class SettingsForm(forms.Form):
     def from_scene(cls, scene):
 
         all_settings = {}
+        # pre-populate class default settins
+        for object_type in scene.registered_object_types:
+            if hasattr(object_type, 'settings'):
+                if isinstance(object_type.settings, dict):  # avoid property objects
+                    all_settings[object_type.__name__] = object_type.settings
+        # # overwite with object setting if added as node
         for key in scene.nodes:
             node = scene.nodes[key]
-            all_settings[node.name] = node.settings
+            all_settings[node.__class__.__name__] = node.settings
 
         settingsForm = cls()
         settingsForm.scene = scene
