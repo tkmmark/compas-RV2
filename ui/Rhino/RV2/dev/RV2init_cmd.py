@@ -79,7 +79,7 @@ SETTINGS = {
     'thrust.tol.residuals': 1e-3,
     'thrust.tol.pipes': 1e-3,
 
-    "tna.vertical.kmax": 100,
+    "tna.vertical.kmax": 300,
     "tna.vertical.zmax": 4.0,
     "tna.horizontal.kmax": 100,
     "tna.horizontal.alpha": 100,

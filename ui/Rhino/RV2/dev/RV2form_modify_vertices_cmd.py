@@ -23,6 +23,11 @@ def RunCommand(is_interactive):
     if not form:
         return
 
+    layer = form.settings['form.layer']
+    group_vertices = "{}::vertices".format(layer)
+
+    compas_rhino.rs.ShowGroup(group_vertices)
+
     options = ['All', 'Continuous', 'ESC']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 
