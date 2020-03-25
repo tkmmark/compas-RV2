@@ -57,10 +57,10 @@ def RunCommand(is_interactive):
     if 'data' in session:
         data = session['data']
 
-        if 'pattern' in data:
-            pattern = Pattern.from_data(data['pattern'])
+        # if 'pattern' in data:
+        #     pattern = Pattern.from_data(data['pattern'])
 
-            scene.add(pattern, name="pattern")
+        #     scene.add(pattern, name="pattern")
 
         if 'form' in data and 'force' in data:
 

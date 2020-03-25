@@ -6,6 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import select_vertices as rv2_select_vertices
 from compas_rv2.rhino import select_faces as rv2_select_faces
 from compas_rv2.rhino import select_edges as rv2_select_edges
+from compas_rv2.rhino import delete_objects
 from compas_rhino.modifiers import VertexModifier
 from compas_rhino.modifiers import EdgeModifier
 from compas_rhino.modifiers import FaceModifier
@@ -168,7 +169,7 @@ class MeshObject(object):
         guids_vertexnormals = list(self.guid_vertexnormal.keys())
         guids_facenormals = list(self.guid_facenormal.keys())
         guids = guids_vertices + guids_edges + guids_faces + guids_vertexlabels + guids_edgelabels + guids_facelabels + guids_vertexnormals + guids_facenormals
-        compas_rhino.delete_objects(guids, purge=True)
+        delete_objects(guids, purge=True)
         self._guid_vertex = {}
         self._guid_edge = {}
         self._guid_face = {}
@@ -206,8 +207,7 @@ class MeshObject(object):
         >>>
         """
         _filter = compas_rhino.rs.filter.point
-        objects = list(self.guid_vertex.keys())
-        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, objects=objects, group=False, filter=_filter)
+        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, group=False, filter=_filter)
         if guids:
             keys = [self.guid_vertex[guid] for guid in guids if guid in self.guid_vertex]
         else:
@@ -240,7 +240,7 @@ class MeshObject(object):
     # Edges
     # ==========================================================================
 
-    def select_edges(self, keys=None):
+    def select_edges(self):
         """Manually select edges in the Rhino model view.
 
         Returns
@@ -252,11 +252,8 @@ class MeshObject(object):
         --------
         >>>
         """
-        if keys:
-            rv2_select_edges(self.datastructure, keys)
-
         _filter = compas_rhino.rs.filter.curve
-        guids = compas_rhino.rs.GetObjects(message="Select Edges.", preselect=True, select=True, filter=_filter)
+        guids = compas_rhino.rs.GetObjects(message="Select Edges.", preselect=True, select=True, group=False, filter=_filter)
         if guids:
             keys = [self.guid_edge[guid] for guid in guids if guid in self.guid_edge]
         else:
@@ -302,7 +299,7 @@ class MeshObject(object):
         >>>
         """
         _filter = compas_rhino.rs.filter.mesh
-        guids = compas_rhino.rs.GetObjects(message="Select Faces.", preselect=True, select=True, filter=_filter)
+        guids = compas_rhino.rs.GetObjects(message="Select Faces.", preselect=True, select=True, group=False, filter=_filter)
         if guids:
             keys = [self.guid_face[guid] for guid in guids if guid in self.guid_face]
         else:

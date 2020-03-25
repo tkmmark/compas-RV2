@@ -23,6 +23,11 @@ def RunCommand(is_interactive):
     if not form:
         return
 
+    layer = form.settings['form.layer']
+    group_edges = "{}::edges".format(layer)
+
+    compas_rhino.rs.ShowGroup(group_edges)
+
     options = ['All', 'Continuous', 'Parallel', 'ESC']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 

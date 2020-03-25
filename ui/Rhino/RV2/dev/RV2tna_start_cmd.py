@@ -38,6 +38,8 @@ def RunCommand(is_interactive):
 
     force.transform(Translation(dx))
 
+    scene.clear()
+
     scene.add(form, name='form')
     scene.add(force, name='force')
     scene.add(thrust, name='thrust')

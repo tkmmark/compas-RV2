@@ -45,13 +45,17 @@ class Scene(object):
             if node.visible:
                 node.draw()
         compas_rhino.rs.EnableRedraw(True)
+        compas_rhino.rs.Redraw()
 
     def clear(self):
+        compas_rhino.rs.EnableRedraw(False)
         for _id in list(self.nodes.keys()):
             node = self.nodes[_id]
             node.clear()
             del self.nodes[_id]
         self.nodes = {}
+        compas_rhino.rs.EnableRedraw(True)
+        compas_rhino.rs.Redraw()
 
     def update_settings(self, settings=None):
         # should this not produce some kind of result we can react to?
