@@ -112,6 +112,15 @@ class SettingsForm(forms.Form):
         settingsForm.Show()
         return settingsForm
 
+    @classmethod
+    def from_settings(cls, settings, name):
+
+        all_settings = {name: settings}
+        settingsForm = cls()
+        settingsForm.setup(all_settings)
+        settingsForm.Show()
+        return settingsForm
+
     def setup(self, all_settings):
 
         self.Title = "Settings"
@@ -159,7 +168,8 @@ class SettingsForm(forms.Form):
         try:
             for page in self.TabControl.Pages:
                 page.Content.apply()
-            self.scene.update()
+            if hasattr(self, 'scene'):
+                self.scene.update()
         except Exception as e:
             print(e)
         self.Close()
@@ -171,4 +181,5 @@ class SettingsForm(forms.Form):
 if __name__ == "__main__":
 
     scene = get_scene()
-    SettingsForm.from_scene(scene)
+    # SettingsForm.from_scene(scene)
+    SettingsForm.from_settings(scene.settings, "solver") 
