@@ -70,42 +70,46 @@ class FormObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
 
+        # vertices
+
+        guids_vertices = list(self.guid_vertex.keys())
+        delete_objects(guids_vertices, purge=True)
+
+        keys = list(self.datastructure.vertices())
+        color = {key: self.settings['form.color.vertices'] for key in keys}
+        color_fixed = self.settings['form.color.vertices:is_fixed']
+        color_external = self.settings['form.color.vertices:is_external']
+        color_anchor = self.settings['form.color.vertices:is_anchor']
+        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
+        color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
+        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+        guids = self.artist.draw_vertices(keys, color)
+        self.guid_vertex = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+
         if self.settings['form.show.vertices']:
-
-            keys = list(self.datastructure.vertices())
-            color = {key: self.settings['form.color.vertices'] for key in keys}
-            color_fixed = self.settings['form.color.vertices:is_fixed']
-            color_external = self.settings['form.color.vertices:is_external']
-            color_anchor = self.settings['form.color.vertices:is_anchor']
-            color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-            color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
-            color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
-            guids = self.artist.draw_vertices(keys, color)
-            self.guid_vertex = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
-
+            compas_rhino.rs.ShowGroup(group_vertices)
         else:
-            guids_vertices = list(self.guid_vertex.keys())
-            compas_rhino.delete_objects(guids_vertices, purge=True)
-            compas_rhino.rs.DeleteGroup(group_vertices)
-            del self._guid_vertex
-            self._guid_vertex = {}
+            compas_rhino.rs.HideGroup(group_vertices)
+
+        # edges
+
+        guids_edges = list(self.guid_edge.keys())
+        delete_objects(guids_edges, purge=True)
+
+        keys = list(self.datastructure.edges_where({'_is_edge': True}))
+        color = {key: self.settings['form.color.edges'] for key in keys}
+        color.update({key: self.settings['form.color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
+        guids = self.artist.draw_edges(keys, color)
+        self.guid_edge = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
         if self.settings['form.show.edges']:
-
-            keys = list(self.datastructure.edges_where({'_is_edge': True}))
-            color = {key: self.settings['form.color.edges'] for key in keys}
-            color.update({key: self.settings['form.color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
-            guids = self.artist.draw_edges(keys, color)
-            self.guid_edge = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
-
+            compas_rhino.rs.ShowGroup(group_edges)
         else:
-            guids_edges = list(self.guid_edge.keys())
-            compas_rhino.delete_objects(guids_edges, purge=True)
-            compas_rhino.rs.DeleteGroup(group_edges)
-            del self._guid_edge
-            self._guid_edge = {}
+            compas_rhino.rs.HideGroup(group_edges)
+
+        # angles
 
         if self.settings['form.show.angles']:
 
@@ -126,7 +130,7 @@ class FormObject(MeshObject):
 
         else:
             guids_edgelabels = list(self.guid_edgelabel.keys())
-            compas_rhino.delete_objects(guids_edgelabels, purge=True)
+            delete_objects(guids_edgelabels, purge=True)
             del self._guid_edgelabel
             self._guid_edgelabel = {}
 

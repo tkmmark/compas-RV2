@@ -5,6 +5,7 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import ThrustArtist
+from compas_rv2.rhino import delete_objects
 
 
 __all__ = ["ThrustObject"]
@@ -62,52 +63,57 @@ class ThrustObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_faces):
             compas_rhino.rs.AddGroup(group_faces)
 
+        # vertices
+
+        guids_vertices = list(self.guid_vertex.keys())
+        delete_objects(guids_vertices, purge=True)
+
+        keys = list(self.datastructure.vertices_where({'_is_external': False}))
+        color = {key: self.settings['thrust.color.vertices'] for key in keys}
+        color.update({key: self.settings['thrust.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
+        color.update({key: self.settings['thrust.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+        guids = self.artist.draw_vertices(keys, color)
+        self.guid_vertex = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+
         if self.settings['thrust.show.vertices']:
-
-            keys = list(self.datastructure.vertices_where({'_is_external': False}))
-            color = {key: self.settings['thrust.color.vertices'] for key in keys}
-            color.update({key: self.settings['thrust.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-            color.update({key: self.settings['thrust.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
-            guids = self.artist.draw_vertices(keys, color)
-            self.guid_vertex = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
-
+            compas_rhino.rs.ShowGroup(group_vertices)
         else:
-            guids_vertices = list(self.guid_vertex.keys())
-            compas_rhino.delete_objects(guids_vertices, purge=True)
-            compas_rhino.rs.DeleteGroup(group_vertices)
-            del self._guid_vertex
-            self._guid_vertex = {}
+            compas_rhino.rs.HideGroup(group_vertices)
+
+        # edges
+
+        guids_edges = list(self.guid_edge.keys())
+        delete_objects(guids_edges, purge=True)
+
+        keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
+        color = {key: self.settings['thrust.color.edges'] for key in keys}
+        guids = self.artist.draw_edges(keys, color)
+        self.guid_edge = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
         if self.settings['thrust.show.edges']:
-
-            keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
-            color = {key: self.settings['thrust.color.edges'] for key in keys}
-            guids = self.artist.draw_edges(keys, color)
-            self.guid_edge = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
-
+            compas_rhino.rs.ShowGroup(group_edges)
         else:
-            guids_edges = list(self.guid_edge.keys())
-            compas_rhino.delete_objects(guids_edges, purge=True)
-            compas_rhino.rs.DeleteGroup(group_edges)
-            del self._guid_edge
-            self._guid_edge = {}
+            compas_rhino.rs.HideGroup(group_edges)
+
+        # faces
+
+        guids_faces = list(self.guid_face.keys())
+        delete_objects(guids_faces, purge=True)
+
+        keys = list(self.datastructure.faces_where({'_is_loaded': True}))
+        color = {key: self.settings['thrust.color.faces'] for key in keys}
+        guids = self.artist.draw_faces(keys, color)
+        self.guid_face = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
 
         if self.settings.get('thrust.show.faces', True):
-
-            keys = list(self.datastructure.faces_where({'_is_loaded': True}))
-            color = {key: self.settings['thrust.color.faces'] for key in keys}
-            guids = self.artist.draw_faces(keys, color)
-            self.guid_face = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
-
+            compas_rhino.rs.ShowGroup(group_faces)
         else:
-            guids_faces = list(self.guid_face.keys())
-            compas_rhino.delete_objects(guids_faces, purge=True)
-            compas_rhino.rs.DeleteGroup(group_faces)
-            del self._guid_face
-            self._guid_face = {}
+            compas_rhino.rs.HideGroup(group_faces)
+
+        # overlays
 
         if self.settings['thrust.show.reactions']:
 
@@ -120,7 +126,7 @@ class ThrustObject(MeshObject):
 
         else:
             guids_reactions = list(self.guid_reaction.keys())
-            compas_rhino.delete_objects(guids_reactions, purge=True)
+            delete_objects(guids_reactions, purge=True)
             del self._guid_reaction
             self._guid_reaction = {}
 
@@ -135,7 +141,7 @@ class ThrustObject(MeshObject):
 
         else:
             guids_residuals = list(self.guid_residual)
-            compas_rhino.delete_objects(guids_residuals, purge=True)
+            delete_objects(guids_residuals, purge=True)
             del self._guid_residual
             self._guid_residual = {}
 
@@ -150,7 +156,7 @@ class ThrustObject(MeshObject):
 
         else:
             guids_pipes = list(self.guid_pipe)
-            compas_rhino.delete_objects(guids_pipes, purge=True)
+            delete_objects(guids_pipes, purge=True)
             del self._guid_pipe
             self._guid_pipe = {}
 

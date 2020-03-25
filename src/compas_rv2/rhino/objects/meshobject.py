@@ -6,6 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import select_vertices as rv2_select_vertices
 from compas_rv2.rhino import select_faces as rv2_select_faces
 from compas_rv2.rhino import select_edges as rv2_select_edges
+from compas_rv2.rhino import delete_objects
 from compas_rhino.modifiers import VertexModifier
 from compas_rhino.modifiers import EdgeModifier
 from compas_rhino.modifiers import FaceModifier
@@ -163,7 +164,7 @@ class MeshObject(object):
         guids_vertexnormals = list(self.guid_vertexnormal.keys())
         guids_facenormals = list(self.guid_facenormal.keys())
         guids = guids_vertices + guids_edges + guids_faces + guids_vertexlabels + guids_edgelabels + guids_facelabels + guids_vertexnormals + guids_facenormals
-        compas_rhino.delete_objects(guids, purge=True)
+        delete_objects(guids, purge=True)
         self._guid_vertex = {}
         self._guid_edge = {}
         self._guid_face = {}

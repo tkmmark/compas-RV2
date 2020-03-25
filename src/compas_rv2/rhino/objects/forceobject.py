@@ -5,6 +5,7 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import ForceArtist
+from compas_rv2.rhino import delete_objects
 
 
 __all__ = ["ForceObject"]
@@ -68,39 +69,41 @@ class ForceObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
 
+        # vertices
+
+        guids_vertices = list(self.guid_vertex.keys())
+        delete_objects(guids_vertices, purge=True)
+
+        keys = list(self.datastructure.vertices())
+        color = {key: self.settings["force.color.vertices"] for key in keys}
+        guids = self.artist.draw_vertices(keys, color)
+        self.guid_vertex = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+
         if self.settings["force.show.vertices"]:
-
-            keys = list(self.datastructure.vertices())
-            color = {key: self.settings["force.color.vertices"] for key in keys}
-            guids = self.artist.draw_vertices(keys, color)
-            self.guid_vertex = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
-
+            compas_rhino.rs.ShowGroup(group_vertices)
         else:
-            guids_vertices = list(self.guid_vertex.keys())
-            compas_rhino.delete_objects(guids_vertices, purge=True)
-            compas_rhino.rs.DeleteGroup(group_vertices)
-            del self._guid_vertex
-            self._guid_vertex = {}
+            compas_rhino.rs.HideGroup(group_vertices)
+
+        # edges
+
+        guids_edges = list(self.guid_edge.keys())
+        delete_objects(guids_edges, purge=True)
+
+        keys = list(self.datastructure.edges())
+        color = {key: self.settings['force.color.edges'] for key in keys}
+        for key in keys:
+            key_ = self.datastructure.primal.face_adjacency_halfedge(*key)
+            if self.datastructure.primal.edge_attribute(key_, '_is_external'):
+                color[key] = self.settings["force.color.edges:is_external"]
+        guids = self.artist.draw_edges(keys, color)
+        self.guid_edge = zip(guids, keys)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
         if self.settings["force.show.edges"]:
-
-            keys = list(self.datastructure.edges())
-            color = {key: self.settings['force.color.edges'] for key in keys}
-            for key in keys:
-                key_ = self.datastructure.primal.face_adjacency_halfedge(*key)
-                if self.datastructure.primal.edge_attribute(key_, '_is_external'):
-                    color[key] = self.settings["force.color.edges:is_external"]
-            guids = self.artist.draw_edges(keys, color)
-            self.guid_edge = zip(guids, keys)
-            compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
-
+            compas_rhino.rs.ShowGroup(group_edges)
         else:
-            guids_edges = list(self.guid_edge.keys())
-            compas_rhino.delete_objects(guids_edges, purge=True)
-            compas_rhino.rs.DeleteGroup(group_edges)
-            del self._guid_edge
-            self._guid_edge = {}
+            compas_rhino.rs.HideGroup(group_edges)
 
 
 # ==============================================================================

@@ -7,8 +7,26 @@ from ast import literal_eval
 import compas_rhino
 from compas_rhino.etoforms import TextForm
 
+try:
+    import System
+    import Rhino
+    import rhinoscriptsyntax as rs
+    import scriptcontext as sc
+
+except ImportError:
+    pass
+
+else:
+    find_object = sc.doc.Objects.Find
+
+    try:
+        purge_object = sc.doc.Objects.Purge
+    except AttributeError:
+        purge_object = None
+
 
 __all__ = [
+    "delete_objects",
     "is_valid_file",
     "select_filepath_open",
     "select_filepath_save",
@@ -19,14 +37,30 @@ __all__ = [
     "select_vertices",
     "select_edges",
     "select_faces",
-    # "select_boundary_vertices",
-    # "select_continuous_vertices",
-    # "select_boundary_edges",
-    # "select_continuous_edges",
-    # "select_parallel_edges",
-    # "select_boundary_faces",
-    # "select_parallel_faces",
 ]
+
+
+def delete_objects(guids, purge=None):
+    if purge and purge_object:
+        purge_objects(guids)
+    else:
+        rs.EnableRedraw(False)
+        for guid in guids:
+            if rs.IsObjectHidden(guid):
+                rs.ShowObject(guid)
+        rs.DeleteObjects(guids)
+
+
+def purge_objects(guids):
+    if not purge_object:
+        raise RuntimeError('Cannot purge outside Rhino script context')
+    rs.EnableRedraw(False)
+    for guid in guids:
+        if rs.IsObject(guid):
+            if rs.IsObjectHidden(guid):
+                rs.ShowObject(guid)
+            o = find_object(guid)
+            purge_object(o.RuntimeSerialNumber)
 
 
 def match_vertices(diagram, keys):
@@ -85,57 +119,6 @@ def select_faces(diagram, keys):
     compas_rhino.rs.EnableRedraw(False)
     compas_rhino.rs.SelectObjects(guids)
     compas_rhino.rs.EnableRedraw(True)
-
-
-# def select_boundary_vertices(rhinodiagram):
-#     vertices = rhinodiagram.diagram.vertices_on_boundary()
-#     select_vertices(rhinodiagram.diagram, vertices)
-
-
-# def select_boundary_edges(rhinodiagram):
-#     edges = rhinodiagram.diagram.edges_on_boundary()
-#     select_edges(rhinodiagram.diagram, edges)
-
-
-# def select_boundary_faces(rhinodiagram):
-#     faces = rhinodiagram.diagram.faces_on_boundary()
-#     select_faces(rhinodiagram.diagram, faces)
-
-
-# def select_continuous_edges(rhinodiagram):
-#     selected = rhinodiagram.select_edges()
-#     edges = []
-#     for edge in selected:
-#         continuous = rhinodiagram.diagram.continuous_edges(edge)
-#         edges.extend(continuous)
-#     select_edges(rhinodiagram.diagram, edges)
-
-
-# def select_continuous_vertices(rhinodiagram):
-#     edges = rhinodiagram.select_edges()
-#     vertices = []
-#     for edge in edges:
-#         continuous = rhinodiagram.diagram.continuous_vertices(edge)
-#         vertices.extend(continuous)
-#     select_vertices(rhinodiagram.diagram, vertices)
-
-
-# def select_parallel_edges(rhinodiagram):
-#     selected = rhinodiagram.select_edges()
-#     edges = []
-#     for edge in selected:
-#         parallel = rhinodiagram.diagram.parallel_edges(edge)
-#         edges.extend(parallel)
-#     select_edges(rhinodiagram.diagram, edges)
-
-
-# def select_parallel_faces(rhinodiagram):
-#     selected = rhinodiagram.select_edges()
-#     faces = []
-#     for edge in selected:
-#         parallel = rhinodiagram.diagram.parallel_faces(edge)
-#         faces.extend(parallel)
-#     select_faces(rhinodiagram.diagram, faces)
 
 
 def is_valid_file(filepath, ext):

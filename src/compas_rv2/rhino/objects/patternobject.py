@@ -4,6 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
+from compas_rv2.rhino import delete_objects
 from compas_rhino.artists import MeshArtist
 
 
@@ -59,7 +60,7 @@ class PatternObject(MeshObject):
         # vertices
 
         guids_vertices = list(self.guid_vertex.keys())
-        compas_rhino.delete_objects(guids_vertices, purge=True)
+        delete_objects(guids_vertices, purge=True)
 
         keys = list(self.datastructure.vertices())
         color = {key: self.settings['pattern.color.vertices'] for key in keys}
@@ -79,7 +80,7 @@ class PatternObject(MeshObject):
         # edges
 
         guids_edges = list(self.guid_edge.keys())
-        compas_rhino.delete_objects(guids_edges, purge=True)
+        delete_objects(guids_edges, purge=True)
 
         keys = list(self.datastructure.edges())
         color = {key: self.settings['pattern.color.edges'] for key in keys}
@@ -95,7 +96,7 @@ class PatternObject(MeshObject):
         # faces
 
         guids_faces = list(self.guid_face.keys())
-        compas_rhino.delete_objects(guids_faces, purge=True)
+        delete_objects(guids_faces, purge=True)
 
         keys = list(self.datastructure.faces())
         color = {key: self.settings['pattern.color.faces'] for key in keys}

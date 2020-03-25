@@ -45,7 +45,7 @@ holes = [point[:2]]
 
 tri = {'vertices': vertices, 'segments': segments, 'holes': holes}
 tri = triangulate(tri, opts='p')
-tri = triangulate(tri, opts='ra0.0005q')
+tri = triangulate(tri, opts='pra0.0005q')
 
 vertices = [[x, y, 0] for x, y in tri['vertices']]
 triangles = tri['triangles'].tolist()
