@@ -37,15 +37,15 @@ class PatternObject(MeshObject):
         super(PatternObject, self).__init__(scene, pattern, **kwargs)
         self.artist = MeshArtist(self.datastructure)
         self.settings = {
-            'show.vertices': True,
-            'show.edges': True,
-            'show.faces': True,
-            'color.vertices': [255, 255, 255],
-            'color.vertices:is_anchor': [255, 0, 0],
-            'color.vertices:is_fixed': [0, 0, 255],
-            'color.edges': [0, 0, 0],
-            'color.faces': [200, 200, 200],
-            'layer': "RV2::Pattern",
+            'pattern.layer': "RV2::Pattern",
+            'pattern.show.vertices': True,
+            'pattern.show.edges': True,
+            'pattern.show.faces': True,
+            'pattern.color.vertices': [255, 255, 255],
+            'pattern.color.vertices:is_anchor': [255, 0, 0],
+            'pattern.color.vertices:is_fixed': [0, 0, 255],
+            'pattern.color.edges': [0, 0, 0],
+            'pattern.color.faces': [200, 200, 200],
         }
         self.settings.update(settings)
 

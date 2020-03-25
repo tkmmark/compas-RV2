@@ -55,16 +55,17 @@ class FormObject(MeshObject):
         super(FormObject, self).__init__(scene, diagram, **kwargs)
         self.artist = FormArtist(self.datastructure)
         self.settings = {
-            'show.vertices': False,
-            'show.edges': True,
-            'show.angles': False,
-            'color.vertices': [0, 255, 0],
-            'color.vertices:is_fixed': [0, 255, 255],
-            'color.vertices:is_external': [0, 0, 255],
-            'color.vertices:is_anchor': [255, 255, 255],
-            'color.edges': [0, 255, 0],
-            'color.edges:is_external': [0, 0, 255],
-            'layer': "RV2::FormDiagram"
+            'form.layer': "RV2::FormDiagram",
+            'form.show.vertices': False,
+            'form.show.edges': True,
+            'form.show.angles': False,
+            'form.color.vertices': [0, 255, 0],
+            'form.color.vertices:is_fixed': [0, 255, 255],
+            'form.color.vertices:is_external': [0, 0, 255],
+            'form.color.vertices:is_anchor': [255, 255, 255],
+            'form.color.edges': [0, 255, 0],
+            'form.color.edges:is_external': [0, 0, 255],
+            'form.tol.angles': 5,
         }
         self.settings.update(settings)
 

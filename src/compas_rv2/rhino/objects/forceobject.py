@@ -53,13 +53,13 @@ class ForceObject(MeshObject):
         super(ForceObject, self).__init__(scene, diagram, **kwargs)
         self.artist = ForceArtist(self.datastructure)
         self.settings = {
-            'show.vertices': False,
-            'show.edges': True,
-            'color.vertices': [0, 255, 0],
-            'color.vertices:is_fixed': [0, 255, 255],
-            'color.edges': [0, 255, 0],
-            'color.edges:is_external': [0, 0, 255],
-            'layer': "RV2::ForceDiagram",
+            'force.layer': "RV2::ForceDiagram",
+            'force.show.vertices': False,
+            'force.show.edges': True,
+            'force.color.vertices': [0, 255, 0],
+            'force.color.vertices:is_fixed': [0, 255, 255],
+            'force.color.edges': [0, 255, 0],
+            'force.color.edges:is_external': [0, 0, 255],
         }
         self.settings.update(settings)
 
