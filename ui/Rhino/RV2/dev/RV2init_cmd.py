@@ -27,6 +27,7 @@ __commandname__ = "RV2init"
 
 
 SETTINGS = {
+    'pattern.layer': "RV2::Pattern",
     'pattern.show.vertices': True,
     'pattern.show.edges': True,
     'pattern.show.faces': True,
@@ -35,8 +36,8 @@ SETTINGS = {
     'pattern.color.vertices:is_fixed': [0, 0, 255],
     'pattern.color.edges': [0, 0, 0],
     'pattern.color.faces': [200, 200, 200],
-    'pattern.layer': "RV2::Pattern",
 
+    'form.layer': "RV2::FormDiagram",
     'form.show.vertices': False,
     'form.show.edges': True,
     'form.show.angles': False,
@@ -46,22 +47,23 @@ SETTINGS = {
     'form.color.vertices:is_anchor': [255, 255, 255],
     'form.color.edges': [0, 255, 0],
     'form.color.edges:is_external': [0, 0, 255],
-    'form.layer': "RV2::FormDiagram",
+    'form.tol.angles': 5,
 
+    'force.layer': "RV2::ForceDiagram",
     'force.show.vertices': False,
     'force.show.edges': True,
     'force.color.vertices': [0, 255, 0],
     'force.color.vertices:is_fixed': [0, 255, 255],
     'force.color.edges': [0, 255, 0],
     'force.color.edges:is_external': [0, 0, 255],
-    'force.layer': "RV2::ForceDiagram",
 
+    'thrust.layer': "RV2::ThrustDiagram",
     'thrust.show.vertices': False,
     'thrust.show.edges': True,
     'thrust.show.faces': True,
     'thrust.show.reactions': True,
     'thrust.show.residuals': False,
-    'thrust.show.pipes': True,
+    'thrust.show.pipes': False,
     'thrust.color.vertices': [255, 0, 255],
     'thrust.color.vertices:is_fixed': [0, 255, 0],
     'thrust.color.vertices:is_anchor': [255, 0, 0],
@@ -73,7 +75,9 @@ SETTINGS = {
     'thrust.scale.reactions': 0.1,
     'thrust.scale.residuals': 1.0,
     'thrust.scale.pipes': 0.01,
-    'thrust.layer': "RV2::ThrustDiagram",
+    'thrust.tol.reactions': 1e-3,
+    'thrust.tol.residuals': 1e-3,
+    'thrust.tol.pipes': 1e-3,
 
     "tna.vertical.kmax": 100,
     "tna.vertical.zmax": 4.0,

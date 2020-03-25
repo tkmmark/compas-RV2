@@ -27,6 +27,16 @@ class FormArtist(MeshArtist):
             lines.append({'start': start, 'end': end, 'name': "FormDiagram.edge", 'color': color[key]})
         return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
 
+    def draw_edgelabels(self, text, color):
+        labels = []
+        for key in text:
+            u, v = key
+            a = self.mesh.vertex_attributes(u, 'xy') + [0]
+            b = self.mesh.vertex_attributes(v, 'xy') + [0]
+            pos = [0.5 * (a[0] + b[0]), 0.5 * (a[1] + b[1]), 0.0]
+            labels.append({'pos': pos, 'text': text[key], 'name': "FormDiagram.edgelabel", 'color': color[key]})
+        return compas_rhino.draw_labels(labels, layer=self.layer, clear=False, redraw=False)
+
 
 # ==============================================================================
 # Main

@@ -55,21 +55,36 @@ class ForceObject(MeshObject):
     def draw(self):
         """Draw the force diagram in Rhino using the current settings."""
         layer = self.settings["force.layer"]
-        if layer:
-            self.artist.layer = layer
-            self.artist.clear_layer()
+
+        self.artist.layer = layer
+        self.artist.clear_layer()
+
+        group_vertices = "{}::vertices".format(layer)
+        group_edges = "{}::edges".format(layer)
+
+        if not compas_rhino.rs.IsGroup(group_vertices):
+            compas_rhino.rs.AddGroup(group_vertices)
+
+        if not compas_rhino.rs.IsGroup(group_edges):
+            compas_rhino.rs.AddGroup(group_edges)
 
         if self.settings["force.show.vertices"]:
+
             keys = list(self.datastructure.vertices())
             color = {key: self.settings["force.color.vertices"] for key in keys}
             guids = self.artist.draw_vertices(keys, color)
             self.guid_vertex = zip(guids, keys)
+            compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+
         else:
             guids_vertices = list(self.guid_vertex.keys())
             compas_rhino.delete_objects(guids_vertices, purge=True)
+            compas_rhino.rs.DeleteGroup(group_vertices)
+            del self._guid_vertex
             self._guid_vertex = {}
 
         if self.settings["force.show.edges"]:
+
             keys = list(self.datastructure.edges())
             color = {key: self.settings['force.color.edges'] for key in keys}
             for key in keys:
@@ -78,9 +93,13 @@ class ForceObject(MeshObject):
                     color[key] = self.settings["force.color.edges:is_external"]
             guids = self.artist.draw_edges(keys, color)
             self.guid_edge = zip(guids, keys)
+            compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
+
         else:
             guids_edges = list(self.guid_edge.keys())
             compas_rhino.delete_objects(guids_edges, purge=True)
+            compas_rhino.rs.DeleteGroup(group_edges)
+            del self._guid_edge
             self._guid_edge = {}
 
 
