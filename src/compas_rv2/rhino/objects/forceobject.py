@@ -48,20 +48,30 @@ class ForceObject(MeshObject):
 
     __module__ = 'compas_rv2.rhino'
 
-    def __init__(self, scene, diagram, **kwargs):
+    def __init__(self, scene, diagram, settings={}, **kwargs):
         super(ForceObject, self).__init__(scene, diagram, **kwargs)
         self.artist = ForceArtist(self.datastructure)
+        self.settings = {
+            'show.vertices': False,
+            'show.edges': True,
+            'color.vertices': [0, 255, 0],
+            'color.vertices:is_fixed': [0, 255, 255],
+            'color.edges': [0, 255, 0],
+            'color.edges:is_external': [0, 0, 255],
+            'layer': "RV2::ForceDiagram",
+        }
+        self.settings.update(settings)
 
     def draw(self):
         """Draw the force diagram in Rhino using the current settings."""
-        layer = self.settings["force.layer"]
+        layer = self.settings["layer"]
         if layer:
             self.artist.layer = layer
             self.artist.clear_layer()
 
-        if self.settings["force.show.vertices"]:
+        if self.settings["show.vertices"]:
             keys = list(self.datastructure.vertices())
-            color = {key: self.settings["force.color.vertices"] for key in keys}
+            color = {key: self.settings["color.vertices"] for key in keys}
             guids = self.artist.draw_vertices(keys, color)
             self.guid_vertex = zip(guids, keys)
         else:
@@ -69,13 +79,13 @@ class ForceObject(MeshObject):
             compas_rhino.delete_objects(guids_vertices, purge=True)
             self._guid_vertex = {}
 
-        if self.settings["force.show.edges"]:
+        if self.settings["show.edges"]:
             keys = list(self.datastructure.edges())
-            color = {key: self.settings['force.color.edges'] for key in keys}
+            color = {key: self.settings['color.edges'] for key in keys}
             for key in keys:
                 key_ = self.datastructure.primal.face_adjacency_halfedge(*key)
                 if self.datastructure.primal.edge_attribute(key_, '_is_external'):
-                    color[key] = self.settings["force.color.edges:is_external"]
+                    color[key] = self.settings["color.edges:is_external"]
             guids = self.artist.draw_edges(keys, color)
             self.guid_edge = zip(guids, keys)
         else:

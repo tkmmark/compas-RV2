@@ -50,23 +50,36 @@ class FormObject(MeshObject):
 
     __module__ = 'compas_rv2.rhino'
 
-    def __init__(self, scene, diagram, **kwargs):
+    def __init__(self, scene, diagram, settings={}, **kwargs):
         super(FormObject, self).__init__(scene, diagram, **kwargs)
         self.artist = FormArtist(self.datastructure)
+        self.settings = {
+            'show.vertices': False,
+            'show.edges': True,
+            'show.angles': False,
+            'color.vertices': [0, 255, 0],
+            'color.vertices:is_fixed': [0, 255, 255],
+            'color.vertices:is_external': [0, 0, 255],
+            'color.vertices:is_anchor': [255, 255, 255],
+            'color.edges': [0, 255, 0],
+            'color.edges:is_external': [0, 0, 255],
+            'layer': "RV2::FormDiagram"
+        }
+        self.settings.update(settings)
 
     def draw(self):
         """Draw the form diagram in the Rhino scene using the current settings."""
-        layer = self.settings['form.layer']
+        layer = self.settings['layer']
         if layer:
             self.artist.layer = layer
             self.artist.clear_layer()
 
-        if self.settings['form.show.vertices']:
+        if self.settings['show.vertices']:
             keys = list(self.datastructure.vertices())
-            color = {key: self.settings['form.color.vertices'] for key in keys}
-            color_fixed = self.settings['form.color.vertices:is_fixed']
-            color_external = self.settings['form.color.vertices:is_external']
-            color_anchor = self.settings['form.color.vertices:is_anchor']
+            color = {key: self.settings['color.vertices'] for key in keys}
+            color_fixed = self.settings['color.vertices:is_fixed']
+            color_external = self.settings['color.vertices:is_external']
+            color_anchor = self.settings['color.vertices:is_anchor']
             color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
             color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
             color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
@@ -77,10 +90,10 @@ class FormObject(MeshObject):
             compas_rhino.delete_objects(guids_vertices, purge=True)
             self._guid_vertex = {}
 
-        if self.settings['form.show.edges']:
+        if self.settings['show.edges']:
             keys = list(self.datastructure.edges_where({'_is_edge': True}))
-            color = {key: self.settings['form.color.edges'] for key in keys}
-            color.update({key: self.settings['form.color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
+            color = {key: self.settings['color.edges'] for key in keys}
+            color.update({key: self.settings['color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
             guids = self.artist.draw_edges(keys, color)
             self.guid_edge = zip(guids, keys)
         else:
@@ -88,7 +101,7 @@ class FormObject(MeshObject):
             compas_rhino.delete_objects(guids_edges, purge=True)
             self._guid_edge = {}
 
-        if self.settings['form.show.angles']:
+        if self.settings['show.angles']:
             keys = list(self.datastructure.edges_where({'_is_edge': True}))
             angles = self.datastructure.edges_attribute('_a', keys=keys)
             amin = min(angles)
