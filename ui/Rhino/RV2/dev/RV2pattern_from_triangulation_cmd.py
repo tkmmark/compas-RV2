@@ -4,6 +4,7 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
+from compas_rv2.rhino import get_proxy
 from compas_rv2.datastructures import Pattern
 from compas.geometry import Polygon
 from compas.geometry import Polyline
@@ -12,8 +13,6 @@ from compas.utilities import pairwise
 from compas.utilities import flatten
 import rhinoscriptsyntax as rs
 
-from compas.rpc import Proxy
-triangle = Proxy('triangle')
 
 __commandname__ = "RV2pattern_from_triangulation"
 
@@ -26,6 +25,12 @@ def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:
         return
+
+    p = get_proxy()
+    if not p:
+        return
+
+    triangulate = p.package("triangle.triangulate")
 
     # ==============================================================================
     # Boundaries from Rhino
@@ -93,11 +98,11 @@ def RunCommand(is_interactive):
 
     if not inners:  # no inner boundary
         tri = {'vertices': vertices, 'segments': segments}
-        tri = triangle.triangulate(tri, opts='pa{}q'.format(area_constrain))
+        tri = triangulate(tri, opts='pa{}q'.format(area_constrain))
     else:
         tri = {'vertices': vertices, 'segments': segments, 'holes': holes}
-        tri = triangle.triangulate(tri, opts='p')
-        tri = triangle.triangulate(tri, opts='ra{}q'.format(area_constrain))  # this doesn't take fixed segements from previous step # noqa 501
+        tri = triangulate(tri, opts='p')
+        tri = triangulate(tri, opts='ra{}q'.format(area_constrain))  # this doesn't take fixed segements from previous step # noqa 501
 
     vertices = [[x, y, 0] for x, y in tri['vertices']]
     triangles = list(tri['triangles'])
