@@ -56,7 +56,7 @@ mesh = Mesh.from_vertices_and_faces(vertices, triangles)
 # Visualization
 # ==============================================================================
 
-plotter = MeshPlotter(mesh, figsize=(8, 5))
+# plotter = MeshPlotter(mesh, figsize=(8, 5))
 
-plotter.draw_faces()
-plotter.show()
+# plotter.draw_faces()
+# plotter.show()
