@@ -24,8 +24,9 @@ def RunCommand(is_interactive):
 
     keys = pattern.select_vertices()
 
-    if pattern.move_vertices(keys):
-        scene.update()
+    if keys:
+        if pattern.move_vertices(keys):
+            scene.update()
 
 
 # ==============================================================================

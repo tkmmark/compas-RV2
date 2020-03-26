@@ -24,8 +24,9 @@ def RunCommand(is_interactive):
 
     keys = pattern.select_vertices()
 
-    pattern.datastructure.vertices_attribute('is_fixed', True, keys=keys)
-    scene.update()
+    if keys:
+        pattern.datastructure.vertices_attribute('is_fixed', True, keys=keys)
+        scene.update()
 
 
 # ==============================================================================

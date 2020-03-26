@@ -23,13 +23,10 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    options = ['All', 'Continuous', 'Parallel', 'ESC']
+    options = ['Continuous', 'Parallel', 'Manual']
     option = compas_rhino.rs.GetString("Selection Type", options[-1], options)
 
-    if option == 'All':
-        keys = list(pattern.datastructure.edges())
-
-    elif option == 'Continuous':
+    if option == 'Continuous':
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.continuous_edges(key) for key in temp])))
 
@@ -40,10 +37,10 @@ def RunCommand(is_interactive):
     else:
         keys = pattern.select_edges()
 
-    # is this necessary with the special update dialogs?
-    public = [name for name in pattern.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
-    if pattern.update_edges_attributes(keys, names=public):
-        scene.update()
+    if keys:
+        public = [name for name in pattern.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
+        if pattern.update_edges_attributes(keys, names=public):
+            scene.update()
 
 
 # ==============================================================================

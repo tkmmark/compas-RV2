@@ -55,7 +55,7 @@ class FormObject(MeshObject):
         'form.layer': "RV2::FormDiagram",
         'form.show.vertices': False,
         'form.show.edges': True,
-        'form.show.angles': False,
+        'form.show.angles': True,
         'form.color.vertices': [0, 255, 0],
         'form.color.vertices:is_fixed': [0, 255, 255],
         'form.color.vertices:is_external': [0, 0, 255],
@@ -79,8 +79,21 @@ class FormObject(MeshObject):
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
 
-        if not compas_rhino.rs.IsGroup(group_vertices):
-            compas_rhino.rs.AddGroup(group_vertices)
+        group_supports = "{}::supports".format(group_vertices)
+        group_free = "{}::free".format(group_vertices)
+        group_external = "{}::external".format(group_vertices)
+
+        # if not compas_rhino.rs.IsGroup(group_vertices):
+        #     compas_rhino.rs.AddGroup(group_vertices)
+
+        if not compas_rhino.rs.IsGroup(group_supports):
+            compas_rhino.rs.AddGroup(group_supports)
+
+        if not compas_rhino.rs.IsGroup(group_free):
+            compas_rhino.rs.AddGroup(group_free)
+
+        if not compas_rhino.rs.IsGroup(group_external):
+            compas_rhino.rs.AddGroup(group_external)
 
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
@@ -90,7 +103,12 @@ class FormObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        keys = list(self.datastructure.vertices())
+        supports = list(self.datastructure.vertices_where({'is_anchor': True}))
+        external = list(self.datastructure.vertices_where({'_is_external': True}))
+        free = list(self.datastructure.vertices_where({'is_anchor': False, '_is_external': False}))
+
+        keys = supports + external + free
+
         color = {key: self.settings['form.color.vertices'] for key in keys}
         color_fixed = self.settings['form.color.vertices:is_fixed']
         color_external = self.settings['form.color.vertices:is_external']
@@ -99,13 +117,23 @@ class FormObject(MeshObject):
         color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
         guids = self.artist.draw_vertices(keys, color)
+
         self.guid_vertex = zip(guids, keys)
-        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+        key_guid = dict(zip(keys, guids))
+
+        # compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in supports], group_supports)
+        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in external], group_external)
+        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
 
         if self.settings['form.show.vertices']:
-            compas_rhino.rs.ShowGroup(group_vertices)
+            compas_rhino.rs.ShowGroup(group_supports)
+            compas_rhino.rs.ShowGroup(group_external)
+            compas_rhino.rs.ShowGroup(group_free)
         else:
-            compas_rhino.rs.HideGroup(group_vertices)
+            compas_rhino.rs.ShowGroup(group_supports)
+            compas_rhino.rs.HideGroup(group_external)
+            compas_rhino.rs.HideGroup(group_free)
 
         # edges
 

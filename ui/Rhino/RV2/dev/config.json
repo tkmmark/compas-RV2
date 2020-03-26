@@ -86,7 +86,6 @@
             {"name": "RV2pattern_from_skeleton", "menu_text": "Pattern From Skeleton", "icon": 10},
 
             {"name": "RV2pattern_modify_edges",    "menu_text": "Pattern Modify Edges",    "icon": 20},
-            {"name": "RV2pattern_modify_faces",    "menu_text": "Pattern Modify Faces",    "icon": 21},
             {"name": "RV2pattern_modify_vertices", "menu_text": "Pattern Modify Vertices", "icon": 19},
             {"name": "RV2pattern_set_fixed",       "menu_text": "Pattern Set Fixed",       "icon": 19},
             {"name": "RV2pattern_move_vertices",   "menu_text": "Pattern Move Vertices",   "icon": 19},
@@ -135,7 +134,7 @@
                         [
                             {"command": "RV2settings"},
                             {"command": "RV2settings_solver"}
-                            
+
                         ]
                     },
                     {
@@ -164,7 +163,6 @@
                         [
                             {"command": "RV2pattern_modify_vertices"},
                             {"command": "RV2pattern_modify_edges"},
-                            {"command": "RV2pattern_modify_faces"},
 
                             {"type": "separator"},
 

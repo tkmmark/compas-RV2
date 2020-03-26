@@ -9,6 +9,7 @@ __all__ = ['ForceArtist']
 
 
 class ForceArtist(MeshArtist):
+    """Artist for visualizing force diagrams in the Rhino model space."""
     pass
 
 

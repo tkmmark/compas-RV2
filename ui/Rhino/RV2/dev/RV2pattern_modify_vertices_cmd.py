@@ -23,22 +23,20 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    options = ['All', 'Continuous', 'ESC']
+    options = ['Continuous', 'Manual']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 
-    if option == 'All':
-        keys = list(pattern.datastructure.vertices())
-
-    elif option == 'Continuous':
+    if option == 'Continuous':
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
 
     else:
         keys = pattern.select_vertices()
 
-    public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
-    if pattern.update_vertices_attributes(keys, names=public):
-        scene.update()
+    if keys:
+        public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+        if pattern.update_vertices_attributes(keys, names=public):
+            scene.update()
 
 
 # ==============================================================================

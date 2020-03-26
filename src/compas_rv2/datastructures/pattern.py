@@ -10,7 +10,24 @@ __all__ = ['Pattern']
 
 
 class Pattern(MeshMixin, Mesh):
-    """Customised mesh data structure for RV2."""
+    """Customised mesh data structure for RV2.
+
+    Examples
+    --------
+    A :class:`Pattern` is used to define the geometry and boundary conditions of
+    a funicular network in RV2.
+    Patterns can be constructed from various inputs.
+
+    >>> pattern = Pattern.from_lines()
+    >>> pattern = Pattern.from_mesh()
+    >>> pattern = Pattern.from_surface()
+    >>> pattern = Pattern.from_skeleton()
+    >>> pattern = Pattern.from_features()
+
+    A pattern is essentially a mesh data structure, and therefore supports all operations
+    available for meshes. For example,
+
+    """
 
     def __init__(self, *args, **kwargs):
         super(Pattern, self).__init__(*args, **kwargs)

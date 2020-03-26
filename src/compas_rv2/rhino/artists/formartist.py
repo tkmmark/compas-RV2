@@ -10,8 +10,17 @@ __all__ = ['FormArtist']
 
 
 class FormArtist(MeshArtist):
+    """Artist for visualizing form diagrams in the Rhino model space."""
 
     def draw_vertices(self, keys, color):
+        """Draw form diagram vertices in the Rhino model space.
+
+        Parameters
+        ----------
+        keys : list
+            The keys of the vertices that should be visualized.
+        color : dict
+        """
         points = []
         for key in keys:
             xy = self.mesh.vertex_attributes(key, 'xy')

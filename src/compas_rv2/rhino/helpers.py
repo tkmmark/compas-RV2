@@ -40,11 +40,24 @@ __all__ = [
 ]
 
 
-def delete_objects(guids, purge=None):
+def delete_objects(guids, purge=False):
+    """Delete objects from the Rhino model space.
+
+    Parameters
+    ----------
+    guids : list
+        A list of object IDs.
+    purge : bool, optional
+        If ``True``, the objects are permanently deleted
+        and cannot be restored through, for example, using *undo*.
+        If ``False`` (default), the objects are deleted from the model space
+        but can still be restored using Rhino's *undo* function.
+
+    """
+    rs.EnableRedraw(False)
     if purge and purge_object:
         purge_objects(guids)
     else:
-        rs.EnableRedraw(False)
         for guid in guids:
             if rs.IsObjectHidden(guid):
                 rs.ShowObject(guid)
@@ -52,9 +65,9 @@ def delete_objects(guids, purge=None):
 
 
 def purge_objects(guids):
-    if not purge_object:
-        raise RuntimeError('Cannot purge outside Rhino script context')
     rs.EnableRedraw(False)
+    if not purge_object:
+        raise RuntimeError('Cannot purge outside Rhino context.')
     for guid in guids:
         if rs.IsObject(guid):
             if rs.IsObjectHidden(guid):

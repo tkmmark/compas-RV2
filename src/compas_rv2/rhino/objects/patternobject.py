@@ -35,14 +35,16 @@ class PatternObject(MeshObject):
 
     settings = {
         'pattern.layer': "RV2::Pattern",
-        'pattern.show.vertices': True,
+        'pattern.show.vertices': False,
         'pattern.show.edges': True,
-        'pattern.show.faces': True,
+        'pattern.show.faces': False,
         'pattern.color.vertices': [255, 255, 255],
         'pattern.color.vertices:is_anchor': [255, 0, 0],
         'pattern.color.vertices:is_fixed': [0, 0, 255],
         'pattern.color.edges': [0, 0, 0],
         'pattern.color.faces': [200, 200, 200],
+        'pattern.from_surface.density.U': 10,
+        'pattern.from_surface.density.V': 10,
     }
 
     def __init__(self, scene, pattern, **kwargs):

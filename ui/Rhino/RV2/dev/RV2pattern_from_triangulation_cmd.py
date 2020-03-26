@@ -30,88 +30,90 @@ def RunCommand(is_interactive):
     if not p:
         return
 
-    triangulate = p.package("triangle.triangulate")
+        raise NotImplementedError
 
-    # ==============================================================================
-    # Boundaries from Rhino
-    # ==============================================================================
+    # triangulate = p.package("triangle.triangulate")
 
-    outer_guid = compas_rhino.select_curve('select outer boundary curve')
-    inner_guids = compas_rhino.select_curves('select inner boundary curves')
-    guide_guids = compas_rhino.select_curves('select guide lines')
-    target_length = rs.GetReal('target edge length')
+    # # ==============================================================================
+    # # Boundaries from Rhino
+    # # ==============================================================================
 
-    if not outer_guid:
-        return
-    if not target_length:
-        return
+    # outer_guid = compas_rhino.select_curve('select outer boundary curve')
+    # inner_guids = compas_rhino.select_curves('select inner boundary curves')
+    # guide_guids = compas_rhino.select_curves('select guide lines')
+    # target_length = rs.GetReal('target edge length')
 
-    # outer
-    outer_guids = rs.ExplodeCurves(outer_guid, False)
-    outer = []
-    for guid in outer_guids:
-        pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)[:-1]
-        outer.extend(pts)
-    outer = Polygon(outer)
-    compas_rhino.delete_objects(outer_guids)
+    # if not outer_guid:
+    #     return
+    # if not target_length:
+    #     return
 
-    # inner
-    inners = []
-    holes = []
-    for guid in inner_guids:
-        pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)
-        inners.append(Polygon(pts))
-        holes.append(centroid_points_xy(pts))
+    # # outer
+    # outer_guids = rs.ExplodeCurves(outer_guid, False)
+    # outer = []
+    # for guid in outer_guids:
+    #     pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)[:-1]
+    #     outer.extend(pts)
+    # outer = Polygon(outer)
+    # compas_rhino.delete_objects(outer_guids)
 
-    # guide
-    guides = []
-    for guid in guide_guids:
-        pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)
-        guides.append(Polyline(pts))
+    # # inner
+    # inners = []
+    # holes = []
+    # for guid in inner_guids:
+    #     pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)
+    #     inners.append(Polygon(pts))
+    #     holes.append(centroid_points_xy(pts))
 
-    # ==============================================================================
-    # Input data
-    # ==============================================================================
+    # # guide
+    # guides = []
+    # for guid in guide_guids:
+    #     pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)
+    #     guides.append(Polyline(pts))
 
-    boundaries = [outer] + inners
+    # # ==============================================================================
+    # # Input data
+    # # ==============================================================================
 
-    vertices = list(flatten(boundaries + guides))
-    vertices = [[x, y] for x, y, z in vertices]
-    holes = [[x, y] for x, y, z in holes]
+    # boundaries = [outer] + inners
 
-    segments = []
-    index = 0
-    for polygon in boundaries:
-        start = index
-        end = start + len(polygon)
-        segments.extend(list(pairwise(range(start, end))) + [(end - 1, start)])
-        index = end
+    # vertices = list(flatten(boundaries + guides))
+    # vertices = [[x, y] for x, y, z in vertices]
+    # holes = [[x, y] for x, y, z in holes]
 
-    if guides:
-        for polyline in guides:
-            start = index
-            end = start + len(polyline)
-            segments.extend(list(pairwise(range(start, end))))
-            index = end
+    # segments = []
+    # index = 0
+    # for polygon in boundaries:
+    #     start = index
+    #     end = start + len(polygon)
+    #     segments.extend(list(pairwise(range(start, end))) + [(end - 1, start)])
+    #     index = end
 
-    area_constrain = target_length ** 2 * 0.5 * 0.5 * 1.732  # calculate a triangle area based on target edge length # noqa E501
+    # if guides:
+    #     for polyline in guides:
+    #         start = index
+    #         end = start + len(polyline)
+    #         segments.extend(list(pairwise(range(start, end))))
+    #         index = end
 
-    if not inners:  # no inner boundary
-        tri = {'vertices': vertices, 'segments': segments}
-        tri = triangulate(tri, opts='pa{}q'.format(area_constrain))
-    else:
-        tri = {'vertices': vertices, 'segments': segments, 'holes': holes}
-        tri = triangulate(tri, opts='p')
-        tri = triangulate(tri, opts='ra{}q'.format(area_constrain))  # this doesn't take fixed segements from previous step # noqa 501
+    # area_constrain = target_length ** 2 * 0.5 * 0.5 * 1.732  # calculate a triangle area based on target edge length # noqa E501
 
-    vertices = [[x, y, 0] for x, y in tri['vertices']]
-    triangles = list(tri['triangles'])
+    # if not inners:  # no inner boundary
+    #     tri = {'vertices': vertices, 'segments': segments}
+    #     tri = triangulate(tri, opts='pa{}q'.format(area_constrain))
+    # else:
+    #     tri = {'vertices': vertices, 'segments': segments, 'holes': holes}
+    #     tri = triangulate(tri, opts='p')
+    #     tri = triangulate(tri, opts='ra{}q'.format(area_constrain))  # this doesn't take fixed segements from previous step # noqa 501
 
-    pattern = Pattern.from_vertices_and_faces(vertices, triangles)
+    # vertices = [[x, y, 0] for x, y in tri['vertices']]
+    # triangles = list(tri['triangles'])
 
-    scene.clear()
-    scene.add(pattern, name='pattern')
-    scene.update()
+    # pattern = Pattern.from_vertices_and_faces(vertices, triangles)
+
+    # scene.clear()
+    # scene.add(pattern, name='pattern')
+    # scene.update()
 
 
 # ==============================================================================
