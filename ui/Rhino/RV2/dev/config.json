@@ -93,6 +93,7 @@
             {"name": "RV2pattern_smooth", "menu_text": "Smooth Pattern"},
 
             {"name": "RV2settings", "menu_text": "Settings", "icon": 2},
+            {"name": "RV2settings_solver", "menu_text": "Solver", "icon": 2},
 
             {"name": "RV2skeleton_from_lines", "menu_text": "Skeleton From Lines", "icon": 11},
             {"name": "RV2skeleton_modify",     "menu_text": "Skeleton Modify",     "icon": 22},
@@ -127,7 +128,9 @@
                         "name" : "Settings",
                         "items":
                         [
-                            {"command": "RV2settings"}
+                            {"command": "RV2settings"},
+                            {"command": "RV2settings_solver"}
+                            
                         ]
                     },
                     {

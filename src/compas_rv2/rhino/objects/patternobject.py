@@ -33,6 +33,18 @@ class PatternObject(MeshObject):
 
     __module__ = 'compas_rv2.rhino'
 
+    settings = {
+        'pattern.layer': "RV2::Pattern",
+        'pattern.show.vertices': True,
+        'pattern.show.edges': True,
+        'pattern.show.faces': True,
+        'pattern.color.vertices': [255, 255, 255],
+        'pattern.color.vertices:is_anchor': [255, 0, 0],
+        'pattern.color.vertices:is_fixed': [0, 0, 255],
+        'pattern.color.edges': [0, 0, 0],
+        'pattern.color.faces': [200, 200, 200],
+    }
+
     def __init__(self, scene, pattern, **kwargs):
         super(PatternObject, self).__init__(scene, pattern, **kwargs)
         self.artist = MeshArtist(self.datastructure)

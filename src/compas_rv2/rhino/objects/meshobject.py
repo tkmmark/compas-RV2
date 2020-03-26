@@ -63,7 +63,7 @@ class MeshObject(object):
 
     __module__ = 'compas_rv2.rhino'
 
-    def __init__(self, scene, datastructure, name=None, visible=True, **kwargs):
+    def __init__(self, scene, datastructure, name=None, visible=True, settings={}, **kwargs):
         self.scene = scene
         self.datastructure = datastructure
         self.name = name
@@ -78,10 +78,16 @@ class MeshObject(object):
         self._guid_facelabel = {}
         self._guid_vertexnormal = {}
         self._guid_facenormal = {}
+        self._settings = {}
+        self._settings.update(settings)
 
     @property
     def settings(self):
-        return self.scene.settings
+        return self._settings
+
+    @settings.setter
+    def settings(self, settings):
+        return self._settings.update(settings)
 
     @property
     def guid_vertex(self):

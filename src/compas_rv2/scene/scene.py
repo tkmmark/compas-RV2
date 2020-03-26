@@ -77,6 +77,10 @@ class Scene(object):
         wrapper = _ITEM_WRAPPER[type(item)]
         return wrapper(scene, item, **kwargs)
 
+    @property
+    def registered_object_types(self):
+        return [_ITEM_WRAPPER[key] for key in _ITEM_WRAPPER]
+
 
 # ==============================================================================
 # Main

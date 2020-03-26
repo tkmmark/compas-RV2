@@ -5,7 +5,7 @@ from __future__ import division
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import SettingsForm
 
-__commandname__ = "RV2settings"
+__commandname__ = "RV2settings_solver"
 
 
 def RunCommand(is_interactive):
@@ -14,7 +14,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    SettingsForm.from_scene(scene)
+    SettingsForm.from_settings(scene.settings, 'Solver')
 
 
 # ==============================================================================

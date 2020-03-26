@@ -51,6 +51,20 @@ class FormObject(MeshObject):
 
     __module__ = 'compas_rv2.rhino'
 
+    settings = {
+        'form.layer': "RV2::FormDiagram",
+        'form.show.vertices': False,
+        'form.show.edges': True,
+        'form.show.angles': False,
+        'form.color.vertices': [0, 255, 0],
+        'form.color.vertices:is_fixed': [0, 255, 255],
+        'form.color.vertices:is_external': [0, 0, 255],
+        'form.color.vertices:is_anchor': [255, 255, 255],
+        'form.color.edges': [0, 255, 0],
+        'form.color.edges:is_external': [0, 0, 255],
+        'form.tol.angles': 5,
+    }
+
     def __init__(self, scene, diagram, **kwargs):
         super(FormObject, self).__init__(scene, diagram, **kwargs)
         self.artist = FormArtist(self.datastructure)
