@@ -31,12 +31,15 @@ def RunCommand(is_interactive):
 
     bbox_form = form.bounding_box_xy()
     bbox_force = force.bounding_box_xy()
-    xmax_form = bbox_form[1][0]
-    xmin_force = bbox_force[0][0]
-
-    dx = [1.2 * (xmax_form - xmin_force), 0, 0]
-
-    force.transform(Translation(dx))
+    xmin_form, xmax_form = bbox_form[0][0], bbox_form[1][0]
+    xmin_force, _ = bbox_force[0][0], bbox_force[1][0]
+    ymin_form, ymax_form = bbox_form[0][1], bbox_form[3][1]
+    ymin_force, ymax_force = bbox_force[0][1], bbox_force[3][1]
+    y_form = ymin_form + 0.5 * (ymax_form - ymin_form)
+    y_force = ymin_force + 0.5 * (ymax_force - ymin_force)
+    dx = 1.5 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
+    dy = y_form - y_force
+    force.transform(Translation([dx, dy, 0]))
 
     scene.clear()
 

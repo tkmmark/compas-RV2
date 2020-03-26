@@ -22,6 +22,12 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
+    layer = pattern.settings['pattern.layer']
+    group_vertices = "{}::vertices".format(layer)
+
+    compas_rhino.rs.ShowGroup(group_vertices)
+    compas_rhino.rs.Redraw()
+
     keys = pattern.select_vertices()
 
     if keys:

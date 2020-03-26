@@ -23,14 +23,29 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
+    layer = pattern.settings['pattern.layer']
+    group_supports = "{}::vertices::supports".format(layer)
+    group_fixed = "{}::vertices::fixed".format(layer)
+    group_free = "{}::vertices::free".format(layer)
+
     options = ['Continuous', 'Manual']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 
     if option == 'Continuous':
+        compas_rhino.rs.ShowGroup(group_supports)
+        compas_rhino.rs.ShowGroup(group_fixed)
+        compas_rhino.rs.HideGroup(group_free)
+        compas_rhino.rs.Redraw()
+
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
 
     else:
+        compas_rhino.rs.ShowGroup(group_supports)
+        compas_rhino.rs.ShowGroup(group_fixed)
+        compas_rhino.rs.ShowGroup(group_free)
+        compas_rhino.rs.Redraw()
+
         keys = pattern.select_vertices()
 
     if keys:

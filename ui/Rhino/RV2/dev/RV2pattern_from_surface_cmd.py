@@ -5,6 +5,7 @@ from __future__ import division
 import compas_rhino
 from compas_rhino.geometry import RhinoSurface
 from compas_rv2.datastructures import Pattern
+from compas_rv2.rhino import PatternObject
 from compas_rv2.rhino import get_scene
 
 
@@ -24,8 +25,8 @@ def RunCommand(is_interactive):
     if not guid:
         return
 
-    u = scene.settings['pattern.from_surface.density.U']
-    v = scene.settings['pattern.from_surface.density.V']
+    u = scene.settings.get('pattern.from_surface.density.U', PatternObject.settings['pattern.from_surface.density.U'])
+    v = scene.settings.get('pattern.from_surface.density.V', PatternObject.settings['pattern.from_surface.density.V'])
 
     options = ['U', 'V', 'ESC']
     while True:

@@ -27,6 +27,7 @@ def RunCommand(is_interactive):
     group_vertices = "{}::vertices".format(layer)
 
     compas_rhino.rs.ShowGroup(group_vertices)
+    compas_rhino.rs.Redraw()
 
     options = ['All', 'Continuous', 'ESC']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
