@@ -71,10 +71,12 @@
             {"name": "RV2force_modify_edges",    "menu_text": "ForceDiagram Modify Edges",    "icon": 26},
             {"name": "RV2force_modify_vertices", "menu_text": "ForceDiagram Modify Vertices", "icon": 25},
             {"name": "RV2force_move_vertices",   "menu_text": "ForceDiagram Move Vertices",   "icon": 25},
+            {"name": "RV2force_attributes",   "menu_text": "Force Attributes"},
 
             {"name": "RV2form_modify_edges",    "menu_text": "FormDiagram Modify Edges",    "icon": 20},
             {"name": "RV2form_modify_vertices", "menu_text": "FormDiagram Modify Vertices", "icon": 19},
             {"name": "RV2form_move_vertices",   "menu_text": "FormDiagram Move Vertices",   "icon": 19},
+            {"name": "RV2form_attributes",   "menu_text": "Form Attributes"},
 
             {"name": "RV2init", "menu_text": "Initialize RV2", "icon": 0},
 
@@ -88,6 +90,9 @@
             {"name": "RV2pattern_modify_vertices", "menu_text": "Pattern Modify Vertices", "icon": 19},
             {"name": "RV2pattern_set_fixed",       "menu_text": "Pattern Set Fixed",       "icon": 19},
             {"name": "RV2pattern_move_vertices",   "menu_text": "Pattern Move Vertices",   "icon": 19},
+            {"name": "RV2pattern_attributes",   "menu_text": "Pattern Attributes"},
+
+            {"name": "RV2thrust_attributes",   "menu_text": "Thrust Attributes"},
 
             {"name": "RV2pattern_relax",  "menu_text": "Relax Pattern"},
             {"name": "RV2pattern_smooth", "menu_text": "Smooth Pattern"},
@@ -163,6 +168,10 @@
 
                             {"type": "separator"},
 
+                            {"command": "RV2pattern_attributes"},
+
+                            {"type": "separator"},
+
                             {"command": "RV2pattern_set_fixed"},
                             {"command": "RV2pattern_move_vertices"},
 
@@ -200,6 +209,10 @@
 
                             {"type": "separator"},
 
+                            {"command": "RV2form_attributes"},
+
+                            {"type": "separator"},
+
                             {"command": "RV2form_move_vertices"}
                         ]
                     },
@@ -212,7 +225,18 @@
 
                             {"type": "separator"},
 
+                            {"command": "RV2force_attributes"},
+
+                            {"type": "separator"},
+
                             {"command": "RV2force_move_vertices"}
+                        ]
+                    },
+                    {
+                        "name" : "Modify Thrust Diagram",
+                        "items":
+                        [
+                            {"command": "RV2thrust_attributes"}
                         ]
                     },
                     {"type": "separator"},

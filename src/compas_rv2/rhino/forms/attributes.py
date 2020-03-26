@@ -85,21 +85,18 @@ class Tree_Table(forms.TreeGridView):
         self.CellFormatting += OnCellFormatting
 
     @classmethod
-    def create_diagram_table(cls, sceneNode):
+    def create_settings_table(cls, sceneNode):
         table = cls(ShowHeader=False)
         table.add_column()
-        table.add_column()
+        table.add_column(Editable=True)
 
         treecollection = forms.TreeGridItemCollection()
-        treecollection.Add(forms.TreeGridItem(Values=('Type', sceneNode.datastructure.__class__.__name__)))
-        treecollection.Add(forms.TreeGridItem(Values=('Name', sceneNode.name)))
-        treecollection.Add(forms.TreeGridItem(Values=('Layer', sceneNode.artist.layer)))
-
-        if hasattr(sceneNode.artist, 'settings'):
-            settings = forms.TreeGridItem(Values=('Settings',))
-            treecollection.Add(settings)
+        # treecollection.Add(forms.TreeGridItem(Values=('Type', sceneNode.datastructure.__class__.__name__)))
+        # treecollection.Add(forms.TreeGridItem(Values=('Name', sceneNode.name)))
+        # treecollection.Add(forms.TreeGridItem(Values=('Layer', sceneNode.artist.layer)))
+        if hasattr(sceneNode, 'settings'):
             for key in sceneNode.artist.settings:
-                settings.Children.Add(forms.TreeGridItem(Values=(key, str(sceneNode.artist.settings[key]))))
+                treecollection.Add(forms.TreeGridItem(Values=(key, str(sceneNode.artist.settings[key]))))
 
         table.DataStore = treecollection
         return table
@@ -213,27 +210,28 @@ class Tree_Table(forms.TreeGridView):
         # TODO: need to add situations for edge and face
         def on_edited(sender, event):
             try:
-                key = event.Item.Values[0]
-                attr = attributes[event.Column-1]
-                value = event.Item.Values[event.Column]
-                if value != '-':
-                    try:
-                        parsed = ast.literal_eval(value)
-                    except Exception:
-                        parsed = str(value)
-                    compas_value = rhinoDiagram.diagram.vertex_attribute(key, attr)
-                    if type(compas_value) == float and type(parsed) == int:
-                        parsed = float(parsed)
-                    if parsed != compas_value:
-                        if type(parsed) == rhinoDiagram.vertex_attributes_properties[attr]['type']:
-                            rhinoDiagram.diagram.vertex_attribute(key, attr, parsed)
-                            print('updated', parsed)
-                            get_scene().update()
-                        else:
-                            print('invalid value type!')
-                            event.Item.Values[event.Column] = compas_value
-                    else:
-                        print('value not changed from', value)
+                raise NotImplementedError("Editing not implemented yet")
+                # key = event.Item.Values[0]
+                # attr = attributes[event.Column-1]
+                # value = event.Item.Values[event.Column]
+                # if value != '-':
+                #     try:
+                #         parsed = ast.literal_eval(value)
+                #     except Exception:
+                #         parsed = str(value)
+                #     compas_value = rhinoDiagram.diagram.vertex_attribute(key, attr)
+                #     if type(compas_value) == float and type(parsed) == int:
+                #         parsed = float(parsed)
+                #     if parsed != compas_value:
+                #         if type(parsed) == rhinoDiagram.vertex_attributes_properties[attr]['type']:
+                #             rhinoDiagram.diagram.vertex_attribute(key, attr, parsed)
+                #             print('updated', parsed)
+                #             get_scene().update()
+                #         else:
+                #             print('invalid value type!')
+                #             event.Item.Values[event.Column] = compas_value
+                #     else:
+                #         print('value not changed from', value)
 
             except Exception as e:
                 print(e)
@@ -295,8 +293,8 @@ class AttributesForm(forms.Form):
         control.TabPosition = forms.DockPosition.Top
 
         tab = forms.TabPage()
-        tab.Text = "Diagram"
-        tab.Content = Tree_Table.create_diagram_table(sceneNode)
+        tab.Text = "Settings"
+        tab.Content = Tree_Table.create_settings_table(sceneNode)
         control.Pages.Add(tab)
 
         tab = forms.TabPage()
