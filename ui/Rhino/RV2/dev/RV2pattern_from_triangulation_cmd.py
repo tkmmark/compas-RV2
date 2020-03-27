@@ -37,10 +37,13 @@ def RunCommand(is_interactive):
         return
 
     # boundary
-    curve = RhinoCurve.from_guid(boundary_guids[0])
-    N = int(curve.length() / target_length)
-    points = curve.divide(N, over_space=True)
-    boundary = map(list, points)
+    boundary = []
+    boundary_seg_guids = compas_rhino.rs.ExplodeCurves(boundary_guids[0])
+    for guid in boundary_seg_guids:
+        curve = RhinoCurve.from_guid(guid)
+        N = int(curve.length() / target_length)
+        points = curve.divide(N, over_space=True)
+        boundary.extend(map(list, points))
 
     # polylines
     polylines = []
