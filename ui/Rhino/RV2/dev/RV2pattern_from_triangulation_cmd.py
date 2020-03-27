@@ -64,7 +64,7 @@ def RunCommand(is_interactive):
     vertices, faces = triangle.constrained_delaunay_triangulation(
         boundary, polylines, polygons, area=area)
 
-    pattern = Pattern.from_vertices_and_faces(V2, F2)
+    pattern = Pattern.from_vertices_and_faces(vertices, faces)
 
     scene.clear()
     scene.add(pattern, name='pattern')
