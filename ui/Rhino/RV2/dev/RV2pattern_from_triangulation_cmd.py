@@ -5,14 +5,17 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
+from compas_rhino.geometry import RhinoCurve
 from compas_rv2.datastructures import Pattern
-from compas.geometry import Polygon
-from compas.geometry import Polyline
 from compas.geometry import centroid_points_xy
+from compas.utilities import geometric_key
 from compas.utilities import pairwise
-from compas.utilities import flatten
 import rhinoscriptsyntax as rs
+import math
 
+from compas.rpc import Proxy
+
+igl = Proxy('compas_libigl')
 
 __commandname__ = "RV2pattern_from_triangulation"
 
@@ -26,94 +29,69 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    p = get_proxy()
-    if not p:
+    boundary_guids = compas_rhino.select_curves('select outer boundary')
+    if not boundary_guids:
+        return
+    hole_guids = compas_rhino.select_curves('select inner boundary')
+    segments_guids = compas_rhino.select_curves('select guide line')
+    target_length = rs.GetReal('target edge length')
+    if not target_length:
         return
 
-        raise NotImplementedError
+    # boundary
+    boundary = RhinoCurve.from_guid(boundary_guids[0])
+    divide = math.floor(boundary.length()/target_length)
+    points = boundary.divide(divide, over_space=True)
+    boundary = points
 
-    # triangulate = p.package("triangle.triangulate")
+    # hole
+    hole = []
+    if hole_guids:
+        hole = RhinoCurve.from_guid(hole_guids[0])
+        divide = math.floor(hole.length()/target_length)
+        points = hole.divide(divide, over_space=True)
+        hole = points
 
-    # # ==============================================================================
-    # # Boundaries from Rhino
-    # # ==============================================================================
+    # segments
+    segments = []
+    if segments_guids:
+        segments = RhinoCurve.from_guid(segments_guids[0])
+        divide = math.floor(segments.length()/target_length)
+        points = segments.divide(divide, over_space=True)
+        segments = points
 
-    # outer_guid = compas_rhino.select_curve('select outer boundary curve')
-    # inner_guids = compas_rhino.select_curves('select inner boundary curves')
-    # guide_guids = compas_rhino.select_curves('select guide lines')
-    # target_length = rs.GetReal('target edge length')
+    # data
+    data = {
+        "boundary": boundary,
+        "segments": segments,
+        "hole": hole,
+        "target_length": target_length
+    }
 
-    # if not outer_guid:
-    #     return
-    # if not target_length:
-    #     return
+    gkey_xyz = {geometric_key(point): point for point in data['boundary']}
+    gkey_xyz.update({geometric_key(point): point for point in data['segments']})
+    gkey_xyz.update({geometric_key(point): point for point in data['hole']})
+    gkey_index = {gkey: index for index, gkey in enumerate(gkey_xyz.keys())}
 
-    # # outer
-    # outer_guids = rs.ExplodeCurves(outer_guid, False)
-    # outer = []
-    # for guid in outer_guids:
-    #     pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)[:-1]
-    #     outer.extend(pts)
-    # outer = Polygon(outer)
-    # compas_rhino.delete_objects(outer_guids)
+    xyz = list(gkey_xyz.values())
+    edges = []
+    edges += [[gkey_index[geometric_key(a)], gkey_index[geometric_key(b)]] for a, b in pairwise(data['boundary'])]
+    edges += [[gkey_index[geometric_key(a)], gkey_index[geometric_key(b)]] for a, b in pairwise(data['segments'])]
+    edges += [[gkey_index[geometric_key(a)], gkey_index[geometric_key(b)]] for a, b in pairwise(data['hole'])]
+    if data['hole']:
+        holes = []
+        holes += [centroid_points_xy([xyz[gkey_index[geometric_key(point)]] for point in data['hole'][:-1]])]
+    else:
+        holes = None
 
-    # # inner
-    # inners = []
-    # holes = []
-    # for guid in inner_guids:
-    #     pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)
-    #     inners.append(Polygon(pts))
-    #     holes.append(centroid_points_xy(pts))
+    area = data['target_length'] ** 2 * 0.5 * 0.5 * 1.732
+    V2, F2 = igl.conforming_delaunay_triangulation(xyz, edges, holes, area=area)
 
-    # # guide
-    # guides = []
-    # for guid in guide_guids:
-    #     pts = rs.DivideCurve(guid, rs.CurveLength(guid) / target_length)
-    #     guides.append(Polyline(pts))
+    pattern = Pattern.from_vertices_and_faces(V2, F2)
 
-    # # ==============================================================================
-    # # Input data
-    # # ==============================================================================
-
-    # boundaries = [outer] + inners
-
-    # vertices = list(flatten(boundaries + guides))
-    # vertices = [[x, y] for x, y, z in vertices]
-    # holes = [[x, y] for x, y, z in holes]
-
-    # segments = []
-    # index = 0
-    # for polygon in boundaries:
-    #     start = index
-    #     end = start + len(polygon)
-    #     segments.extend(list(pairwise(range(start, end))) + [(end - 1, start)])
-    #     index = end
-
-    # if guides:
-    #     for polyline in guides:
-    #         start = index
-    #         end = start + len(polyline)
-    #         segments.extend(list(pairwise(range(start, end))))
-    #         index = end
-
-    # area_constrain = target_length ** 2 * 0.5 * 0.5 * 1.732  # calculate a triangle area based on target edge length # noqa E501
-
-    # if not inners:  # no inner boundary
-    #     tri = {'vertices': vertices, 'segments': segments}
-    #     tri = triangulate(tri, opts='pa{}q'.format(area_constrain))
-    # else:
-    #     tri = {'vertices': vertices, 'segments': segments, 'holes': holes}
-    #     tri = triangulate(tri, opts='p')
-    #     tri = triangulate(tri, opts='ra{}q'.format(area_constrain))  # this doesn't take fixed segements from previous step # noqa 501
-
-    # vertices = [[x, y, 0] for x, y in tri['vertices']]
-    # triangles = list(tri['triangles'])
-
-    # pattern = Pattern.from_vertices_and_faces(vertices, triangles)
-
-    # scene.clear()
-    # scene.add(pattern, name='pattern')
-    # scene.update()
+    scene.clear()
+    scene.add(pattern, name='pattern')
+    scene.update()
 
 
 # ==============================================================================
