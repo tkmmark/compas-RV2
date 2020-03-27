@@ -4,16 +4,14 @@ RhinoVault for Rhino 6 based on COMPAS
 
 ## Alpha release install(Windows Only)
 
-Get the latest release from:   
-https://github.com/BlockResearchGroup/compas-RV2/releases
-
+Get the latest release from: <https://github.com/BlockResearchGroup/compas-RV2/releases>
 
 1. Install RV2
 
    Unzip the folder and open `RV2\dev` in explorer, right click on `install.bat` (.bat extension might be hidden) and choose `Run as Administrator`. Click `Yes` in the pop-up window.
    Installation is successful if you see following output.
 
-   ```
+   ```bash
    C:\Windows\system32>C:\Users\lichen7\compas-RV2\dist\RV2\dev\env\python.exe -m compas_rv2.install --plugin_path C:\Users\lichen7\compas-RV2\dist\RV2\dev\..\
    Installing PlugIn RV2 to Rhino PythonPlugIns.
 
@@ -40,7 +38,7 @@ https://github.com/BlockResearchGroup/compas-RV2/releases
 
 2. Activate RV2 toolbar in Rhino
 
-   Go to menu `Tools > Toolbar Layout...`. In pop-up window, click `File > Open...`. Then in file explorer, select `YOUR_RV2_FOLDER\dev\RV2.rui`. Now you will see RhinoVAULT2 appears in rhino menu. At last, tick `RV2` in Toolbars section to enable floating toolbar.
+   Go to menu `Tools > Toolbar Layout...`. In pop-up window, click `File > Open...`. Then in file explorer, select `YOUR_RV2_FOLDER\dev\RV2.rui`. Now you will see RhinoVAULT2 appears in rhino menu.
 
 ## Dev install
 
@@ -124,7 +122,7 @@ These installation instructions assume that Anaconda/conda are available on your
 
 7. Test the installation.
 
-   In Rhino, type `RV2_init`.
+   In Rhino, type `RV2init`.
    This should display the RhinoVault2 welcome page.
 
    > (Windows) If the command does not appear in the list of possible commands, you may have to open and close the Python Script Editor to initialise the plugin.
