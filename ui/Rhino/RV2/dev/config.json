@@ -80,10 +80,11 @@
 
             {"name": "RV2init", "menu_text": "Initialize RV2", "icon": 0},
 
-            {"name": "RV2pattern_from_lines",    "menu_text": "From Lines",    "icon": 7},
-            {"name": "RV2pattern_from_mesh",     "menu_text": "From Mesh",     "icon": 8},
-            {"name": "RV2pattern_from_surface",  "menu_text": "From Surface",  "icon": 9},
-            {"name": "RV2pattern_from_skeleton", "menu_text": "From Skeleton", "icon": 10},
+            {"name": "RV2pattern_from_lines",         "menu_text": "From Lines",    "icon": 7},
+            {"name": "RV2pattern_from_mesh",          "menu_text": "From Mesh",     "icon": 8},
+            {"name": "RV2pattern_from_surface",       "menu_text": "From Surface",  "icon": 9},
+            {"name": "RV2pattern_from_skeleton",      "menu_text": "From Skeleton", "icon": 10},
+            {"name": "RV2pattern_from_triangulation", "menu_text": "From Triangulation", "icon": 10},
 
             {"name": "RV2pattern_modify_edges",    "menu_text": "Modify Edges",    "icon": 20},
             {"name": "RV2pattern_modify_vertices", "menu_text": "Modify Vertices", "icon": 19},
