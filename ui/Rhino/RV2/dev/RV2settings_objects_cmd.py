@@ -5,7 +5,7 @@ from __future__ import division
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import SettingsForm
 
-__commandname__ = "RV2settings"
+__commandname__ = "RV2settings_objects"
 
 
 def RunCommand(is_interactive):

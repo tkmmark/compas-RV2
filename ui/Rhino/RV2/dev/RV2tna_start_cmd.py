@@ -8,6 +8,8 @@ from compas_rv2.datastructures import ThrustDiagram
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas.geometry import Translation
+from compas.geometry import subtract_vectors
+from compas.geometry import length_vector
 
 __commandname__ = "RV2tna_start"
 
@@ -40,6 +42,11 @@ def RunCommand(is_interactive):
     dx = 1.5 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
     dy = y_form - y_force
     force.transform(Translation([dx, dy, 0]))
+
+    diagonal = length_vector(subtract_vectors(bbox_form[2], bbox_form[0]))
+    zmax = 0.5 * diagonal
+
+    scene.settings['tna.vertical.zmax'] = round(zmax, 1)
 
     scene.clear()
 

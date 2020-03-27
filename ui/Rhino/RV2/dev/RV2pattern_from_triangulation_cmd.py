@@ -32,6 +32,7 @@ def RunCommand(is_interactive):
     boundary_guids = compas_rhino.select_curves('select outer boundary')
     if not boundary_guids:
         return
+
     hole_guids = compas_rhino.select_curves('select inner boundary')
     segments_guids = compas_rhino.select_curves('select guide line')
     target_length = rs.GetReal('target edge length')
@@ -78,6 +79,7 @@ def RunCommand(is_interactive):
     edges += [[gkey_index[geometric_key(a)], gkey_index[geometric_key(b)]] for a, b in pairwise(data['boundary'])]
     edges += [[gkey_index[geometric_key(a)], gkey_index[geometric_key(b)]] for a, b in pairwise(data['segments'])]
     edges += [[gkey_index[geometric_key(a)], gkey_index[geometric_key(b)]] for a, b in pairwise(data['hole'])]
+
     if data['hole']:
         holes = []
         holes += [centroid_points_xy([xyz[gkey_index[geometric_key(point)]] for point in data['hole'][:-1]])]

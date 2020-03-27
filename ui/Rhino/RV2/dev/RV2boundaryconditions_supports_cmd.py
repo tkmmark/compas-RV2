@@ -32,10 +32,10 @@ def RunCommand(is_interactive):
     compas_rhino.rs.ShowGroup(group_supports)
     compas_rhino.rs.Redraw()
 
-    options = ["Continuous", "Manual"]
+    options = ["Continuous", "Manual", "ESC"]
     while True:
         option2 = compas_rhino.rs.GetString("Selection Mode.", options[-1], options)
-        if not option2:
+        if not option2 or option2 == 'ESC':
             return
 
         if option2 == 'Continuous':
