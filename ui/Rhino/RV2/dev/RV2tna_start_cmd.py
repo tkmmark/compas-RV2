@@ -44,7 +44,7 @@ def RunCommand(is_interactive):
     force.transform(Translation([dx, dy, 0]))
 
     diagonal = length_vector(subtract_vectors(bbox_form[2], bbox_form[0]))
-    zmax = 0.5 * diagonal
+    zmax = 0.25 * diagonal
 
     scene.settings['tna.vertical.zmax'] = round(zmax, 1)
 
