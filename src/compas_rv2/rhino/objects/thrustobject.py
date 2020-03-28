@@ -16,11 +16,15 @@ class ThrustObject(MeshObject):
     settings = {
         'thrust.layer': "RV2::ThrustDiagram",
         'thrust.show.vertices': False,
-        'thrust.show.edges': True,
+        'thrust.show.edges': False,
         'thrust.show.faces': True,
         'thrust.show.reactions': True,
         'thrust.show.residuals': False,
+        'thrust.show.selfweight': False,
+        'thrust.show.loads': False,
         'thrust.show.pipes': False,
+        'thrust.viz.mode': None,  # discrete, continuous
+        'thrust.color.mode': None,  # minmax
         'thrust.color.vertices': [255, 0, 255],
         'thrust.color.vertices:is_fixed': [0, 255, 0],
         'thrust.color.vertices:is_anchor': [255, 0, 0],
