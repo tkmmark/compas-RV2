@@ -1,5 +1,5 @@
 ================================================================================
-rhinoVAULT
+rhinoVAULT 1
 ================================================================================
 
 .. figure:: /_images/rv1.jpg
@@ -26,3 +26,12 @@ Recognition
 In 2014, RhinoVAULT was awarded in the category 'Structure / Physics _ Formation' at ALGODeQ, an international competition for algorithmic design programs, furthermore receiving the highest rating from the reviewers.
 
 other info about rv1...
+
+
+____
+
+
+References
+==========
+
+.. [1] Rippmann M., Lachauer L. and Block P. *RhinoVAULT - Interactive Vault Design*, International Journal of Space Structures,27(4): 219-230,2012 (December).
