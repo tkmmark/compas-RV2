@@ -52,17 +52,17 @@ class FormObject(MeshObject):
     __module__ = 'compas_rv2.rhino'
 
     settings = {
-        'form.layer': "RV2::FormDiagram",
-        'form.show.vertices': False,
-        'form.show.edges': True,
-        'form.show.angles': True,
-        'form.color.vertices': [0, 255, 0],
-        'form.color.vertices:is_fixed': [0, 255, 255],
-        'form.color.vertices:is_external': [0, 0, 255],
-        'form.color.vertices:is_anchor': [255, 255, 255],
-        'form.color.edges': [0, 255, 0],
-        'form.color.edges:is_external': [0, 0, 255],
-        'form.tol.angles': 5,
+        'layer': "RV2::FormDiagram",
+        'show.vertices': False,
+        'show.edges': True,
+        'show.angles': True,
+        'color.vertices': [0, 255, 0],
+        'color.vertices:is_fixed': [0, 255, 255],
+        'color.vertices:is_external': [0, 0, 255],
+        'color.vertices:is_anchor': [255, 255, 255],
+        'color.edges': [0, 255, 0],
+        'color.edges:is_external': [0, 0, 255],
+        'tol.angles': 5,
     }
 
     def __init__(self, scene, diagram, **kwargs):
@@ -71,7 +71,7 @@ class FormObject(MeshObject):
 
     def draw(self):
         """Draw the form diagram in the Rhino scene using the current settings."""
-        layer = self.settings['form.layer']
+        layer = self.settings['layer']
 
         self.artist.layer = layer
         self.artist.clear_layer()
@@ -109,10 +109,10 @@ class FormObject(MeshObject):
 
         keys = supports + external + free
 
-        color = {key: self.settings['form.color.vertices'] for key in keys}
-        color_fixed = self.settings['form.color.vertices:is_fixed']
-        color_external = self.settings['form.color.vertices:is_external']
-        color_anchor = self.settings['form.color.vertices:is_anchor']
+        color = {key: self.settings['color.vertices'] for key in keys}
+        color_fixed = self.settings['color.vertices:is_fixed']
+        color_external = self.settings['color.vertices:is_external']
+        color_anchor = self.settings['color.vertices:is_anchor']
         color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
         color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
@@ -126,7 +126,7 @@ class FormObject(MeshObject):
         compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in external], group_external)
         compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
 
-        if self.settings['form.show.vertices']:
+        if self.settings['show.vertices']:
             compas_rhino.rs.ShowGroup(group_supports)
             compas_rhino.rs.ShowGroup(group_external)
             compas_rhino.rs.ShowGroup(group_free)
@@ -141,22 +141,22 @@ class FormObject(MeshObject):
         delete_objects(guids_edges, purge=True)
 
         keys = list(self.datastructure.edges_where({'_is_edge': True}))
-        color = {key: self.settings['form.color.edges'] for key in keys}
-        color.update({key: self.settings['form.color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
+        color = {key: self.settings['color.edges'] for key in keys}
+        color.update({key: self.settings['color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
         guids = self.artist.draw_edges(keys, color)
         self.guid_edge = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
-        if self.settings['form.show.edges']:
+        if self.settings['show.edges']:
             compas_rhino.rs.ShowGroup(group_edges)
         else:
             compas_rhino.rs.HideGroup(group_edges)
 
         # angles
 
-        if self.settings['form.show.angles']:
+        if self.settings['show.angles']:
 
-            tol = self.settings['form.tol.angles']
+            tol = self.settings['tol.angles']
             keys = list(self.datastructure.edges_where({'_is_edge': True}))
             angles = self.datastructure.edges_attribute('_a', keys=keys)
             amin = min(angles)

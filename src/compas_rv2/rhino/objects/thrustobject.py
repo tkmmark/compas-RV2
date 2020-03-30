@@ -14,31 +14,31 @@ __all__ = ["ThrustObject"]
 class ThrustObject(MeshObject):
 
     settings = {
-        'thrust.layer': "RV2::ThrustDiagram",
-        'thrust.show.vertices': False,
-        'thrust.show.edges': False,
-        'thrust.show.faces': True,
-        'thrust.show.reactions': True,
-        'thrust.show.residuals': False,
-        'thrust.show.selfweight': False,
-        'thrust.show.loads': False,
-        'thrust.show.pipes': False,
-        'thrust.viz.mode': None,  # discrete, continuous
-        'thrust.color.mode': None,  # minmax
-        'thrust.color.vertices': [255, 0, 255],
-        'thrust.color.vertices:is_fixed': [0, 255, 0],
-        'thrust.color.vertices:is_anchor': [255, 0, 0],
-        'thrust.color.edges': [255, 0, 255],
-        'thrust.color.faces': [255, 0, 255],
-        'thrust.color.reactions': [0, 255, 255],
-        'thrust.color.residuals': [0, 255, 255],
-        'thrust.color.pipes': [0, 0, 255],
-        'thrust.scale.reactions': 0.1,
-        'thrust.scale.residuals': 1.0,
-        'thrust.scale.pipes': 0.01,
-        'thrust.tol.reactions': 1e-3,
-        'thrust.tol.residuals': 1e-3,
-        'thrust.tol.pipes': 1e-3,
+        'layer': "RV2::ThrustDiagram",
+        'show.vertices': False,
+        'show.edges': False,
+        'show.faces': True,
+        'show.reactions': True,
+        'show.residuals': False,
+        'show.selfweight': False,
+        'show.loads': False,
+        'show.pipes': False,
+        'viz.mode': None,  # discrete, continuous
+        'color.mode': None,  # minmax
+        'color.vertices': [255, 0, 255],
+        'color.vertices:is_fixed': [0, 255, 0],
+        'color.vertices:is_anchor': [255, 0, 0],
+        'color.edges': [255, 0, 255],
+        'color.faces': [255, 0, 255],
+        'color.reactions': [0, 255, 255],
+        'color.residuals': [0, 255, 255],
+        'color.pipes': [0, 0, 255],
+        'scale.reactions': 0.1,
+        'scale.residuals': 1.0,
+        'scale.pipes': 0.01,
+        'tol.reactions': 1e-3,
+        'tol.residuals': 1e-3,
+        'tol.pipes': 1e-3,
     }
 
     def __init__(self, scene, diagram, **kwargs):
@@ -73,7 +73,7 @@ class ThrustObject(MeshObject):
         self._guid_pipe = dict(values)
 
     def draw(self):
-        layer = self.settings['thrust.layer']
+        layer = self.settings['layer']
 
         self.artist.layer = layer
         self.artist.clear_layer()
@@ -97,14 +97,14 @@ class ThrustObject(MeshObject):
         delete_objects(guids_vertices, purge=True)
 
         keys = list(self.datastructure.vertices_where({'_is_external': False}))
-        color = {key: self.settings['thrust.color.vertices'] for key in keys}
-        color.update({key: self.settings['thrust.color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-        color.update({key: self.settings['thrust.color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+        color = {key: self.settings['color.vertices'] for key in keys}
+        color.update({key: self.settings['color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
+        color.update({key: self.settings['color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
         guids = self.artist.draw_vertices(keys, color)
         self.guid_vertex = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
 
-        if self.settings['thrust.show.vertices']:
+        if self.settings['show.vertices']:
             compas_rhino.rs.ShowGroup(group_vertices)
         else:
             compas_rhino.rs.HideGroup(group_vertices)
@@ -115,12 +115,12 @@ class ThrustObject(MeshObject):
         delete_objects(guids_edges, purge=True)
 
         keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
-        color = {key: self.settings['thrust.color.edges'] for key in keys}
+        color = {key: self.settings['color.edges'] for key in keys}
         guids = self.artist.draw_edges(keys, color)
         self.guid_edge = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
-        if self.settings['thrust.show.edges']:
+        if self.settings['show.edges']:
             compas_rhino.rs.ShowGroup(group_edges)
         else:
             compas_rhino.rs.HideGroup(group_edges)
@@ -131,24 +131,24 @@ class ThrustObject(MeshObject):
         delete_objects(guids_faces, purge=True)
 
         keys = list(self.datastructure.faces_where({'_is_loaded': True}))
-        color = {key: self.settings['thrust.color.faces'] for key in keys}
+        color = {key: self.settings['color.faces'] for key in keys}
         guids = self.artist.draw_faces(keys, color)
         self.guid_face = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
 
-        if self.settings.get('thrust.show.faces', True):
+        if self.settings.get('show.faces', True):
             compas_rhino.rs.ShowGroup(group_faces)
         else:
             compas_rhino.rs.HideGroup(group_faces)
 
         # overlays
 
-        if self.settings['thrust.show.reactions']:
+        if self.settings['show.reactions']:
 
-            tol = self.settings['thrust.tol.reactions']
+            tol = self.settings['tol.reactions']
             keys = list(self.datastructure.vertices_where({'is_anchor': True}))
-            color = self.settings['thrust.color.reactions']
-            scale = self.settings['thrust.scale.reactions']
+            color = self.settings['color.reactions']
+            scale = self.settings['scale.reactions']
             guids = self.artist.draw_reactions(keys, color, scale, tol)
             self.guid_reaction = zip(guids, keys)
 
@@ -158,12 +158,12 @@ class ThrustObject(MeshObject):
             del self._guid_reaction
             self._guid_reaction = {}
 
-        if self.settings['thrust.show.residuals']:
+        if self.settings['show.residuals']:
 
-            tol = self.settings['thrust.tol.residuals']
+            tol = self.settings['tol.residuals']
             keys = list(self.datastructure.vertices_where({'is_anchor': False, '_is_external': False}))
-            color = self.settings['thrust.color.residuals']
-            scale = self.settings['thrust.scale.residuals']
+            color = self.settings['color.residuals']
+            scale = self.settings['scale.residuals']
             guids = self.artist.draw_residuals(keys, color, scale, tol)
             self.guid_residual = zip(guids, keys)
 
@@ -173,12 +173,12 @@ class ThrustObject(MeshObject):
             del self._guid_residual
             self._guid_residual = {}
 
-        if self.settings['thrust.show.pipes']:
+        if self.settings['show.pipes']:
 
-            tol = self.settings['thrust.tol.pipes']
+            tol = self.settings['tol.pipes']
             keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
-            color = self.settings['thrust.color.pipes']
-            scale = self.settings['thrust.scale.pipes']
+            color = self.settings['color.pipes']
+            scale = self.settings['scale.pipes']
             guids = self.artist.draw_pipes(keys, color, scale, tol)
             self.guid_pipe = zip(guids, keys)
 
