@@ -21,64 +21,43 @@ __all__ = ["AttributesForm"]
 
 
 class Tree_Table(forms.TreeGridView):
-    def __init__(self, ShowHeader=True, rhinoDiagram=None, table_type=None):
+    def __init__(self, ShowHeader=True, sceneNode=None, table_type=None):
         self.ShowHeader = ShowHeader
         self.Height = 300
         self.last_sorted_to = None
         # self.AllowMultipleSelection=True
 
-        # settings = get_scene().settings
-        # color = {}
-        # if rhinoDiagram.__class__.__name__ == 'RhinoFormDiagram':
-        #     if table_type == 'vertex':
-        #         color.update({key: settings.get("color.form.vertices") for key in rhinoDiagram.diagram.vertices()})
-        #         color.update({key: settings.get("color.form.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
-        #         color.update({key: settings.get("color.form.vertices:is_external") for key in rhinoDiagram.diagram.vertices_where({'is_external': True})})
-        #         color.update({key: settings.get("color.form.vertices:is_anchor") for key in rhinoDiagram.diagram.vertices_where({'is_anchor': True})})
-        #     if table_type == 'edge':
-        #         keys = list(rhinoDiagram.diagram.edges_where({'is_edge': True}))
-        #         for i, key in enumerate(keys):
-        #             u, v = key
-        #             if rhinoDiagram.diagram.vertex_attribute(u, 'is_external') or rhinoDiagram.diagram.vertex_attribute(v, 'is_external'):
-        #                 color[i] = settings.get("color.form.edges:is_external")
-        #             else:
-        #                 color[i] = settings.get("color.form.edges")
+        # give colors to each item cells according to object settings
+        color = {}
+        if sceneNode and table_type:
+            settings = sceneNode.settings
 
-        # if rhinoDiagram.__class__.__name__ == 'RhinoForceDiagram':
-        #     if table_type == 'vertex':
-        #         color.update({key: settings.get("color.force.vertices") for key in rhinoDiagram.diagram.vertices()})
-        #     if table_type == 'edge':
-        #         keys = list(rhinoDiagram.diagram.edges())
-        #         for i, key in enumerate(keys):
-        #             u_, v_ = rhinoDiagram.diagram.primal.face_adjacency_halfedge(*key)
-        #             if rhinoDiagram.diagram.primal.vertex_attribute(u_, 'is_external') or rhinoDiagram.diagram.primal.vertex_attribute(v_, 'is_external'):
-        #                 color[i] = settings.get("color.force.edges:is_external")
-        #             else:
-        #                 color[i] = settings.get("color.force.edges")
+            # update general color settings for this table
+            general_setting_key = "color.%s" % table_type
+            color.update({str(key): settings.get(general_setting_key) for key in sceneNode.datastructure.vertices()})
 
-        # if rhinoDiagram.__class__.__name__ == 'RhinoThrustDiagram':
-        #     if table_type == 'vertex':
-        #         color.update({key: settings.get("color.thrust.vertices") for key in rhinoDiagram.diagram.vertices()})
-        #         color.update({key: settings.get("color.thrust.vertices:is_fixed") for key in rhinoDiagram.diagram.vertices_where({'is_fixed': True})})
-        #         color.update({key: settings.get("color.thrust.vertices:is_anchor") for key in rhinoDiagram.diagram.vertices_where({'is_anchor': True})})
-        #     if table_type == 'edge':
-        #         keys = list(rhinoDiagram.diagram.edges_where({'is_edge': True, 'is_external': False}))
-        #         color.update({i: settings.get("color.thrust.edges") for i, key in enumerate(keys)})
-        #     if table_type == 'face':
-        #         keys = list(rhinoDiagram.diagram.faces_where({'is_loaded': True}))
-        #         color.update({key: settings.get("color.thrust.faces") for key in keys})
+            # gather and update subsettings
+            for full_setting_key in settings:
+                sub_setting_str = full_setting_key.split(":")
+                if len(sub_setting_str) > 1 and sub_setting_str[0] == general_setting_key:
+                    sub_setting_key = sub_setting_str[-1]
+                    items_where = getattr(sceneNode.datastructure, '%s_where' % table_type)
+                    color.update({str(key): settings.get(full_setting_key) for key in items_where({sub_setting_key: True})})
+                    color.update({str(key): settings.get(full_setting_key) for key in items_where({'_'+sub_setting_key: True})})  # including read-only ones
 
         def OnCellFormatting(sender, e):
             try:
                 if not e.Column.Editable:
                     e.ForegroundColor = drawing.Colors.DarkGray
-                # attr = e.Column.HeaderText
-                # if attr == 'key':
-                #     key = e.Item.Values[0]
-                #     if key in color:
-                #         rgb = color[key]
-                #         rgb = [c/255. for c in rgb]
-                #         e.BackgroundColor = drawing.Color(*rgb)
+
+                attr = e.Column.HeaderText
+                if attr == 'key':
+                    key = e.Item.Values[0]
+                    if key in color:
+                        rgb = color[key]
+                        rgb = [c/255. for c in rgb]
+                        e.BackgroundColor = drawing.Color(*rgb)
+
             except Exception as exc:
                 print('formating error', exc)
 
@@ -104,7 +83,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def create_vertices_table(cls, sceneNode):
         datastructure = sceneNode.datastructure
-        table = cls()
+        table = cls(sceneNode=sceneNode, table_type='vertices')
         table.add_column('key')
         attributes = list(datastructure.default_vertex_attributes.keys())
         attributes.sort()
@@ -128,7 +107,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def create_edges_table(cls, sceneNode):
         datastructure = sceneNode.datastructure
-        table = cls()
+        table = cls(sceneNode=sceneNode, table_type='edges')
         table.add_column('key')
         attributes = list(datastructure.default_edge_attributes.keys())
         attributes.sort()
@@ -157,7 +136,7 @@ class Tree_Table(forms.TreeGridView):
     @classmethod
     def create_faces_table(cls, sceneNode):
         datastructure = sceneNode.datastructure
-        table = cls()
+        table = cls(sceneNode=sceneNode, table_type='faces')
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(datastructure.default_face_attributes.keys())
@@ -338,16 +317,18 @@ if __name__ == "__main__":
     from compas_rv2.datastructures import FormDiagram
     from compas_rv2.datastructures import Pattern
 
-    pattern = Pattern.from_obj(compas.get('faces.obj'))
-    form = FormDiagram.from_pattern(pattern)
+    # pattern = Pattern.from_obj(compas.get('faces.obj'))
+    # form = FormDiagram.from_pattern(pattern)
     scene = get_scene()
 
-    scene.clear()
-    node = scene.add(form, name='form', settings=scene.settings)
-    scene.update()
+    # scene.clear()
+    # node = scene.add(form, name='form', settings=scene.settings)
+    # scene.update()
 
-    print(node.datastructure.default_vertex_attributes)
-    print(node.datastructure.default_edge_attributes)
-    print(node.datastructure.default_face_attributes)
+    # print(node.datastructure.default_vertex_attributes)
+    # print(node.datastructure.default_edge_attributes)
+    # print(node.datastructure.default_face_attributes)
 
+
+    node = scene.get("form")[0]
     AttributesForm.from_sceneNode(node)
