@@ -7,13 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas_rhino.geometry import RhinoCurve
 from compas_rv2.datastructures import Pattern
-from compas.geometry import centroid_points_xy
-from compas.utilities import geometric_key
-from compas.utilities import pairwise
 import rhinoscriptsyntax as rs
-
-from compas.rpc import Proxy
-triangle = Proxy('compas_triangle.delaunay')
 
 
 __commandname__ = "RV2pattern_from_triangulation"
@@ -24,6 +18,12 @@ def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:
         return
+
+    p = get_proxy()
+    if not p:
+        return
+
+    constrained_delaunay_triangulation = p.package('compas_triangle.delaunay.constrained_delaunay_triangulation')
 
     boundary_guids = compas_rhino.select_curves('Select outer boundary.')
     if not boundary_guids:
@@ -64,8 +64,9 @@ def RunCommand(is_interactive):
             polygons.append(map(list, points))
 
     area = target_length ** 2 * 0.5 * 0.5 * 1.732
-    vertices, faces = triangle.constrained_delaunay_triangulation(
-        boundary, polylines, polygons, area=area)
+
+    vertices, faces = constrained_delaunay_triangulation(
+        boundary, polylines=polylines, polygons=polygons, area=area)
 
     pattern = Pattern.from_vertices_and_faces(vertices, faces)
 
