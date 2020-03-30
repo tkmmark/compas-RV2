@@ -14,7 +14,7 @@ Armadillo Vault
 
 5. Vertical equilibrium
 
-6. Modify form or thrust diagram > Modify faces (toggle openings, which makes holes)
+6. Modify thrust diagram > Modify faces (toggle openings, which makes holes)
 
 7. Create form/force (force diagram needs to be redrawn to incorporate the holes)
 
