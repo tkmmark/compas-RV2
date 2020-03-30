@@ -9,7 +9,7 @@ RhinoVault 2
    intro
    gettingstarted
    overview
-   user_manual
+   tutorial
    examples
    api
    license
