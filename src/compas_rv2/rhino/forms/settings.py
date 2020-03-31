@@ -4,7 +4,6 @@ from __future__ import division
 
 
 import compas
-import ast
 from compas_rv2.rhino import get_scene
 
 try:
@@ -17,74 +16,94 @@ except Exception:
 __all__ = ["SettingsForm"]
 
 
-class Tree_Table(forms.TreeGridView):
-    def __init__(self, ShowHeader=True, table_type=None):
-        self.ShowHeader = ShowHeader
+class Settings_Tab(forms.TabPage):
 
     @classmethod
-    def from_settings(cls, settings):
-        table = cls(ShowHeader=True)
-        table.settings = settings
-        table.new_settings = settings.copy()
-        table.settings_data_type = {key: type(settings[key]) for key in settings}
+    def from_settings(cls, object_name, settings):
+        tab = cls()
+        tab.Text = object_name
+        layout = forms.StackLayout()
+        layout.Spacing = 2
+        layout.HorizontalContentAlignment = forms.HorizontalAlignment.Stretch
+        tab.Content = layout
 
-        table.add_column("Property")
-        table.add_column("Value", Editable=True)
-        treecollection = forms.TreeGridItemCollection()
+        # link to original setting and keep a temporary new settings holder
+        tab.settings = settings
+        tab.new_settings = settings.copy()
 
-        keys = list(settings.keys())
-        keys.sort()
-        for key in keys:
-            treecollection.Add(forms.TreeGridItem(Values=(key,  str(settings[key]))))
+        # create sections
+        sections = {}
+        for key in settings:
+            split = key.split('.')
+            prefix = split[0]
+            postfix = '.'.join(split[1:])
+            if prefix not in sections:
+                sections[prefix] = {}
+            sections[prefix][postfix] = (key, settings[key])
 
-        table.DataStore = treecollection
-        table.CellEdited += table.EditEvent()
-        return table
+        for prefix in sections:
 
-    def EditEvent(self):
+            groupbox = forms.GroupBox(Text=prefix)
+            groupbox.Padding = drawing.Padding(5)
+            grouplayout = forms.DynamicLayout()
+            grouplayout.Spacing = drawing.Size(3, 3)
+
+            postfixies = list(sections[prefix].keys())
+            postfixies.sort()
+            for postfix in postfixies:
+                key, value = sections[prefix][postfix]
+
+                if type(value) == bool:
+                    control = forms.CheckBox()
+                    control.Checked = value
+                    control.CheckedChanged += tab.EditEvent(key)
+                elif type(value) == list and len(value) == 3:
+                    control = forms.ColorPicker()
+                    control.Value = drawing.Color.FromArgb(*value)
+                    control.ValueChanged += tab.EditEvent(key)
+                elif type(value) == float or type(value) == int:
+                    control = forms.NumericUpDown()
+                    if type(value) == float:
+                        digits = len(str(value).split('.')[-1])
+                        control.DecimalPlaces = digits
+                        control.Increment = 0.1 ** digits
+                    control.Value = value
+                    control.ValueChanged += tab.EditEvent(key)
+                else:
+                    control = forms.TextBox()
+                    control.Text = str(value)
+                    control.TextChanged += tab.EditEvent(key)
+
+                label = forms.Label(Text=postfix)
+                if postfix != '':
+                    grouplayout.AddRow(label, None, control)
+                else:
+                    grouplayout.AddRow(control)
+
+            groupbox.Content = grouplayout
+            layout.Items.Add(groupbox)
+
+        return tab
+
+    def EditEvent(self, key):
         def on_edited(sender, event):
-
             try:
-                key = event.Item.Values[0]
-                new_value = event.Item.Values[event.Column]
-                if new_value != '-':
-                    # parse new input value
-                    try:
-                        parsed = ast.literal_eval(new_value)
-                    except Exception:
-                        parsed = str(new_value)
+                if isinstance(sender, forms.ColorPicker):
+                    color = sender.Value
+                    new_value = [int(color.Rb), int(color.Gb), int(color.Bb)]
+                elif isinstance(sender, forms.CheckBox):
+                    new_value = sender.Checked
+                elif isinstance(sender, forms.NumericUpDown):
+                    new_value = sender.Value
+                elif isinstance(sender, forms.TextBox):
+                    new_value = sender.Text
 
-                    data_type = self.settings_data_type[key]
-                    original_value = self.settings[key]
-
-                    # convert int to float if needed
-                    if data_type == float and type(parsed) == int:
-                        parsed = float(parsed)
-
-                    # final type check
-                    if parsed != original_value:
-                        if type(parsed) == data_type:
-                            self.new_settings[key] = parsed
-                            print('updated %s from %s to %s' % (key, original_value, parsed))
-                            # get_scene().update()
-                        else:
-                            print('Invalid value type! Needs', data_type)
-                            event.Item.Values[event.Column] = str(original_value)
-                    else:
-                        print('value not changed from', original_value)
+                print(new_value)
+                self.new_settings.update({key: new_value})
 
             except Exception as e:
                 print(e)
         return on_edited
-
-    def add_column(self, HeaderText=None, Editable=False):
-        column = forms.GridColumn()
-        if self.ShowHeader:
-            column.HeaderText = HeaderText
-        column.Editable = Editable
-        column.DataCell = forms.TextBoxCell(self.Columns.Count)
-        column.Sortable = True
-        self.Columns.Add(column)
 
     def apply(self):
         self.settings.update(self.new_settings)
@@ -132,22 +151,20 @@ class SettingsForm(forms.Form):
         layout.Items.Add(tab_items)
 
         sub_layout = forms.DynamicLayout()
-        sub_layout.AddRow(None, self.ok, self.cancel)
+        sub_layout.Spacing = drawing.Size(5, 0)
+        sub_layout.AddRow(None, self.ok, self.cancel, self.apply)
         layout.Items.Add(forms.StackLayoutItem(sub_layout))
 
         self.Content = layout
         self.Padding = drawing.Padding(12)
         self.Resizable = True
-        self.ClientSize = drawing.Size(400, 600)
 
     def tabs_from_settings(self, all_settings):
         control = forms.TabControl()
         control.TabPosition = forms.DockPosition.Top
 
         for object_name in all_settings:
-            tab = forms.TabPage()
-            tab.Text = object_name
-            tab.Content = Tree_Table.from_settings(all_settings[object_name])
+            tab = Settings_Tab.from_settings(object_name, all_settings[object_name])
             control.Pages.Add(tab)
 
         return control
@@ -164,15 +181,30 @@ class SettingsForm(forms.Form):
         self.AbortButton.Click += self.on_cancel
         return self.AbortButton
 
+    @property
+    def apply(self):
+        self.ApplyButton = forms.Button(Text='Apply')
+        self.ApplyButton.Click += self.on_apply
+        return self.ApplyButton
+
     def on_ok(self, sender, event):
         try:
             for page in self.TabControl.Pages:
-                page.Content.apply()
+                page.apply()
             if hasattr(self, 'scene'):
                 self.scene.update()
         except Exception as e:
             print(e)
         self.Close()
+
+    def on_apply(self, sender, event):
+        try:
+            for page in self.TabControl.Pages:
+                page.apply()
+            if hasattr(self, 'scene'):
+                self.scene.update()
+        except Exception as e:
+            print(e)
 
     def on_cancel(self, sender, event):
         self.Close()
@@ -181,5 +213,5 @@ class SettingsForm(forms.Form):
 if __name__ == "__main__":
 
     scene = get_scene()
-    # SettingsForm.from_scene(scene)
-    SettingsForm.from_settings(scene.settings, "solver") 
+    SettingsForm.from_scene(scene)
+    # SettingsForm.from_settings(scene.settings, "solver")

@@ -34,17 +34,17 @@ class PatternObject(MeshObject):
     __module__ = 'compas_rv2.rhino'
 
     settings = {
-        'pattern.layer': "RV2::Pattern",
-        'pattern.show.vertices': False,
-        'pattern.show.edges': True,
-        'pattern.show.faces': False,
-        'pattern.color.vertices': [255, 255, 255],
-        'pattern.color.vertices:is_anchor': [255, 0, 0],
-        'pattern.color.vertices:is_fixed': [0, 0, 255],
-        'pattern.color.edges': [0, 0, 0],
-        'pattern.color.faces': [200, 200, 200],
-        'pattern.from_surface.density.U': 10,
-        'pattern.from_surface.density.V': 10,
+        'layer': "RV2::Pattern",
+        'show.vertices': False,
+        'show.edges': True,
+        'show.faces': False,
+        'color.vertices': [255, 255, 255],
+        'color.vertices:is_anchor': [255, 0, 0],
+        'color.vertices:is_fixed': [0, 0, 255],
+        'color.edges': [0, 0, 0],
+        'color.faces': [200, 200, 200],
+        'from_surface.density.U': 10,
+        'from_surface.density.V': 10,
     }
 
     def __init__(self, scene, pattern, **kwargs):
@@ -53,7 +53,7 @@ class PatternObject(MeshObject):
 
     def draw(self):
         """Draw the pattern in the Rhino scene using the current settings."""
-        layer = self.settings['pattern.layer']
+        layer = self.settings['layer']
 
         self.artist.layer = layer
         self.artist.clear_layer()
@@ -95,9 +95,9 @@ class PatternObject(MeshObject):
 
         keys = supports + fixed + free
 
-        color = {key: self.settings['pattern.color.vertices'] for key in keys}
-        color_fixed = self.settings['pattern.color.vertices:is_fixed']
-        color_anchor = self.settings['pattern.color.vertices:is_anchor']
+        color = {key: self.settings['color.vertices'] for key in keys}
+        color_fixed = self.settings['color.vertices:is_fixed']
+        color_anchor = self.settings['color.vertices:is_anchor']
         color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
         guids = self.artist.draw_vertices(keys, color)
@@ -109,7 +109,7 @@ class PatternObject(MeshObject):
         compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in fixed], group_fixed)
         compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
 
-        if self.settings['pattern.show.vertices']:
+        if self.settings['show.vertices']:
             compas_rhino.rs.ShowGroup(group_supports)
             compas_rhino.rs.ShowGroup(group_fixed)
             compas_rhino.rs.ShowGroup(group_free)
@@ -124,12 +124,12 @@ class PatternObject(MeshObject):
         delete_objects(guids_edges, purge=True)
 
         keys = list(self.datastructure.edges())
-        color = {key: self.settings['pattern.color.edges'] for key in keys}
+        color = {key: self.settings['color.edges'] for key in keys}
         guids = self.artist.draw_edges(keys, color)
         self.guid_edge = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
-        if self.settings['pattern.show.edges']:
+        if self.settings['show.edges']:
             compas_rhino.rs.ShowGroup(group_edges)
         else:
             compas_rhino.rs.HideGroup(group_edges)
@@ -140,12 +140,12 @@ class PatternObject(MeshObject):
         delete_objects(guids_faces, purge=True)
 
         keys = list(self.datastructure.faces())
-        color = {key: self.settings['pattern.color.faces'] for key in keys}
+        color = {key: self.settings['color.faces'] for key in keys}
         guids = self.artist.draw_faces(keys, color)
         self.guid_face = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
 
-        if self.settings['pattern.show.faces']:
+        if self.settings['show.faces']:
             compas_rhino.rs.ShowGroup(group_faces)
         else:
             compas_rhino.rs.HideGroup(group_faces)
