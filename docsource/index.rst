@@ -8,7 +8,8 @@ RhinoVault 2
 
    intro
    gettingstarted
-   overview
+   theoretical_background
+   workflow_tutorial
    user_manual
    examples
    api

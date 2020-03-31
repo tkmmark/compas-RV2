@@ -2,6 +2,10 @@
 British Museum
 ********************************************************************************
 
+.. figure:: /_images/example_british-museum.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
 1. Create pattern > From features (compas_pattern)
 
 * showcase compas_pattern options/features (Robin strip stuff?)

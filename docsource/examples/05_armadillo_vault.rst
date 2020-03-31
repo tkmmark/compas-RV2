@@ -2,6 +2,10 @@
 Armadillo Vault
 ********************************************************************************
 
+.. figure:: /_images/example_armadillo.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
 1. Create pattern > From skeleton
 
 * showcase various skeleton options

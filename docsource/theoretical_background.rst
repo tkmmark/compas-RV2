@@ -1,5 +1,5 @@
 ********************************************************************************
-Overview
+Theoretical background
 ********************************************************************************
 
 .. toctree::
@@ -7,7 +7,7 @@ Overview
    :titlesonly:
    :glob:
 
-   overview/00_TNA.rst
-   overview/01_rhinoVAULT.rst
-   overview/02_ecosystem.rst
+   theoretical_background/00_TNA.rst
+   theoretical_background/01_rhinoVAULT.rst
+   theoretical_background/02_ecosystem.rst
 

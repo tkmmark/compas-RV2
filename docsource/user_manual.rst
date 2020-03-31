@@ -7,7 +7,6 @@ User manual
    :titlesonly:
    :glob:
 
-   user_manual/workflow_overview.rst
    user_manual/00_initializing.rst
    user_manual/01_pattern.rst
    user_manual/02_diagrams.rst

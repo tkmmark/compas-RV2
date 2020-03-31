@@ -2,6 +2,10 @@
 MLK Jr. Park Stone Vault
 ********************************************************************************
 
+.. figure:: /_images/example_MLK.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
 1. Create pattern > From triangulation (irregular, trimmed-edge like boundary curves with one ore more holes, with one or more guide curves)
 
 * showcase triangulation options
