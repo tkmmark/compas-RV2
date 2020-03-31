@@ -89,9 +89,10 @@ class Tree_Table(forms.TreeGridView):
         attributes.sort()
         for attr in attributes:
             editable = attr[0] != '_'
+            checkbox = type(datastructure.default_vertex_attributes[attr]) == bool
             if not editable:
                 attr = attr[1:]
-            table.add_column(attr, Editable=editable)
+            table.add_column(attr, Editable=editable, checkbox=checkbox)
         treecollection = forms.TreeGridItemCollection()
         for key in datastructure.vertices():
             values = [str(key)]
@@ -114,9 +115,10 @@ class Tree_Table(forms.TreeGridView):
 
         for attr in attributes:
             editable = attr[0] != '_'
+            checkbox = type(datastructure.default_edge_attributes[attr]) == bool
             if not editable:
                 attr = attr[1:]
-            table.add_column(attr, Editable=editable)
+            table.add_column(attr, Editable=editable, checkbox=checkbox)
 
         treecollection = forms.TreeGridItemCollection()
         for key, edge in enumerate(datastructure.edges()):
@@ -143,9 +145,10 @@ class Tree_Table(forms.TreeGridView):
         attributes.sort()
         for attr in attributes:
             editable = attr[0] != '_'
+            checkbox = type(datastructure.default_face_attributes[attr]) == bool
             if not editable:
                 attr = attr[1:]
-            table.add_column(attr, Editable=editable)
+            table.add_column(attr, Editable=editable, checkbox=checkbox)
 
         treecollection = forms.TreeGridItemCollection()
         for key in datastructure.faces():
@@ -225,12 +228,15 @@ class Tree_Table(forms.TreeGridView):
                 print(e)
         return on_hearderClick
 
-    def add_column(self, HeaderText=None, Editable=False):
+    def add_column(self, HeaderText=None, Editable=False, checkbox=False):
         column = forms.GridColumn()
         if self.ShowHeader:
             column.HeaderText = HeaderText
         column.Editable = Editable
-        column.DataCell = forms.TextBoxCell(self.Columns.Count)
+        if not checkbox:
+            column.DataCell = forms.TextBoxCell(self.Columns.Count)
+        else:
+            column.DataCell = forms.CheckBoxCell(self.Columns.Count)
         column.Sortable = True
         self.Columns.Add(column)
 
