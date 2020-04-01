@@ -98,7 +98,6 @@ class Settings_Tab(forms.TabPage):
                 elif isinstance(sender, forms.TextBox):
                     new_value = sender.Text
 
-                print(new_value)
                 self.new_settings.update({key: new_value})
 
             except Exception as e:
