@@ -13,7 +13,7 @@ except Exception:
     compas.raise_if_ironpython()
 
 
-__all__ = ["SettingsForm"]
+__all__ = ["SettingsForm", "Settings_Tab"]
 
 
 class Settings_Tab(forms.TabPage):

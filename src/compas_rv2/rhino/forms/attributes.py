@@ -6,6 +6,7 @@ from __future__ import division
 import compas
 import ast
 from compas_rv2.rhino import get_scene
+from compas_rv2.rhino.forms.settings import Settings_Tab
 
 try:
     import rhinoscriptsyntax as rs
@@ -172,7 +173,6 @@ class Tree_Table(forms.TreeGridView):
                 key = event.Item.Values[0]
                 guid2key = getattr(sceneNode, guid_field)
                 key2guid = {str(guid2key[guid]): guid for guid in guid2key}
-                print(key2guid)
                 if key in key2guid:
                     find_object(key2guid[key]).Select(True)
                 elif children_guid_field:
@@ -273,13 +273,12 @@ class AttributesForm(forms.Form):
 
     def setup(self, sceneNode):
         self.Title = "Property - " + sceneNode.name
+        self.sceneNode = sceneNode
 
         control = forms.TabControl()
         control.TabPosition = forms.DockPosition.Top
 
-        tab = forms.TabPage()
-        tab.Text = "Settings"
-        tab.Content = Tree_Table.create_settings_table(sceneNode)
+        tab = Settings_Tab.from_settings("Settings", sceneNode.settings)
         control.Pages.Add(tab)
 
         tab = forms.TabPage()
@@ -309,11 +308,56 @@ class AttributesForm(forms.Form):
         layout.Spacing = 5
         layout.HorizontalContentAlignment = forms.HorizontalAlignment.Stretch
         layout.Items.Add(tab_items)
+
+        sub_layout = forms.DynamicLayout()
+        sub_layout.Spacing = drawing.Size(5, 0)
+        sub_layout.AddRow(None, self.ok, self.cancel, self.apply)
+        layout.Items.Add(forms.StackLayoutItem(sub_layout))
+
         self.Content = layout
         self.Padding = drawing.Padding(12)
         self.Resizable = True
         self.ClientSize = drawing.Size(400, 600)
 
+    @property
+    def ok(self):
+        self.DefaultButton = forms.Button(Text='OK')
+        self.DefaultButton.Click += self.on_ok
+        return self.DefaultButton
+
+    @property
+    def cancel(self):
+        self.AbortButton = forms.Button(Text='Cancel')
+        self.AbortButton.Click += self.on_cancel
+        return self.AbortButton
+
+    @property
+    def apply(self):
+        self.ApplyButton = forms.Button(Text='Apply')
+        self.ApplyButton.Click += self.on_apply
+        return self.ApplyButton
+
+    def on_ok(self, sender, event):
+        try:
+            for page in self.TabControl.Pages:
+                if hasattr(page, 'apply'):
+                    page.apply()
+            get_scene().update()
+        except Exception as e:
+            print(e)
+        self.Close()
+
+    def on_apply(self, sender, event):
+        try:
+            for page in self.TabControl.Pages:
+                if hasattr(page, 'apply'):
+                    page.apply()
+            get_scene().update()
+        except Exception as e:
+            print(e)
+
+    def on_cancel(self, sender, event):
+        self.Close()
 
 if __name__ == "__main__":
 
