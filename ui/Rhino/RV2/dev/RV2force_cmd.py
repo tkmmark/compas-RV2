@@ -25,7 +25,7 @@ def RunCommand(is_interactive):
 
     # pattern = scene.get("pattern")[0]
     form = scene.get("form")[0]
-    if not pattern:
+    if not form:
         return
 
     # form = FormDiagram.from_pattern(pattern.datastructure)

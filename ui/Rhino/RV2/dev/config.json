@@ -78,8 +78,8 @@
             {"name": "RV2pattern_from_lines",         "menu_text": "From Lines",    "icon": 8},
             {"name": "RV2pattern_from_mesh",          "menu_text": "From Mesh",     "icon": 9},
             {"name": "RV2pattern_from_surface",       "menu_text": "From Surface",  "icon": 10},
-            {"name": "RV2pattern_from_skeleton",      "menu_text": "From Skeleton", "icon": 11},
-            {"name": "RV2pattern_from_triangulation", "menu_text": "From Triangulation", "icon": 12},
+            {"name": "RV2pattern_from_triangulation", "menu_text": "From Triangulation", "icon": 11},
+            {"name": "RV2pattern_from_skeleton",      "menu_text": "From Skeleton", "icon": 12},
 
             {"name": "RV2pattern_attributes",   "menu_text": "Modify Pattern Attributes", "icon": 13},
             {"name": "RV2pattern_modify_vertices", "menu_text": "Modify Vertices", "icon": 14},
@@ -184,9 +184,6 @@
 
                             {"type": "separator"},
 
-                            {"command": "RV2skeleton_modify"},
-
-                            {"type": "separator"},
 
                             {"command": "RV2pattern_subdivide"},
                             {"command": "RV2pattern_relax"}
@@ -205,8 +202,10 @@
 
                     },
 
-                    {"type": "RV2form"},
-                    {"type": "RV2force"},
+                    {"type": "separator"},
+
+                    {"command": "RV2form"},
+                    {"command": "RV2force"},
 
                     {"type": "separator"},
 
