@@ -1,6 +1,6 @@
 ### Compas_rv2.web
 
-RV2 uses electron to display rv2 front-page, tutorial, documentaions etc. You to install `node.js` first to develop this part.
+RV2 uses electron to display rv2 front-page, tutorial, documentaions etc. You need to install `node.js` first to develop this part.
 
 Install dependencies:
 ```
