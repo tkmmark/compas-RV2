@@ -36,6 +36,15 @@ Get the latest release from: <https://github.com/BlockResearchGroup/compas-RV2/r
    Press any key to continue . . .
    ```
 
+   #### Possible Issues
+
+   Following error might appear for fresh Rhino installations: 
+   ```bash
+   FileNotFoundError: [WinError 3] The system cannot find the path specified:
+      'C:\Users\xxx\AppData\Roaming\McNeel\Rhinoceros\6.0\Plug-ins\PythonPlugins'
+   ```
+   To fix this, run `EditPythonScript` once and restart Rhino.
+
 2. Activate RV2 toolbar in Rhino
 
    Go to menu `Tools > Toolbar Layout...`. In pop-up window, click `File > Open...`. Then in file explorer, select `YOUR_RV2_FOLDER\dev\RV2.rui`. Now you will see RhinoVAULT2 appears in rhino menu.
