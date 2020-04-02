@@ -12,7 +12,7 @@ def Browser():
     if not os.path.exists(BIN):
         print("unziping electron")
         zf = ZipFile(os.path.join(HERE, 'electron.zip'), 'r')
-        zf.extractall(HERE)
+        zf.extractall(os.path.join(HERE, 'electron'))
         zf.close()
 
     subprocess.Popen('"%s"' % BIN)

@@ -119,3 +119,5 @@ docs/.doctrees/**
 *.rhi
 
 electron/
+
+node_modules
