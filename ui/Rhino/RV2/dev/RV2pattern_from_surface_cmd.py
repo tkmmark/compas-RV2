@@ -25,8 +25,8 @@ def RunCommand(is_interactive):
     if not guid:
         return
 
-    u = scene.settings.get('pattern.from_surface.density.U', PatternObject.settings['pattern.from_surface.density.U'])
-    v = scene.settings.get('pattern.from_surface.density.V', PatternObject.settings['pattern.from_surface.density.V'])
+    u = PatternObject.settings['from_surface.density.U']
+    v = PatternObject.settings['from_surface.density.V']
 
     options = ['U', 'V', 'ESC']
     while True:
@@ -42,8 +42,8 @@ def RunCommand(is_interactive):
             v = compas_rhino.rs.GetInteger("Density V", v, 2, 100)
             continue
 
-    scene.settings['pattern.from_surface.density.U'] = u
-    scene.settings['pattern.from_surface.density.V'] = v
+    PatternObject.settings['from_surface.density.U'] = u
+    PatternObject.settings['from_surface.density.V'] = v
 
     density = u, v
     pattern = RhinoSurface.from_guid(guid).uv_to_compas(cls=Pattern, density=density)
