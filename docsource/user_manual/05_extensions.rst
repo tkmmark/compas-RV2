@@ -2,24 +2,4 @@
 5. Extensions
 ********************************************************************************
 
-
-
-----
-
-Best-fit TNA
-============
-
-|
-
-----
-
-Load path optimization
-======================
-
-|
-
-----
-
-Stereotomy
-==========
-
+extensions of RV2, such as best-fit TNA, load path optimization, stereotomy... under construction.

@@ -6,6 +6,12 @@ MLK Jr. Park Stone Vault
     :figclass: figure
     :class: figure-img img-fluid
 
+
+show: pattern from constrained triangulation, guide curves, and pattern zones (if there's time)
+
+doesn't exactly have to be MLK, but something like `this <https://vimeo.com/116955381>`_
+
+
 1. Create pattern > From triangulation (irregular, trimmed-edge like boundary curves with one ore more holes, with one or more guide curves)
 
 * showcase triangulation options
