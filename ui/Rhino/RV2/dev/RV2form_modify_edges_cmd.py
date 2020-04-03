@@ -23,7 +23,7 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    layer = form.settings['form.layer']
+    layer = form.settings['layer']
     group_edges = "{}::edges".format(layer)
 
     compas_rhino.rs.ShowGroup(group_edges)

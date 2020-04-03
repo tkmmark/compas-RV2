@@ -45,6 +45,9 @@ def RunCommand(is_interactive):
         points = curve.divide(N, over_space=True)
         boundary.extend(map(list, points))
 
+    if len(boundary_seg_guids) > boundary_guids:
+        compas_rhino.delete_objects(boundary_seg_guids)
+
     # polylines
     polylines = []
     if segments_guids:
@@ -67,6 +70,9 @@ def RunCommand(is_interactive):
 
     vertices, faces = constrained_delaunay_triangulation(
         boundary, polylines=polylines, polygons=polygons, area=area)
+
+    # fix all the vertices on the constraints
+    # is_fixed is thus relevant hor horizontal as well...
 
     pattern = Pattern.from_vertices_and_faces(vertices, faces)
 

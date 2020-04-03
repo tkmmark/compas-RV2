@@ -49,6 +49,8 @@ def RunCommand(is_interactive):
 
         keys = pattern.select_vertices()
 
+    # draw and highlight the selected vertices
+
     if keys:
         public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
         if pattern.update_vertices_attributes(keys, names=public):
