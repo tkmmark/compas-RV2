@@ -26,7 +26,7 @@ def RunCommand(is_interactive):
     if not option1 or option1 == 'ESC':
         return
 
-    layer = pattern.settings['pattern.layer']
+    layer = pattern.settings['layer']
     group_supports = "{}::vertices::supports".format(layer)
 
     compas_rhino.rs.ShowGroup(group_supports)

@@ -9,7 +9,7 @@ from compas.geometry import Translation
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
 
-__commandname__ = "RV2tna_start"
+__commandname__ = "RV2force"
 
 
 HERE = compas_rhino.get_document_dirname()
