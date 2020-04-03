@@ -45,17 +45,17 @@ def RunCommand(is_interactive):
     zmax = scene.settings['tna.vertical.zmax']
     kmax = scene.settings['tna.vertical.kmax']
 
-    options = ['Zmax', 'Kmax', 'ESC']
+    options = ['zmax', 'kmax', 'ESC']
     while True:
         option = compas_rhino.rs.GetString('Options', options[-1], options)
         if not option or option == 'ESC':
             break
 
-        if option == 'Zmax':
-            zmax = compas_rhino.rs.GetReal('Zmax', zmax, 0.1 * diagonal, 1.0 * diagonal)
+        if option == 'zmax':
+            zmax = compas_rhino.rs.GetReal('zmax', zmax, 0.1 * diagonal, 1.0 * diagonal)
 
-        elif option == 'Kmax':
-            kmax = compas_rhino.rs.GetString('Kmax', kmax, 1, 10000)
+        elif option == 'kmax':
+            kmax = compas_rhino.rs.GetString('kmax', kmax, 1, 10000)
 
     scene.settings['tna.vertical.zmax'] = zmax
     scene.settings['tna.vertical.kmax'] = kmax

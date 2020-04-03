@@ -10,9 +10,6 @@ from compas.utilities import flatten
 __commandname__ = "RV2form_modify_edges"
 
 
-HERE = compas_rhino.get_document_dirname()
-
-
 def RunCommand(is_interactive):
 
     scene = get_scene()
@@ -23,18 +20,10 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    layer = form.settings['layer']
-    group_edges = "{}::edges".format(layer)
-
-    compas_rhino.rs.ShowGroup(group_edges)
-
-    options = ['All', 'Continuous', 'Parallel', 'ESC']
+    options = ['Continuous', 'Parallel', 'Manual']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 
-    if option == 'All':
-        keys = list(form.datastructure.edges())
-
-    elif option == 'Continuous':
+    if option == 'Continuous':
         temp = form.select_edges()
         keys = list(set(flatten([form.datastructure.continuous_edges(key) for key in temp])))
 
@@ -45,10 +34,10 @@ def RunCommand(is_interactive):
     else:
         keys = form.select_edges()
 
-    # is this necessary with the special update dialogs?
-    public = [name for name in form.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
-    if form.update_edges_attributes(keys, names=public):
-        scene.update()
+    if keys:
+        public = [name for name in form.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
+        if form.update_edges_attributes(keys, names=public):
+            scene.update()
 
 
 # ==============================================================================

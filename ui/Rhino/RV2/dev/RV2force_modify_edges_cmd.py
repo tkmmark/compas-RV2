@@ -4,11 +4,10 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
+from compas.utilities import flatten
+
 
 __commandname__ = "RV2force_modify_edges"
-
-
-HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
@@ -21,12 +20,24 @@ def RunCommand(is_interactive):
     if not force:
         return
 
-    keys = force.select_edges()
+    options = ['Continuous', 'Parallel', 'Manual']
+    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
 
-    # is this necessary with the special update dialogs?
-    public = [name for name in force.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
-    if force.update_edges_attributes(keys, names=public):
-        scene.update()
+    if option == 'Continuous':
+        temp = force.select_edges()
+        keys = list(set(flatten([force.datastructure.continuous_edges(key) for key in temp])))
+
+    elif option == 'Parallel':
+        temp = force.select_edges()
+        keys = list(set(flatten([force.datastructure.parallel_edges(key) for key in temp])))
+
+    else:
+        keys = force.select_edges()
+
+    if keys:
+        public = [name for name in force.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
+        if force.update_edges_attributes(keys, names=public):
+            scene.update()
 
 
 # ==============================================================================

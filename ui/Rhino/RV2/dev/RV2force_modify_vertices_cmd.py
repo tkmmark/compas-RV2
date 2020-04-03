@@ -4,12 +4,10 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
+from compas.utilities import flatten
 
 
 __commandname__ = "RV2force_modify_vertices"
-
-
-HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
@@ -22,7 +20,24 @@ def RunCommand(is_interactive):
     if not force:
         return
 
-    keys = force.select_vertices()
+    layer = force.settings['layer']
+    group_vertices = "{}::vertices".forceat(layer)
+
+    compas_rhino.rs.ShowGroup(group_vertices)
+    compas_rhino.rs.Redraw()
+
+    options = ['All', 'Continuous', 'ESC']
+    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
+
+    if option == 'All':
+        keys = list(force.datastructure.vertices())
+
+    elif option == 'Continuous':
+        temp = force.select_edges()
+        keys = list(set(flatten([force.datastructure.continuous_vertices(key) for key in temp])))
+
+    else:
+        keys = force.select_vertices()
 
     public = [name for name in force.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
     if force.update_vertices_attributes(keys, names=public):

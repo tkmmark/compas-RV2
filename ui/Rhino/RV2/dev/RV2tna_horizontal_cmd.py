@@ -37,6 +37,26 @@ def RunCommand(is_interactive):
     kmax = scene.settings['tna.horizontal.kmax']
     alpha = scene.settings['tna.horizontal.alpha']
 
+    options = ['alpha', 'kmax', 'ESC']
+    while True:
+        option = compas_rhino.rs.GetString('Options', options[-1], options)
+        if not option or option == 'ESC':
+            break
+
+        if option == 'alpha':
+            alpha_options = ['form{}'.format(int(i * 10)) for i in range(11)]
+            temp = compas_rhino.rs.GetString('alpha', alpha_options[0], alpha_options)
+            if not temp:
+                alpha = 100
+            else:
+                alpha = int(temp[4:])
+
+        elif option == 'kmax':
+            kmax = compas_rhino.rs.GetString('kmax', kmax, 1, 10000)
+
+    scene.settings['tna.horizontal.kmax'] = kmax
+    scene.settings['tna.horizontal.alpha'] = alpha
+
     formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data, kmax=kmax, alpha=alpha)
 
     form.datastructure.data = formdata

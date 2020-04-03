@@ -100,8 +100,10 @@ class ThrustObject(MeshObject):
         color = {key: self.settings['color.vertices'] for key in keys}
         color.update({key: self.settings['color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
         color.update({key: self.settings['color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+
         guids = self.artist.draw_vertices(keys, color)
         self.guid_vertex = zip(guids, keys)
+
         compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
 
         if self.settings['show.vertices']:

@@ -53,7 +53,7 @@ class FormObject(MeshObject):
 
     settings = {
         'layer': "RV2::FormDiagram",
-        'show.vertices': False,
+        'show.vertices': True,
         'show.edges': True,
         'show.angles': True,
         'color.vertices': [0, 255, 0],
@@ -79,21 +79,21 @@ class FormObject(MeshObject):
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
 
-        group_supports = "{}::supports".format(group_vertices)
-        group_free = "{}::free".format(group_vertices)
-        group_external = "{}::external".format(group_vertices)
+        # group_supports = "{}::supports".format(group_vertices)
+        # group_free = "{}::free".format(group_vertices)
+        # group_external = "{}::external".format(group_vertices)
 
-        # if not compas_rhino.rs.IsGroup(group_vertices):
-        #     compas_rhino.rs.AddGroup(group_vertices)
+        if not compas_rhino.rs.IsGroup(group_vertices):
+            compas_rhino.rs.AddGroup(group_vertices)
 
-        if not compas_rhino.rs.IsGroup(group_supports):
-            compas_rhino.rs.AddGroup(group_supports)
+        # if not compas_rhino.rs.IsGroup(group_supports):
+        #     compas_rhino.rs.AddGroup(group_supports)
 
-        if not compas_rhino.rs.IsGroup(group_free):
-            compas_rhino.rs.AddGroup(group_free)
+        # if not compas_rhino.rs.IsGroup(group_free):
+        #     compas_rhino.rs.AddGroup(group_free)
 
-        if not compas_rhino.rs.IsGroup(group_external):
-            compas_rhino.rs.AddGroup(group_external)
+        # if not compas_rhino.rs.IsGroup(group_external):
+        #     compas_rhino.rs.AddGroup(group_external)
 
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
@@ -103,11 +103,12 @@ class FormObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        supports = list(self.datastructure.vertices_where({'is_anchor': True}))
-        external = list(self.datastructure.vertices_where({'_is_external': True}))
-        free = list(self.datastructure.vertices_where({'is_anchor': False, '_is_external': False}))
+        # supports = list(self.datastructure.vertices_where({'is_anchor': True}))
+        # external = list(self.datastructure.vertices_where({'_is_external': True}))
+        # free = list(self.datastructure.vertices_where({'is_anchor': False, '_is_external': False}))
+        # keys = supports + external + free
 
-        keys = supports + external + free
+        keys = list(self.datastructure.vertices())
 
         color = {key: self.settings['color.vertices'] for key in keys}
         color_fixed = self.settings['color.vertices:is_fixed']
@@ -116,24 +117,27 @@ class FormObject(MeshObject):
         color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
         color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+
         guids = self.artist.draw_vertices(keys, color)
-
         self.guid_vertex = zip(guids, keys)
-        key_guid = dict(zip(keys, guids))
 
-        # compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
-        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in supports], group_supports)
-        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in external], group_external)
-        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+
+        # key_guid = dict(zip(keys, guids))
+        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in supports], group_supports)
+        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in external], group_external)
+        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
 
         if self.settings['show.vertices']:
-            compas_rhino.rs.ShowGroup(group_supports)
-            compas_rhino.rs.ShowGroup(group_external)
-            compas_rhino.rs.ShowGroup(group_free)
+            compas_rhino.rs.ShowGroup(group_vertices)
+            # compas_rhino.rs.ShowGroup(group_supports)
+            # compas_rhino.rs.ShowGroup(group_external)
+            # compas_rhino.rs.ShowGroup(group_free)
         else:
-            compas_rhino.rs.ShowGroup(group_supports)
-            compas_rhino.rs.HideGroup(group_external)
-            compas_rhino.rs.HideGroup(group_free)
+            compas_rhino.rs.HideGroup(group_vertices)
+            # compas_rhino.rs.ShowGroup(group_supports)
+            # compas_rhino.rs.HideGroup(group_external)
+            # compas_rhino.rs.HideGroup(group_free)
 
         # edges
 

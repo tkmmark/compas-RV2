@@ -35,7 +35,7 @@ class PatternObject(MeshObject):
 
     settings = {
         'layer': "RV2::Pattern",
-        'show.vertices': False,
+        'show.vertices': True,
         'show.edges': True,
         'show.faces': False,
         'color.vertices': [255, 255, 255],
@@ -62,21 +62,21 @@ class PatternObject(MeshObject):
         group_edges = "{}::edges".format(layer)
         group_faces = "{}::faces".format(layer)
 
-        group_supports = "{}::supports".format(group_vertices)
-        group_fixed = "{}::fixed".format(group_vertices)
-        group_free = "{}::free".format(group_vertices)
+        # group_supports = "{}::supports".format(group_vertices)
+        # group_fixed = "{}::fixed".format(group_vertices)
+        # group_free = "{}::free".format(group_vertices)
 
-        # if not compas_rhino.rs.IsGroup(group_vertices):
-        #     compas_rhino.rs.AddGroup(group_vertices)
+        if not compas_rhino.rs.IsGroup(group_vertices):
+            compas_rhino.rs.AddGroup(group_vertices)
 
-        if not compas_rhino.rs.IsGroup(group_supports):
-            compas_rhino.rs.AddGroup(group_supports)
+        # if not compas_rhino.rs.IsGroup(group_supports):
+        #     compas_rhino.rs.AddGroup(group_supports)
 
-        if not compas_rhino.rs.IsGroup(group_fixed):
-            compas_rhino.rs.AddGroup(group_fixed)
+        # if not compas_rhino.rs.IsGroup(group_fixed):
+        #     compas_rhino.rs.AddGroup(group_fixed)
 
-        if not compas_rhino.rs.IsGroup(group_free):
-            compas_rhino.rs.AddGroup(group_free)
+        # if not compas_rhino.rs.IsGroup(group_free):
+        #     compas_rhino.rs.AddGroup(group_free)
 
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
@@ -89,34 +89,37 @@ class PatternObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        supports = list(self.datastructure.vertices_where({'is_anchor': True}))
-        fixed = list(self.datastructure.vertices_where({'is_fixed': True}))
-        free = list(self.datastructure.vertices_where({'is_anchor': False, 'is_fixed': False}))
+        # supports = list(self.datastructure.vertices_where({'is_anchor': True}))
+        # fixed = list(self.datastructure.vertices_where({'is_fixed': True}))
+        # free = list(self.datastructure.vertices_where({'is_anchor': False, 'is_fixed': False}))
+        # keys = supports + fixed + free
 
-        keys = supports + fixed + free
+        keys = list(self.datastructure.vertices())
 
         color = {key: self.settings['color.vertices'] for key in keys}
         color_fixed = self.settings['color.vertices:is_fixed']
         color_anchor = self.settings['color.vertices:is_anchor']
         color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+
         guids = self.artist.draw_vertices(keys, color)
-
         self.guid_vertex = zip(guids, keys)
-        key_guid = dict(zip(keys, guids))
-
-        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in supports], group_supports)
-        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in fixed], group_fixed)
-        compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+        # key_guid = dict(zip(keys, guids))
+        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in supports], group_supports)
+        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in fixed], group_fixed)
+        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
 
         if self.settings['show.vertices']:
-            compas_rhino.rs.ShowGroup(group_supports)
-            compas_rhino.rs.ShowGroup(group_fixed)
-            compas_rhino.rs.ShowGroup(group_free)
+            compas_rhino.rs.ShowGroup(group_vertices)
+            # compas_rhino.rs.ShowGroup(group_supports)
+            # compas_rhino.rs.ShowGroup(group_fixed)
+            # compas_rhino.rs.ShowGroup(group_free)
         else:
-            compas_rhino.rs.ShowGroup(group_supports)
-            compas_rhino.rs.ShowGroup(group_fixed)
-            compas_rhino.rs.HideGroup(group_free)
+            compas_rhino.rs.HideGroup(group_vertices)
+            # compas_rhino.rs.ShowGroup(group_supports)
+            # compas_rhino.rs.ShowGroup(group_fixed)
+            # compas_rhino.rs.HideGroup(group_free)
 
         # edges
 

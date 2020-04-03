@@ -10,9 +10,6 @@ from compas.utilities import flatten
 __commandname__ = "RV2form_modify_vertices"
 
 
-HERE = compas_rhino.get_document_dirname()
-
-
 def RunCommand(is_interactive):
 
     scene = get_scene()

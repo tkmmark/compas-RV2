@@ -51,7 +51,7 @@ class ForceObject(MeshObject):
 
     settings = {
         'layer': "RV2::ForceDiagram",
-        'show.vertices': False,
+        'show.vertices': True,
         'show.edges': True,
         'color.vertices': [0, 255, 0],
         'color.vertices:is_fixed': [0, 255, 255],
