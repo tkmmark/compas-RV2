@@ -6,6 +6,10 @@ Armadillo Vault
     :figclass: figure
     :class: figure-img img-fluid
 
+
+show: pattern from skeleton, toggle openings (modify from diagram faces), drop down (move thrustdiagram vertices)
+
+
 1. Create pattern > From skeleton
 
 * showcase various skeleton options
