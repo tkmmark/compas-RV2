@@ -23,7 +23,8 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    layer = pattern.settings['pattern.layer']
+    layer = pattern.settings['layer']
+
     group_supports = "{}::vertices::supports".format(layer)
     group_fixed = "{}::vertices::fixed".format(layer)
     group_free = "{}::vertices::free".format(layer)

@@ -91,29 +91,27 @@
             {"name": "RV2boundaryconditions_supports", "menu_text": "Identify Supports", "icon": 19},
             {"name": "RV2boundaryconditions_loads",    "menu_text": "Define Loads",      "icon": 20},
 
-            {"name": "RV2form",    "menu_text": "Create FormDiagram",    "icon": 21},
-            {"name": "RV2force",    "menu_text": "Create ForceDiagram",    "icon": 22},
+            {"name": "RV2form",  "menu_text": "Create FormDiagram",  "icon": 21},
+            {"name": "RV2force", "menu_text": "Create ForceDiagram", "icon": 22},
 
             {"name": "RV2tna_horizontal", "menu_text": "Horizontal Equilibrium", "icon": 23},
             {"name": "RV2tna_vertical",   "menu_text": "Vertical Equilibrium",   "icon": 24},
 
-            {"name": "RV2form_attributes",   "menu_text": "Modify FormDiagram Attributes", "icon": 25},
+            {"name": "RV2form_attributes",      "menu_text": "Modify FormDiagram Attributes", "icon": 25},
             {"name": "RV2form_modify_vertices", "menu_text": "Modify Vertices", "icon": 26},
             {"name": "RV2form_modify_edges",    "menu_text": "Modify Edges",    "icon": 27},
             {"name": "RV2form_move_vertices",   "menu_text": "Move Vertices",   "icon": 28},
 
-            {"name": "RV2force_attributes",   "menu_text": "Modify ForceDiagram Attributes", "icon": 29},
+            {"name": "RV2force_attributes",      "menu_text": "Modify ForceDiagram Attributes", "icon": 29},
             {"name": "RV2force_modify_vertices", "menu_text": "Modify Vertices", "icon": 30},
             {"name": "RV2force_modify_edges",    "menu_text": "Modify Edges",    "icon": 31},
             {"name": "RV2force_move_vertices",   "menu_text": "Move Vertices",   "icon": 32},
 
-            {"name": "RV2thrust_attributes",   "menu_text": "Modify ThrustDiagramAttributes", "icon": 33},
+            {"name": "RV2thrust_attributes",   "menu_text": "Modify ThrustDiagram Attributes", "icon": 33},
 
 
             {"name": "RV2skeleton_from_lines", "menu_text": "Skeleton From Lines"},
-            {"name": "RV2skeleton_modify",     "menu_text": "Modify Skeleton"},
-
-            {"name": "RV2tna_start",      "menu_text": "Create Form/Force"}
+            {"name": "RV2skeleton_modify",     "menu_text": "Modify Skeleton"}
         ],
 
         "menus":
