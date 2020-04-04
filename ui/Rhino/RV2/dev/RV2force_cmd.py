@@ -22,7 +22,7 @@ def RunCommand(is_interactive):
 
     force = ForceDiagram.from_formdiagram(form.datastructure)
 
-    bbox_form = form.bounding_box_xy()
+    bbox_form = form.datastructure.bounding_box_xy()
     bbox_force = force.bounding_box_xy()
     xmin_form, xmax_form = bbox_form[0][0], bbox_form[1][0]
     xmin_force, _ = bbox_force[0][0], bbox_force[1][0]
