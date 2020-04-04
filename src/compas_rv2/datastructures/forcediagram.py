@@ -21,6 +21,31 @@ class ForceDiagram(MeshMixin, ForceDiagram):
     >>> force = FroceDiagram.from_formdiagram(form)
     """
 
+    def primal_edge(self, key):
+        """Get the corresponding edge in the FormDiagram.
+
+        Parameters
+        ----------
+        key : tuple
+            The identifier of the edge in this diagram.
+
+        Returns
+        -------
+        tuple
+            The identifier of the edge in the other/primal diagram.
+
+        Raises
+        ------
+        KeyError
+            If the dual edge does not exist.
+
+        """
+        f1, f2 = key
+        for u, v in self.primal.face_halfedges(f1):
+            if self.primal.halfedge[v][u] == f2:
+                return u, v
+        raise KeyError(key)
+
 
 # ==============================================================================
 # Main

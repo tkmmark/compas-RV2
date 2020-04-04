@@ -26,9 +26,47 @@ class FormDiagram(MeshMixin, FormDiagram):
 
     @classmethod
     def from_pattern(cls, pattern, feet=2):
+        """Construct a form diagram from a pattern.
+
+        Parameters
+        ----------
+        pattern : Pattern
+            The pattern from which the diagram should be constructed.
+        feet : {1, 2}, optional
+            The number of horizontal force directions that should be added to the supports.
+
+        Returns
+        -------
+        FormDiagram
+            The form diagram.
+        """
         form = pattern.copy(cls=cls)
         form.update_boundaries(feet=2)
         return form
+
+    def dual_edge(self, key):
+        """Get the corresponding edge in the ForceDiagram.
+
+        Parameters
+        ----------
+        key : tuple
+            The identifier of the edge in this diagram.
+
+        Returns
+        -------
+        tuple
+            The identifier of the edge in the other/dual diagram.
+
+        Raises
+        ------
+        KeyError
+            If the dual edge does not exist.
+        """
+        f1, f2 = key
+        for u, v in self.dual.face_halfedges(f1):
+            if self.dual.halfedge[v][u] == f2:
+                return u, v
+        raise KeyError(key)
 
 
 # ==============================================================================
