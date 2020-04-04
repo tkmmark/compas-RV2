@@ -20,7 +20,7 @@ def RunCommand(is_interactive):
     if not form:
         return
 
-    force = ForceDiagram.from_formdiagram(form)
+    force = ForceDiagram.from_formdiagram(form.datastructure)
 
     bbox_form = form.bounding_box_xy()
     bbox_force = force.bounding_box_xy()
