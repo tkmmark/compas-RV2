@@ -21,7 +21,7 @@ def RunCommand(is_interactive):
         return
 
     layer = force.settings['layer']
-    group_vertices = "{}::vertices".forceat(layer)
+    group_vertices = "{}::vertices".format(layer)
 
     options = ['Continuous', 'Manual']
     option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)

@@ -53,7 +53,7 @@ def RunCommand(is_interactive):
             zmax = compas_rhino.rs.GetReal('zmax', zmax, 0.1 * diagonal, 1.0 * diagonal)
 
         elif option == 'kmax':
-            kmax = compas_rhino.rs.GetString('kmax', kmax, 1, 10000)
+            kmax = compas_rhino.rs.GetInteger('kmax', 100, 1, 10000)
 
     scene.settings['tna.vertical.zmax'] = zmax
     scene.settings['tna.vertical.kmax'] = kmax
