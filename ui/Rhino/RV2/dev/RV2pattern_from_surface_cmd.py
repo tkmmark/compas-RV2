@@ -12,9 +12,6 @@ from compas_rv2.rhino import get_scene
 __commandname__ = "RV2pattern_from_surface"
 
 
-HERE = compas_rhino.get_document_dirname()
-
-
 def RunCommand(is_interactive):
 
     scene = get_scene()

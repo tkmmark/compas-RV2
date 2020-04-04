@@ -5,15 +5,11 @@ from __future__ import division
 import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_scene
-from compas_rv2.datastructures import Pattern
 from compas_rv2.datastructures import Skeleton
 from compas_rv2.rhino import SkeletonObject
 
 
 __commandname__ = "RV2pattern_from_skeleton"
-
-
-HERE = compas_rhino.get_document_dirname()
 
 
 def skeleton_move_skeleton_vertex(skeletonobject):

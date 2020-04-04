@@ -11,9 +11,6 @@ from compas.geometry import Translation
 __commandname__ = "RV2tna_horizontal"
 
 
-HERE = compas_rhino.get_document_dirname()
-
-
 def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:

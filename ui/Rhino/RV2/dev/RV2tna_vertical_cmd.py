@@ -12,10 +12,8 @@ from compas.geometry import length_vector
 __commandname__ = "RV2tna_vertical"
 
 
-HERE = compas_rhino.get_document_dirname()
-
-
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return

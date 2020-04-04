@@ -9,7 +9,6 @@ import compas_rhino
 from compas_rv2.rhino import get_system
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_filepath_open
-from compas_rv2.datastructures import Pattern
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.datastructures import ThrustDiagram
@@ -56,11 +55,6 @@ def RunCommand(is_interactive):
 
     if 'data' in session:
         data = session['data']
-
-        # if 'pattern' in data:
-        #     pattern = Pattern.from_data(data['pattern'])
-
-        #     scene.add(pattern, name="pattern")
 
         if 'form' in data and 'force' in data:
 

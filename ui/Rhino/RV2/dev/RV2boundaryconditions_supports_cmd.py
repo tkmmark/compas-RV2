@@ -9,9 +9,6 @@ from compas.utilities import flatten
 __commandname__ = "RV2boundaryconditions_supports"
 
 
-HERE = compas_rhino.get_document_dirname()
-
-
 def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:
@@ -26,7 +23,7 @@ def RunCommand(is_interactive):
     if not option1 or option1 == 'ESC':
         return
 
-    layer = pattern.settings['pattern.layer']
+    layer = pattern.settings['layer']
     group_supports = "{}::vertices::supports".format(layer)
 
     compas_rhino.rs.ShowGroup(group_supports)

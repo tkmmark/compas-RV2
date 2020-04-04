@@ -41,32 +41,20 @@ CWD = HERE or HOME
 
 def RunCommand(is_interactive):
 
-    # RV2.system
-    # RV2.settings
-    # RV2.proxy
-    # RV2.data
-    # RV2.scene
-
-    # perhaps we should make this specificly about a "splash" window
     Browser()
 
     sc.sticky["RV2.proxy"] = Proxy()
 
-    # how to update this when Rhino file is saved?
     sc.sticky["RV2.system"] = {
         "session.dirname": CWD,
         "session.filename": None,
         "session.extension": 'rv2'
     }
 
-    # perhaps it would make sense to make the secene configurable
-    # and to allow this configuration to be changed explicitly by the user
     scene = Scene(SETTINGS)
     scene.clear()
 
-    sc.sticky["RV2"] = {
-        "scene": scene,
-    }
+    sc.sticky["RV2"] = {"scene": scene}
 
 
 # ==============================================================================

@@ -6,6 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import AttributesForm
 
+
 __commandname__ = "RV2thrust_attributes"
 
 

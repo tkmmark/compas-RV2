@@ -2,27 +2,18 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import ForceDiagram
 from compas.geometry import Translation
-from compas.geometry import subtract_vectors
-from compas.geometry import length_vector
-
-__commandname__ = "RV2tna_start"
 
 
-HERE = compas_rhino.get_document_dirname()
+__commandname__ = "RV2force"
 
 
 def RunCommand(is_interactive):
 
     scene = get_scene()
     if not scene:
-        return
-
-    pattern = scene.get("pattern")[0]
-    if not pattern:
         return
 
     form = scene.get("form")[0]
@@ -41,6 +32,7 @@ def RunCommand(is_interactive):
     y_force = ymin_force + 0.5 * (ymax_force - ymin_force)
     dx = 1.5 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
     dy = y_form - y_force
+
     force.transform(Translation([dx, dy, 0]))
 
     scene.add(force, name='force')

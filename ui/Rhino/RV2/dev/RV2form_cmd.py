@@ -2,19 +2,14 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import ThrustDiagram
 from compas_rv2.datastructures import FormDiagram
-from compas_rv2.datastructures import ForceDiagram
-from compas.geometry import Translation
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
 
+
 __commandname__ = "RV2form"
-
-
-HERE = compas_rhino.get_document_dirname()
 
 
 def RunCommand(is_interactive):
