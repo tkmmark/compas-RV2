@@ -21,7 +21,7 @@ def RunCommand(is_interactive):
         return
 
     layer = force.settings['layer']
-    group_vertices = "{}::vertices".forceat(layer)
+    group_vertices = "{}::vertices".format(layer)
 
     compas_rhino.rs.ShowGroup(group_vertices)
     compas_rhino.rs.Redraw()
