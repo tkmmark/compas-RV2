@@ -81,7 +81,7 @@ def RunCommand(is_interactive):
         print('Horizontal equilibrium found!')
         print('Maximum angle deviation:', max_angle)
     else:
-        print('Horizontal equilibrium NOT found!. Consider running more iterations.')
+        print('Horizontal equilibrium NOT found! Consider running more iterations.')
         print('Maximum angle deviation:', max_angle)
 
 

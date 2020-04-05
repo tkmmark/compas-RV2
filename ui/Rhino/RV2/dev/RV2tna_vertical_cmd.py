@@ -66,6 +66,9 @@ def RunCommand(is_interactive):
 
     scene.update()
 
+    print('Vertical equilibrium found!')
+    print('ThrustDiagram object successfully created.')
+
 
 # ==============================================================================
 # Main

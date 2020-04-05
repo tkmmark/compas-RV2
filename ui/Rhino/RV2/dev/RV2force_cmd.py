@@ -40,7 +40,7 @@ def RunCommand(is_interactive):
     scene.add(force, name='force')
     scene.update()
 
-    print('ForceDiageram object successfully created!')
+    print('ForceDiagram object successfully created.')
 
 # ==============================================================================
 # Main
