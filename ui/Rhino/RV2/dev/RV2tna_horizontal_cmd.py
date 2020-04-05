@@ -71,7 +71,18 @@ def RunCommand(is_interactive):
     dy = y_form - y_force
     force.datastructure.transform(Translation([dx, dy, 0]))
 
+    form.datastructure.update_angle_deviations()
+
     scene.update()
+
+    max_angle = max(form.datastructure.edges_attribute('_a'))
+    tol = form.settings['tol.angles']
+    if max_angle < tol:
+        print('Horizontal equilibrium found!')
+        print('Maximum angle deviation:', max_angle)
+    else:
+        print('Horizontal equilibrium NOT found!. Consider running more iterations.')
+        print('Maximum angle deviation:', max_angle)
 
 
 # ==============================================================================

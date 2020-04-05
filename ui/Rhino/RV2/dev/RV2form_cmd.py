@@ -35,6 +35,7 @@ def RunCommand(is_interactive):
     scene.add(thrust, name='thrust')
     scene.update()
 
+    print('FormDiageram object successfully created!')
 
 # ==============================================================================
 # Main

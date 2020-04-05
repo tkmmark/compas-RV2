@@ -35,9 +35,12 @@ def RunCommand(is_interactive):
 
     force.transform(Translation([dx, dy, 0]))
 
+    form.datastructure.update_angle_deviations()
+
     scene.add(force, name='force')
     scene.update()
 
+    print('ForceDiageram object successfully created!')
 
 # ==============================================================================
 # Main

@@ -7,6 +7,7 @@ from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import FormArtist
 from compas_rv2.rhino import delete_objects
 from compas.utilities import i_to_green
+from compas.utilities import i_to_rgb
 
 
 __all__ = ["FormObject"]
@@ -171,7 +172,7 @@ class FormObject(MeshObject):
                 for key, angle in zip(keys, angles):
                     if angle > tol:
                         text[key] = "{:.0f}".format(angle)
-                        color[key] = i_to_green((angle - amin) / (amax - amin))
+                        color[key] = i_to_rgb((angle - amin) / (amax - amin))
                 guids = self.artist.draw_edgelabels(text, color)
                 self.guid_edgelabel = zip(guids, keys)
 

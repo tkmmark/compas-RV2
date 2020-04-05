@@ -80,6 +80,7 @@ def RunCommand(is_interactive):
     scene.add(pattern, name='pattern')
     scene.update()
 
+    print('Pattern object successfully created!')
 
 # ==============================================================================
 # Main
