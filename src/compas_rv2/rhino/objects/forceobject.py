@@ -7,7 +7,6 @@ from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import ForceArtist
 from compas_rv2.rhino import delete_objects
 
-
 __all__ = ["ForceObject"]
 
 

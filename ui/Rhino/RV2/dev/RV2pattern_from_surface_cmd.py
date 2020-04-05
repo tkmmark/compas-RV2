@@ -45,11 +45,13 @@ def RunCommand(is_interactive):
     density = u, v
     pattern = RhinoSurface.from_guid(guid).uv_to_compas(cls=Pattern, density=density)
 
+    compas_rhino.rs.HideObject(guid)
+
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print('Pattern object successfully created.')
+    print('Pattern object successfully created. Input object has been hidden.')
 
 # ==============================================================================
 # Main

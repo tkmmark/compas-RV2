@@ -6,6 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas.utilities import flatten
 
+from compas_rhino.modifiers import VertexModifier
 
 __commandname__ = "RV2force_move_vertices"
 
@@ -38,7 +39,11 @@ def RunCommand(is_interactive):
         keys = force.select_vertices()
 
     if keys:
-        if force.move_vertices(keys):
+        if VertexModifier.move_vertices(force.datastructure, keys):
+
+            form = scene.get("form")[0]
+            form.datastructure.update_angle_deviations()
+
             scene.update()
 
 

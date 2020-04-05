@@ -6,7 +6,6 @@ import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import FormArtist
 from compas_rv2.rhino import delete_objects
-from compas.utilities import i_to_green
 from compas.utilities import i_to_rgb
 
 
