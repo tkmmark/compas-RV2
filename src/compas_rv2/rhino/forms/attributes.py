@@ -51,10 +51,11 @@ class Tree_Table(forms.TreeGridView):
 
         def OnCellFormatting(sender, e):
             try:
-                if not e.Column.Editable:
+                attr = e.Column.HeaderText
+
+                if not e.Column.Editable and attr != 'key':
                     e.ForegroundColor = drawing.Colors.DarkGray
 
-                attr = e.Column.HeaderText
                 if attr == 'key':
                     key = e.Item.Values[0]
                     if key in color:
@@ -73,7 +74,7 @@ class Tree_Table(forms.TreeGridView):
         table = cls(sceneNode=sceneNode, table_type='vertices')
         table.add_column('key')
         attributes = list(datastructure.default_vertex_attributes.keys())
-        attributes.sort()
+        attributes = table.sort_attributes(attributes)
         for attr in attributes:
             editable = attr[0] != '_'
             checkbox = type(datastructure.default_vertex_attributes[attr]) == bool
@@ -98,7 +99,7 @@ class Tree_Table(forms.TreeGridView):
         table = cls(sceneNode=sceneNode, table_type='edges')
         table.add_column('key')
         attributes = list(datastructure.default_edge_attributes.keys())
-        attributes.sort()
+        attributes = table.sort_attributes(attributes)
 
         for attr in attributes:
             editable = attr[0] != '_'
@@ -130,7 +131,7 @@ class Tree_Table(forms.TreeGridView):
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(datastructure.default_face_attributes.keys())
-        attributes.sort()
+        attributes = table.sort_attributes(attributes)
         for attr in attributes:
             editable = attr[0] != '_'
             checkbox = type(datastructure.default_face_attributes[attr]) == bool
@@ -153,6 +154,16 @@ class Tree_Table(forms.TreeGridView):
         table.ColumnHeaderClick += table.HeaderClickEvent()
         table.CellEdited += table.EditEvent()
         return table
+
+    def sort_attributes(self, attributes):
+        sorted_attributes = attributes[:]
+        sorted_attributes.sort()
+        for i, attr in enumerate(sorted_attributes):
+            if attr[0] != '_':
+                break
+        sorted_attributes = sorted_attributes[i:] + sorted_attributes[:i]
+
+        return sorted_attributes
 
     def SelectEvent(self, sceneNode, guid_field, children_guid_field=None):
         def on_selected(sender, event):
