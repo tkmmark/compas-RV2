@@ -24,6 +24,10 @@ def RunCommand(is_interactive):
 
     relax = proxy.package("compas.numerical.fd_numpy")
 
+    # update fixed vertices
+    # update "sag" of resulting boundary openings
+    # run fd
+
     key_index = pattern.datastructure.key_index()
     xyz = pattern.datastructure.vertices_attributes('xyz')
     loads = [[0.0, 0.0, 0.0] for _ in xyz]

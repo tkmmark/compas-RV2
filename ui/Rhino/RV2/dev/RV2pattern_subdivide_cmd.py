@@ -4,7 +4,7 @@ from __future__ import division
 
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
-# from compas.datastructures import mesh_subdivide_quad
+from compas.datastructures import mesh_subdivide_quad
 
 
 __commandname__ = "RV2pattern_subdivide"
@@ -23,18 +23,23 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    # options = ['Finer', 'Coarser', 'ESC']
-    # while True:
-    #     option = compas_rhino.rs.GetString('Select mode', options[-1], options)
-    #     if not option or option == 'ESC':
-    #         break
+    options = ['Finer', 'Coarser', 'ESC']
+    while True:
+        option = compas_rhino.rs.GetString('Select mode', options[-1], options)
+        if not option or option == 'ESC':
+            break
 
-    #     if option == 'Finer':
-    #         mesh_subdivide_quad(pattern.datastructure, k=1)
+        if option == 'Finer':
+            subd = mesh_subdivide_quad(pattern.datastructure, k=1)
+            for key, attr in pattern.datastructure.vertices(True):
+                names = list(attr.keys())
+                values = list(attr.values())
+                subd.vertex_attributes(key, names, values)
+            pattern.datastructure = subd
+            scene.update()
 
-    # scene.update()
-
-    raise NotImplementedError
+        else:
+            raise NotImplementedError
 
 
 # ==============================================================================

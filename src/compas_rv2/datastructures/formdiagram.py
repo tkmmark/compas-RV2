@@ -88,6 +88,16 @@ class FormDiagram(MeshMixin, FormDiagram):
                 self.edge_attribute(key, '_a', a)
 
         return self
+=======
+        for key in self.edges_where({'_is_external': False, '_is_edge': True}):
+            uv = self.edge_vector(key[0], key[1])
+            _key = self.dual_edge(key)
+            _uv = self.dual.edge_vector(_key[0], _key[1])
+            a = angle_vectors_xy(uv, cross_vectors((0, 0, 1), _uv), deg=True)
+            self.edge_attribute(key, '_a', a)
+            self.dual.edge_attribute(_key, '_a', a)
+
+>>>>>>> 132a766cff1425f9bfab33fd1c023a23787b4a37
 
 # ==============================================================================
 # Main

@@ -237,6 +237,16 @@ class MeshObject(object):
             rv2_select_vertices(self.datastructure, keys)
             return VertexModifier.update_vertex_attributes(self.datastructure, keys, names)
 
+    def move_vertices(self, keys):
+        """Move selected vertices.
+
+        Parameters
+        ----------
+        keys : list
+            The identifiers of the vertices.
+        """
+        return VertexModifier.move_vertices(self.datastructure, keys)
+
     # ==========================================================================
     # Edges
     # ==========================================================================
