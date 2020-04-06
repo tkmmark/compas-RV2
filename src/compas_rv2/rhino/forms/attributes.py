@@ -26,6 +26,9 @@ class Tree_Table(forms.TreeGridView):
         self.ShowHeader = ShowHeader
         self.Height = 300
         self.last_sorted_to = None
+        self.table_type = table_type
+        self.sceneNode = sceneNode
+        self.to_update = {}
         # self.AllowMultipleSelection=True
 
         # give colors to each item cells according to object settings
@@ -65,23 +68,6 @@ class Tree_Table(forms.TreeGridView):
         self.CellFormatting += OnCellFormatting
 
     @classmethod
-    def create_settings_table(cls, sceneNode):
-        table = cls(ShowHeader=False)
-        table.add_column()
-        table.add_column(Editable=True)
-
-        treecollection = forms.TreeGridItemCollection()
-        # treecollection.Add(forms.TreeGridItem(Values=('Type', sceneNode.datastructure.__class__.__name__)))
-        # treecollection.Add(forms.TreeGridItem(Values=('Name', sceneNode.name)))
-        # treecollection.Add(forms.TreeGridItem(Values=('Layer', sceneNode.artist.layer)))
-        if hasattr(sceneNode, 'settings'):
-            for key in sceneNode.artist.settings:
-                treecollection.Add(forms.TreeGridItem(Values=(key, str(sceneNode.artist.settings[key]))))
-
-        table.DataStore = treecollection
-        return table
-
-    @classmethod
     def create_vertices_table(cls, sceneNode):
         datastructure = sceneNode.datastructure
         table = cls(sceneNode=sceneNode, table_type='vertices')
@@ -102,8 +88,8 @@ class Tree_Table(forms.TreeGridView):
             treecollection.Add(forms.TreeGridItem(Values=tuple(values)))
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(sceneNode, 'guid_vertex')
-        # table.CellEdited += table.EditEvent(rhinoDiagram, attributes)
         table.ColumnHeaderClick += table.HeaderClickEvent()
+        table.CellEdited += table.EditEvent()
         return table
 
     @classmethod
@@ -134,6 +120,7 @@ class Tree_Table(forms.TreeGridView):
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(sceneNode, 'guid_edge', 'guid_vertex')
         table.ColumnHeaderClick += table.HeaderClickEvent()
+        table.CellEdited += table.EditEvent()
         return table
 
     @classmethod
@@ -164,6 +151,7 @@ class Tree_Table(forms.TreeGridView):
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(sceneNode, 'guid_face', 'guid_vertex')
         table.ColumnHeaderClick += table.HeaderClickEvent()
+        table.CellEdited += table.EditEvent()
         return table
 
     def SelectEvent(self, sceneNode, guid_field, children_guid_field=None):
@@ -188,35 +176,47 @@ class Tree_Table(forms.TreeGridView):
 
         return on_selected
 
-    def EditEvent(self, rhinoDiagram, attributes):
-        # TODO: need to add situations for edge and face
+    def EditEvent(self):
         def on_edited(sender, event):
             try:
-                raise NotImplementedError("Editing not implemented yet")
-                # key = event.Item.Values[0]
-                # attr = attributes[event.Column-1]
-                # value = event.Item.Values[event.Column]
-                # if value != '-':
-                #     try:
-                #         parsed = ast.literal_eval(value)
-                #     except Exception:
-                #         parsed = str(value)
-                #     compas_value = rhinoDiagram.diagram.vertex_attribute(key, attr)
-                #     if type(compas_value) == float and type(parsed) == int:
-                #         parsed = float(parsed)
-                #     if parsed != compas_value:
-                #         if type(parsed) == rhinoDiagram.vertex_attributes_properties[attr]['type']:
-                #             rhinoDiagram.diagram.vertex_attribute(key, attr, parsed)
-                #             print('updated', parsed)
-                #             get_scene().update()
-                #         else:
-                #             print('invalid value type!')
-                #             event.Item.Values[event.Column] = compas_value
-                #     else:
-                #         print('value not changed from', value)
+                key = event.Item.Values[0]
+                value = event.Item.Values[event.Column]
+                attr = self.Columns[event.Column].HeaderText
+
+                if self.table_type == 'vertices':
+                    get_set_attributes = getattr(self.sceneNode.datastructure, 'vertex_attribute')
+                if self.table_type == 'edges':
+                    get_set_attributes = getattr(self.sceneNode.datastructure, 'edge_attribute')
+                if self.table_type == 'faces':
+                    get_set_attributes = getattr(self.sceneNode.datastructure, 'face_attribute')
+
+                try:
+                    new_value = ast.literal_eval(value)
+                except Exception:
+                    new_value = str(value)
+
+                # convert key from str to original type: int,tuple...
+                try:
+                    key = ast.literal_eval(key)
+                except Exception:
+                    pass
+
+                original_value = get_set_attributes(key, attr)
+
+                if type(original_value) == float and type(new_value) == int:
+                    new_value = float(new_value)
+                if new_value != original_value:
+                    if type(new_value) == type(original_value):
+                        print('will update key: %s, attr: %s, value: %s' % (key, attr, new_value))
+                        self.to_update[(key, attr)] = (get_set_attributes, new_value)
+                    else:
+                        print('invalid value type!')
+                        event.Item.Values[event.Column] = original_value
+                else:
+                    print('value not changed from', original_value)
 
             except Exception as e:
-                print(e)
+                print("cell edit failed:", type(e), e)
         return on_edited
 
     def HeaderClickEvent(self):
@@ -261,6 +261,26 @@ class Tree_Table(forms.TreeGridView):
 
         self.DataStore = forms.TreeGridItemCollection(items)
 
+    def apply(self):
+        for _key in self.to_update:
+            get_set_attributes, new_value = self.to_update[_key]
+            key, attr = _key
+            get_set_attributes(key, attr, new_value)
+
+
+class Tree_Tab(forms.TabPage):
+
+    @classmethod
+    def from_sceneNode(cls, sceneNode, tab_type):
+        tab = cls()
+        tab.Text = tab_type
+        create_table = getattr(Tree_Table, "create_%s_table" % tab_type)
+        tab.Content = create_table(sceneNode)
+        return tab
+
+    def apply(self):
+        self.Content.apply()
+
 
 class AttributesForm(forms.Form):
 
@@ -281,25 +301,16 @@ class AttributesForm(forms.Form):
         tab = Settings_Tab.from_settings("Settings", sceneNode.settings)
         control.Pages.Add(tab)
 
-        tab = forms.TabPage()
-        tab.Text = "Vertices"
-        tab.Content = Tree_Table.create_vertices_table(sceneNode)
+        tab = Tree_Tab.from_sceneNode(sceneNode, 'vertices')
         control.Pages.Add(tab)
-        self.vertices_table = tab.Content
 
-        tab = forms.TabPage()
-        tab.Text = "Edges"
-        tab.Content = Tree_Table.create_edges_table(sceneNode)
+        tab = Tree_Tab.from_sceneNode(sceneNode, 'edges')
         control.Pages.Add(tab)
-        self.edges_table = tab.Content
 
         if hasattr(sceneNode, 'guid_face'):
             if len(sceneNode.guid_face.keys()) > 0:
-                tab = forms.TabPage()
-                tab.Text = "Faces"
-                tab.Content = Tree_Table.create_faces_table(sceneNode)
+                tab = Tree_Tab.from_sceneNode(sceneNode, 'faces')
                 control.Pages.Add(tab)
-                self.faces_table = tab.Content
 
         self.TabControl = control
 
@@ -359,26 +370,10 @@ class AttributesForm(forms.Form):
     def on_cancel(self, sender, event):
         self.Close()
 
+
 if __name__ == "__main__":
 
-    # from compas_rhino.utilities import unload_modules
-    # unload_modules("compas")
-
-    from compas_rv2.datastructures import FormDiagram
-    from compas_rv2.datastructures import Pattern
-
-    # pattern = Pattern.from_obj(compas.get('faces.obj'))
-    # form = FormDiagram.from_pattern(pattern)
     scene = get_scene()
-
-    # scene.clear()
-    # node = scene.add(form, name='form', settings=scene.settings)
-    # scene.update()
-
-    # print(node.datastructure.default_vertex_attributes)
-    # print(node.datastructure.default_edge_attributes)
-    # print(node.datastructure.default_face_attributes)
-
 
     node = scene.get("form")[0]
     AttributesForm.from_sceneNode(node)
