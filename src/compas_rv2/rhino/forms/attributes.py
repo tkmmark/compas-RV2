@@ -158,10 +158,13 @@ class Tree_Table(forms.TreeGridView):
     def sort_attributes(self, attributes):
         sorted_attributes = attributes[:]
         sorted_attributes.sort()
+
+        switch = len(sorted_attributes)
         for i, attr in enumerate(sorted_attributes):
             if attr[0] != '_':
+                switch = i
                 break
-        sorted_attributes = sorted_attributes[i:] + sorted_attributes[:i]
+        sorted_attributes = sorted_attributes[switch:] + sorted_attributes[:switch]
 
         return sorted_attributes
 
