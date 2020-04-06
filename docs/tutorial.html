@@ -18,11 +18,11 @@
         <link rel="stylesheet" type="text/css" href="_static/css/compas-reference.css" />
 
         
-            <link rel="next" title="Workflow" href="tutorial/workflow_overview.html" />
+            <link rel="next" title="Examples" href="examples.html" />
         
         
         
-            <link rel="prev" title="RV2" href="overview/02_ecosystem.html" />
+            <link rel="prev" title="5. Extensions" href="user_manual/05_extensions.html" />
         
 
         <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -59,44 +59,165 @@
 
                         <div class="section" id="tutorial">
 <h1>Tutorial</h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/workflow_overview.html">Workflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/00_initialising.html">0. Initialising</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/00_initialising/00_init.html">Initialising RV2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/00_initialising/01_settings.html">Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/00_initialising/02_cloud.html">Cloud</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/01_pattern.html">1. Pattern</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/01_pattern/00_make_pattern.html">Make pattern</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/01_pattern/01_modify_pattern.html">Modify pattern</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/02_diagrams.html">2. Diagrams</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/02_diagrams/00_boundary_conditions.html">Boundary conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/02_diagrams/01_create_form_diagram.html">Create form diagram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/02_diagrams/02_create_force_diagram.html">Create force diagram</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/03_equilibrium.html">3. Equilibrium</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/03_equilibrium/00_horizontal_equilibrium.html">Horizontal equilibrium</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/03_equilibrium/01_vertical_equilibrium.html">Vertical equilibrium</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/04_interaction.html">4. Interaction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/04_interaction/00_modify_form_diagram.html">Modify form diagram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/04_interaction/01_modify_force_diagram.html">Modify force diagram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/04_interaction/02_modify_thrust_diagram.html">Modify thrust diagram</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/05_extensions.html">5. Extensions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/05_extensions/00_best-fit_tna.html">Best-fit TNA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/05_extensions/01_load_path_optimisation.html">Load path optimisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/05_extensions/02_stereotomy.html">Stereotomy</a></li>
-</ul>
-</li>
-</ul>
+<div class="figure">
+<img alt="_images/tutorial_19.jpg" class="figure-img img-fluid" src="_images/tutorial_19.jpg" />
+</div>
+<p>This section provides a step-by-step tutorial of simple example, highlighting and describing the main features of RV2.</p>
+<hr class="docutils" />
+<div class="section" id="initializing">
+<h2>0. Initializing</h2>
+<dl class="simple">
+<dt><strong>Initialising RV2</strong></dt>
+<dd><p>Initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, examples and terms of use.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_1.jpg" class="figure-img img-fluid" src="_images/tutorial_1.jpg" />
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="pattern">
+<h2>1. Pattern</h2>
+<dl class="simple">
+<dt><strong>Make pattern</strong></dt>
+<dd><p>A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: a Rhino NURBS surface object; a Rhino mesh object; from lines; from a set of boundary features (with Delaunay triangulation or compas_pattern); or skeleton.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_2.jpg" class="figure-img img-fluid" src="_images/tutorial_2.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_3.jpg" class="figure-img img-fluid" src="_images/tutorial_3.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_4.jpg" class="figure-img img-fluid" src="_images/tutorial_4.jpg" />
+</div>
+<dl class="simple">
+<dt><strong>Modify pattern</strong></dt>
+<dd><p>After a pattern has been created, it can be modified for further refinement through procedures such as subdivide, relax, etc.</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="form-and-force-diagrams">
+<h2>2. Form and force diagrams</h2>
+<dl class="simple">
+<dt><strong>Define boundary conditions</strong></dt>
+<dd><p>In this step, the user defines the support vertices, open edges and loading conditions.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_5.jpg" class="figure-img img-fluid" src="_images/tutorial_5.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_6.jpg" class="figure-img img-fluid" src="_images/tutorial_6.jpg" />
+</div>
+<dl class="simple">
+<dt><strong>Create form diagram</strong></dt>
+<dd><p>Once the boundary conditions have been defined, the pattern now becomes a form diagram object.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_7.jpg" class="figure-img img-fluid" src="_images/tutorial_7.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_8.jpg" class="figure-img img-fluid" src="_images/tutorial_8.jpg" />
+</div>
+<dl class="simple">
+<dt><strong>Create force diagram</strong></dt>
+<dd><p>Using the form diagrm, the force diagram can be created, which is the topological dual of the form diagram.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_9.jpg" class="figure-img img-fluid" src="_images/tutorial_9.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_10.jpg" class="figure-img img-fluid" src="_images/tutorial_10.jpg" />
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="equilibrium">
+<h2>3. Equilibrium</h2>
+<dl class="simple">
+<dt><strong>Horizontal equilibrium</strong></dt>
+<dd><p>Once the form and force diagram have been created, the horizontal equilibrium parallel-izes either or both diagrams.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_11.jpg" class="figure-img img-fluid" src="_images/tutorial_11.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_12.jpg" class="figure-img img-fluid" src="_images/tutorial_12.jpg" />
+</div>
+<dl class="simple">
+<dt><strong>Vertical equilibrium</strong></dt>
+<dd><p>With the parallel-ized form and force diagrams, the coordinates of the thrust diagram can be iteratively computed based on a desired z-max value.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_13.jpg" class="figure-img img-fluid" src="_images/tutorial_13.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_14.jpg" class="figure-img img-fluid" src="_images/tutorial_14.jpg" />
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="interaction">
+<h2>4. Interaction</h2>
+<dl class="simple">
+<dt><strong>Modify form diagram</strong></dt>
+<dd><p>The vertices of the form diagram can be fixed, and edges can be constrained to remain fixed in its length. The faces of the form diagram can also be used to toggle openings.</p>
+</dd>
+<dt><strong>Modify force diagram</strong></dt>
+<dd><p>One of the most powerful features of TNA is the user’s ability to control the form by constraining and interacting with the force diagram. The user can fix vertices, constrain edge lengths (which sets bounds on the minimum and maximum horizontal forces in the corresponding memebers), and move vertices to manually manipulate the force distribution in the thrust diagram.</p>
+</dd>
+</dl>
+<div class="figure">
+<img alt="_images/tutorial_15.jpg" class="figure-img img-fluid" src="_images/tutorial_15.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_16.jpg" class="figure-img img-fluid" src="_images/tutorial_16.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_17.jpg" class="figure-img img-fluid" src="_images/tutorial_17.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_18.jpg" class="figure-img img-fluid" src="_images/tutorial_18.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_19.jpg" class="figure-img img-fluid" src="_images/tutorial_19.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_20.jpg" class="figure-img img-fluid" src="_images/tutorial_20.jpg" />
+</div>
+<div class="figure">
+<img alt="_images/tutorial_21.jpg" class="figure-img img-fluid" src="_images/tutorial_21.jpg" />
+</div>
+<dl class="simple">
+<dt><strong>Modify thrust diagram</strong></dt>
+<dd><p>The user can also interact directly with the thrust diagram, to change the vertical location of the vertices, changing the fixities of vertices, and toggling openings.</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="extensions">
+<h2>5. Extensions</h2>
+<p>RV2, which is based on the COMPAS framework, offers a flexible and robust platform to integreate other computational methods into the form finding workflow, such as best-fit TNA analysis, laod-path optimisation and various other fabrication-related applications. Currently under construction.</p>
 </div>
 </div>
 
@@ -129,17 +250,9 @@
                                 <ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="intro.html">Introduction</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="gettingstarted.html">Getting Started</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="overview.html">Overview</a></li>
-<li class="nav-item active"><a class="nav-link active current reference internal" href="#">Tutorial</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/workflow_overview.html">Workflow</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/00_initialising.html">0. Initialising</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/01_pattern.html">1. Pattern</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/02_diagrams.html">2. Diagrams</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/03_equilibrium.html">3. Equilibrium</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/04_interaction.html">4. Interaction</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="tutorial/05_extensions.html">5. Extensions</a></li>
-</ul>
-</li>
+<li class="nav-item"><a class="nav-link reference internal" href="theoretical_background.html">Theoretical background</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="user_manual.html">User manual</a></li>
+<li class="nav-item active"><a class="nav-link active current reference internal" href="#">Tutorial</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
@@ -161,7 +274,15 @@
                     
 
                     <ul class="nav flex-column" id="compas-localnav">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Tutorial</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Tutorial</a><ul class="nav">
+<li class="nav-item"><a class="nav-link reference internal" href="#initializing">0. Initializing</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern">1. Pattern</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#form-and-force-diagrams">2. Form and force diagrams</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#equilibrium">3. Equilibrium</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#interaction">4. Interaction</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#extensions">5. Extensions</a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -172,7 +293,7 @@
 
         <footer class="compas-footer">
             
-                Last updated on Mar 28, 2020.
+                Last updated on Apr 07, 2020.
             
 
             

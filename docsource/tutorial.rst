@@ -3,32 +3,13 @@ Tutorial
 ================================================================================
 
 
-
-simple/basic example here to show/highlight the five steps...
-
-
-1. Create pattern > From surface
-
-2. Identify supports (2 parralel base edges)
-
-3. Relax pattern
-
-4. Create form/force
-
-5. Horizontal equilibrium
-
-6. Vertical equilibrium
-
-7. Modify force diagram > move vertices
-
-8. Horizontal equilibrium
-
-9. Vertical equilibrium (vary zmax to show shells with different heights)
-
-10. Show main visualization options (pipe, color analysis)
+.. figure:: _images/tutorial_19.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
 
-|
+This section provides a step-by-step tutorial of simple example, highlighting and describing the main features of RV2.
+
 
 
 ----
@@ -39,14 +20,6 @@ simple/basic example here to show/highlight the five steps...
 
 **Initialising RV2**
     Initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, examples and terms of use.
-
-**Global settings**
-
-
-**Visualisation settings**
-
-
-**compas_cloud**
 
 
 .. figure:: _images/tutorial_1.jpg
@@ -211,6 +184,16 @@ simple/basic example here to show/highlight the five steps...
 
 
 .. figure:: _images/tutorial_19.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_20.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_21.jpg
     :figclass: figure
     :class: figure-img img-fluid
 
