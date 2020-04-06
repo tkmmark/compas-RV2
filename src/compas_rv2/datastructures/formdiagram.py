@@ -69,28 +69,19 @@ class FormDiagram(MeshMixin, FormDiagram):
         for u, v in self.dual.face_halfedges(f1):
             if self.dual.halfedge[v][u] == f2:
                 return u, v
-
         raise KeyError(key)
 
     def update_angle_deviations(self):
         """Compute the angle deviation with the corresponding edge in the ForceDiagram.
-
         """
+        for key in self.edges_where({'_is_external': False, '_is_edge': True}):
+            uv = self.edge_vector(key[0], key[1])
+            _key = self.dual_edge(key)
+            _uv = self.dual.edge_vector(_key[0], _key[1])
+            a = angle_vectors_xy(uv, cross_vectors((0, 0, 1), _uv), deg=True)
+            self.edge_attribute(key, '_a', a)
+            self.dual.edge_attribute(_key, '_a', a)
 
-        for key in self.edges_where({'_is_external': False}):
-
-            if self.edge_attribute(key, '_is_edge'):
-
-                _key = self.dual_edge(key)
-
-                uv = self.edge_vector(key[0], key[1])
-                _uv = self.dual.edge_vector(_key[0], _key[1])
-
-                a = angle_vectors_xy(uv, cross_vectors((0, 0, 1), _uv), deg=True)
-                self.edge_attribute(key, '_a', a)
-                self.dual.edge_attribute(_key, '_a', a)
-
-        return self
 
 # ==============================================================================
 # Main

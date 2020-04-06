@@ -18,6 +18,9 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
+    # mark all fixed vertices as anchors
+    # mark all leaves as anchors
+
     options = ["Select", "Unselect", "ESC"]
     option1 = compas_rhino.rs.GetString("Supports", options[-1], options)
     if not option1 or option1 == 'ESC':
