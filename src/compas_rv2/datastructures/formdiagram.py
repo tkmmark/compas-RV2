@@ -74,9 +74,7 @@ class FormDiagram(MeshMixin, FormDiagram):
 
     def update_angle_deviations(self):
         """Compute the angle deviation with the corresponding edge in the ForceDiagram.
-
         """
-
         for key in self.edges_where({'_is_external': False}):
 
             if self.edge_attribute(key, '_is_edge'):
@@ -88,7 +86,6 @@ class FormDiagram(MeshMixin, FormDiagram):
 
                 a = angle_vectors_xy(uv, cross_vectors((0, 0, 1), _uv), deg=True)
                 self.edge_attribute(key, '_a', a)
-                self.dual.edge_attribute(_key, '_a', a)
 
         return self
 

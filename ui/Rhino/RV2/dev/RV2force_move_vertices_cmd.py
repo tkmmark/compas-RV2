@@ -8,6 +8,7 @@ from compas.utilities import flatten
 
 from compas_rhino.modifiers import VertexModifier
 
+
 __commandname__ = "RV2force_move_vertices"
 
 

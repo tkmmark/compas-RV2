@@ -2,12 +2,6 @@
 Tutorial
 ================================================================================
 
-.. figure:: _images/rv2_workflow.jpg
-    :figclass: figure
-    :class: figure-img img-fluid
-
-
-The RV2 workflow can be broken down into five main steps.
 
 
 simple/basic example here to show/highlight the five steps...
@@ -34,9 +28,6 @@ simple/basic example here to show/highlight the five steps...
 10. Show main visualization options (pipe, color analysis)
 
 
-
-
-
 |
 
 
@@ -58,6 +49,11 @@ simple/basic example here to show/highlight the five steps...
 **compas_cloud**
 
 
+.. figure:: _images/tutorial_1.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 |
 
 
@@ -70,8 +66,25 @@ simple/basic example here to show/highlight the five steps...
 **Make pattern**
     A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: a Rhino NURBS surface object; a Rhino mesh object; from lines; from a set of boundary features (with Delaunay triangulation or compas_pattern); or skeleton.
 
+
+.. figure:: _images/tutorial_2.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_3.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_4.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 **Modify pattern**
     After a pattern has been created, it can be modified for further refinement through procedures such as subdivide, relax, etc.
+
 
 |
 
@@ -85,11 +98,43 @@ simple/basic example here to show/highlight the five steps...
 **Define boundary conditions**
     In this step, the user defines the support vertices, open edges and loading conditions.
 
+
+.. figure:: _images/tutorial_5.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_6.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 **Create form diagram**
     Once the boundary conditions have been defined, the pattern now becomes a form diagram object.
 
+
+.. figure:: _images/tutorial_7.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_8.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 **Create force diagram**
     Using the form diagrm, the force diagram can be created, which is the topological dual of the form diagram.
+
+
+.. figure:: _images/tutorial_9.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_10.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
 |
 
@@ -102,8 +147,31 @@ simple/basic example here to show/highlight the five steps...
 **Horizontal equilibrium**
     Once the form and force diagram have been created, the horizontal equilibrium parallel-izes either or both diagrams.
 
+
+.. figure:: _images/tutorial_11.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_12.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 **Vertical equilibrium**
     With the parallel-ized form and force diagrams, the coordinates of the thrust diagram can be iteratively computed based on a desired z-max value.
+
+
+.. figure:: _images/tutorial_13.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_14.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
 
 |
 
@@ -120,6 +188,31 @@ simple/basic example here to show/highlight the five steps...
 
 **Modify force diagram**
     One of the most powerful features of TNA is the user's ability to control the form by constraining and interacting with the force diagram. The user can fix vertices, constrain edge lengths (which sets bounds on the minimum and maximum horizontal forces in the corresponding memebers), and move vertices to manually manipulate the force distribution in the thrust diagram.
+
+
+.. figure:: _images/tutorial_15.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_16.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_17.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_18.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+.. figure:: _images/tutorial_19.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
 
 **Modify thrust diagram**

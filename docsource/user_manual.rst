@@ -2,6 +2,15 @@
 User manual
 ********************************************************************************
 
+
+.. figure:: _images/rv2_workflow.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+The RV2 workflow can be broken down into five main steps.
+
+
 .. toctree::
    :maxdepth: 2
    :titlesonly:
