@@ -38,7 +38,9 @@ class Tree_Table(forms.TreeGridView):
 
             # update general color settings for this table
             general_setting_key = "color.%s" % table_type
-            color.update({str(key): settings.get(general_setting_key) for key in sceneNode.datastructure.vertices()})
+
+            if getattr(sceneNode.datastructure, table_type):
+                color.update({str(key): settings.get(general_setting_key) for key in getattr(sceneNode.datastructure, table_type)()})
 
             # gather and update subsettings
             for full_setting_key in settings:
@@ -51,10 +53,11 @@ class Tree_Table(forms.TreeGridView):
 
         def OnCellFormatting(sender, e):
             try:
-                if not e.Column.Editable:
+                attr = e.Column.HeaderText
+
+                if not e.Column.Editable and attr != 'key':
                     e.ForegroundColor = drawing.Colors.DarkGray
 
-                attr = e.Column.HeaderText
                 if attr == 'key':
                     key = e.Item.Values[0]
                     if key in color:
@@ -73,7 +76,7 @@ class Tree_Table(forms.TreeGridView):
         table = cls(sceneNode=sceneNode, table_type='vertices')
         table.add_column('key')
         attributes = list(datastructure.default_vertex_attributes.keys())
-        attributes.sort()
+        attributes = table.sort_attributes(attributes)
         for attr in attributes:
             editable = attr[0] != '_'
             checkbox = type(datastructure.default_vertex_attributes[attr]) == bool
@@ -98,7 +101,7 @@ class Tree_Table(forms.TreeGridView):
         table = cls(sceneNode=sceneNode, table_type='edges')
         table.add_column('key')
         attributes = list(datastructure.default_edge_attributes.keys())
-        attributes.sort()
+        attributes = table.sort_attributes(attributes)
 
         for attr in attributes:
             editable = attr[0] != '_'
@@ -130,7 +133,7 @@ class Tree_Table(forms.TreeGridView):
         table.add_column('key')
         table.add_column('vertices')
         attributes = list(datastructure.default_face_attributes.keys())
-        attributes.sort()
+        attributes = table.sort_attributes(attributes)
         for attr in attributes:
             editable = attr[0] != '_'
             checkbox = type(datastructure.default_face_attributes[attr]) == bool
@@ -153,6 +156,19 @@ class Tree_Table(forms.TreeGridView):
         table.ColumnHeaderClick += table.HeaderClickEvent()
         table.CellEdited += table.EditEvent()
         return table
+
+    def sort_attributes(self, attributes):
+        sorted_attributes = attributes[:]
+        sorted_attributes.sort()
+
+        switch = len(sorted_attributes)
+        for i, attr in enumerate(sorted_attributes):
+            if attr[0] != '_':
+                switch = i
+                break
+        sorted_attributes = sorted_attributes[switch:] + sorted_attributes[:switch]
+
+        return sorted_attributes
 
     def SelectEvent(self, sceneNode, guid_field, children_guid_field=None):
         def on_selected(sender, event):
@@ -191,7 +207,7 @@ class Tree_Table(forms.TreeGridView):
                     get_set_attributes = getattr(self.sceneNode.datastructure, 'face_attribute')
 
                 try:
-                    new_value = ast.literal_eval(value)
+                    new_value = ast.literal_eval(str(value))  # checkboxes value type is bool, turn them into str first to be parsed back to bool
                 except Exception:
                     new_value = str(value)
 
@@ -210,7 +226,7 @@ class Tree_Table(forms.TreeGridView):
                         print('will update key: %s, attr: %s, value: %s' % (key, attr, new_value))
                         self.to_update[(key, attr)] = (get_set_attributes, new_value)
                     else:
-                        print('invalid value type!')
+                        print('invalid value type, needs: %s, got %s instead' % (type(original_value), type(new_value)))
                         event.Item.Values[event.Column] = original_value
                 else:
                     print('value not changed from', original_value)
