@@ -38,7 +38,9 @@ class Tree_Table(forms.TreeGridView):
 
             # update general color settings for this table
             general_setting_key = "color.%s" % table_type
-            color.update({str(key): settings.get(general_setting_key) for key in sceneNode.datastructure.vertices()})
+
+            if getattr(sceneNode.datastructure, table_type):
+                color.update({str(key): settings.get(general_setting_key) for key in getattr(sceneNode.datastructure, table_type)()})
 
             # gather and update subsettings
             for full_setting_key in settings:
