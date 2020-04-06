@@ -191,7 +191,7 @@ class Tree_Table(forms.TreeGridView):
                     get_set_attributes = getattr(self.sceneNode.datastructure, 'face_attribute')
 
                 try:
-                    new_value = ast.literal_eval(value)
+                    new_value = ast.literal_eval(str(value))  # checkboxes value type is bool, turn them into str first to be parsed back to bool
                 except Exception:
                     new_value = str(value)
 
@@ -210,7 +210,7 @@ class Tree_Table(forms.TreeGridView):
                         print('will update key: %s, attr: %s, value: %s' % (key, attr, new_value))
                         self.to_update[(key, attr)] = (get_set_attributes, new_value)
                     else:
-                        print('invalid value type!')
+                        print('invalid value type, needs: %s, got %s instead' % (type(original_value), type(new_value)))
                         event.Item.Values[event.Column] = original_value
                 else:
                     print('value not changed from', original_value)
