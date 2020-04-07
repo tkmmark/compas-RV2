@@ -67,13 +67,13 @@ config = {
             "action": None
         },
         {
-            "name": "move_skeleton",
-            "message": "Move_Skeleton",
+            "name": "move_skeleton_vertices",
+            "message": "Move_Skeleton_Vertices",
             "action": skeleton_move_skeleton_vertex
         },
         {
-            "name": "move_vertex",
-            "message": "Move_Vertex",
+            "name": "move_coarse_mesh_corner_vertices",
+            "message": "Move_Coarse_Mesh_Corner_Vertices",
             "action": skeleton_move_mesh_vertex
         },
         {

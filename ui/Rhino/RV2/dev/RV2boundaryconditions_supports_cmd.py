@@ -32,7 +32,7 @@ def RunCommand(is_interactive):
     compas_rhino.rs.ShowGroup(group_supports)
     compas_rhino.rs.Redraw()
 
-    options = ["AllBoundaryVertices", "ByBoundaryEdges", "Manual", "ESC"]
+    options = ["AllBoundaryVertices", "ByContinuousEdges", "Manual", "ESC"]
     while True:
         option2 = compas_rhino.rs.GetString("Selection Mode.", options[-1], options)
         if not option2 or option2 == 'ESC':
@@ -41,7 +41,7 @@ def RunCommand(is_interactive):
         elif option2 == "AllBoundaryVertices":
             keys = pattern.datastructure.vertices_on_boundary()
 
-        elif option2 == 'ByBoundaryEdges':
+        elif option2 == 'ByContinuousEdges':
             temp = pattern.select_edges()
             keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
 

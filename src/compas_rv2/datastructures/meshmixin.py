@@ -71,29 +71,38 @@ class MeshMixin(object):
             The last vertex is the vertex at the end of the v-direction.
 
         """
+        valency = 4
         if self.is_edge_on_boundary(*uv):
-            return self.continuous_vertices_on_boundary(uv)
+            valency = 3
 
         vertices = []
         current, previous = uv
         while True:
             vertices.append(current)
             nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
+            if len(nbrs) != valency:
                 break
             i = nbrs.index(previous)
             previous = current
             current = nbrs[i - 2]
+            if valency == 3 and not self.is_edge_on_boundary(previous, current):
+                current = nbrs[i - 1]
+
         vertices[:] = vertices[::-1]
+
         previous, current = uv
+
         while True:
             vertices.append(current)
             nbrs = self.vertex_neighbors(current, ordered=True)
-            if len(nbrs) != 4:
+            if len(nbrs) != valency:
                 break
             i = nbrs.index(previous)
             previous = current
             current = nbrs[i - 2]
+            if valency == 3 and not self.is_edge_on_boundary(previous, current):
+                current = nbrs[i - 1]
+
         return vertices
 
     def continuous_edges(self, uv):
