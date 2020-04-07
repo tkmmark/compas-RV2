@@ -6,6 +6,7 @@ import compas_rhino
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import Skeleton
+from compas_rv2.datastructures import Pattern
 from compas_rv2.rhino import SkeletonObject
 
 
@@ -16,17 +17,26 @@ def skeleton_move_skeleton_vertex(skeletonobject):
     skeletonobject.move_skeleton_vertex()
 
 
-def skeleton_move_diagram_vertex(skeletonobject):
-    skeletonobject.move_diagram_vertex()
+def skeleton_move_mesh_vertex(skeletonobject):
+    skeletonobject.draw_coarse_mesh_vertices()
+    skeletonobject.move_mesh_vertex()
+    skeletonobject.clear_coarse_mesh_vertices()
 
 
 def skeleton_dynamic_draw_nodewidth(skeletonobject):
-    skeletonobject.dynamic_draw('node_width')
+    skeletonobject.dynamic_update_width('node_width')
 
 
 def skeleton_dynamic_draw_leafwidth(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices()[1] != []:
-        skeletonobject.dynamic_draw('leaf_width')
+    if skeletonobject.datastructure.skeleton_vertices():
+        skeletonobject.dynamic_update_width('leaf_width')
+    else:
+        print("This skeleton doesn't have leaf vertices!")
+
+
+def skeleton_dynamic_draw_leafextend(skeletonobject):
+    if skeletonobject.datastructure.skeleton_vertices():
+        skeletonobject.dynamic_update_width('leaf_extend')
     else:
         print("This skeleton doesn't have leaf vertices!")
 
@@ -64,7 +74,7 @@ config = {
         {
             "name": "move_vertex",
             "message": "Move_Vertex",
-            "action": skeleton_move_diagram_vertex
+            "action": skeleton_move_mesh_vertex
         },
         {
             "name": "node_width",
@@ -75,6 +85,11 @@ config = {
             "name": "leaf_width",
             "message": "Leaf_Width",
             "action": skeleton_dynamic_draw_leafwidth
+        },
+        {
+            "name": "leaf_extend",
+            "message": "Leaf_Extend",
+            "action": skeleton_dynamic_draw_leafextend
         },
         {
             "name": "add_lines",
@@ -111,16 +126,14 @@ def RunCommand(is_interactive):
         return
 
     lines = compas_rhino.get_line_coordinates(guids)
+    compas_rhino.rs.HideObjects(guids)
     skeleton = Skeleton.from_skeleton_lines(lines)
     if not skeleton:
         return
 
-    compas_rhino.delete_objects(guids)
-
-    # pattern from skeleton / skeleton to pattern
     skeletonobject = SkeletonObject(skeleton)
-    skeletonobject.draw_skeleton_branches()
-    skeletonobject.dynamic_draw_self()
+    skeletonobject.draw()
+    skeletonobject.dynamic_update_mesh()
 
     # modify skeleton
     while True:
@@ -133,13 +146,20 @@ def RunCommand(is_interactive):
             break
 
         action['action'](skeletonobject)
-        skeletonobject.draw_self()
+        skeletonobject.draw()
 
     # make pattern
-    pattern = skeletonobject.datastructure.to_pattern()
+    mesh = skeletonobject.datastructure.to_mesh()
+    xyz = mesh.vertices_attributes('xyz')
+    faces = [mesh.face_vertices(fkey) for fkey in mesh.faces()]
+    pattern = Pattern.from_vertices_and_faces(xyz, faces)
 
     # clear skeleton
-    compas_rhino.clear_layer('Skeleton')
+    skeletonobject.clear()
+    compas_rhino.delete_layers([
+        skeletonobject.settings['skeleton.layer'],
+        skeletonobject.settings['mesh.layer']
+        ])
 
     scene.clear()
     scene.add(pattern, name='pattern')
