@@ -47,7 +47,7 @@ a:link:visited{
 
 #terms{
     position: absolute;
-    top: 83%;
+    top: 80%;
     left: 8%;
     font-size: xx-small;
 }
@@ -63,4 +63,14 @@ a:link:visited{
     top: 3%;
     -webkit-app-region: no-drag;
     cursor: pointer;
+}
+
+#agree{
+    /* font-family: Arial; */
+    font-size: large;
+    font-weight: bolder;
+}
+
+#agree a:link{
+    text-decoration: none;
 }

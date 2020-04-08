@@ -69,6 +69,7 @@ class FormDiagram(MeshMixin, FormDiagram):
         for u, v in self.dual.face_halfedges(f1):
             if self.dual.halfedge[v][u] == f2:
                 return u, v
+
         raise KeyError(key)
 
     def update_angle_deviations(self):
