@@ -2,6 +2,8 @@
 
 RhinoVault for Rhino 6 based on COMPAS
 
+![](docs/_images/rv2_cover_01.png)
+
 ## Beta release install
 Instructions here: [INSTALLATION.md](INSTALLATION.md)
 
@@ -102,3 +104,7 @@ These installation instructions assume that Anaconda/conda are available on your
 on windows, the .rui file can be dragged into Rhino to load the toolbar. on mac, there is no equivalent mechanism. the toolbar has to be created manually and, as far as i know, can't be shared.
 
 just fyi, the .rui file can be converted to a .plist file using the `TestEditToolPaletteCollection` command. you can see the contents of the .plist file in the editor and even update it, but you can't load the palette and use it.
+
+
+## Front-page Development
+The pop-up front-page of RV2 is developed using [Electron](https://www.electronjs.org/). An instruction is at [compas_rv2.web setup](src/compas_rv2/web/README.md)
