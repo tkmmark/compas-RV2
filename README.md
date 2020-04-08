@@ -2,7 +2,7 @@
 
 RhinoVault for Rhino 6 based on COMPAS
 
-![](https://blockresearchgroup.github.io/compas-RV2/_images/rv2_cover_01.png)
+![](docs/_images/rv2_cover_01.png)
 
 ## Beta release install
 Instructions here: [INSTALLATION.md](INSTALLATION.md)
