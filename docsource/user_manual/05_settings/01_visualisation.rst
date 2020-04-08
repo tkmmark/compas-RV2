@@ -1,5 +1,5 @@
 ********************************************************************************
-5. Extensions
+Visualisation
 ********************************************************************************
 
-extensions of RV2, such as best-fit TNA, load path optimization, stereotomy... under construction.
+visualisation options and modes

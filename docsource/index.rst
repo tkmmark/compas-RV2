@@ -9,8 +9,8 @@ RhinoVault 2
    intro
    gettingstarted
    theoretical_background
-   user_manual
    tutorial
+   user_manual
    examples
    api
    license

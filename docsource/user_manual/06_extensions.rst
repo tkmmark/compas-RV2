@@ -1,11 +1,5 @@
 ********************************************************************************
-1. Pattern
+6. Extensions
 ********************************************************************************
 
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :glob:
-
-   01_pattern/00_make_pattern.rst
-   01_pattern/01_modify_pattern.rst
+extensions of RV2, such as best-fit TNA, load path optimization, stereotomy... under construction.

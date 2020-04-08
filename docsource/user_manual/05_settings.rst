@@ -1,5 +1,5 @@
 ********************************************************************************
-1. Pattern
+5. Settings
 ********************************************************************************
 
 .. toctree::
@@ -7,5 +7,6 @@
    :titlesonly:
    :glob:
 
-   01_pattern/00_make_pattern.rst
-   01_pattern/01_modify_pattern.rst
+   05_settings/00_settings.rst
+   05_settings/01_visualisation.rst
+   05_settings/02_compas_cloud.rst
