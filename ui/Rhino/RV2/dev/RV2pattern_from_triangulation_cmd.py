@@ -23,7 +23,7 @@ def RunCommand(is_interactive):
     if not p:
         return
 
-    constrained_delaunay_triangulation = p.package('compas_triangle.delaunay.constrained_delaunay_triangulation')
+    conforming_delaunay_triangulation = p.package('compas_triangle.delaunay.conforming_delaunay_triangulation')
 
     boundary_guids = compas_rhino.select_curves('Select outer boundary.')
     if not boundary_guids:
@@ -68,7 +68,7 @@ def RunCommand(is_interactive):
 
     area = target_length ** 2 * 0.5 * 0.5 * 1.732
 
-    vertices, faces = constrained_delaunay_triangulation(
+    vertices, faces = conforming_delaunay_triangulation(
         boundary, polylines=polylines, polygons=polygons, area=area)
 
     # fix all the vertices on the constraints
