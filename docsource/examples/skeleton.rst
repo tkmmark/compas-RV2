@@ -1,11 +1,9 @@
 ********************************************************************************
-1. Pattern
+Skeleton
 ********************************************************************************
 
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :glob:
+.. figure:: /_images/example_funnel-shell.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-   01_pattern/00_make_pattern.rst
-   01_pattern/01_modify_pattern.rst
+Under construction...
