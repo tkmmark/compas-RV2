@@ -2,6 +2,9 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+from compas.geometry import angle_vectors_xy
+from compas.geometry import cross_vectors
+
 from compas_tna.diagrams import ForceDiagram
 from compas_rv2.datastructures.meshmixin import MeshMixin
 
@@ -45,6 +48,17 @@ class ForceDiagram(MeshMixin, ForceDiagram):
             if self.primal.halfedge[v][u] == f2:
                 return u, v
         raise KeyError(key)
+
+    def update_angle_deviations(self):
+        """Compute the angle deviation with the corresponding edge in the FormDiagram.
+        """
+        for edge in self.edges():
+            edge_ = self.primal_edge(edge)
+            uv = self.edge_vector(*edge)
+            uv_ = self.primal.edge_vector(*edge_)
+            a = angle_vectors_xy(uv, cross_vectors(uv_, (0, 0, 1)), deg=True)
+            self.edge_attribute(edge, '_a', a)
+            self.primal.edge_attribute(edge_, '_a', a)
 
 
 # ==============================================================================

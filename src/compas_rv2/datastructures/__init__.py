@@ -33,7 +33,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 from .meshmixin import MeshMixin
-# from .skeleton import Skeleton
+from .skeleton import Skeleton
 from .pattern import Pattern
 from .formdiagram import FormDiagram
 from .forcediagram import ForceDiagram
