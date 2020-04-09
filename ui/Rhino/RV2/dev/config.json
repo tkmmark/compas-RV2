@@ -82,7 +82,7 @@
             {"name": "RV2pattern_from_skeleton",      "menu_text": "From Skeleton", "icon": 12},
 
             {"name": "RV2pattern_attributes",   "menu_text": "Modify Pattern Attributes", "icon": 13},
-            {"name": "RV2pattern_modify_vertices", "menu_text": "Modify Vertices", "icon": 14},
+            {"name": "RV2pattern_modify_vertices", "menu_text": "Define Vertex Fixities", "icon": 14},
             {"name": "RV2pattern_modify_edges",    "menu_text": "Modify Edges",    "icon": 15},
             {"name": "RV2pattern_move_vertices",   "menu_text": "Move Pattern Vertices",   "icon": 16},
             {"name": "RV2pattern_subdivide",  "menu_text": "Subdivide Pattern", "icon": 17},

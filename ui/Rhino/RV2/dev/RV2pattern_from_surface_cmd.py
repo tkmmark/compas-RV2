@@ -25,13 +25,13 @@ def RunCommand(is_interactive):
     u = PatternObject.settings['from_surface.density.U']
     v = PatternObject.settings['from_surface.density.V']
 
-    options = ['U', 'V', 'ESC']
+    options = ['U', 'V']
     while True:
-        option = compas_rhino.rs.GetString("Density.", options[-1], options)
+        option = compas_rhino.rs.GetString("Enter values for U and V:", strings=options)
+
         if not option:
             break
-        if option == 'ESC':
-            break
+
         if option == 'U':
             u = compas_rhino.rs.GetInteger("Density U", u, 2, 100)
             continue

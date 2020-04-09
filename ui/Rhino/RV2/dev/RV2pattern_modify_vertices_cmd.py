@@ -23,24 +23,43 @@ def RunCommand(is_interactive):
     layer = pattern.settings['layer']
     group_vertices = "{}::vertices".format(layer)
 
-    options = ['Continuous', 'Manual']
-    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
+    compas_rhino.rs.ShowGroup(group_vertices)
+    compas_rhino.rs.Redraw()
 
-    if option == 'Continuous':
-        compas_rhino.rs.ShowGroup(group_vertices)
-        compas_rhino.rs.Redraw()
-        temp = pattern.select_edges()
-        keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+    options = ['AllBoundaryVertices', 'Corners', 'ByContinuousEdges', 'Manual']
 
-    else:
-        compas_rhino.rs.ShowGroup(group_vertices)
-        compas_rhino.rs.Redraw()
-        keys = pattern.select_vertices()
+    while True:
+        option = compas_rhino.rs.GetString("Selection mode:", strings=options)
 
-    if keys:
-        public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
-        if pattern.update_vertices_attributes(keys, names=public):
-            scene.update()
+        if not option:
+            return
+
+        elif option == "Corners":
+            keys = []
+            for key in pattern.datastructure.vertices_on_boundary():
+                if pattern.datastructure.vertex_degree(key) == 2:
+                    keys.append(key)
+
+        elif option == "AllBoundaryVertices":
+            keys = pattern.datastructure.vertices_on_boundary()
+
+        elif option == "ByContinuousEdges":
+
+            temp = pattern.select_edges()
+            keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+
+        elif option == 'Manual':
+            keys = pattern.select_vertices()
+
+        # if keys:
+        #     public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+        #     if pattern.update_vertices_attributes(keys, names=public):
+        #         scene.update()
+
+        if keys:
+            pattern.datastructure.vertices_attribute('is_fixed', True, keys=keys)
+
+        scene.update()
 
 
 # ==============================================================================

@@ -21,9 +21,10 @@ def RunCommand(is_interactive):
     # mark all fixed vertices as anchors
     # mark all leaves as anchors
 
-    options = ["Select", "Unselect", "ESC"]
-    option1 = compas_rhino.rs.GetString("Supports", options[-1], options)
-    if not option1 or option1 == 'ESC':
+    options = ["Select", "Unselect"]
+    option1 = compas_rhino.rs.GetString("Select or unselect vertices as supports:", strings=options)
+
+    if not option1:
         return
 
     layer = pattern.settings['layer']
@@ -32,20 +33,33 @@ def RunCommand(is_interactive):
     compas_rhino.rs.ShowGroup(group_supports)
     compas_rhino.rs.Redraw()
 
-    options = ["AllBoundaryVertices", "ByContinuousEdges", "Manual", "ESC"]
+    options = ["InheritFromPattern", "AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
+
     while True:
-        option2 = compas_rhino.rs.GetString("Selection Mode.", options[-1], options)
-        if not option2 or option2 == 'ESC':
+        option2 = compas_rhino.rs.GetString("Selection mode:", strings=options)
+
+        if not option2:
             return
+
+        elif option2 == "Corners":
+            keys = []
+            for key in pattern.datastructure.vertices_on_boundary():
+                if pattern.datastructure.vertex_degree(key) == 2:
+                    keys.append(key)
+
+        elif option2 == "InheritFromPattern":
+            keys = pattern.datastructure.vertices_where({'is_fixed': True})
 
         elif option2 == "AllBoundaryVertices":
             keys = pattern.datastructure.vertices_on_boundary()
+
+
 
         elif option2 == 'ByContinuousEdges':
             temp = pattern.select_edges()
             keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
 
-        else:
+        elif option2 == 'Manual':
             keys = pattern.select_vertices()
 
         if keys:

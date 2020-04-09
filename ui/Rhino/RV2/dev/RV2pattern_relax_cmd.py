@@ -32,7 +32,7 @@ def RunCommand(is_interactive):
 
     options = ['boundary_edges', 'interior_edges']
     while True:
-        option = compas_rhino.rs.GetString('Enter qs for edges', strings=options)
+        option = compas_rhino.rs.GetString('Enter weights (q) for edges:', strings=options)
 
         if not option:
             break
