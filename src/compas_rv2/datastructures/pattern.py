@@ -55,6 +55,22 @@ class Pattern(MeshMixin, Mesh):
     # def smooth(self, fixed, kmax=10):
     #     mesh_smooth_area(self, fixed=fixed, kmax=kmax)
 
+    def relax(self):
+        from compas.numerical import fd_numpy
+
+        key_index = self.key_index()
+        xyz = self.vertices_attributes('xyz')
+        loads = [[0.0, 0.0, 0.0] for _ in xyz]
+        fixed = [key_index[key] for key in self.vertices_where({'is_fixed': True})]
+        edges = [(key_index[u], key_index[v]) for u, v in self.edges()]
+        q = self.edges_attribute('q')
+
+        xyz, q, f, l, r = fd_numpy(xyz, edges, fixed, q, loads)
+
+        for key in self.vertices():
+            index = key_index[key]
+            self.vertex_attributes(key, 'xyz', xyz[index])
+
 
 # ==============================================================================
 # Main
