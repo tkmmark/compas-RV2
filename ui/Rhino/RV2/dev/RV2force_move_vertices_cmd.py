@@ -41,8 +41,7 @@ def RunCommand(is_interactive):
 
     if keys:
         if force.move_vertices(keys):
-            form = scene.get("form")[0]
-            form.datastructure.update_angle_deviations()
+            force.datastructure.update_angle_deviations()
             scene.update()
 
 
