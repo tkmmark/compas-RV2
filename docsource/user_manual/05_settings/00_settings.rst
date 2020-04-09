@@ -1,12 +1,10 @@
+.. _settings:
+
 ********************************************************************************
 Settings
 ********************************************************************************
 
-
-----
-
-Settings
-========
+settings - global parameters and settings
 
 Settings menu provides interfaces to adjust global settings of RV2:
 

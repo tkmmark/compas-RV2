@@ -57,11 +57,12 @@
 
                         
 
-                        <div class="section" id="initializing">
-<h1>0. Initializing</h1>
+                        <div class="section" id="initialising">
+<span id="id1"></span><h1>0. Initialising</h1>
+<div class="figure">
+<img alt="../_images/rv2_workflow.jpg" class="figure-img img-fluid" src="../_images/rv2_workflow.jpg" />
+</div>
 <hr class="docutils" />
-<div class="section" id="initializing-rv2">
-<h2>Initializing RV2</h2>
 <div class="figure">
 <img alt="../_images/rv2init.png" class="figure-img img-fluid" src="../_images/rv2init.png" />
 </div>
@@ -71,40 +72,6 @@
 <li><p>Initialize data structures and user session needed for RV2 to operate in Rhino environment.</p></li>
 <li><p>Kick off <strong>compas_cloud</strong> server in background and establish connection to it from Rhino.</p></li>
 </ul>
-</div>
-<hr class="docutils" />
-<div class="section" id="settings">
-<h2>Settings</h2>
-<p>Settings menu provides interfaces to adjust global settings of RV2:</p>
-<div class="figure">
-<img alt="../_images/object_settings.png" class="figure-img img-fluid" src="../_images/object_settings.png" />
-</div>
-<ul class="simple">
-<li><p>Object Settings provides options to adjust visualization style of different RV2 objects such as Pattern, FormDiagram, ForceDiagram etc.</p></li>
-</ul>
-<div class="figure">
-<img alt="../_images/solver_settings.png" class="figure-img img-fluid" src="../_images/solver_settings.png" />
-</div>
-<ul class="simple">
-<li><p>Solver Settings provides options to adjust RV2 Solver settings like kmax value for horizontal equilibrium in <strong>compas_tna</strong> solver.</p></li>
-</ul>
-</div>
-<hr class="docutils" />
-<div class="section" id="compas-cloud">
-<h2>compas_cloud</h2>
-<p><strong>compas_cloud</strong> is an essential infrastructure component used by RV2.
-It runs a background server for executing highly efficient numerical algorithms from Cython packges such as <strong>numpy</strong> and <strong>scipy</strong> that are not compatible with IronPython that runs inside Rhino.
-This allows RV2 to utilise full capacity of other compas packages such as <strong>compas_tna</strong> and <strong>compas_triangle</strong> which has Cython dependencies.
-compas_cloud server communicates with Rhino through websocket protocol, and can be controlled from RV2 menu:</p>
-<div class="figure">
-<img alt="../_images/compas_cloud.png" class="figure-img img-fluid" src="../_images/compas_cloud.png" />
-</div>
-<ul class="simple">
-<li><p>Cloud &gt; Check: check if connection to compas_cloud server is healthy.</p></li>
-<li><p>Cloud &gt; Restart: Restart compas_cloud server, with options of running in background or in a prompt console which is handy for debugging.</p></li>
-<li><p>Cloud &gt; Shut Down: Shutdown the compas_cloud server.</p></li>
-</ul>
-</div>
 </div>
 
                         
@@ -137,16 +104,17 @@ compas_cloud server communicates with Rhino through websocket protocol, and can 
 <li class="nav-item"><a class="nav-link reference internal" href="../intro.html">Introduction</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../gettingstarted.html">Getting Started</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../theoretical_background.html">Theoretical background</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../user_manual.html">User manual</a><ul class="nav active">
-<li class="nav-item active"><a class="nav-link active current reference internal" href="#">0. Initializing</a></li>
+<li class="nav-item active"><a class="nav-link active current reference internal" href="#">0. Initialising</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="01_pattern.html">1. Pattern</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="02_diagrams.html">2. Form and force diagrams</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="03_equilibrium.html">3. Equilibrium</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="04_interaction.html">4. Interaction</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="05_extensions.html">5. Extensions</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="05_settings.html">5. Settings</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="06_extensions.html">6. Extensions</a></li>
 </ul>
 </li>
-<li class="nav-item"><a class="nav-link reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../api.html">API Reference</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../license.html">License</a></li>
@@ -168,12 +136,7 @@ compas_cloud server communicates with Rhino through websocket protocol, and can 
                     
 
                     <ul class="nav flex-column" id="compas-localnav">
-<li class="nav-item"><a class="nav-link reference internal" href="#">0. Initializing</a><ul class="nav">
-<li class="nav-item"><a class="nav-link reference internal" href="#initializing-rv2">Initializing RV2</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#settings">Settings</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#compas-cloud">compas_cloud</a></li>
-</ul>
-</li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">0. Initialising</a></li>
 </ul>
 
 
@@ -184,7 +147,7 @@ compas_cloud server communicates with Rhino through websocket protocol, and can 
 
         <footer class="compas-footer">
             
-                Last updated on Apr 07, 2020.
+                Last updated on Apr 09, 2020.
             
 
             

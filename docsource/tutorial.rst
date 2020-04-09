@@ -6,13 +6,13 @@ Tutorial
     :figclass: figure
     :class: figure-img img-fluid
 
-This section provides a step-by-step tutorial of a simple example, highlighting and describing the main features of RV2.
+This section provides a step-by-step tutorial of a simple example, highlighting and describing the main features of RV2. This tutorial is intended to be a "quick start" guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the :ref:`user_manual`.
 
 |
 
 ----
 
-0. Initializing
+0. Initialising
 ===============
 
 Initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, examples and terms of use. Don't forget to read the Terms and Conditions, and the Data Donation Agreement.

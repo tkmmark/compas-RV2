@@ -1,5 +1,7 @@
+.. _visualisation:
+
 ********************************************************************************
 Visualisation
 ********************************************************************************
 
-visualisation options and modes
+settings - visualisation options and modes

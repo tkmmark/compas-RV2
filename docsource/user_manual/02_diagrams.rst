@@ -1,6 +1,17 @@
+.. _diagrams:
+
 ********************************************************************************
 2. Form and force diagrams
 ********************************************************************************
+
+
+.. figure:: /_images/rv2_workflow.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+----
+
 
 .. toctree::
    :maxdepth: 1

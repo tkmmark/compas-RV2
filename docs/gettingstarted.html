@@ -59,6 +59,50 @@
 
                         <div class="section" id="getting-started">
 <h1>Getting Started</h1>
+<div class="section" id="beta-release-install-windows-only">
+<h2>Beta Release install (Windows Only)</h2>
+<p>Get the latest release from: <a class="reference external" href="https://github.com/BlockResearchGroup/compas-RV2/releases">https://github.com/BlockResearchGroup/compas-RV2/releases</a></p>
+<ol class="arabic">
+<li><p>Install RV2</p>
+<p>Unzip the folder and open <code class="docutils literal notranslate"><span class="pre">RV2\dev</span></code> in explorer, right click on <code class="docutils literal notranslate"><span class="pre">install.bat</span></code> (.bat extension might be hidden) and choose <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">as</span> <span class="pre">Administrator</span></code>. Click <code class="docutils literal notranslate"><span class="pre">Yes</span></code> in the pop-up window.
+Installation is successful if you see following output.</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><code><span></span>C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32&gt;C:<span class="se">\U</span>sers<span class="se">\l</span>ichen7<span class="se">\c</span>ompas-RV2<span class="se">\d</span>ist<span class="se">\R</span>V2<span class="se">\d</span>ev<span class="se">\e</span>nv<span class="se">\p</span>ython.exe -m compas_rv2.install --plugin_path C:<span class="se">\U</span>sers<span class="se">\l</span>ichen7<span class="se">\c</span>ompas-RV2<span class="se">\d</span>ist<span class="se">\R</span>V2<span class="se">\d</span>ev<span class="se">\.</span>.<span class="se">\</span>
+Installing PlugIn RV2 to Rhino PythonPlugIns.
+
+PlugIn RV2 Installed.
+
+Restart Rhino and open the Python editor at least once to make it available.
+installing compas_rv2
+Installing COMPAS packages to Rhino <span class="m">6</span>.0 IronPython lib:
+IronPython location: C:<span class="se">\U</span>sers<span class="se">\l</span>ichen7<span class="se">\A</span>ppData<span class="se">\R</span>oaming<span class="se">\M</span>cNeel<span class="se">\R</span>hinoceros<span class="se">\6</span>.0<span class="se">\P</span>lug-ins<span class="se">\I</span>ronPython <span class="o">(</span>814d908a-e25c-493d-97e9-ee3861957f49<span class="o">)</span><span class="se">\s</span>ettings<span class="se">\l</span>ib
+
+   compas               OK
+   compas_rhino         OK
+   compas_tna           OK
+   compas_ags           OK
+   compas_pattern       OK
+   compas_rv2           OK
+   compas_bootstrapper  OK
+
+Completed.
+
+C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32&gt;pause
+Press any key to <span class="k">continue</span> . . .
+</code></pre></div>
+</div>
+<p>#### Possible Issues</p>
+<p>Following error might appear for fresh Rhino installations:</p>
+<div class="language-bash notranslate"><div class="highlight"><pre><code><span></span>FileNotFoundError: <span class="o">[</span>WinError <span class="m">3</span><span class="o">]</span> The system cannot find the path specified:
+   <span class="s1">&#39;C:\Users\xxx\AppData\Roaming\McNeel\Rhinoceros\6.0\Plug-ins\PythonPlugins&#39;</span>
+</code></pre></div>
+</div>
+<p>To fix this, run <code class="docutils literal notranslate"><span class="pre">EditPythonScript</span></code> once and restart Rhino.</p>
+</li>
+<li><p>Activate RV2 toolbar in Rhino</p>
+<p>Go to menu <code class="docutils literal notranslate"><span class="pre">Tools</span> <span class="pre">&gt;</span> <span class="pre">Toolbar</span> <span class="pre">Layout...</span></code>. In pop-up window, click <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&gt;</span> <span class="pre">Open...</span></code>. Then in file explorer, select <code class="docutils literal notranslate"><span class="pre">YOUR_RV2_FOLDER\dev\RV2.rui</span></code>. Now you will see RhinoVAULT2 appears in rhino menu.</p>
+</li>
+</ol>
+</div>
 </div>
 
                         
@@ -91,8 +135,8 @@
 <li class="nav-item"><a class="nav-link reference internal" href="intro.html">Introduction</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">Getting Started</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="theoretical_background.html">Theoretical background</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="user_manual.html">User manual</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="user_manual.html">User manual</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="api.html">API Reference</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
@@ -114,7 +158,10 @@
                     
 
                     <ul class="nav flex-column" id="compas-localnav">
-<li class="nav-item"><a class="nav-link reference internal" href="#">Getting Started</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">Getting Started</a><ul class="nav">
+<li class="nav-item"><a class="nav-link reference internal" href="#beta-release-install-windows-only">Beta Release install (Windows Only)</a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -125,7 +172,7 @@
 
         <footer class="compas-footer">
             
-                Last updated on Apr 07, 2020.
+                Last updated on Apr 09, 2020.
             
 
             

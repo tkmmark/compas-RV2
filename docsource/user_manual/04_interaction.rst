@@ -1,6 +1,17 @@
+.. _interaction:
+
 ********************************************************************************
 4. Interaction
 ********************************************************************************
+
+
+.. figure:: /_images/rv2_workflow.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+----
+
 
 .. toctree::
    :maxdepth: 1
