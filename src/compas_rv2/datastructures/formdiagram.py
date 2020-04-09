@@ -159,16 +159,20 @@ class FormDiagram(MeshMixin, FormDiagram):
             if left in key_foot:
                 start = key_foot[left][1]
             else:
-                start = left
+                start = None
 
             if right in key_foot:
                 end = key_foot[right][0]
             else:
-                end = right
+                end = None
 
             if left in key_foot or right in key_foot:
-                self.add_face([start] + vertices + [end], _is_loaded=False)
-                self.edge_attribute((start, end), '_is_edge', False)
+                if start is not None:
+                    vertices.insert(0, start)
+                if end is not None:
+                    vertices.append(end)
+                self.add_face(vertices, _is_loaded=False)
+                self.edge_attribute((vertices[0], vertices[-1]), '_is_edge', False)
 
         # # mark all faces with at least one external vertex (`_is_external=True`) as `_is_loaded/_is_face=False`
         # for face in self.faces():

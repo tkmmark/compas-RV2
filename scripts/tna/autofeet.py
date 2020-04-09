@@ -1,10 +1,15 @@
 import compas
 from compas.utilities import pairwise
+from compas.utilities import i_to_green
 from compas_rv2.datastructures import Pattern
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_tna.equilibrium import horizontal_nodal
 from compas_plotters import MeshPlotter
+
+# ==============================================================================
+# Patterning
+# ==============================================================================
 
 pattern = Pattern.from_obj(compas.get('faces.obj'))
 
@@ -30,11 +35,20 @@ pattern.relax()
 # - define loads (these can still be updated later)
 pattern.vertices_attribute('is_anchor', True, keys=list(pattern.vertices_where({'is_fixed': True})))
 
+# ==============================================================================
+# TNA
+# ==============================================================================
+
 # create form diagram
 form = FormDiagram.from_pattern(pattern)
 force = ForceDiagram.from_formdiagram(form)
 
-horizontal_nodal(form, force)
+# horizontal equilibrium
+horizontal_nodal(form, force, kmax=500)
+
+# ==============================================================================
+# Visualization
+# ==============================================================================
 
 # visualize form
 plotter = MeshPlotter(form, figsize=(8, 5))
@@ -42,11 +56,31 @@ plotter.draw_vertices(
     facecolor={key: (255, 0, 0) for key in form.vertices_where({'is_anchor': True})})
 plotter.draw_edges(
     keys=list(form.edges_where({'_is_edge': True})),
-    color=dict((key, (0, 0, 255)) for key in form.edges_where({'_is_external': True})))
-plotter.draw_faces(keys=list(form.faces_where({'_is_loaded': True})))
+    color=dict((key, (0, 0, 255)) for key in form.edges_where({'_is_external': True}))
+)
+plotter.draw_faces(
+    text="key",
+    # keys=list(form.faces_where({'_is_loaded': True}))
+)
 plotter.show()
+
+angles = []
+for edge in force.edges():
+    _edge = force.primal_edge(edge)
+    a = form.edge_attribute(_edge, '_a')
+    angles.append(a)
+
+amin = min(angles)
+amax = max(angles)
+
+edgelabel = {}
+for edge in force.edges():
+    _edge = force.primal_edge(edge)
+    a = form.edge_attribute(_edge, '_a')
+    if a > 1:
+        edgelabel[edge] = "{:.1f}".format(a)
 
 # visualize force
 plotter = MeshPlotter(force, figsize=(8, 5))
-plotter.draw_edges()
+plotter.draw_edges(text=edgelabel, fontsize=6)
 plotter.show()
