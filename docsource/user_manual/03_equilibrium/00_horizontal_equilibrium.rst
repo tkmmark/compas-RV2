@@ -1,5 +1,9 @@
+.. _horizontal_equilibrium:
+
 ********************************************************************************
 Horizontal equilibrium
 ********************************************************************************
 
-hoirzontal equilibrium...
+alpha
+
+kmax (iterations) - doesn't have a terminating condition

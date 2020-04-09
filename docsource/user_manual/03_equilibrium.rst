@@ -1,6 +1,17 @@
+.. _equilibrium:
+
 ********************************************************************************
 3. Equilibrium
 ********************************************************************************
+
+
+.. figure:: /_images/rv2_workflow.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+----
+
 
 .. toctree::
    :maxdepth: 1

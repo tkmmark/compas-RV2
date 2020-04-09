@@ -1,7 +1,22 @@
+.. _boundary_conditions:
+
 ********************************************************************************
 Boundary conditions
 ********************************************************************************
 
-identify supports...
 
-define loading conditions...
+Identify supports
+=================
+
+vertices
+
+is_achnor
+
+feet
+
+
+----
+
+
+Define loading conditions
+=========================

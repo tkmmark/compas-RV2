@@ -1,10 +1,8 @@
+.. _compas_cloud:
+
 ********************************************************************************
 compas_cloud
 ********************************************************************************
-
-
-compas_cloud
-============
 
 **compas_cloud** is an essential infrastructure component used by RV2.
 It runs a background server for executing highly efficient numerical algorithms from CPython packges such as **numpy** and **scipy** that are not compatible with IronPython that runs inside Rhino.
