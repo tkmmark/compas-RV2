@@ -38,6 +38,7 @@ def RunCommand(is_interactive):
     force.update_angle_deviations()
 
     scene.add(force, name='force')
+
     scene.update()
 
     print('ForceDiagram object successfully created.')

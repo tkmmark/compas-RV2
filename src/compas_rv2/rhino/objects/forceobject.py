@@ -6,6 +6,8 @@ import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import ForceArtist
 from compas_rv2.rhino import delete_objects
+from compas.utilities import i_to_rgb
+
 
 __all__ = ["ForceObject"]
 
@@ -52,10 +54,12 @@ class ForceObject(MeshObject):
         'layer': "RV2::ForceDiagram",
         'show.vertices': True,
         'show.edges': True,
+        'show.angles': True,  # move to global settings?
         'color.vertices': [0, 255, 255],
         'color.vertices:is_fixed': [0, 255, 255],
         'color.edges': [0, 0, 255],
         'color.edges:is_external': [0, 0, 255],
+        'tol.angles': 5  # temporary duplicate from formdiagram
     }
 
     def __init__(self, scene, diagram, **kwargs):
@@ -113,6 +117,31 @@ class ForceObject(MeshObject):
             compas_rhino.rs.ShowGroup(group_edges)
         else:
             compas_rhino.rs.HideGroup(group_edges)
+
+        # angles
+
+        if self.settings['show.angles']:
+
+            tol = self.settings['tol.angles']
+            keys = list(self.datastructure.edges())
+            angles = self.datastructure.edges_attribute('_a', keys=keys)
+            amin = min(angles)
+            amax = max(angles)
+            if (amax - amin)**2 > 0.001**2:
+                text = {}
+                color = {}
+                for key, angle in zip(keys, angles):
+                    if angle > tol:
+                        text[key] = "{:.0f}".format(angle)
+                        color[key] = i_to_rgb((angle - amin) / (amax - amin))
+                guids = self.artist.draw_edgelabels(text, color)
+                self.guid_edgelabel = zip(guids, keys)
+
+        else:
+            guids_edgelabels = list(self.guid_edgelabel.keys())
+            delete_objects(guids_edgelabels, purge=True)
+            del self._guid_edgelabel
+            self._guid_edgelabel = {}
 
 
 # ==============================================================================
