@@ -22,6 +22,10 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
+    if not list(pattern.datastructure.vertices_where({'is_fixed': True})):
+        print("Pattern has No fixed vertices!")
+        return
+
     relax = proxy.package("compas.numerical.fd_numpy")
 
     # update fixed vertices
