@@ -66,23 +66,16 @@ class FormDiagram(MeshMixin, FormDiagram):
         return form
 
     def update_boundaries(self):
-        # split boundaries on anchors
-        # add feet (corresponding new faces, mark has_external, is_external)
-        # mark faces
-
         scale = self.attributes['feet.scale']
         alpha = pi * 45 / 180
         tol = self.attributes['feet.tol']
-
         # mark all "anchored edges" as '_is_edge=False'
         for edge in self.edges():
             self.edge_attribute(edge, '_is_edge', not all(self.vertices_attribute('is_anchor', keys=edge)))
-
         # outer boundary
         # note: how to make sure this is the "outer" boundary
         boundaries = self.vertices_on_boundaries()
         exterior = boundaries[0]
-
         # split outer boundary
         # where `is_anchor=True`
         # into (ordered) series of boundary edges
@@ -95,29 +88,25 @@ class FormDiagram(MeshMixin, FormDiagram):
                 segments.append(segment)
         segments[-1] += segments[0]
         del segments[0]
-
         # add new vertices
         # where number of `_is_edge=True` connected edges at begin/end vertices of a segment is greater than 1
         key_foot = {}
         key_xyz = {key: self.vertex_coordinates(key, 'xyz') for key in self.vertices()}
-
         for i, vertices in enumerate(segments):
             key = vertices[0]
             nbrs = self.vertex_neighbors(key)
-
+            # check necessary condition for feet
             count = 0
             for nbr in nbrs:
                 edge = key, nbr
                 if self.edge_attribute(edge, '_is_edge'):
                     count += 1
-
+            # only add feet if necessary
             if count > 1:
                 after = vertices[1]
                 before = segments[i - 1][-2]
-
                 # base point
                 o = key_xyz[key]
-
                 # +normal
                 b = key_xyz[before]
                 a = key_xyz[after]
@@ -134,85 +123,36 @@ class FormDiagram(MeshMixin, FormDiagram):
                     ba = normalize_vector_xy(subtract_vectors_xy(a, b))
                     n = cross_vectors([0, 0, 1], ba)
                     n = scale_vector(n, +scale)
-
                 # left and right
                 lx, ly, lz = add_vectors_xy(o, rotate(n, +alpha))
                 rx, ry, rz = add_vectors_xy(o, rotate(n, -alpha))
                 l = self.add_vertex(x=lx, y=ly, z=o[2], is_fixed=True, _is_external=True)
                 r = self.add_vertex(x=rx, y=ry, z=o[2], is_fixed=True, _is_external=True)
                 key_foot[key] = l, r
-
                 # foot face
                 self.add_face([l, key, r], _is_loaded=False)
-
                 # foot face attributes
                 self.edge_attribute((l, key), '_is_external', True)
                 self.edge_attribute((key, r), '_is_external', True)
                 self.edge_attribute((r, l), '_is_edge', False)
-
         # add (opening?) faces
-
         for vertices in segments:
             if len(vertices) < 3:
                 continue
-
             left = vertices[0]
             right = vertices[-1]
-
             start = None
             end = None
-
             if left in key_foot:
                 start = key_foot[left][1]
-
             if right in key_foot:
                 end = key_foot[right][0]
-
             if start is not None:
                 vertices.insert(0, start)
             if end is not None:
                 vertices.append(end)
             self.add_face(vertices, _is_loaded=False)
             self.edge_attribute((vertices[0], vertices[-1]), '_is_edge', False)
-
-        # # mark all faces with at least one external vertex (`_is_external=True`) as `_is_loaded/_is_face=False`
-        # for face in self.faces():
-        #     self.face_attribute(face, '_is_loaded', any(self.vertices_attribute('_is_external', keys=self.face_vertices(face))))
-
-    def dual_edge(self, key):
-        """Get the corresponding edge in the ForceDiagram.
-
-        Parameters
-        ----------
-        key : tuple
-            The identifier of the edge in this diagram.
-
-        Returns
-        -------
-        tuple
-            The identifier of the edge in the other/dual diagram.
-
-        Raises
-        ------
-        KeyError
-            If the dual edge does not exist.
-        """
-        f1, f2 = key
-        for u, v in self.dual.face_halfedges(f1):
-            if self.dual.halfedge[v][u] == f2:
-                return u, v
-        raise KeyError(key)
-
-    def update_angle_deviations(self):
-        """Compute the angle deviation with the corresponding edge in the ForceDiagram.
-        """
-        for key in self.edges_where({'_is_edge': True}):
-            uv = self.edge_vector(key[0], key[1])
-            _key = self.dual_edge(key)
-            _uv = self.dual.edge_vector(_key[0], _key[1])
-            a = angle_vectors_xy(uv, cross_vectors((0, 0, 1), _uv), deg=True)
-            self.edge_attribute(key, '_a', a)
-            self.dual.edge_attribute(_key, '_a', a)
 
 
 # ==============================================================================
