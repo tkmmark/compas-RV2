@@ -17,6 +17,8 @@ def RunCommand(is_interactive):
 
     SettingsForm.from_settings(scene.settings, 'Solver')
 
+    scene.update()
+
 
 # ==============================================================================
 # Main

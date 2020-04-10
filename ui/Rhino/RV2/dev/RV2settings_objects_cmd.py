@@ -17,6 +17,8 @@ def RunCommand(is_interactive):
 
     SettingsForm.from_scene(scene)
 
+    scene.update()
+
 
 # ==============================================================================
 # Main

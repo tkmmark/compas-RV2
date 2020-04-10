@@ -39,10 +39,7 @@ def RunCommand(is_interactive):
             v = compas_rhino.rs.GetInteger("Density V", v, 2, 100)
             continue
 
-    PatternObject.settings['from_surface.density.U'] = u
-    PatternObject.settings['from_surface.density.V'] = v
-
-    density = u, v
+    density = u + 1, v + 1
     pattern = RhinoSurface.from_guid(guid).uv_to_compas(cls=Pattern, density=density)
 
     compas_rhino.rs.HideObject(guid)

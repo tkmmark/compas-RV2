@@ -55,10 +55,11 @@ class ForceObject(MeshObject):
         'show.vertices': True,
         'show.edges': True,
         'show.angles': True,  # move to global settings?
+        'show.color.analysis': False,
         'color.vertices': [0, 255, 255],
         'color.vertices:is_fixed': [0, 255, 255],
         'color.edges': [0, 0, 255],
-        'color.edges:is_external': [0, 0, 255],
+        'color.edges:is_external': [0, 0, 0],
         'tol.angles': 5  # temporary duplicate from formdiagram
     }
 
@@ -87,7 +88,7 @@ class ForceObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        keys = list(self.datastructure.vertices())
+        keys  = list(self.datastructure.vertices())
         color = {key: self.settings["color.vertices"] for key in keys}
         guids = self.artist.draw_vertices(keys, color)
         self.guid_vertex = zip(guids, keys)
@@ -103,12 +104,22 @@ class ForceObject(MeshObject):
         guids_edges = list(self.guid_edge.keys())
         delete_objects(guids_edges, purge=True)
 
-        keys = list(self.datastructure.edges())
+        keys  = list(self.datastructure.edges())
         color = {key: self.settings['color.edges'] for key in keys}
         for key in keys:
             key_ = self.datastructure.primal.face_adjacency_halfedge(*key)
             if self.datastructure.primal.edge_attribute(key_, '_is_external'):
                 color[key] = self.settings["color.edges:is_external"]
+
+        # color analysis
+        if self.settings['show.color.analysis']:
+            keys    = [self.datastructure.primal.dual_edge(key) for key in list(self.datastructure.primal.edges_where({'_is_edge': True}))]
+            lengths = [self.datastructure.edge_length(*key) for key in keys]
+            lmin    = min(lengths)
+            lmax    = max(lengths)
+            for key, length in zip(keys, lengths):
+                color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
+
         guids = self.artist.draw_edges(keys, color)
         self.guid_edge = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
@@ -122,17 +133,17 @@ class ForceObject(MeshObject):
 
         if self.settings['show.angles']:
 
-            tol = self.settings['tol.angles']
-            keys = list(self.datastructure.edges())
+            tol    = self.settings['tol.angles']
+            keys   = list(self.datastructure.edges())
             angles = self.datastructure.edges_attribute('_a', keys=keys)
-            amin = min(angles)
-            amax = max(angles)
+            amin   = min(angles)
+            amax   = max(angles)
             if (amax - amin)**2 > 0.001**2:
-                text = {}
+                text  = {}
                 color = {}
                 for key, angle in zip(keys, angles):
                     if angle > tol:
-                        text[key] = "{:.0f}".format(angle)
+                        text[key]  = "{:.0f}".format(angle)
                         color[key] = i_to_rgb((angle - amin) / (amax - amin))
                 guids = self.artist.draw_edgelabels(text, color)
                 self.guid_edgelabel = zip(guids, keys)
