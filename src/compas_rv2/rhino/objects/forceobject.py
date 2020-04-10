@@ -113,7 +113,6 @@ class ForceObject(MeshObject):
 
         # color analysis
         if self.settings['show.color.analysis']:
-            keys    = [self.datastructure.primal.dual_edge(key) for key in list(self.datastructure.primal.edges_where({'_is_edge': True}))]
             lengths = [self.datastructure.edge_length(*key) for key in keys]
             lmin    = min(lengths)
             lmax    = max(lengths)

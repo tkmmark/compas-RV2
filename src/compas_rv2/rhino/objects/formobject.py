@@ -152,13 +152,14 @@ class FormObject(MeshObject):
 
         # color analysis
         if self.settings['show.color.analysis']:
-            keys    = list(self.datastructure.edges_where({'_is_edge': True}))
-            _keys   = [self.datastructure.dual_edge(key) for key in keys]
-            lengths = [self.datastructure.edge_length(*key) for key in _keys]
-            lmin    = min(lengths)
-            lmax    = max(lengths)
-            for key, length in zip(keys, lengths):
-                color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
+            if self.datastructure.dual:
+                _keys    = list(self.datastructure.dual.edges())
+                lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
+                keys   = [self.datastructure.dual.primal_edge(key) for key in _keys]
+                lmin    = min(lengths)
+                lmax    = max(lengths)
+                for key, length in zip(keys, lengths):
+                    color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
 
         guids = self.artist.draw_edges(keys, color)
         self.guid_edge = zip(guids, keys)

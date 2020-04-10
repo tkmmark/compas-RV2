@@ -24,7 +24,7 @@ def RunCommand(is_interactive):
         return
 
     if not list(pattern.datastructure.vertices_where({'is_fixed': True})):
-        print("Pattern has No fixed vertices! ")
+        print("Pattern has no fixed vertices! Relaxation requires fixed vertices.")
         return
 
     bq = 5

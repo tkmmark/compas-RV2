@@ -20,6 +20,11 @@ def RunCommand(is_interactive):
 
     pattern = scene.get("pattern")[0]
     if not pattern:
+        print("There is no Pattern in the scene.")
+        return
+
+    if not list(pattern.datastructure.vertices_where({'is_anchor': True})):
+        print("Pattern has no anchor vertices! Please define anchor (support) vertices.")
         return
 
     form = FormDiagram.from_pattern(pattern.datastructure)

@@ -18,6 +18,7 @@ def RunCommand(is_interactive):
 
     form = scene.get("form")[0]
     if not form:
+        print("There is no FormDiagram in the scene.")
         return
 
     force = ForceDiagram.from_formdiagram(form.datastructure)

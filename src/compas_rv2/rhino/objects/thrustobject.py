@@ -30,7 +30,7 @@ class ThrustObject(MeshObject):
         'color.vertices:is_anchor': [255, 0, 0],
         'color.edges': [255, 0, 255],
         'color.faces': [255, 0, 255],
-        'color.reactions': [0, 255, 255],
+        'color.reactions': [0, 80, 0],
         'color.residuals': [0, 255, 255],
         'color.pipes': [0, 0, 255],
         'scale.reactions': 0.1,
