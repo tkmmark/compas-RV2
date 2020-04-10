@@ -36,7 +36,6 @@ class Pattern(MeshMixin, Mesh):
             'y': 0.0,
             'z': 0.0,
             'is_fixed': False,
-            'is_anchor': False
         })
         self.default_edge_attributes.update({
             'q': 1.0,

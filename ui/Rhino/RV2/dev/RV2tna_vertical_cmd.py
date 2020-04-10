@@ -43,17 +43,18 @@ def RunCommand(is_interactive):
     zmax = scene.settings['tna.vertical.zmax']
     kmax = scene.settings['tna.vertical.kmax']
 
-    options = ['zmax', 'kmax', 'ESC']
+    options = ['target_height', 'iterations']
     while True:
-        option = compas_rhino.rs.GetString('Options', options[-1], options)
-        if not option or option == 'ESC':
+        option = compas_rhino.rs.GetString('Options for vertical equilibrium solver:', strings=options)
+
+        if not option:
             break
 
-        if option == 'zmax':
-            zmax = compas_rhino.rs.GetReal('zmax', zmax, 0.1 * diagonal, 1.0 * diagonal)
+        if option == 'target_height':
+            zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.1 * diagonal, 1.0 * diagonal)
 
-        elif option == 'kmax':
-            kmax = compas_rhino.rs.GetInteger('kmax', 100, 1, 10000)
+        elif option == 'iterations':
+            kmax = compas_rhino.rs.GetInteger('kEnter number of iterations', 100, 1, 10000)
 
     scene.settings['tna.vertical.zmax'] = zmax
     scene.settings['tna.vertical.kmax'] = kmax

@@ -23,6 +23,9 @@ def RunCommand(is_interactive):
         return
 
     form = FormDiagram.from_pattern(pattern.datastructure)
+    form.edges_attribute('fmin', 0.1)
+    form.vertices_attribute('_is_fixed', False)
+
     thrust = form.copy(cls=ThrustDiagram)
 
     bbox_form = form.bounding_box_xy()
