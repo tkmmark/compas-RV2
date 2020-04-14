@@ -61,6 +61,9 @@ def RunCommand(is_interactive):
 
     formdata, scale = vertical(form.datastructure.data, zmax, kmax=kmax)
 
+    force.settings['show.color.analysis'] = form.settings['show.color.analysis']
+    force.settings['tol.angles'] = form.settings['tol.angles']
+
     force.datastructure.attributes['scale'] = scale
     form.datastructure.data = formdata
     thrust.datastructure.data = formdata
