@@ -2,6 +2,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+from functools import partial
 import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
@@ -35,7 +36,6 @@ def compute_sag(pattern, opening):
     else:
         a = pattern.vertex_attributes(v, 'xyz')
         aa = pattern.vertex_attributes(u, 'xyz')
-
     u, v = opening[-1]
     if pattern.vertex_attribute(u, 'is_fixed'):
         b = pattern.vertex_attributes(u, 'xyz')
@@ -43,18 +43,24 @@ def compute_sag(pattern, opening):
     else:
         b = pattern.vertex_attributes(v, 'xyz')
         bb = pattern.vertex_attributes(u, 'xyz')
-
     span = distance_point_point_xy(a, b)
     apex = intersection_line_line_xy((a, aa), (b, bb))
-
     if apex is None:
         rise = 0.0
     else:
         midspan = midpoint_point_point_xy(a, b)
         rise = 0.5 * distance_point_point_xy(midspan, apex)
-
     sag = rise / span
     return sag
+
+
+def _draw_labels(pattern, openings):
+    labels = []
+    for i, opening in enumerate(openings):
+        points = pattern.datastructure.vertices_attributes('xyz', keys=opening)
+        centroid = centroid_points(points)
+        labels.append({'pos': centroid, 'text': str(i)})
+    return compas_rhino.draw_labels(labels, layer=pattern.settings['layer'], clear=False, redraw=True)
 
 
 # ==============================================================================
@@ -94,23 +100,20 @@ def RunCommand(is_interactive):
     openings[-1] += openings[0]
     del openings[0]
 
+    draw_labels = partial(_draw_labels, pattern, openings)
+
     # draw a label per opening
-    labels = []
-    for i, opening in enumerate(openings):
-        points = pattern.datastructure.vertices_attributes('xyz', keys=opening)
-        centroid = centroid_points(points)
-        labels.append({'pos': centroid, 'text': str(i)})
-    guids = compas_rhino.draw_labels(labels, layer=pattern.settings['layer'], clear=False, redraw=True)
+    guids = draw_labels()
 
     # convert the list of vertices to a list of segments
-    openings[:] = [list(pairwise(opening)) for opening in openings]
+    openings = [list(pairwise(opening)) for opening in openings]
 
     # compute current opening sags
     targets = []
     for opening in openings:
         sag = compute_sag(pattern.datastructure, opening)
         if sag < 0.01:
-            sag = 0.05
+            sag = 0.01
         targets.append(sag)
 
     # compute current opening Qs
@@ -139,6 +142,10 @@ def RunCommand(is_interactive):
             pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
         relax_pattern(pattern.datastructure, relax)
 
+    compas_rhino.delete_objects(guids, purge=True)
+    scene.update()
+    guids = draw_labels()
+
     # allow user to select label
     # and specify a target sag
     options1 = ["Opening{}".format(i) for i, opening in enumerate(openings)] + ["ESC"]
@@ -148,13 +155,13 @@ def RunCommand(is_interactive):
         option1 = compas_rhino.rs.GetString("Select opening.", options1[-1], options1)
         if not option1 or option1 == "ESC":
             break
-        O = int(option1[7:])
+        N = int(option1[7:])
 
         while True:
             option2 = compas_rhino.rs.GetString("Select sag.", options2[-1], options2)
             if not option2 or option2 == "ESC":
                 break
-            targets[O] = float(option2[3:]) / 100
+            targets[N] = float(option2[3:]) / 100
 
             while True:
                 sags = [compute_sag(pattern.datastructure, opening) for opening in openings]
@@ -170,7 +177,9 @@ def RunCommand(is_interactive):
                     pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
                 relax_pattern(pattern.datastructure, relax)
 
+            compas_rhino.delete_objects(guids, purge=True)
             scene.update()
+            guids = draw_labels()
 
     compas_rhino.delete_objects(guids, purge=True)
     scene.update()
