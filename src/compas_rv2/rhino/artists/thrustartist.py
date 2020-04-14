@@ -181,11 +181,15 @@ class ThrustArtist(MeshArtist):
             if force < tol:
                 continue
             radius = sqrt(force / pi)
+            if isinstance(color, dict):
+                pipe_color = color[key]
+            else:
+                pipe_color = color
             cylinders.append({
                 'start': start,
                 'end': end,
                 'radius': radius,
-                'color': color
+                'color': pipe_color
             })
         guids = compas_rhino.draw_cylinders(cylinders, layer=self.layer, clear=False, redraw=False)
         return guids

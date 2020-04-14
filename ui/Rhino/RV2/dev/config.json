@@ -107,6 +107,12 @@
             {"name": "RV2force_modify_edges",    "menu_text": "Modify Edges",    "icon": 31},
             {"name": "RV2force_move_vertices",   "menu_text": "Move Vertices",   "icon": 32},
 
+            {"name": "RV2analysis_lumped_stress",       "menu_text": "Lumped Stress"},
+            {"name": "RV2analysis_curvature",           "menu_text": "Curvature"},
+            {"name": "RV2analysis_horizontal_forces",   "menu_text": "Horizontal Forces"},
+            {"name": "RV2analysis_show_pipes",          "menu_text": "Display Pipes"},
+            {"name": "RV2analysis_show_colors",         "menu_text": "Color Analysis"},
+
             {"name": "RV2thrust_attributes",   "menu_text": "Modify ThrustDiagram Attributes", "icon": 33}
         ],
 
@@ -245,6 +251,21 @@
                         [
                         ]
                     },
+
+                    {"type": "separator"},
+
+                    {
+                        "name" : "Analysis",
+                        "items":
+                        [
+                            {"command": "RV2analysis_lumped_stress"},
+                            {"command": "RV2analysis_curvature"},
+                            {"command": "RV2analysis_horizontal_forces"},
+                            {"command": "RV2analysis_show_pipes"},
+                            {"command": "RV2analysis_show_colors"}
+                        ]
+                    },
+
                     {"type": "separator"},
                     {
                         "name" : "Extensions",

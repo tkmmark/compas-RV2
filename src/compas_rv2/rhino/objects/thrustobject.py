@@ -6,6 +6,7 @@ import compas_rhino
 from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import ThrustArtist
 from compas_rv2.rhino import delete_objects
+from compas.utilities import i_to_rgb
 
 
 __all__ = ["ThrustObject"]
@@ -24,6 +25,7 @@ class ThrustObject(MeshObject):
         'show.loads': False,
         'show.pipes': False,
         'viz.mode': None,  # discrete, continuous
+        'show.color.analysis': False,
         'color.mode': None,  # minmax
         'color.vertices': [255, 0, 255],
         'color.vertices:is_fixed': [0, 255, 0],
@@ -117,8 +119,22 @@ class ThrustObject(MeshObject):
         delete_objects(guids_edges, purge=True)
 
         keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
-        color = {key: self.settings['color.edges'] for key in keys}
-        guids = self.artist.draw_edges(keys, color)
+        color_edges = {key: self.settings['color.edges'] for key in keys}
+
+        # color analysis
+        if self.settings['show.color.analysis']:
+            if self.datastructure.dual:
+                _keys    = list(self.datastructure.dual.edges())
+                print(_keys)
+                lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
+                keys   = [self.datastructure.dual.primal_edge(key) for key in _keys]
+                lmin    = min(lengths)
+                lmax    = max(lengths)
+                for key, length in zip(keys, lengths):
+                    if lmin != lmax:
+                        color_edges[key] = i_to_rgb((length - lmin) / (lmax - lmin))
+
+        guids = self.artist.draw_edges(keys, color_edges)
         self.guid_edge = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
@@ -180,6 +196,8 @@ class ThrustObject(MeshObject):
             tol = self.settings['tol.pipes']
             keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
             color = self.settings['color.pipes']
+            if self.settings['show.color.analysis']:
+                color = color_edges
             scale = self.settings['scale.pipes']
             guids = self.artist.draw_pipes(keys, color, scale, tol)
             self.guid_pipe = zip(guids, keys)

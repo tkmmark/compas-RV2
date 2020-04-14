@@ -35,7 +35,6 @@ def RunCommand(is_interactive):
     dy = y_form - y_force
 
     force.transform(Translation([dx, dy, 0]))
-
     force.update_angle_deviations()
 
     scene.add(force, name='force')

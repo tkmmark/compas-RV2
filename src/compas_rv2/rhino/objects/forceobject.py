@@ -55,7 +55,7 @@ class ForceObject(MeshObject):
         'show.vertices': True,
         'show.edges': True,
         'show.angles': True,  # move to global settings?
-        'show.color.analysis': False,
+        'show.color.analysis': False,  # temporary duplicate from formdiagram
         'color.vertices': [0, 255, 255],
         'color.vertices:is_fixed': [0, 255, 255],
         'color.edges': [0, 0, 255],
