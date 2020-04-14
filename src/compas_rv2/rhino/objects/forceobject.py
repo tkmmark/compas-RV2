@@ -117,7 +117,8 @@ class ForceObject(MeshObject):
             lmin    = min(lengths)
             lmax    = max(lengths)
             for key, length in zip(keys, lengths):
-                color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
+                if lmin != lmax:
+                    color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
 
         guids = self.artist.draw_edges(keys, color)
         self.guid_edge = zip(guids, keys)
