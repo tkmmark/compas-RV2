@@ -30,7 +30,6 @@ def compute_sag(edges):
         end = v
         b = pattern.vertex_attributes(v, 'xyz')
         bb = pattern.vertex_attributes(u, 'xyz')
-
     span = distance_point_point_xy(a, b)
     apex = intersection_line_line_xy((a, aa), (b, bb))
     midspan = midpoint_point_point_xy(a, b)

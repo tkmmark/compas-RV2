@@ -1,0 +1,164 @@
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+
+import compas_rhino
+from compas_rv2.rhino import get_scene
+from compas.utilities import flatten
+from compas.geometry import centroid_points
+from compas.geometry import distance_point_point_xy
+from compas.geometry import intersection_line_line_xy
+from compas.geometry
+
+
+__commandname__ = "RV2boundaryconditions_openings"
+
+
+def compute_sag(opening):
+    u, v = opening[0]
+    if pattern.vertex_attribute(u, 'is_fixed'):
+        start = u
+        a = pattern.vertex_attributes(u, 'xyz')
+        aa = pattern.vertex_attributes(v, 'xyz')
+    else:
+        start = v
+        a = pattern.vertex_attributes(v, 'xyz')
+        aa = pattern.vertex_attributes(u, 'xyz')
+
+    u, v = opening[-1]
+    if pattern.vertex_attribute(u, 'is_fixed'):
+        end = u
+        b = pattern.vertex_attributes(u, 'xyz')
+        bb = pattern.vertex_attributes(v, 'xyz')
+    else:
+        end = v
+        b = pattern.vertex_attributes(v, 'xyz')
+        bb = pattern.vertex_attributes(u, 'xyz')
+
+    span = distance_point_point_xy(a, b)
+    apex = intersection_line_line_xy((a, aa), (b, bb))
+
+    if apex is None:
+        rise = 0.0
+    else:
+        midspan = midpoint_point_point_xy(a, b)
+        rise = 0.5 * distance_point_point_xy(midspan, apex)
+
+    sag = rise / span
+    return sag
+
+
+# ==============================================================================
+# Command
+# ==============================================================================
+
+
+TOL2 = 0.001 ** 2
+
+
+def RunCommand(is_interactive):
+    scene = get_scene()
+    if not scene:
+        return
+
+    pattern = scene.get("pattern")[0]
+    if not pattern:
+        return
+
+    # count the number of anchors
+    a = len(list(pattern.vertices_where({'is_anchor': True})))
+
+    # split the exterior boundary
+    boundaries = pattern.vertices_on_boundaries()
+    exterior = boundaries[0]
+    opening = []
+    openings = [opening]
+    for vertex in exterior:
+        opening.append(vertex)
+        if pattern.vertex_attribute(vertex, 'is_anchor'):
+            opening = [vertex]
+            openings.append(opening)
+    openings[-1] += openings[0]
+    del openings[0]
+
+    # draw a label per opening
+    labels = []
+    for i, opening in enumerate(openings):
+        points = pattern.vertices_attributes('xyz', keys=opening)
+        centroid = centroid_points(points)
+        labels.append({'pos': centroid, 'text': str(i)})
+    guids = compas_rhino.draw_labels(labels, layer=pattern.settings['layer'], clear=False, redraw=True)
+
+    # convert the list of vertices to a list of segments
+    openings[:] = [list(pairwise(opening)) for opening in openings]
+
+    # compute current opening sags
+    targets = []
+    for opening in openings:
+        sag = compute_sag(opening)
+        if sag < 0.01:
+            sag = 0.01
+        targets.append(sag)
+
+    # compute current opening Qs
+    Q = []
+    for opening in openings:
+        q = pattern.edges_attribute('q', keys=opening)
+        q = sum(q) / len(q)
+        Q.append(q)
+        pattern.edges_attribute('q', q, keys=opening)
+
+    # relax the pattern
+    pattern.relax()
+
+    # update Qs to match target sag
+    while True:
+        sags = [compute_sag(opening) for opening in openings]
+        if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
+            break
+        for i in range(len(openings)):
+            sag = sags[i]
+            target = targets[i]
+            q = Q[i]
+            q = sag / target * q
+            Q[i] = q
+            opening = openings[i]
+            pattern.edges_attribute('q', Q[i], keys=opening)
+        pattern.relax()
+
+    # allow user to select label
+    # and specify a target sag
+    options1 = ["Opening{}".format(i) for i, opening in enumerate(openings)] + ["ESC"]
+    options2 = ["Sag5", "Sag10", "Sag15", "Sag20", "Sag25", "Sag30", "ESC"]
+
+    while True:
+        option1 = compas_rhino.rs.GetString("Select opening.", options1[-1], options1)
+        if not option1 or option1 == "ESC":
+            break
+
+        i = int(option1[7:])
+
+        while True:
+            option2 = compas_rhino.rs.GetString("Select sag.", options2[-1], options2)
+            if not option2 or option2 == "ESC":
+                break
+            targets[i] = float(option2[3:]) / 100
+            while True:
+                sags = [compute_sag(opening) for opening in openings]
+                if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
+                    break
+                Q[i] *= sags[i] / targets[i]
+                pattern.edges_attribute('q', Q[i], keys=openings[i])
+                pattern.relax()
+
+    compas_rhino.delete_objects(guids, purge=True)
+    scene.update()
+
+
+# ==============================================================================
+# Main
+# ==============================================================================
+
+if __name__ == "__main__":
+
+    RunCommand(True)

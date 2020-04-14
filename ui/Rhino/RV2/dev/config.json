@@ -89,6 +89,7 @@
             {"name": "RV2pattern_relax",  "menu_text": "Relax Pattern", "icon": 18},
 
             {"name": "RV2boundaryconditions_supports", "menu_text": "Identify Supports", "icon": 19},
+            {"name": "RV2boundaryconditions_openings", "menu_text": "Update Openings",   "icon": 19},
             {"name": "RV2boundaryconditions_loads",    "menu_text": "Define Loads",      "icon": 20},
 
             {"name": "RV2form",  "menu_text": "Create FormDiagram",  "icon": 21},
@@ -191,6 +192,7 @@
                         "items":
                         [
                             {"command": "RV2boundaryconditions_supports"},
+                            {"command": "RV2boundaryconditions_openings"},
                             {"command": "RV2boundaryconditions_loads"}
                         ]
 
