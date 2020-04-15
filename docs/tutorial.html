@@ -62,14 +62,14 @@
 <div class="figure">
 <img alt="_images/tutorial_0.jpg" class="figure-img img-fluid" src="_images/tutorial_0.jpg" />
 </div>
-<p>This section provides a step-by-step tutorial of a simple example, highlighting and describing the main features of RV2. This tutorial is intended to be a “quick start” guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the <a class="reference internal" href="user_manual.html#user-manual"><span class="std std-ref">User manual</span></a>.</p>
+<p>This section provides a step-by-step tutorial of a simple tutorial, highlighting and describing the main features of RV2. This tutorial is intended to be a “quick start” guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the <a class="reference internal" href="user_manual.html#user-manual"><span class="std std-ref">User manual</span></a>.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 <hr class="docutils" />
 <div class="section" id="initialising">
 <h2>0. Initialising</h2>
-<p>Initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, examples and terms of use. Don’t forget to read the Terms and Conditions, and the Data Donation Agreement.</p>
+<p>Initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, tutorials and terms of use. Don’t forget to read the Terms and Conditions, and the Data Donation Agreement.</p>
 <div class="figure">
 <img alt="_images/tutorial_1.jpg" class="figure-img img-fluid" src="_images/tutorial_1.jpg" />
 </div>
@@ -80,7 +80,7 @@
 <ol class="arabic">
 <li><p><strong>Make pattern</strong></p>
 <p>A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: a Rhino NURBS surface object; a Rhino mesh object; from lines; from a set of boundary features (with Delaunay triangulation or compas_pattern); or skeleton.</p>
-<p>In this example, we will use a simple orthogonal surface, which can be created through the Rhino command, “Rectanguarl plane: corner to corner.”</p>
+<p>In this tutorial, we will use a simple orthogonal surface, which can be created through the Rhino command, “Rectanguarl plane: corner to corner.”</p>
 <div class="figure">
 <img alt="_images/tutorial_2.jpg" class="figure-img img-fluid" src="_images/tutorial_2.jpg" />
 </div>
@@ -93,9 +93,6 @@
 <img alt="_images/tutorial_4.jpg" class="figure-img img-fluid" src="_images/tutorial_4.jpg" />
 </div>
 </li>
-<li><p><strong>Modify pattern</strong></p>
-<p>After a pattern has been created, it can be modified for further refinement through procedures such as subdivide, relax, etc. These features will not be presented in this example.</p>
-</li>
 </ol>
 </div>
 <hr class="docutils" />
@@ -103,36 +100,63 @@
 <h2>2. Form and force diagrams</h2>
 <ol class="arabic">
 <li><p><strong>Define boundary conditions</strong></p>
-<p>Once a Pattern object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) defining the supports (vertices of the structure where reactions are allowed); and 2) loading parameters and conditions.</p>
+<p>Once a Pattern object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.</p>
+<p><em>Identify supports</em></p>
 <p>In the RhinoVAULT 2 drop down menu, select “Define Boundary Conditions”, then “Identify Supports.”</p>
 <div class="figure">
 <img alt="_images/tutorial_5.jpg" class="figure-img img-fluid" src="_images/tutorial_5.jpg" />
 </div>
-<p>The command will provide two options, to select or unselect vertices to define them as supports or not. The vertex selection options are: all boundary vertices; all vertices on the selected boundary edge; and manual. Here, we use the “AllBoundaryVertices” option to turn all of the vertices on the boundary of the pattern to supports. Once the vertex has been defined as a support, it will be displayed in red.</p>
+<p>The command will provide two options, to select or unselect vertices to define them as supports or not. The vertex selection options are:</p>
+<ul class="simple">
+<li><p>AllBoundaryVertices - all boundary vertices</p></li>
+<li><p>Corners - all corner vertices</p></li>
+<li><p>ByContinuousEdges - all vertices on the selected boundary edge (corner to corner)</p></li>
+<li><p>Manual - manual selection by the user</p></li>
+</ul>
 <div class="figure">
 <img alt="_images/tutorial_6.jpg" class="figure-img img-fluid" src="_images/tutorial_6.jpg" />
+</div>
+<p>In this tutorial, we use the mode ByContinuousEdges, and select one edge on the left boundary and on edge on the right boundary of the pattern. Once the two edges are selected, press Enter, then all the vertices along that boundary from corner to corner, will be automatically selected (supports are shown in red).</p>
+<div class="figure">
+<img alt="_images/tutorial_7.jpg" class="figure-img img-fluid" src="_images/tutorial_7.jpg" />
+</div>
+<p><em>Update openings</em></p>
+<p>The second step of defining boundary conditions involves updating the geometry of the openings. In this tutorial, the two boundaries at the top and the bottom are the openings (the edges are on the boundary of the pattern but have no support vertices along them).</p>
+<p>Because openings have no supports (i.e. reaction or external forces), they cannot be straight; openings need to curve inward towards the center of the pattern, so that horizontal equilibrium can be resolved.</p>
+<p>In the RhinoVAULT 2 drop down menu, select “Define Boundary Conditions”, then “Update Openings.”</p>
+<div class="figure">
+<img alt="_images/tutorial_8.jpg" class="figure-img img-fluid" src="_images/tutorial_8.jpg" />
+</div>
+<p>If there are straight openings found in the pattern, an automatic sag of 5% of the span of the opening will be imposed. Per opening, the user has the option to enter a desired amount of sag, as a percentage of the span of the opening.</p>
+<div class="figure">
+<img alt="_images/tutorial_9.jpg" class="figure-img img-fluid" src="_images/tutorial_9.jpg" />
+</div>
+<p>In this tutorial, sag of 10% is applied to opening 1, and sag of 20% is applied to opening 0.</p>
+<div class="figure">
+<img alt="_images/tutorial_10.jpg" class="figure-img img-fluid" src="_images/tutorial_10.jpg" />
 </div>
 </li>
 <li><p><strong>Create form diagram</strong></p>
 <p>Once the boundary conditions have been defined, the Pattern can now be converted into a FormDiagram.</p>
 <p>In the RhinoVAULT 2 drop down menu, select “Create FormDiagram.”</p>
 <div class="figure">
-<img alt="_images/tutorial_7.jpg" class="figure-img img-fluid" src="_images/tutorial_7.jpg" />
+<img alt="_images/tutorial_11.jpg" class="figure-img img-fluid" src="_images/tutorial_11.jpg" />
 </div>
-<p>This command will add “feet” to the support vertices, representing the horizontal components of the reactions at the supports, and generate the initial ThrustDiagram (displayed in magenta), the geometry of which is equivalent to the FormDiagram at this initial, un-equilibrated state. Notice the additionof the blue edges at the support vertices, representing the horizontal reaction components at those vertices.</p>
+<p>If the creation of FormDiagram is successful, it will be displayed with green vertices and edges. The ThrustDiagram is also automatically created (displayed in magenta), the geometry of which is equivalent to the FormDiagram at this initial, un-equilibrated state.</p>
 <div class="figure">
-<img alt="_images/tutorial_8.jpg" class="figure-img img-fluid" src="_images/tutorial_8.jpg" />
+<img alt="_images/tutorial_12.jpg" class="figure-img img-fluid" src="_images/tutorial_12.jpg" />
 </div>
 </li>
 <li><p><strong>Create force diagram</strong></p>
 <p>Once the FormDiagram has been created, the ForceDiagram can now be created.</p>
 <p>In the RhinoVAULT 2 drop down menu, select “Create ForceDiagram.”</p>
 <div class="figure">
-<img alt="_images/tutorial_9.jpg" class="figure-img img-fluid" src="_images/tutorial_9.jpg" />
+<img alt="_images/tutorial_13.jpg" class="figure-img img-fluid" src="_images/tutorial_13.jpg" />
 </div>
-<p>The ForceDiagram will be automatically drawn to the right (+x) of the FormDiagram. The initial ForceDiagram is the topological dual of the FormDiagram. The two diagrams are not yet reciprocal, meaning that the corresponding edges in the diagrams are not perpendicular to the other. When the diagrams are not yet reciprocal (in another words, perpendicular-ised or “equilibrated”), the edges with angle deviations above the defined angle tolerance will be displayed (in this example, the red dots near the corners).</p>
+<p>The ForceDiagram will be automatically drawn to the right (+x) of the FormDiagram. The initial ForceDiagram is the topological dual of the FormDiagram. The two diagrams are not yet reciprocal, meaning that the corresponding edges in the diagrams are not perpendicular to the other.</p>
+<p>When the diagrams are not yet reciprocal (in another words, perpendicular-ised or “equilibrated”), the edges with angle deviations above the defined angle tolerance will be displayed. The dots displaying the angle deviations are a visual cue for the user, indicating that horizontal equilibrium has not yet been resolved.</p>
 <div class="figure">
-<img alt="_images/tutorial_10.jpg" class="figure-img img-fluid" src="_images/tutorial_10.jpg" />
+<img alt="_images/tutorial_14.jpg" class="figure-img img-fluid" src="_images/tutorial_14.jpg" />
 </div>
 </li>
 </ol>
@@ -145,24 +169,30 @@
 <p>Once the FormDiagram and ForceDiagram have been created, the horizontal equilibrium algorithm perpendicular-ises either or both diagrams, which converts them from dual to reciprocal diagrams.</p>
 <p>In the RhinoVAULT 2 drop down menu, select “Horizontal Equilibrium.”</p>
 <div class="figure">
-<img alt="_images/tutorial_11.jpg" class="figure-img img-fluid" src="_images/tutorial_11.jpg" />
+<img alt="_images/tutorial_15.jpg" class="figure-img img-fluid" src="_images/tutorial_15.jpg" />
 </div>
-<p>Under “alpha” option, the user will be able to select a value that determine which of the two diagrams will have more weight during the perpendicular-isation process. Default is “form100,” which only allows the ForceDiagram to update in its geometry. “kmax” is the number of iterations for the algorithm. Default number of iterations is 100.</p>
-<p>If horizontal equilibrium has been found, meaning that all the corresponding edges now have angle deviations that are below the defined angle tolerance, the two diagrams should no longer have any dots displaying the angle values, as shown below. Notice that the blue edges in the corners of the ForceDiagram on the right, is now perpendicular to the corresponding edges of the “feet” in the FormDiagram to the left.</p>
+<p>Under “alpha” option, the user will be able to select a value that determine which of the two diagrams will have more weight during the perpendicular-isation process. Default is “form100,” which only allows the ForceDiagram to update in its geometry. User can also enter the numnber of iterations. Default number of iterations is 100.</p>
 <div class="figure">
-<img alt="_images/tutorial_12.jpg" class="figure-img img-fluid" src="_images/tutorial_12.jpg" />
+<img alt="_images/tutorial_16.jpg" class="figure-img img-fluid" src="_images/tutorial_16.jpg" />
+</div>
+<p>If horizontal equilibrium has been found, meaning that all the corresponding edges now have angle deviations that are below the defined angle tolerance, the two diagrams should no longer have any dots displaying the angle values, as shown below.</p>
+<div class="figure">
+<img alt="_images/tutorial_17.jpg" class="figure-img img-fluid" src="_images/tutorial_17.jpg" />
 </div>
 </li>
 <li><p><strong>Vertical equilibrium</strong></p>
 <p>With the FormDiagram and ForceDiagram now reciprocal, the coordinates of the ThrustDiagram can be iteratively computed based on a desired z-max (target height) value.</p>
 <p>In the RhinoVAULT 2 drop down menu, select “Vertical Equilibrium.”</p>
 <div class="figure">
-<img alt="_images/tutorial_13.jpg" class="figure-img img-fluid" src="_images/tutorial_13.jpg" />
+<img alt="_images/tutorial_18.jpg" class="figure-img img-fluid" src="_images/tutorial_18.jpg" />
 </div>
-<p>The user can manually enter a desired value for “zmax,” the desired target height of the vault. “kamx” is the number of iterations for the algorithm. Default number of iterations is 100.</p>
+<p>The user can manually enter a desired value for the target height of the vault, and the number of iterations for the algorithm. Default number of iterations is 100.</p>
+<div class="figure">
+<img alt="_images/tutorial_19.jpg" class="figure-img img-fluid" src="_images/tutorial_19.jpg" />
+</div>
 <p>If the vertical equilibrium is successfully computed and found, the new ThrustDiagram will be displayed, now with updated z coordinates.</p>
 <div class="figure">
-<img alt="_images/tutorial_14.jpg" class="figure-img img-fluid" src="_images/tutorial_14.jpg" />
+<img alt="_images/tutorial_20.jpg" class="figure-img img-fluid" src="_images/tutorial_20.jpg" />
 </div>
 </li>
 </ol>
@@ -170,52 +200,63 @@
 <hr class="docutils" />
 <div class="section" id="interaction">
 <h2>4. Interaction</h2>
-<p>RV2 provides various post-form-finding functionalities to interact with the three diagrams (FormDiagram, ForceDiagram or the ThrustDiagram) to explore various design options and parameters. In this example, the geometry of the ForceDiagram will be modified to control the geometry of the FormDiagram.</p>
+<p>RV2 provides various post-form-finding functionalities to interact with the three diagrams (FormDiagram, ForceDiagram or the ThrustDiagram) to explore various design options and parameters. In this tutorial, the geometry of the ForceDiagram will be modified to control the geometry of the FormDiagram.</p>
 <ol class="arabic">
 <li><p><strong>Modify form diagram</strong></p>
 <p>The vertices of the form diagram can be fixed, and edges can be constrained to remain fixed in its length. The faces of the form diagram can also be used to toggle openings.</p>
-<p>These features will not be presented in this example.</p>
+<p>These features will not be presented in this tutorial.</p>
 </li>
 <li><p><strong>Modify force diagram</strong></p>
 <p>One of the most powerful features of TNA is the user’s ability to control the form by constraining and interacting with the force diagram. The user can fix vertices, constrain edge lengths (which sets bounds on the minimum and maximum horizontal forces in the corresponding memebers), and move vertices to manually manipulate the force distribution in the thrust diagram.</p>
 <p>In the RhinoVAULT 2 drop down menu, select “Modify ForceDiagram” then “Move vertices.”</p>
 <div class="figure">
-<img alt="_images/tutorial_15.jpg" class="figure-img img-fluid" src="_images/tutorial_15.jpg" />
+<img alt="_images/tutorial_21.jpg" class="figure-img img-fluid" src="_images/tutorial_21.jpg" />
 </div>
 <p>The vertices can be selected by edges and its chain of continuous edges, or manually. Select manual. Select a group of vertices in the top part of the ForceDiagram, and move it up in +y direction.</p>
 <div class="figure">
-<img alt="_images/tutorial_16.jpg" class="figure-img img-fluid" src="_images/tutorial_16.jpg" />
+<img alt="_images/tutorial_22.jpg" class="figure-img img-fluid" src="_images/tutorial_22.jpg" />
 </div>
-<p>The geometry of the ForceDiagram have been updated, but the FormDiagram and ForceDiagram are no longer in horizontal equilibrium. Run “Horizontal Equilibrium” again, to perpendicular-ise the two diagrams again.</p>
+<p>The geometry of the ForceDiagram have been updated, but the FormDiagram and ForceDiagram are no longer in horizontal equilibrium, indicated by the angle deviations. Run “Horizontal Equilibrium” again, to perpendicular-ise the two diagrams again.</p>
 <div class="figure">
-<img alt="_images/tutorial_17.jpg" class="figure-img img-fluid" src="_images/tutorial_17.jpg" />
+<img alt="_images/tutorial_23.jpg" class="figure-img img-fluid" src="_images/tutorial_23.jpg" />
 </div>
-<p>With the FormDiagram and ForceDiagram in horizontal equilibrium, run “Vertical equilibrium” to compute the new geomerty of the ThrustDiagram. Notice now, the crease in the FormDiagram, which corresponds to the longer edges in the ForceDiagram, where the internal member forces are greater.</p>
+<p>With the FormDiagram and ForceDiagram in horizontal equilibrium, run “Vertical equilibrium” to compute the new geomerty of the ThrustDiagram. Notice now, the crease in the ThrustDiagram, which corresponds to the longer edges in the ForceDiagram, where the internal member forces are greater.</p>
 <div class="figure">
-<img alt="_images/tutorial_18.jpg" class="figure-img img-fluid" src="_images/tutorial_18.jpg" />
+<img alt="_images/tutorial_24.jpg" class="figure-img img-fluid" src="_images/tutorial_24.jpg" />
 </div>
-<p>This modificatoin funcationality can be applied repeatedly to continue force-driven form finding.</p>
+<p>This modification funcationality can be applied repeatedly to continue force-driven form finding.</p>
 <div class="figure">
-<img alt="_images/tutorial_19.jpg" class="figure-img img-fluid" src="_images/tutorial_19.jpg" />
-</div>
-<p>Under “Settings,” then “Object settings,” various global parameters and visualisations options can be moidified.</p>
-<div class="figure">
-<img alt="_images/tutorial_20.jpg" class="figure-img img-fluid" src="_images/tutorial_20.jpg" />
-</div>
-<p>By checking on “Pipes,” the edges of the ThrustDiagram can be visualised with pipes, the radii of which are proportional to the internal forces.</p>
-<div class="figure">
-<img alt="_images/tutorial_21.jpg" class="figure-img img-fluid" src="_images/tutorial_21.jpg" />
+<img alt="_images/tutorial_25.jpg" class="figure-img img-fluid" src="_images/tutorial_25.jpg" />
 </div>
 </li>
-<li><p><strong>Modify thrust diagram</strong></p>
-<p>The user can also interact directly with the thrust diagram, to change the vertical location of the vertices, changing the fixities of vertices, and toggling openings.</p>
-<p>These features will not be presented in this example.</p>
+</ol>
+</div>
+<hr class="docutils" />
+<div class="section" id="settings-analysis">
+<h2>5. Settings &amp; Analysis</h2>
+<ol class="arabic">
+<li><p><strong>Settings</strong></p>
+<p>Under “Settings,” then “Object settings,” various global parameters and visualisations options can be moidified.</p>
+<div class="figure">
+<img alt="_images/tutorial_26.jpg" class="figure-img img-fluid" src="_images/tutorial_26.jpg" />
+</div>
+</li>
+<li><p><strong>Analysis</strong></p>
+<p>Under “Analysis” in the drop down menu, there are several helper functions that facilitate analysis and enhance visualisation.</p>
+<p>“Color Analysis” draws the edges of the ForceDiagram with a color gradient from blue, green to red, based on its the length (the horizontal force in the corresponding edge of the ThrustDiagram). The corresponding edges in the FormDiagram are also displayed with the same color, which makes the two diagrams much more legible and discernable (blue means smaller horizontal force, red means greater horizontal force).</p>
+<div class="figure">
+<img alt="_images/tutorial_27.jpg" class="figure-img img-fluid" src="_images/tutorial_27.jpg" />
+</div>
+<p>With “Display Pipes,” the edges of the ThrustDiagram can be visualised with pipes, the radii of which are proportional to the internal forces.</p>
+<div class="figure">
+<img alt="_images/tutorial_28.jpg" class="figure-img img-fluid" src="_images/tutorial_28.jpg" />
+</div>
 </li>
 </ol>
 </div>
 <hr class="docutils" />
 <div class="section" id="extensions">
-<h2>5. Extensions</h2>
+<h2>6. Extensions</h2>
 <p>RV2, which is based on the COMPAS framework, offers a flexible and robust platform to integreate other computational methods into the form finding workflow, such as best-fit TNA analysis, laod-path optimisation and various other fabrication-related applications.</p>
 <p>Currently under construction.</p>
 </div>
@@ -280,7 +321,8 @@
 <li class="nav-item"><a class="nav-link reference internal" href="#form-and-force-diagrams">2. Form and force diagrams</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#equilibrium">3. Equilibrium</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="#interaction">4. Interaction</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="#extensions">5. Extensions</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#settings-analysis">5. Settings &amp; Analysis</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#extensions">6. Extensions</a></li>
 </ul>
 </li>
 </ul>
@@ -293,7 +335,7 @@
 
         <footer class="compas-footer">
             
-                Last updated on Apr 09, 2020.
+                Last updated on Apr 16, 2020.
             
 
             
