@@ -21,24 +21,43 @@ def RunCommand(is_interactive):
     # mark all fixed vertices as anchors
     # mark all leaves as anchors
 
-    options = ["Select", "Unselect"]
-    option1 = compas_rhino.rs.GetString("Select or unselect vertices as supports:", strings=options)
+    fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
+    leaves = []
+    for vertex in pattern.datastructure.vertices():
+        nbrs = pattern.datastructure.vertex_neighbors(vertex)
+        count = 0
+        for nbr in nbrs:
+            if pattern.datastructure.edge_attribute((vertex, nbr), '_is_edge'):
+                count += 1
+        if count == 1:
+            leaves.append(vertex)
 
-    if not option1:
+    anchors = list(set(fixed) | set(leaves))
+    if anchors:
+        pattern.datastructure.vertices_attribute('is_anchor', True, keys=anchors)
+        scene.update()
+
+    # manually Select or Unselect
+    # shoudl this not be included in the while loop?
+
+    options = ["Select", "Unselect", "ESC"]
+    option1 = compas_rhino.rs.GetString("Select or unselect vertices as supports:", options[-1], options)
+
+    if not option1 or option1 == 'ESC':
         return
 
-    layer = pattern.settings['layer']
-    group_supports = "{}::vertices::supports".format(layer)
+    # layer = pattern.settings['layer']
+    # group_supports = "{}::vertices::supports".format(layer)
 
-    compas_rhino.rs.ShowGroup(group_supports)
-    compas_rhino.rs.Redraw()
+    # compas_rhino.rs.ShowGroup(group_supports)
+    # compas_rhino.rs.Redraw()
 
-    options = ["InheritFromPattern", "AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
+    options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual", "ESC"]
 
     while True:
-        option2 = compas_rhino.rs.GetString("Selection mode:", strings=options)
+        option2 = compas_rhino.rs.GetString("Selection mode:", options[-1], options)
 
-        if not option2:
+        if not option2 or option2 == 'ESC':
             return
 
         elif option2 == "Corners":
@@ -47,13 +66,8 @@ def RunCommand(is_interactive):
                 if pattern.datastructure.vertex_degree(key) == 2:
                     keys.append(key)
 
-        elif option2 == "InheritFromPattern":
-            keys = pattern.datastructure.vertices_where({'is_fixed': True})
-
         elif option2 == "AllBoundaryVertices":
             keys = pattern.datastructure.vertices_on_boundary()
-
-
 
         elif option2 == 'ByContinuousEdges':
             temp = pattern.select_edges()
@@ -62,9 +76,14 @@ def RunCommand(is_interactive):
         elif option2 == 'Manual':
             keys = pattern.select_vertices()
 
+        else:
+            raise NotImplementedError
+
         if keys:
-            value = option1 == "Select"
-            pattern.datastructure.vertices_attribute('is_anchor', value, keys=keys)
+            if option1 == "Select":
+                pattern.datastructure.vertices_attribute('is_anchor', True, keys=keys)
+            else:
+                pattern.datastructure.vertices_attribute('is_anchor', False, keys=keys)
 
         scene.update()
 
