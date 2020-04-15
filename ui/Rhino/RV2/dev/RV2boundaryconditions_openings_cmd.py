@@ -95,10 +95,10 @@ def RunCommand(is_interactive):
         opening.append(vertex)
         if pattern.datastructure.vertex_attribute(vertex, 'is_anchor'):
             opening = [vertex]
-            if len(opening) < 3:
-                openings.append(opening)
+            openings.append(opening)
     openings[-1] += openings[0]
     del openings[0]
+    openings[:] = [opening for opening in openings if len(opening) > 2]
 
     draw_labels = partial(_draw_labels, pattern, openings)
 
@@ -112,8 +112,8 @@ def RunCommand(is_interactive):
     targets = []
     for opening in openings:
         sag = compute_sag(pattern.datastructure, opening)
-        if sag < 0.01:
-            sag = 0.01
+        if sag < 0.05:
+            sag = 0.05
         targets.append(sag)
 
     # compute current opening Qs
