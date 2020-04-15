@@ -54,7 +54,7 @@ def RunCommand(is_interactive):
             zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.1 * diagonal, 1.0 * diagonal)
 
         elif option == 'iterations':
-            kmax = compas_rhino.rs.GetInteger('kEnter number of iterations', 100, 1, 10000)
+            kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
 
     scene.settings['tna.vertical.zmax'] = zmax
     scene.settings['tna.vertical.kmax'] = kmax
