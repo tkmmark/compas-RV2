@@ -4,8 +4,10 @@
 Vertical equilibrium
 ********************************************************************************
 
-zmax
+* tna.vertical
 
-scale (?)
+* target height zmax
 
-kmax - iterations
+* scale (?)
+
+* kmax (iterations) - doesn't have a terminating condition

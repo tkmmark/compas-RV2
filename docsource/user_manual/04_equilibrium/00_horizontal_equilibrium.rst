@@ -4,6 +4,8 @@
 Horizontal equilibrium
 ********************************************************************************
 
-alpha
+* tna.horizontal_nodal - based on iterative "parallelisation"
 
-kmax (iterations) - doesn't have a terminating condition
+* alpha
+
+* kmax (iterations) - doesn't have a terminating condition

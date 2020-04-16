@@ -12,11 +12,41 @@
 
 ----
 
+1. Pattern from lines
+=====================
 
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-   :glob:
+|
 
-   01_pattern/00_make_pattern.rst
-   01_pattern/01_modify_pattern.rst
+----
+
+2. Pattern from mesh
+====================
+
+|
+
+----
+
+3. Pattern from surface
+=======================
+
+|
+
+----
+
+4. Pattern from Skeleton
+========================
+
+|
+
+----
+
+5. Pattern from Triangulation
+=============================
+
+|
+
+----
+
+6. Pattern from Features
+========================
+

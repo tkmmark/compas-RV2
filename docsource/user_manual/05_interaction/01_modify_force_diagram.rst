@@ -5,24 +5,22 @@ Modify force diagram
 ********************************************************************************
 
 
-attribute
+Attribute
 =========
 
 ----
 
-vertices
-========
-
-vertex attributes
+Vertex attributes
+=================
 
 ----
 
-edges
-=====
+Edge attributes
+===============
 
-edge attributes
+* set bounds on fmin and fmax
 
 ----
 
-move vertices
+Move vertices
 =============

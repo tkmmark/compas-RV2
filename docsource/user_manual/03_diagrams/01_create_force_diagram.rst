@@ -4,4 +4,6 @@
 Create force diagram
 ********************************************************************************
 
-dual diagram of the form diagram...
+* Create force diagram (dual)
+
+* perpendicular orientation (different from RV1, significance)

@@ -4,4 +4,6 @@
 Create form diagram
 ********************************************************************************
 
-create form diagram...
+* Create form diagram...
+
+* Pattern with anchor information

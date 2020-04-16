@@ -1,7 +1,11 @@
-.. _visualisation:
+.. _analysis:
 
 ********************************************************************************
-Visualisation
+Analysis
 ********************************************************************************
 
-settings - visualisation options and modes
+* visualisation options and modes
+
+* show pipes
+
+* color analysis

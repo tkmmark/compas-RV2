@@ -19,5 +19,5 @@
    :glob:
 
    06_settings/00_settings.rst
-   06_settings/01_visualisation.rst
-   06_settings/02_compas_cloud.rst
+   06_settings/01_compas_cloud.rst
+   06_settings/02_analysis.rst

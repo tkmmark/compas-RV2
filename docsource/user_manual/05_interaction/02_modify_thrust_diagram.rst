@@ -10,19 +10,17 @@ attribute
 
 ----
 
-vertices
-========
-
-vertex attributes
+Vertex attributes
+=================
 
 ----
 
-edges
-=====
-
-edge attributes
+Edge attributes
+===============
 
 ----
 
-move vertices
+Move vertices
 =============
+
+* constrain to z axis

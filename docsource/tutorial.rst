@@ -6,7 +6,7 @@ Tutorial
     :figclass: figure
     :class: figure-img img-fluid
 
-This section provides a step-by-step tutorial of a simple tutorial, highlighting and describing the main features of RV2. This tutorial is intended to be a "quick start" guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the :ref:`user_manual`.
+This section provides a step-by-step tutorial of a simple example, highlighting and describing the main features of RV2. This tutorial is intended to be a "quick start" guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the :ref:`user_manual`.
 
 |
 
@@ -148,11 +148,13 @@ This command will generate a pattern from the input surface, using the UV mappin
 
     The ForceDiagram will be automatically drawn to the right (+x) of the FormDiagram. The initial ForceDiagram is the topological dual of the FormDiagram. The two diagrams are not yet reciprocal, meaning that the corresponding edges in the diagrams are not perpendicular to the other.
 
-    When the diagrams are not yet reciprocal (in another words, perpendicular-ised or "equilibrated"), the edges with angle deviations above the defined angle tolerance will be displayed. The dots displaying the angle deviations are a visual cue for the user, indicating that horizontal equilibrium has not yet been resolved.
+    When the diagrams are not yet reciprocal (in another words, perpendicular-ised or "equilibrated"), the edges with angle deviations above the defined angle tolerance will be displayed. The dots displaying the angle deviations are visual cues for the user, indicating that horizontal equilibrium has not yet been resolved.
 
     .. figure:: _images/tutorial_14.jpg
         :figclass: figure
         :class: figure-img img-fluid
+
+|
 
 ----
 
@@ -175,7 +177,7 @@ This command will generate a pattern from the input surface, using the UV mappin
         :figclass: figure
         :class: figure-img img-fluid
 
-    If horizontal equilibrium has been found, meaning that all the corresponding edges now have angle deviations that are below the defined angle tolerance, the two diagrams should no longer have any dots displaying the angle values, as shown below.
+    If horizontal equilibrium has been found, meaning that all the corresponding edges now have angle deviations that are below the defined angle tolerance, the two diagrams should no longer have any dots displaying the angle deviation values, as shown below.
 
     .. figure:: _images/tutorial_17.jpg
         :figclass: figure

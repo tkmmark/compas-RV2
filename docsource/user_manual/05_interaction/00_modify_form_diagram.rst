@@ -4,24 +4,24 @@
 Modify form diagram
 ********************************************************************************
 
-attribute
+Attribute
 =========
 
 ----
 
-vertices
-========
 
-vertex attributes
-
-----
-
-edges
-=====
-
-edge attributes
+Vertex attributes
+=================
 
 ----
 
-move vertices
+
+Edge attributes
+===============
+
+* set bounds
+
+----
+
+Move vertices
 =============
