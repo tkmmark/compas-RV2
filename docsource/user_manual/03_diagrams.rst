@@ -1,11 +1,11 @@
 .. _diagrams:
 
 ********************************************************************************
-2. Form and force diagrams
+3. Form and force diagrams
 ********************************************************************************
 
 
-.. figure:: /_images/rv2_workflow.jpg
+.. figure:: /_images/rv2_workflow_03.jpg
     :figclass: figure
     :class: figure-img img-fluid
 

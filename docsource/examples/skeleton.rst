@@ -2,18 +2,64 @@
 Skeleton
 ********************************************************************************
 
+.. figure:: /_images/example_skeleton_0.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-example showing how to easily generate a complex pattern using compas_skeleton, and integrating it into the RV2 workflow.
+----
 
+.. figure:: /_images/example_skeleton_1.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-1. Create pattern > From skeleton
+.. figure:: /_images/example_skeleton_2.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-* showcase various skeleton options
+.. figure:: /_images/example_skeleton_3.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-2. Identify supports
+.. figure:: /_images/example_skeleton_4.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-3. Create form/force
+.. figure:: /_images/example_skeleton_5.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-4. Horizontal equilibrium
+.. figure:: /_images/example_skeleton_6.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-5. Vertical equilibrium
+.. figure:: /_images/example_skeleton_7.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_8.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_9.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_10.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_11.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_12.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_13.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+.. figure:: /_images/example_skeleton_14.jpg
+    :figclass: figure
+    :class: figure-img img-fluid

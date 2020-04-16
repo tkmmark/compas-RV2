@@ -1,11 +1,11 @@
 .. _interaction:
 
 ********************************************************************************
-4. Interaction
+5. Interaction
 ********************************************************************************
 
 
-.. figure:: /_images/rv2_workflow.jpg
+.. figure:: /_images/rv2_workflow_05.jpg
     :figclass: figure
     :class: figure-img img-fluid
 

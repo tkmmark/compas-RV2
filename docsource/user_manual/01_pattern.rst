@@ -5,7 +5,7 @@
 ********************************************************************************
 
 
-.. figure:: /_images/rv2_workflow.jpg
+.. figure:: /_images/rv2_workflow_01.jpg
     :figclass: figure
     :class: figure-img img-fluid
 

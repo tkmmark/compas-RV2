@@ -1,11 +1,11 @@
 .. _equilibrium:
 
 ********************************************************************************
-3. Equilibrium
+4. Equilibrium
 ********************************************************************************
 
 
-.. figure:: /_images/rv2_workflow.jpg
+.. figure:: /_images/rv2_workflow_04.jpg
     :figclass: figure
     :class: figure-img img-fluid
 

@@ -1,11 +1,11 @@
 .. _settings:
 
 ********************************************************************************
-5. Settings and Analysis
+6. Settings and Analysis
 ********************************************************************************
 
 
-.. figure:: /_images/rv2_workflow.jpg
+.. figure:: /_images/rv2_workflow_06.jpg
     :figclass: figure
     :class: figure-img img-fluid
 

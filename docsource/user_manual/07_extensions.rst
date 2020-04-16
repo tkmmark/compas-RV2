@@ -1,11 +1,11 @@
 .. _extensions:
 
 ********************************************************************************
-6. Extensions
+7. Extensions
 ********************************************************************************
 
 
-.. figure:: /_images/rv2_workflow.jpg
+.. figure:: /_images/rv2_workflow_07.jpg
     :figclass: figure
     :class: figure-img img-fluid
 
