@@ -1,0 +1,23 @@
+.. _settings:
+
+********************************************************************************
+5. Settings and Analysis
+********************************************************************************
+
+
+.. figure:: /_images/rv2_workflow.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
+
+
+----
+
+
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
+   :glob:
+
+   06_settings/00_settings.rst
+   06_settings/01_visualisation.rst
+   06_settings/02_compas_cloud.rst
