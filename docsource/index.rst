@@ -8,8 +8,8 @@ RhinoVault 2
 
    intro
    gettingstarted
-   theoretical_background
+   background
    tutorial
-   user_manual
+   manual
    examples
    license

@@ -19,11 +19,11 @@
     <link rel="stylesheet" type="text/css" href="_static/css/compas-reference.css" />
 
     
-        <link rel="next" title="User manual" href="user_manual.html" />
+        <link rel="next" title="User manual" href="manual.html" />
     
     
     
-        <link rel="prev" title="RV2" href="theoretical_background/02_ecosystem.html" />
+        <link rel="prev" title="RV2" href="background/02_ecosystem.html" />
     
 
     <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
@@ -61,22 +61,14 @@
 <div class="figure align-default">
 <img alt="_images/tutorial_0.jpg" class="figure-img img-fluid" src="_images/tutorial_0.jpg" />
 </div>
-<p>This section provides a step-by-step tutorial of a simple example, highlighting and describing the main features of RV2. This tutorial is intended to be a “quick start” guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the <a class="reference internal" href="user_manual.html#user-manual"><span class="std std-ref">User manual</span></a>.</p>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<hr class="docutils" />
+<p>This section provides a step-by-step tutorial of a simple tutorial, highlighting and describing the main features of RV2. This tutorial is intended to be a “quick start” guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the <a class="reference internal" href="manual.html#manual"><span class="std std-ref">User manual</span></a>.</p>
 <div class="section" id="initialising">
 <h2>0. Initialising</h2>
 <p>This first step initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, tutorials and terms of use. By clicking “YES,” you acknowledge that you have read and understood the Terms and Conditions, and the Data Donation Agreement.</p>
 <div class="figure align-default">
 <img alt="_images/tutorial_1.jpg" class="figure-img img-fluid" src="_images/tutorial_1.jpg" />
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="pattern">
 <h2>1. Pattern</h2>
 <p>A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: Rhion lines ; a Rhino mesh object; a Rhino NURBS surface object; or skeleton; or a set of boundary features (with Delaunay triangulation or compas_pattern).</p>
@@ -92,16 +84,10 @@
 <div class="figure align-default">
 <img alt="_images/tutorial_4.jpg" class="figure-img img-fluid" src="_images/tutorial_4.jpg" />
 </div>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="boundary-conditions">
 <h2>2. Boundary conditions</h2>
-<blockquote>
-<div><p>Once a <code class="docutils literal notranslate"><span class="pre">Pattern</span></code> object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.</p>
-</div></blockquote>
+<p>Once a <code class="docutils literal notranslate"><span class="pre">Pattern</span></code> object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.</p>
 <ol class="arabic">
 <li><p><strong>Identify supports</strong></p>
 <p>In the RhinoVAULT 2 drop down menu, select “Define Boundary Conditions”, then “Identify Supports.”</p>
@@ -143,11 +129,7 @@
 <p>This feature is not presented in this tutorial.</p>
 </li>
 </ol>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="form-and-force-diagrams">
 <h2>3. Form and force diagrams</h2>
 <ol class="arabic">
@@ -175,11 +157,7 @@
 </div>
 </li>
 </ol>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="equilibrium">
 <h2>4. Equilibrium</h2>
 <ol class="arabic">
@@ -214,11 +192,7 @@
 </div>
 </li>
 </ol>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="interaction">
 <h2>5. Interaction</h2>
 <p>RV2 provides various post-form-finding functionalities to interact with the three diagrams (FormDiagram, ForceDiagram or the ThrustDiagram) to explore various design options and parameters. In this tutorial, the geometry of the ForceDiagram will be modified to control the geometry of the FormDiagram.</p>
@@ -251,11 +225,7 @@
 </div>
 </li>
 </ol>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="settings-analysis">
 <h2>6. Settings &amp; Analysis</h2>
 <ol class="arabic">
@@ -277,11 +247,7 @@
 </div>
 </li>
 </ol>
-<div class="line-block">
-<div class="line"><br /></div>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="extensions">
 <h2>7. Extensions</h2>
 <p>RV2, which is based on the COMPAS framework, offers a flexible and robust platform to integreate other computational methods into the form finding workflow, such as best-fit TNA analysis, laod-path optimisation and various other fabrication-related applications.</p>
@@ -318,9 +284,9 @@
                             <ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="intro.html">Introduction</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="gettingstarted.html">Getting Started</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="theoretical_background.html">Background</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="background.html">Background</a></li>
 <li class="nav-item active"><a class="nav-link active current reference internal" href="#">Tutorial</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="user_manual.html">User manual</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="manual.html">User manual</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="examples.html">Examples</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="license.html">License</a></li>
 </ul>
