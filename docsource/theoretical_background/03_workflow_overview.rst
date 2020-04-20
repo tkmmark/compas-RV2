@@ -11,12 +11,14 @@ initialise
 
 make pattern
 
+define boundary conditions
+
 diagrams
 
 equilibrium
 
 interaction
 
-settings
+settings and analysis
 
 extensions

@@ -15,50 +15,57 @@ This section provides a step-by-step tutorial of a simple tutorial, highlighting
 0. Initialising
 ===============
 
+<<<<<<< HEAD
 Initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, tutorials and terms of use. Don't forget to read the Terms and Conditions, and the Data Donation Agreement.
+=======
+This first step initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, tutorials and terms of use. By clicking "YES," you acknowledge that you have read and understood the Terms and Conditions, and the Data Donation Agreement.
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
 
 .. figure:: _images/tutorial_1.jpg
     :figclass: figure
     :class: figure-img img-fluid
+
+|
 
 ----
 
 1. Pattern
 ==========
 
-1.  **Make pattern**
+A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: Rhion lines ; a Rhino mesh object; a Rhino NURBS surface object; or skeleton; or a set of boundary features (with Delaunay triangulation or compas_pattern).
 
-    A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: a Rhino NURBS surface object; a Rhino mesh object; from lines; from a set of boundary features (with Delaunay triangulation or compas_pattern); or skeleton.
+In this tutorial, we will use a simple orthogonal surface, which can be created through the Rhino command, "Rectangular plane: corner to corner." By choosing two corners, create a planar surface that is a square in plan.
 
-    In this tutorial, we will use a simple orthogonal surface, which can be created through the Rhino command, "Rectanguarl plane: corner to corner."
+.. figure:: _images/tutorial_2.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-    .. figure:: _images/tutorial_2.jpg
-        :figclass: figure
-        :class: figure-img img-fluid
+In the RhinoVAULT 2 drop down menu, select "Create pattern", then "From Surface." Select the the surface in the viewport.
 
-    In the RhinoVAULT 2 drop down menu, select "Create pattern", then "From Surface."
+.. figure:: _images/tutorial_3.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-    .. figure:: _images/tutorial_3.jpg
-        :figclass: figure
-        :class: figure-img img-fluid
+This command will generate a pattern from the input surface, using the UV mapping of the surface. The user has the option to enter values for "U" and "V." For this tutorial, we keep the U and V to their default values of 10.
 
-    This command will generate a pattern from the input surface, using the UV mapping of the surface. The user has the option to enter values for "U" and "V."
+.. figure:: _images/tutorial_4.jpg
+    :figclass: figure
+    :class: figure-img img-fluid
 
-    .. figure:: _images/tutorial_4.jpg
-        :figclass: figure
-        :class: figure-img img-fluid
-
+|
 
 ----
 
-2. Form and force diagrams
-==========================
+2. Boundary conditions
+======================
 
-1.  **Define boundary conditions**
+<<<<<<< HEAD
+    In this tutorial, we will use a simple orthogonal surface, which can be created through the Rhino command, "Rectanguarl plane: corner to corner."
+=======
+    Once a ``Pattern`` object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
 
-    Once a Pattern object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.
-
-    *Identify supports*
+1.  **Identify supports**
 
     In the RhinoVAULT 2 drop down menu, select "Define Boundary Conditions", then "Identify Supports."
 
@@ -77,6 +84,56 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
         :figclass: figure
         :class: figure-img img-fluid
 
+    In this tutorial, we use the mode ByContinuousEdges, and select one edge on the left boundary and on edge on the right boundary of the pattern. Once the two edges are selected, press Enter, then all the vertices along that boundary from corner to corner, will be automatically selected (supports are shown in red).
+
+    .. figure:: _images/tutorial_7.jpg
+        :figclass: figure
+        :class: figure-img img-fluid
+
+<<<<<<< HEAD
+=======
+
+2.  **Update openings**
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
+
+    The second step of defining boundary conditions involves updating the geometry of the openings. In this tutorial, the two boundaries at the top and the bottom are the openings (the edges are on the boundary of the pattern but have no support vertices along them).
+
+    Because openings have no supports (i.e. reaction or external forces), they cannot be straight; openings need to curve inward towards the center of the pattern, so that horizontal equilibrium can be resolved.
+
+    In the RhinoVAULT 2 drop down menu, select "Define Boundary Conditions", then "Update Openings."
+
+<<<<<<< HEAD
+    Once a Pattern object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.
+
+    *Identify supports*
+=======
+    .. figure:: _images/tutorial_8.jpg
+        :figclass: figure
+        :class: figure-img img-fluid
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
+
+    If there are straight openings found in the pattern, an automatic sag of 5% of the span of the opening will be imposed. Per opening, the user has the option to enter a desired amount of sag, as a percentage of the span of the opening.
+
+    .. figure:: _images/tutorial_9.jpg
+        :figclass: figure
+        :class: figure-img img-fluid
+
+<<<<<<< HEAD
+    The command will provide two options, to select or unselect vertices to define them as supports or not. The vertex selection options are:
+
+    * AllBoundaryVertices - all boundary vertices
+    * Corners - all corner vertices
+    * ByContinuousEdges - all vertices on the selected boundary edge (corner to corner)
+    * Manual - manual selection by the user
+=======
+    In this tutorial, sag of 10% is applied to opening 1, and sag of 20% is applied to opening 0.
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
+
+    .. figure:: _images/tutorial_10.jpg
+        :figclass: figure
+        :class: figure-img img-fluid
+
+<<<<<<< HEAD
     In this tutorial, we use the mode ByContinuousEdges, and select one edge on the left boundary and on edge on the right boundary of the pattern. Once the two edges are selected, press Enter, then all the vertices along that boundary from corner to corner, will be automatically selected (supports are shown in red).
 
     .. figure:: _images/tutorial_7.jpg
@@ -110,6 +167,22 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
 
 
 2.  **Create form diagram**
+=======
+
+3.  **Define Loads**
+
+    This feature is not presented in this tutorial.
+
+|
+
+----
+
+3. Form and force diagrams
+==========================
+
+
+1.  **Create form diagram**
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
 
     Once the boundary conditions have been defined, the Pattern can now be converted into a FormDiagram.
 
@@ -125,7 +198,7 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
         :figclass: figure
         :class: figure-img img-fluid
 
-3.  **Create force diagram**
+2.  **Create force diagram**
 
     Once the FormDiagram has been created, the ForceDiagram can now be created.
 
@@ -137,15 +210,21 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
 
     The ForceDiagram will be automatically drawn to the right (+x) of the FormDiagram. The initial ForceDiagram is the topological dual of the FormDiagram. The two diagrams are not yet reciprocal, meaning that the corresponding edges in the diagrams are not perpendicular to the other.
 
+<<<<<<< HEAD
     When the diagrams are not yet reciprocal (in another words, perpendicular-ised or "equilibrated"), the edges with angle deviations above the defined angle tolerance will be displayed. The dots displaying the angle deviations are a visual cue for the user, indicating that horizontal equilibrium has not yet been resolved.
+=======
+    When the diagrams are not yet reciprocal (in another words, perpendicular-ised or "equilibrated"), the edges with angle deviations above the defined angle tolerance will be displayed. The dots displaying the angle deviations are visual cues for the user, indicating that horizontal equilibrium has not yet been resolved.
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
 
     .. figure:: _images/tutorial_14.jpg
         :figclass: figure
         :class: figure-img img-fluid
 
+|
+
 ----
 
-3. Equilibrium
+4. Equilibrium
 ==============
 
 1.  **Horizontal equilibrium**
@@ -159,6 +238,7 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
         :class: figure-img img-fluid
 
     Under "alpha" option, the user will be able to select a value that determine which of the two diagrams will have more weight during the perpendicular-isation process. Default is "form100," which only allows the ForceDiagram to update in its geometry. User can also enter the numnber of iterations. Default number of iterations is 100.
+<<<<<<< HEAD
 
     .. figure:: _images/tutorial_16.jpg
         :figclass: figure
@@ -166,6 +246,15 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
 
     If horizontal equilibrium has been found, meaning that all the corresponding edges now have angle deviations that are below the defined angle tolerance, the two diagrams should no longer have any dots displaying the angle values, as shown below.
 
+=======
+
+    .. figure:: _images/tutorial_16.jpg
+        :figclass: figure
+        :class: figure-img img-fluid
+
+    If horizontal equilibrium has been found, meaning that all the corresponding edges now have angle deviations that are below the defined angle tolerance, the two diagrams should no longer have any dots displaying the angle deviation values, as shown below.
+
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
     .. figure:: _images/tutorial_17.jpg
         :figclass: figure
         :class: figure-img img-fluid
@@ -193,9 +282,11 @@ Initiates the RV2 engine, imports all the relevant packages and activates compas
         :figclass: figure
         :class: figure-img img-fluid
 
+|
+
 ----
 
-4. Interaction
+5. Interaction
 ==============
 
 RV2 provides various post-form-finding functionalities to interact with the three diagrams (FormDiagram, ForceDiagram or the ThrustDiagram) to explore various design options and parameters. In this tutorial, the geometry of the ForceDiagram will be modified to control the geometry of the FormDiagram.
@@ -240,9 +331,17 @@ RV2 provides various post-form-finding functionalities to interact with the thre
         :figclass: figure
         :class: figure-img img-fluid
 
+<<<<<<< HEAD
 ----
 
 5. Settings & Analysis
+=======
+|
+
+----
+
+6. Settings & Analysis
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
 ======================
 
 1.  **Settings**
@@ -265,6 +364,7 @@ RV2 provides various post-form-finding functionalities to interact with the thre
         :class: figure-img img-fluid
 
     With "Display Pipes," the edges of the ThrustDiagram can be visualised with pipes, the radii of which are proportional to the internal forces.
+<<<<<<< HEAD
 
     .. figure:: _images/tutorial_28.jpg
         :figclass: figure
@@ -278,6 +378,18 @@ RV2 provides various post-form-finding functionalities to interact with the thre
 ----
 
 6. Extensions
+=======
+
+    .. figure:: _images/tutorial_28.jpg
+        :figclass: figure
+        :class: figure-img img-fluid
+
+|
+
+----
+
+7. Extensions
+>>>>>>> 9de754d7f606beb6453fca7bd53bf47a283a9e04
 =============
 
 RV2, which is based on the COMPAS framework, offers a flexible and robust platform to integreate other computational methods into the form finding workflow, such as best-fit TNA analysis, laod-path optimisation and various other fabrication-related applications.

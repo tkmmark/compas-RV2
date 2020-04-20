@@ -14,20 +14,16 @@ from compas_plotters import MeshPlotter
 def compute_sag(edges):
     u, v = edges[0]
     if pattern.vertex_attribute(u, 'is_fixed'):
-        start = u
         a = pattern.vertex_attributes(u, 'xyz')
         aa = pattern.vertex_attributes(v, 'xyz')
     else:
-        start = v
         a = pattern.vertex_attributes(v, 'xyz')
         aa = pattern.vertex_attributes(u, 'xyz')
     u, v = edges[-1]
     if pattern.vertex_attribute(u, 'is_fixed'):
-        end = u
         b = pattern.vertex_attributes(u, 'xyz')
         bb = pattern.vertex_attributes(v, 'xyz')
     else:
-        end = v
         b = pattern.vertex_attributes(v, 'xyz')
         bb = pattern.vertex_attributes(u, 'xyz')
     span = distance_point_point_xy(a, b)
