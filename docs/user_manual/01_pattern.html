@@ -18,7 +18,7 @@
         <link rel="stylesheet" type="text/css" href="../_static/css/compas-reference.css" />
 
         
-            <link rel="next" title="Make pattern" href="01_pattern/00_make_pattern.html" />
+            <link rel="next" title="2. Boundary conditions" href="02_boundary_conditions.html" />
         
         
         
@@ -60,14 +60,46 @@
                         <div class="section" id="pattern">
 <span id="id1"></span><h1>1. Pattern</h1>
 <div class="figure">
-<img alt="../_images/rv2_workflow.jpg" class="figure-img img-fluid" src="../_images/rv2_workflow.jpg" />
+<img alt="../_images/rv2_workflow_01.jpg" class="figure-img img-fluid" src="../_images/rv2_workflow_01.jpg" />
 </div>
 <hr class="docutils" />
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="01_pattern/00_make_pattern.html">Make pattern</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01_pattern/01_modify_pattern.html">Modify pattern</a></li>
-</ul>
+<div class="section" id="pattern-from-lines">
+<h2>1. Pattern from lines</h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="pattern-from-mesh">
+<h2>2. Pattern from mesh</h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="pattern-from-surface">
+<h2>3. Pattern from surface</h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="pattern-from-skeleton">
+<h2>4. Pattern from Skeleton</h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="pattern-from-triangulation">
+<h2>5. Pattern from Triangulation</h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="pattern-from-features">
+<h2>6. Pattern from Features</h2>
 </div>
 </div>
 
@@ -100,20 +132,17 @@
                                 <ul class="nav flex-column active">
 <li class="nav-item"><a class="nav-link reference internal" href="../intro.html">Introduction</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../gettingstarted.html">Getting Started</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="../theoretical_background.html">Theoretical background</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="../theoretical_background.html">Background</a></li>
 <li class="nav-item"><a class="nav-link reference internal" href="../tutorial.html">Tutorial</a></li>
 <li class="nav-item active"><a class="nav-link reference internal" href="../user_manual.html">User manual</a><ul class="nav active">
 <li class="nav-item"><a class="nav-link reference internal" href="00_initialising.html">0. Initialising</a></li>
-<li class="nav-item active"><a class="nav-link active current reference internal" href="#">1. Pattern</a><ul class="nav flex-column">
-<li class="nav-item"><a class="nav-link reference internal" href="01_pattern/00_make_pattern.html">Make pattern</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="01_pattern/01_modify_pattern.html">Modify pattern</a></li>
-</ul>
-</li>
-<li class="nav-item"><a class="nav-link reference internal" href="02_diagrams.html">2. Form and force diagrams</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="03_equilibrium.html">3. Equilibrium</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="04_interaction.html">4. Interaction</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="05_settings.html">5. Settings</a></li>
-<li class="nav-item"><a class="nav-link reference internal" href="06_extensions.html">6. Extensions</a></li>
+<li class="nav-item active"><a class="nav-link active current reference internal" href="#">1. Pattern</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="02_boundary_conditions.html">2. Boundary conditions</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="03_diagrams.html">3. Form and force diagrams</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="04_equilibrium.html">4. Equilibrium</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="05_interaction.html">5. Interaction</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="06_settings.html">6. Settings and Analysis</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="07_extensions.html">7. Extensions</a></li>
 </ul>
 </li>
 <li class="nav-item"><a class="nav-link reference internal" href="../examples.html">Examples</a></li>
@@ -137,7 +166,15 @@
                     
 
                     <ul class="nav flex-column" id="compas-localnav">
-<li class="nav-item"><a class="nav-link reference internal" href="#">1. Pattern</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#">1. Pattern</a><ul class="nav">
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern-from-lines">1. Pattern from lines</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern-from-mesh">2. Pattern from mesh</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern-from-surface">3. Pattern from surface</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern-from-skeleton">4. Pattern from Skeleton</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern-from-triangulation">5. Pattern from Triangulation</a></li>
+<li class="nav-item"><a class="nav-link reference internal" href="#pattern-from-features">6. Pattern from Features</a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -148,7 +185,7 @@
 
         <footer class="compas-footer">
             
-                Last updated on Apr 09, 2020.
+                Last updated on Apr 16, 2020.
             
 
             

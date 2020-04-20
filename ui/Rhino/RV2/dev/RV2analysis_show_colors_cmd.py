@@ -30,12 +30,13 @@ def RunCommand(is_interactive):
         form.settings['show.color.analysis']   = True
         force.settings['show.color.analysis']  = True
         thrust.settings['show.color.analysis'] = True
+        print('Color analysis mode ON.')
 
     else:
         form.settings['show.color.analysis']   = False
         force.settings['show.color.analysis']  = False
         thrust.settings['show.color.analysis'] = False
-
+        print('Color analysis mode OFF.')
     scene.update()
 
 

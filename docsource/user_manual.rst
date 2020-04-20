@@ -20,8 +20,9 @@ The RV2 workflow can be broken down into six main steps. The details of the six 
 
    user_manual/00_initialising.rst
    user_manual/01_pattern.rst
-   user_manual/02_diagrams.rst
-   user_manual/03_equilibrium.rst
-   user_manual/04_interaction.rst
-   user_manual/05_settings.rst
-   user_manual/06_extensions.rst
+   user_manual/02_boundary_conditions.rst
+   user_manual/03_diagrams.rst
+   user_manual/04_equilibrium.rst
+   user_manual/05_interaction.rst
+   user_manual/06_settings.rst
+   user_manual/07_extensions.rst
