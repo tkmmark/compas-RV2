@@ -12,5 +12,4 @@ RhinoVault 2
    tutorial
    user_manual
    examples
-   api
    license
