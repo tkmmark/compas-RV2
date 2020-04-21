@@ -5,44 +5,59 @@ Getting Started
 Beta Release install (Windows Only)
 ===================================
 
-Get the latest release from: https://github.com/BlockResearchGroup/compas-RV2/releases
+1. Get the latest release from: https://github.com/BlockResearchGroup/compas-RV2/releases
 
-1. Install RV2
+    .. figure:: /_images/install_1_download.png
+        :figclass: figure
+        :class: figure-img img-fluid
 
-   Unzip the folder and open `RV2\dev` in explorer, right click on `install.bat` (.bat extension might be hidden) and choose `Run as Administrator`. Click `Yes` in the pop-up window.
-   Installation is successful if you see following output.
 
-   .. code-block:: none
+2. Unzip downloaded folder
 
-        C:\Windows\system32>C:\Users\lichen7\compas-RV2\dist\RV2\dev\env\python.exe -m compas_rv2.install --plugin_path C:\Users\lichen7\compas-RV2\dist\RV2\dev\..\
-        Installing PlugIn RV2 to Rhino PythonPlugIns.
+    .. figure:: /_images/install_2_extract.png
+        :figclass: figure
+        :class: figure-img img-fluid
 
-        PlugIn RV2 Installed.
 
-        Restart Rhino and open the Python editor at least once to make it available.
-        installing compas_rv2
-        Installing COMPAS packages to Rhino 6.0 IronPython lib:
-        IronPython location: C:\Users\lichen7\AppData\Roaming\McNeel\Rhinoceros\6.0\Plug-ins\IronPython (814d908a-e25c-493d-97e9-ee3861957f49)\settings\lib
+3. open unzipped folder and go to its sub-folder: `RV2/dev/`, right click on `install.bat` (.bat extension might be hidden) and choose `Run as Administrator`
 
-            compas               OK
-            compas_rhino         OK
-            compas_tna           OK
-            compas_ags           OK
-            compas_pattern       OK
-            compas_rv2           OK
-            compas_bootstrapper  OK
+    .. figure:: /_images/install_3_run.png
+        :figclass: figure
+        :class: figure-img img-fluid
 
-        Completed.
 
-        C:\Windows\system32>pause
-        Press any key to continue . . .
+4. If the installation is successful, you should be able to see following logs:
 
-2. Activate RV2 toolbar in Rhino
+    .. figure:: /_images/install_4_done.png
+            :figclass: figure
+            :class: figure-img img-fluid
+
+
+5. Activate RV2 toolbar in Rhino
 
    * Go to menu `Tools > Toolbar Layout...`.
+
+    .. figure:: /_images/install_5_toolbar.png
+            :figclass: figure
+            :class: figure-img img-fluid
+
    * In pop-up window, click `File > Open...`.
+
+   .. figure:: /_images/install_6_open.png
+            :figclass: figure
+            :class: figure-img img-fluid
+
    * Then in file explorer, select `YOUR_RV2_FOLDER\dev\RV2.rui`.
+
+   .. figure:: /_images/install_7_rui.png
+            :figclass: figure
+            :class: figure-img img-fluid
+    
    * Now you will see RhinoVAULT2 appears in rhino menu.
+
+    .. figure:: /_images/install_8_done.png
+            :figclass: figure
+            :class: figure-img img-fluid
 
 
 Known Issues
