@@ -10,7 +10,7 @@ Skeleton is a new powerful feature of RV2 that enables fast and interactive gene
 
 Skeleton features in RV2 are part of the `compas_skeleton <https://github.com/BlockResearchGroup/compas_skeleton>`_  package.
 
-\
+|
 
 ----
 

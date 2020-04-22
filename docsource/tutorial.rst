@@ -15,7 +15,7 @@ This section provides a step-by-step tutorial of a simple example, highlighting 
 0. Initialising
 ===============
 
-This first step initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various useful links to useful information, such as the online documentation, tutorials, tutorials and terms of use. By clicking "YES," you acknowledge that you have read and understood the Terms and Conditions, and the Data Donation Agreement.
+This first step initiates the RV2 engine, imports all the relevant packages and activates compas_cloud server. The startup window also provides various links to useful information, such as the online documentation, tutorials, the repository and terms of use. By clicking "YES," you acknowledge that you have read and understood the Terms and Conditions, and the Data Donation Agreement.
 
 .. figure:: _images/tutorial_1.jpg
     :figclass: figure
@@ -28,7 +28,7 @@ This first step initiates the RV2 engine, imports all the relevant packages and 
 1. Pattern
 ==========
 
-A pattern is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: Rhion lines ; a Rhino mesh object; a Rhino NURBS surface object; or skeleton; or a set of boundary features (with Delaunay triangulation or compas_pattern).
+A ``Pattern`` is a collection of lines that define the topology of the form diagram. In this step, the user can create a pattern from: a network of Rhino lines; a Rhino mesh object; a Rhino NURBS surface object; or a skeleton; or a set of boundary features (tri-mesh from Delaunay triangulation or quad-mesh from ``compas_pattern``).
 
 In this tutorial, we will use a simple orthogonal surface, which can be created through the Rhino command, "Rectangular plane: corner to corner." By choosing two corners, create a planar surface that is a square in plan.
 
@@ -36,13 +36,13 @@ In this tutorial, we will use a simple orthogonal surface, which can be created 
     :figclass: figure
     :class: figure-img img-fluid
 
-In the RhinoVAULT 2 drop down menu, select "Create pattern", then "From Surface." Select the the surface in the viewport.
+In the RhinoVAULT 2 drop down menu, select "Create Pattern", then "From Surface." Select the the surface in the viewport.
 
 .. figure:: _images/tutorial_3.jpg
     :figclass: figure
     :class: figure-img img-fluid
 
-This command will generate a pattern from the input surface, using the UV mapping of the surface. The user has the option to enter values for "U" and "V." For this tutorial, we keep the U and V to their default values of 10.
+This command will generate a ``Pattern`` from the input surface, using the UV mapping of the surface. The user has the option to enter values for "U" and "V." For this tutorial, we keep the U and V to their default values of 10.
 
 .. figure:: _images/tutorial_4.jpg
     :figclass: figure
@@ -65,18 +65,18 @@ This command will generate a pattern from the input surface, using the UV mappin
         :figclass: figure
         :class: figure-img img-fluid
 
-    The command will provide two options, to select or unselect vertices to define them as supports or not. The vertex selection options are:
+    The command will provide two options, to "Select" or "Unselect" vertices to define them as supports or not. The vertex selection modes are:
 
-    * AllBoundaryVertices - all boundary vertices
-    * Corners - all corner vertices
-    * ByContinuousEdges - all vertices on the selected boundary edge (corner to corner)
-    * Manual - manual selection by the user
+    * *AllBoundaryVertices* - all boundary vertices
+    * *Corners* - all corner vertices (only works for quad-meshes)
+    * *ByContinuousEdges* - all vertices on the selected boundary edge from corner to corner (only works for quad-meshes)
+    * *Manual* - manual selection by the user
 
     .. figure:: _images/tutorial_6.jpg
         :figclass: figure
         :class: figure-img img-fluid
 
-    In this tutorial, we use the mode ByContinuousEdges, and select one edge on the left boundary and on edge on the right boundary of the pattern. Once the two edges are selected, press Enter, then all the vertices along that boundary from corner to corner, will be automatically selected (supports are shown in red).
+    In this tutorial, we use the mode *ByContinuousEdges*, and select one edge on the left boundary and on edge on the right boundary of the pattern. Once the two edges are selected, press Enter, then all the vertices along that boundary from corner to corner, will be automatically selected (supports are shown in red).
 
     .. figure:: _images/tutorial_7.jpg
         :figclass: figure
@@ -87,7 +87,7 @@ This command will generate a pattern from the input surface, using the UV mappin
 
     The second step of defining boundary conditions involves updating the geometry of the openings. In this tutorial, the two boundaries at the top and the bottom are the openings (the edges are on the boundary of the pattern but have no support vertices along them).
 
-    Because openings have no supports (i.e. reaction or external forces), they cannot be straight; openings need to curve inward towards the center of the pattern, so that horizontal equilibrium can be resolved.
+    Because openings have no supports (i.e. reaction or external forces), they cannot be straight (unless the non-boundary edges at the openings have no internal forces in them, as in a cross vault or a barrel vault); openings need to curve inward towards the center of the Pattern, so that horizontal equilibrium can be resolved.
 
     In the RhinoVAULT 2 drop down menu, select "Define Boundary Conditions", then "Update Openings."
 
@@ -107,7 +107,6 @@ This command will generate a pattern from the input surface, using the UV mappin
         :figclass: figure
         :class: figure-img img-fluid
 
-
 3.  **Define Loads**
 
     This feature is not presented in this tutorial.
@@ -122,7 +121,7 @@ This command will generate a pattern from the input surface, using the UV mappin
 
 1.  **Create form diagram**
 
-    Once the boundary conditions have been defined, the Pattern can now be converted into a FormDiagram.
+    Once the boundary conditions have been defined, the ``Pattern`` can now be converted into a ``FormDiagram``.
 
     In the RhinoVAULT 2 drop down menu, select "Create FormDiagram."
 
@@ -130,7 +129,7 @@ This command will generate a pattern from the input surface, using the UV mappin
         :figclass: figure
         :class: figure-img img-fluid
 
-    If the creation of FormDiagram is successful, it will be displayed with green vertices and edges. The ThrustDiagram is also automatically created (displayed in magenta), the geometry of which is equivalent to the FormDiagram at this initial, un-equilibrated state.
+    If the creation of ``FormDiagram`` is successful, it will be displayed with green vertices and edges. The ``ThrustDiagram`` is also automatically created (displayed in magenta), the geometry of which is equivalent to the ``FormDiagram`` at this initial, un-equilibrated state.
 
     .. figure:: _images/tutorial_12.jpg
         :figclass: figure
@@ -138,7 +137,7 @@ This command will generate a pattern from the input surface, using the UV mappin
 
 2.  **Create force diagram**
 
-    Once the FormDiagram has been created, the ForceDiagram can now be created.
+    Once the ``FormDiagram`` has been created, the ``ForceDiagram`` can now be created.
 
     In the RhinoVAULT 2 drop down menu, select "Create ForceDiagram."
 
@@ -146,7 +145,7 @@ This command will generate a pattern from the input surface, using the UV mappin
         :figclass: figure
         :class: figure-img img-fluid
 
-    The ForceDiagram will be automatically drawn to the right (+x) of the FormDiagram. The initial ForceDiagram is the topological dual of the FormDiagram. The two diagrams are not yet reciprocal, meaning that the corresponding edges in the diagrams are not perpendicular to the other.
+    The ``ForceDiagram`` will be automatically drawn to the right (+x) of the ``FormDiagram``. The initial ForceDiagram is the topological dual of the ``FormDiagram``. The two diagrams are not yet reciprocal, meaning that the corresponding edges in the diagrams are not perpendicular to the other.
 
     When the diagrams are not yet reciprocal (in another words, perpendicular-ised or "equilibrated"), the edges with angle deviations above the defined angle tolerance will be displayed. The dots displaying the angle deviations are visual cues for the user, indicating that horizontal equilibrium has not yet been resolved.
 
@@ -163,7 +162,7 @@ This command will generate a pattern from the input surface, using the UV mappin
 
 1.  **Horizontal equilibrium**
 
-    Once the FormDiagram and ForceDiagram have been created, the horizontal equilibrium algorithm perpendicular-ises either or both diagrams, which converts them from dual to reciprocal diagrams.
+    Once the ``FormDiagram`` and ``ForceDiagram`` have been created, the horizontal equilibrium algorithm perpendicular-ises either or both diagrams, which converts them from dual to reciprocal diagrams.
 
     In the RhinoVAULT 2 drop down menu, select "Horizontal Equilibrium."
 
@@ -186,7 +185,7 @@ This command will generate a pattern from the input surface, using the UV mappin
 
 2.  **Vertical equilibrium**
 
-    With the FormDiagram and ForceDiagram now reciprocal, the coordinates of the ThrustDiagram can be iteratively computed based on a desired z-max (target height) value.
+    With the ``FormDiagram`` and ``ForceDiagram`` now reciprocal, the coordinates of the ``ThrustDiagram`` can be iteratively computed based on a desired *target height* value.
 
     In the RhinoVAULT 2 drop down menu, select "Vertical Equilibrium."
 
@@ -200,7 +199,7 @@ This command will generate a pattern from the input surface, using the UV mappin
         :figclass: figure
         :class: figure-img img-fluid
 
-    If the vertical equilibrium is successfully computed and found, the new ThrustDiagram will be displayed, now with updated z coordinates.
+    If the vertical equilibrium is successfully computed and found, the new ``ThrustDiagram`` will be displayed, now with updated z coordinates.
 
     .. figure:: _images/tutorial_20.jpg
         :figclass: figure
@@ -213,7 +212,7 @@ This command will generate a pattern from the input surface, using the UV mappin
 5. Interaction
 ==============
 
-RV2 provides various post-form-finding functionalities to interact with the three diagrams (FormDiagram, ForceDiagram or the ThrustDiagram) to explore various design options and parameters. In this tutorial, the geometry of the ForceDiagram will be modified to control the geometry of the FormDiagram.
+RV2 provides various post-form-finding functionalities to interact with the three diagrams (``FormDiagram``, ``ForceDiagram`` or the ``ThrustDiagram``) to explore various design options and parameters. In this tutorial, the geometry of the ``ForceDiagram`` will be modified to control the geometry of the FormDiagram.
 
 1.  **Modify form diagram**
 
@@ -223,7 +222,7 @@ RV2 provides various post-form-finding functionalities to interact with the thre
 
 2.  **Modify force diagram**
 
-    One of the most powerful features of TNA is the user's ability to control the form by constraining and interacting with the force diagram. The user can fix vertices, constrain edge lengths (which sets bounds on the minimum and maximum horizontal forces in the corresponding memebers), and move vertices to manually manipulate the force distribution in the thrust diagram.
+    One of the most powerful features of TNA is the user's ability to control the form by constraining and interacting with the force iagram. The user can fix vertices, constrain edge lengths (which sets bounds on the minimum and maximum horizontal forces in the corresponding memebers), and move vertices to manually manipulate the force distribution in the thrust diagram.
 
     In the RhinoVAULT 2 drop down menu, select "Modify ForceDiagram" then "Move vertices."
 
@@ -237,13 +236,13 @@ RV2 provides various post-form-finding functionalities to interact with the thre
         :figclass: figure
         :class: figure-img img-fluid
 
-    The geometry of the ForceDiagram have been updated, but the FormDiagram and ForceDiagram are no longer in horizontal equilibrium, indicated by the angle deviations. Run "Horizontal Equilibrium" again, to perpendicular-ise the two diagrams again.
+    The geometry of the ForceDiagram have been updated, but the FormDiagram and ``ForceDiagram`` are no longer in horizontal equilibrium, indicated by the angle deviations. Run "Horizontal Equilibrium" again, to perpendicular-ise the two diagrams again.
 
     .. figure:: _images/tutorial_23.jpg
         :figclass: figure
         :class: figure-img img-fluid
 
-    With the FormDiagram and ForceDiagram in horizontal equilibrium, run "Vertical equilibrium" to compute the new geomerty of the ThrustDiagram. Notice now, the crease in the ThrustDiagram, which corresponds to the longer edges in the ForceDiagram, where the internal member forces are greater.
+    With the ``FormDiagram`` and ``ForceDiagram`` in horizontal equilibrium, run "Vertical equilibrium" to compute the new geomerty of the ``ThrustDiagram``. Notice now, the crease in the ``ThrustDiagram``, which corresponds to the longer edges in the ``ForceDiagram``, where the internal member forces are greater.
 
     .. figure:: _images/tutorial_24.jpg
         :figclass: figure
@@ -275,13 +274,13 @@ RV2 provides various post-form-finding functionalities to interact with the thre
 
     Under "Analysis" in the drop down menu, there are several helper functions that facilitate analysis and enhance visualisation.
 
-    "Color Analysis" draws the edges of the ForceDiagram with a color gradient from blue, green to red, based on its the length (the horizontal force in the corresponding edge of the ThrustDiagram). The corresponding edges in the FormDiagram are also displayed with the same color, which makes the two diagrams much more legible and discernable (blue means smaller horizontal force, red means greater horizontal force).
+    "Color Analysis" draws the edges of the ``ForceDiagram`` with a color gradient from blue, green to red, based on its the length (the horizontal force in the corresponding edge of the ``ThrustDiagram``). The corresponding edges in the FormDiagram are also displayed with the same color, which makes the two diagrams much more legible and discernable (blue means smaller horizontal force, red means greater horizontal force).
 
     .. figure:: _images/tutorial_27.jpg
         :figclass: figure
         :class: figure-img img-fluid
 
-    With "Display Pipes," the edges of the ThrustDiagram can be visualised with pipes, the radii of which are proportional to the internal forces.
+    With "Display Pipes," the edges of the ``ThrustDiagram`` can be visualised with pipes, the radii of which are proportional to the internal forces.
 
     .. figure:: _images/tutorial_28.jpg
         :figclass: figure

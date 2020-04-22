@@ -4,21 +4,21 @@
 0. Initialising
 ********************************************************************************
 
-
 .. figure:: /_images/rv2_workflow_00.jpg
     :figclass: figure
     :class: figure-img img-fluid
 
+Initialising RV2 command is required to run at the beginning of all RV2 sessions.
+
+|
 
 ----
-
 
 .. figure:: /_images/rv2_init.png
     :figclass: figure
     :class: figure-img img-fluid
 
-
-Initializing RV2 command is required to run at the beginning of all RV2 sessions. It does several necessary jobs:
+The initialisation does several necessary jobs:
 
 * Bring up a front-page providing useful links about RV2 and require users to accept RV2's Terms and Agreements to proceed.
 
