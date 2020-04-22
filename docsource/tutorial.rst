@@ -6,11 +6,8 @@ Tutorial
     :figclass: figure
     :class: figure-img img-fluid
 
-This section provides a step-by-step tutorial of a simple example, highlighting and describing the main features of RV2. This tutorial is intended to be a "quick start" guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the :ref:`user_manual`.
+This section provides a step-by-step tutorial of a simple tutorial, highlighting and describing the main features of RV2. This tutorial is intended to be a "quick start" guide to RV2. For further information about the procedures, methods and various parameters involved in each of the steps, please refer to the :ref:`manual`.
 
-|
-
-----
 
 0. Initialising
 ===============
@@ -21,9 +18,6 @@ This first step initiates the RV2 engine, imports all the relevant packages and 
     :figclass: figure
     :class: figure-img img-fluid
 
-|
-
-----
 
 1. Pattern
 ==========
@@ -48,14 +42,11 @@ This command will generate a ``Pattern`` from the input surface, using the UV ma
     :figclass: figure
     :class: figure-img img-fluid
 
-|
-
-----
 
 2. Boundary conditions
 ======================
 
-    Once a ``Pattern`` object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.
+Once a ``Pattern`` object has been generated, the boundary conditions will need to be defined. In RV2, the boundary conditions include: 1) identifying the supports (vertices of the structure where reactions are allowed); 2) defining and updating the openings; and 3) loading parameters and conditions.
 
 1.  **Identify supports**
 
@@ -111,9 +102,6 @@ This command will generate a ``Pattern`` from the input surface, using the UV ma
 
     This feature is not presented in this tutorial.
 
-|
-
-----
 
 3. Form and force diagrams
 ==========================
@@ -153,9 +141,6 @@ This command will generate a ``Pattern`` from the input surface, using the UV ma
         :figclass: figure
         :class: figure-img img-fluid
 
-|
-
-----
 
 4. Equilibrium
 ==============
@@ -205,9 +190,6 @@ This command will generate a ``Pattern`` from the input surface, using the UV ma
         :figclass: figure
         :class: figure-img img-fluid
 
-|
-
-----
 
 5. Interaction
 ==============
@@ -254,9 +236,6 @@ RV2 provides various post-form-finding functionalities to interact with the thre
         :figclass: figure
         :class: figure-img img-fluid
 
-|
-
-----
 
 6. Settings & Analysis
 ======================
@@ -286,9 +265,6 @@ RV2 provides various post-form-finding functionalities to interact with the thre
         :figclass: figure
         :class: figure-img img-fluid
 
-|
-
-----
 
 7. Extensions
 =============
