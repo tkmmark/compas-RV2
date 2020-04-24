@@ -24,19 +24,19 @@ def skeleton_move_mesh_vertex(skeletonobject):
 
 
 def skeleton_dynamic_draw_nodewidth(skeletonobject):
-    skeletonobject.dynamic_update_width('node_width')
+    skeletonobject.dynamic_draw_width('node_width')
 
 
 def skeleton_dynamic_draw_leafwidth(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices():
-        skeletonobject.dynamic_update_width('leaf_width')
+    if skeletonobject.datastructure.skeleton_vertices:
+        skeletonobject.dynamic_draw_width('leaf_width')
     else:
         print("This skeleton doesn't have leaf vertices!")
 
 
 def skeleton_dynamic_draw_leafextend(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices():
-        skeletonobject.dynamic_update_width('leaf_extend')
+    if skeletonobject.datastructure.skeleton_vertices:
+        skeletonobject.dynamic_draw_width('leaf_extend')
     else:
         print("This skeleton doesn't have leaf vertices!")
 
@@ -133,7 +133,7 @@ def RunCommand(is_interactive):
 
     skeletonobject = SkeletonObject(skeleton)
     skeletonobject.draw()
-    skeletonobject.dynamic_update_mesh()
+    skeletonobject.dynamic_draw_widths()
 
     # modify skeleton
     while True:
@@ -170,6 +170,7 @@ def RunCommand(is_interactive):
 # ==============================================================================
 # Main
 # ==============================================================================
+
 
 if __name__ == "__main__":
 
