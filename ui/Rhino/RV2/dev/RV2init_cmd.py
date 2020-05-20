@@ -9,7 +9,6 @@ try:
     import compas        # noqa: F401
     import compas_rhino  # noqa: F401
     import compas_cloud  # noqa: F401
-    import compas_ags    # noqa: F401
     import compas_tna    # noqa: F401
     import compas_rv2    # noqa: F401
 
