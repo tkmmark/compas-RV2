@@ -22,7 +22,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    vertical = proxy.package('compas_tna.equilibrium.vertical_from_zmax_proxy')
+    vertical = proxy.function('compas_tna.equilibrium.vertical_from_zmax_proxy')
 
     form = scene.get('form')[0]
     force = scene.get('force')[0]

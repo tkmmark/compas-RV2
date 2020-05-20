@@ -23,7 +23,7 @@ def RunCommand(is_interactive):
     if not p:
         return
 
-    conforming_delaunay_triangulation = p.package('compas_triangle.delaunay.conforming_delaunay_triangulation')
+    conforming_delaunay_triangulation = p.function('compas_triangle.delaunay.conforming_delaunay_triangulation')
 
     boundary_guids = compas_rhino.select_curves('Select outer boundary.')
     if not boundary_guids:

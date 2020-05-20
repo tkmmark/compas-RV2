@@ -80,7 +80,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    relax = proxy.package("compas.numerical.fd_numpy")
+    relax = proxy.function("compas.numerical.fd_numpy")
 
     pattern = scene.get("pattern")[0]
     if not pattern:

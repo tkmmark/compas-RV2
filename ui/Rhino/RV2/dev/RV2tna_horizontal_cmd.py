@@ -20,7 +20,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    horizontal = proxy.package('compas_rv2.equilibrium.horizontal_nodal_proxy')
+    horizontal = proxy.function('compas_rv2.equilibrium.horizontal_nodal_proxy')
 
     form = scene.get('form')[0]
     force = scene.get('force')[0]

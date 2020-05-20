@@ -43,7 +43,7 @@ def RunCommand(is_interactive):
         if option == 'interior_edges':
             iq = compas_rhino.rs.GetReal('q for interior edges', iq, 0.1, 10)
 
-    relax = proxy.package("compas.numerical.fd_numpy")
+    relax = proxy.function("compas.numerical.fd_numpy")
 
     # update fixed vertices
     # update "sag" of resulting boundary openings
