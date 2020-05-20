@@ -74,3 +74,10 @@ a:link:visited{
 #agree a:link{
     text-decoration: none;
 }
+
+
+#version{
+    position: fixed;
+    left: 34%;
+    top: 52%;
+}
