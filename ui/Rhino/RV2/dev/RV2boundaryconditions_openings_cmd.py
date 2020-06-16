@@ -127,8 +127,10 @@ def RunCommand(is_interactive):
     # relax the pattern
     relax_pattern(pattern.datastructure, relax)
 
+    count = 0
     # update Qs to match target sag
-    while True:
+    while True and count < 10:
+        count += 1
         sags = [compute_sag(pattern.datastructure, opening) for opening in openings]
         if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
             break
@@ -141,6 +143,11 @@ def RunCommand(is_interactive):
             opening = openings[i]
             pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
         relax_pattern(pattern.datastructure, relax)
+
+    if count == 10:
+        print("did not converge after 10 iterations")
+    else:
+        print("converged after %s iterations" % count)
 
     compas_rhino.delete_objects(guids, purge=True)
     scene.update()
@@ -163,7 +170,9 @@ def RunCommand(is_interactive):
                 break
             targets[N] = float(option2[3:]) / 100
 
-            while True:
+            count = 0
+            while True and count < 10:
+                count += 1
                 sags = [compute_sag(pattern.datastructure, opening) for opening in openings]
                 if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
                     break
@@ -176,6 +185,11 @@ def RunCommand(is_interactive):
                     opening = openings[i]
                     pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
                 relax_pattern(pattern.datastructure, relax)
+
+            if count == 10:
+                print("did not converge after 10 iterations")
+            else:
+                print("converged after %s iterations" % count)
 
             compas_rhino.delete_objects(guids, purge=True)
             scene.update()
