@@ -41,11 +41,11 @@ def RunCommand(is_interactive):
     boundary_seg_guids = compas_rhino.rs.ExplodeCurves(boundary_guids[0])
     for guid in boundary_seg_guids:
         curve = RhinoCurve.from_guid(guid)
-        N = int(curve.length() / target_length)
+        N = int(curve.length() / target_length) or 1
         points = curve.divide(N, over_space=True)
         boundary.extend(map(list, points))
 
-    if len(boundary_seg_guids) > boundary_guids:
+    if len(boundary_seg_guids) > len(boundary_guids):
         compas_rhino.delete_objects(boundary_seg_guids)
 
     # polylines
@@ -53,7 +53,7 @@ def RunCommand(is_interactive):
     if segments_guids:
         for guid in segments_guids:
             curve = RhinoCurve.from_guid(guid)
-            N = int(curve.length() / target_length)
+            N = int(curve.length() / target_length) or 1
             points = curve.divide(N, over_space=True)
             polylines.append(map(list, points))
 
@@ -62,7 +62,7 @@ def RunCommand(is_interactive):
     if hole_guids:
         for guid in hole_guids:
             curve = RhinoCurve.from_guid(guid)
-            N = int(curve.length() / target_length)
+            N = int(curve.length() / target_length) or 1
             points = curve.divide(N, over_space=True)
             polygons.append(map(list, points))
 
