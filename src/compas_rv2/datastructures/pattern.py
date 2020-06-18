@@ -61,7 +61,7 @@ class Pattern(MeshMixin, Mesh):
         Parameters
         ----------
         input_subdivision_spacing : float
-            The surface boundary and curve feature subdivision spacing. Values between 1% and 5% of the length of the diagonal of the bounding box are recommended.
+            The surface boundary and curve feature subdivision spacing. Values between 0.01 and 0.05 of the length of the diagonal of the bounding box are recommended.
         mesh_edge_length : float
             The edge target length for densification.
         srf_guid : Rhino surface guid
@@ -82,7 +82,7 @@ class Pattern(MeshMixin, Mesh):
 
         .. [1] Oval et al. *Feature-based topology finding of patterns for shell structures*. Automation in Construction, 2019.
                Available at: https://www.researchgate.net/publication/331064073_Feature-based_Topology_Finding_of_Patterns_for_Shell_Structures.
-        .. [2] Oval. *Topology finding of patterns for structural design*. PhD thesis, Unversité Paris-Est, 2019.
+        .. [2] Oval. *Topology finding of patterns for structural design*. PhD thesis, Unversite Paris-Est, 2019.
                Available at: https://www.researchgate.net/publication/340096530_Topology_Finding_of_Patterns_for_Structural_Design.
 
         """        
@@ -131,14 +131,4 @@ class Pattern(MeshMixin, Mesh):
 # ==============================================================================
 
 if __name__ == '__main__':
-    import json
-    from compas_plotters.meshplotter import MeshPlotter
-    filepath = '../../../data/pattern_from_features.json'
-    with open(filepath, 'r') as fp:
-        data = json.load(fp)
-    outer_boundary, inner_boundaries, polyline_features, point_features = data
-    pattern = Pattern.from_surface_and_features(.25, outer_boundary, inner_boundaries, polyline_features, point_features)
-    plotter = MeshPlotter(pattern, figsize=(5, 5))
-    plotter.draw_edges(width=.1)
-    plotter.draw_faces()
-    plotter.show()
+    pass
