@@ -6,8 +6,10 @@ from compas.datastructures import Mesh
 from compas.datastructures import mesh_smooth_area
 from compas_rv2.datastructures.meshmixin import MeshMixin
 
+from compas_singular.algorithms import surface_discrete_mapping
 from compas_singular.algorithms import boundary_triangulation
 from compas_singular.algorithms import SkeletonDecomposition
+from compas_singular.rhino.objects.surface import RhinoSurface
 
 
 __all__ = ['Pattern']
@@ -51,44 +53,28 @@ class Pattern(MeshMixin, Mesh):
         })
 
     @classmethod
-    def from_features(cls, target_length, outer_boundary, inner_boundaries=[], polyline_features=[], point_features=[]):
-        """Get a pattern object from a set of planar polylines.
-        The outer boundary is mandatory and the inner boundaries, polyline and point features are optional.
-        The discretisation of the polylines dictates the accuracy of the underlying triangulation and therefore of the resulting decomposition. Values between 1% and 5% of the length of the diagonal of the bounding box are recommended.
-        The pattern is aligned to the curves (boundary polylines and feature polylines).
+    def from_surface_and_features(cls, input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids=[], pt_guids=[]):
+        """Get a pattern object from a NURBS surface with optional point and curve features on the surface. 
+        The pattern is aligned to the surface boundaries and curve features.
         The pattern contains a pole singularity at the feature points. Pole singularities are a specific type of singularity.
 
         Parameters
         ----------
-        target_length : float
+        input_subdivision_spacing : float
+            The surface boundary and curve feature subdivision spacing. Values between 0.01 and 0.05 of the length of the diagonal of the bounding box are recommended.
+        mesh_edge_length : float
             The edge target length for densification.
-        outer_boundary : list
-            One list of point coordinates discretising the outer boundary.
-        inner_boundaries : list, []
-            Optional. A list of lists of point coordinates discretising each inner boundary.
-        polyline_features : list, []
-            Optional. A list of lists of point coordinates discretising each feature polyline. WIP
-        point_features : list, []
-            Optional. A list of point coordinates at the location of pole singularities.
-
+        srf_guid : Rhino surface guid
+            A Rhino surface guid.
+        crv_guids : list, []
+            Optional. A list of Rhino curve guids.
+        pt_guids : list, []
+            Optional. A list of Rhino point guids. WIP
+        
         Returns
         -------
         Pattern
             A Pattern object.
-
-        Examples
-        --------
-        >>> import json
-        >>> from compas_plotters.meshplotter import MeshPlotter
-        >>> filepath = '../../../data/pattern_from_features.json'
-        >>> with open(filepath, 'r') as fp:
-        >>>     data = json.load(fp)
-        >>> outer_boundary, inner_boundaries, polyline_features, point_features = data
-        >>> pattern = Pattern.from_features(.25, outer_boundary, inner_boundaries, polyline_features, point_features)
-        >>> plotter = MeshPlotter(pattern, figsize=(5, 5))
-        >>> plotter.draw_edges(width=.1)
-        >>> plotter.draw_faces()
-        >>> plotter.show()
 
         References
         ----------
@@ -101,9 +87,11 @@ class Pattern(MeshMixin, Mesh):
 
         """
 
+        outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, discretisation, crv_guids = crv_guids, pt_guids = pt_guids)
         tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy')
         decomposition = SkeletonDecomposition.from_mesh(tri_mesh)
         coarse_mesh = decomposition.decomposition_mesh(point_features)
+        RhinoSurface.from_guid(srf_guid).mesh_uv_to_xyz(coarse_mesh)
 
         coarse_mesh.collect_strips()
         coarse_mesh.set_strips_density_target(target_length)
@@ -143,14 +131,4 @@ class Pattern(MeshMixin, Mesh):
 # ==============================================================================
 
 if __name__ == '__main__':
-    import json
-    from compas_plotters.meshplotter import MeshPlotter
-    filepath = '../../../data/pattern_from_features.json'
-    with open(filepath, 'r') as fp:
-        data = json.load(fp)
-    outer_boundary, inner_boundaries, polyline_features, point_features = data
-    pattern = Pattern.from_features(.25, outer_boundary, inner_boundaries, polyline_features, point_features)
-    plotter = MeshPlotter(pattern, figsize=(5, 5))
-    plotter.draw_edges(width=.1)
-    plotter.draw_faces()
-    plotter.show()
+    pass
