@@ -96,10 +96,10 @@ class Pattern(MeshMixin, Mesh):
 
         .. [1] Oval et al. *Feature-based topology finding of patterns for shell structures*. Automation in Construction, 2019.
                Available at: https://www.researchgate.net/publication/331064073_Feature-based_Topology_Finding_of_Patterns_for_Shell_Structures.
-        .. [2] Oval. *Topology finding of patterns for structural design*. PhD thesis, Unversité Paris-Est, 2019.
+        .. [2] Oval. *Topology finding of patterns for structural design*. PhD thesis, Unversite Paris-Est, 2019.
                Available at: https://www.researchgate.net/publication/340096530_Topology_Finding_of_Patterns_for_Structural_Design.
 
-        """        
+        """
 
         tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy')
         decomposition = SkeletonDecomposition.from_mesh(tri_mesh)

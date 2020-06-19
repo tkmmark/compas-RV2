@@ -12,7 +12,7 @@ from compas.geometry import distance_point_point_xy
 from compas.geometry import intersection_line_line_xy
 from compas.geometry import midpoint_point_point_xy
 
-__commandname__ = "RV2boundaryconditions_openings"
+__commandname__ = "RV2boundary_boundaries"
 
 
 def relax_pattern(pattern, relax):

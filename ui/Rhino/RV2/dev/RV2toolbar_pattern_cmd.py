@@ -5,17 +5,13 @@ from __future__ import division
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2boundaryconditions_loads"
+__commandname__ = "RV2toolbar_pattern"
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
-        return
-
-    pattern = scene.get("pattern")[0]
-
-    if not pattern:
         return
 
     raise NotImplementedError

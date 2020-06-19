@@ -1,11 +1,11 @@
-from __future__ import print_function
+ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
 from compas_rv2.rhino import get_scene
 
 
-__commandname__ = "RV2pattern_from_singularities"
+__commandname__ = "RV2toolbar_boundary"
 
 
 def RunCommand(is_interactive):

@@ -6,7 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas.utilities import flatten
 
-__commandname__ = "RV2boundaryconditions_supports"
+__commandname__ = "RV2boundary_supports"
 
 
 def RunCommand(is_interactive):
