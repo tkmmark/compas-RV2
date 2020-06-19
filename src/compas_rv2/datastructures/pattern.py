@@ -87,14 +87,14 @@ class Pattern(MeshMixin, Mesh):
 
         """
 
-        outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, discretisation, crv_guids = crv_guids, pt_guids = pt_guids)
+        outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, input_subdivision_spacing, crv_guids = crv_guids, pt_guids = pt_guids)
         tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy')
         decomposition = SkeletonDecomposition.from_mesh(tri_mesh)
         coarse_mesh = decomposition.decomposition_mesh(point_features)
         RhinoSurface.from_guid(srf_guid).mesh_uv_to_xyz(coarse_mesh)
 
         coarse_mesh.collect_strips()
-        coarse_mesh.set_strips_density_target(target_length)
+        coarse_mesh.set_strips_density_target(mesh_edge_length)
         coarse_mesh.densification()
 
         dense_mesh = coarse_mesh.get_quad_mesh()
