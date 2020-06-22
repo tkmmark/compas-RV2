@@ -20,16 +20,19 @@ __all__ = ["ErrorForm", "ErrorHandler"]
 from functools import wraps
 
 
-def ErrorHandler(title="Error"):
+def ErrorHandler(title="Error", showLocalTraceback=True):
     def outer(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except Exception:
-                exc_type, exc_value, exc_tb = sys.exc_info()
-                text = traceback.format_exception(exc_type, exc_value, exc_tb)
-                text = "".join(text)
+            except Exception as error:
+                if showLocalTraceback:
+                    exc_type, exc_value, exc_tb = sys.exc_info()
+                    text = traceback.format_exception(exc_type, exc_value, exc_tb)
+                    text = "".join(text)
+                else:
+                    text = str(error)
                 ErrorForm(text, title=title)
         return wrapper
     return outer

@@ -43,7 +43,8 @@ def RunCommand(is_interactive):
 
     Browser()
 
-    sc.sticky["RV2.proxy"] = Proxy(errorHandler=ErrorHandler(title="Proxy Error"))
+    errorHandler = ErrorHandler(title="Server side Error", showLocalTraceback=False)
+    sc.sticky["RV2.proxy"] = Proxy(errorHandler=errorHandler)
 
     sc.sticky["RV2.system"] = {
         "session.dirname": CWD,
