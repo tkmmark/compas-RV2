@@ -20,22 +20,25 @@ def RunCommand(is_interactive):
     if not force:
         return
 
-    options = ['Continuous', 'Parallel', 'Manual']
-    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
+    options = ["Continuous", "Parallel", "Manual"]
+    option = compas_rhino.rs.GetString("Selection Type.", strings=options)
 
-    if option == 'Continuous':
+    if not option:
+        return
+
+    elif option == "Continuous":
         temp = force.select_edges()
         keys = list(set(flatten([force.datastructure.continuous_edges(key) for key in temp])))
 
-    elif option == 'Parallel':
+    elif option == "Parallel":
         temp = force.select_edges()
         keys = list(set(flatten([force.datastructure.parallel_edges(key) for key in temp])))
 
-    else:
+    elif option == "Manual":
         keys = force.select_edges()
 
     if keys:
-        public = [name for name in force.datastructure.default_edge_attributes.keys() if not name.startswith('_')]
+        public = [name for name in force.datastructure.default_edge_attributes.keys() if not name.startswith("_")]
         if force.update_edges_attributes(keys, names=public):
             scene.update()
 

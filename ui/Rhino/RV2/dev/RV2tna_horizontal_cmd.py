@@ -35,13 +35,14 @@ def RunCommand(is_interactive):
     alpha = scene.settings['tna.horizontal.alpha']
 
     options = ['alpha', 'iterations']
+
     while True:
         option = compas_rhino.rs.GetString('Options for horizontal equilibrium solver:', strings=options)
 
         if not option:
             break
 
-        if option == 'alpha':
+        elif option == 'alpha':
             alpha_options = ['form{}'.format(int(i * 10)) for i in range(11)]
             temp = compas_rhino.rs.GetString('Select parallelisation weight', alpha_options[0], alpha_options)
             if not temp:

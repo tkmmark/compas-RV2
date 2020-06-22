@@ -54,7 +54,7 @@ class Pattern(MeshMixin, Mesh):
 
     @classmethod
     def from_surface_and_features(cls, input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids=[], pt_guids=[]):
-        """Get a pattern object from a NURBS surface with optional point and curve features on the surface. 
+        """Get a pattern object from a NURBS surface with optional point and curve features on the surface.
         The pattern is aligned to the surface boundaries and curve features.
         The pattern contains a pole singularity at the feature points. Pole singularities are a specific type of singularity.
 
@@ -70,7 +70,7 @@ class Pattern(MeshMixin, Mesh):
             Optional. A list of Rhino curve guids.
         pt_guids : list, []
             Optional. A list of Rhino point guids. WIP
-        
+
         Returns
         -------
         Pattern
@@ -88,7 +88,7 @@ class Pattern(MeshMixin, Mesh):
         """
 
         outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, input_subdivision_spacing, crv_guids = crv_guids, pt_guids = pt_guids)
-        tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy')
+        tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy_rpc')
         decomposition = SkeletonDecomposition.from_mesh(tri_mesh)
         coarse_mesh = decomposition.decomposition_mesh(point_features)
         RhinoSurface.from_guid(srf_guid).mesh_uv_to_xyz(coarse_mesh)

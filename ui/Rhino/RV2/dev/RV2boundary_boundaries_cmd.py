@@ -155,27 +155,32 @@ def RunCommand(is_interactive):
 
     # allow user to select label
     # and specify a target sag
-    options1 = ["Opening{}".format(i) for i, opening in enumerate(openings)] + ["ESC"]
-    options2 = ["Sag5", "Sag10", "Sag15", "Sag20", "Sag25", "Sag30", "ESC"]
+    options1 = ["Opening{}".format(i) for i, opening in enumerate(openings)]
+    options2 = ["Sag5", "Sag10", "Sag15", "Sag20", "Sag25", "Sag30"]
 
     while True:
-        option1 = compas_rhino.rs.GetString("Select opening.", options1[-1], options1)
-        if not option1 or option1 == "ESC":
+        option1 = compas_rhino.rs.GetString("Select opening.", strings=options1)
+        if not option1:
             break
         N = int(option1[7:])
 
         while True:
-            option2 = compas_rhino.rs.GetString("Select sag.", options2[-1], options2)
-            if not option2 or option2 == "ESC":
+            option2 = compas_rhino.rs.GetString("Select sag.", strings=options2)
+
+            if not option2:
                 break
+
             targets[N] = float(option2[3:]) / 100
 
             count = 0
+
             while True and count < 10:
                 count += 1
                 sags = [compute_sag(pattern.datastructure, opening) for opening in openings]
+
                 if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
                     break
+
                 for i in range(len(openings)):
                     sag = sags[i]
                     target = targets[i]

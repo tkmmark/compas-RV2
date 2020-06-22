@@ -40,10 +40,10 @@ def RunCommand(is_interactive):
     # manually Select or Unselect
     # shoudl this not be included in the while loop?
 
-    options = ["Select", "Unselect", "ESC"]
-    option1 = compas_rhino.rs.GetString("Select or unselect vertices as supports:", options[-1], options)
+    options = ["Select", "Unselect"]
+    option1 = compas_rhino.rs.GetString("Select or unselect vertices as supports:", strings=options)
 
-    if not option1 or option1 == 'ESC':
+    if not option1:
         return
 
     # layer = pattern.settings['layer']
@@ -52,13 +52,16 @@ def RunCommand(is_interactive):
     # compas_rhino.rs.ShowGroup(group_supports)
     # compas_rhino.rs.Redraw()
 
-    options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual", "ESC"]
+    options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
 
     while True:
-        option2 = compas_rhino.rs.GetString("Selection mode:", options[-1], options)
+        option2 = compas_rhino.rs.GetString("Selection mode:", strings=options)
 
-        if not option2 or option2 == 'ESC':
+        if not option2:
             return
+
+        elif option2 == "AllBoundaryVertices":
+            keys = pattern.datastructure.vertices_on_boundary()
 
         elif option2 == "Corners":
             keys = []
@@ -66,18 +69,12 @@ def RunCommand(is_interactive):
                 if pattern.datastructure.vertex_degree(key) == 2:
                     keys.append(key)
 
-        elif option2 == "AllBoundaryVertices":
-            keys = pattern.datastructure.vertices_on_boundary()
-
-        elif option2 == 'ByContinuousEdges':
+        elif option2 == "ByContinuousEdges":
             temp = pattern.select_edges()
             keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
 
-        elif option2 == 'Manual':
+        elif option2 == "Manual":
             keys = pattern.select_vertices()
-
-        else:
-            raise NotImplementedError
 
         if keys:
             if option1 == "Select":

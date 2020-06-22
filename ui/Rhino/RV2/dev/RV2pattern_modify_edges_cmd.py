@@ -20,18 +20,21 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    options = ['Continuous', 'Parallel', 'Manual']
-    option = compas_rhino.rs.GetString("Selection Type", options[-1], options)
+    options = ["Continuous", "Parallel", "Manual"]
+    option = compas_rhino.rs.GetString("Selection Type", strings=options)
 
-    if option == 'Continuous':
+    if not option:
+        return
+
+    elif option == "Continuous":
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.continuous_edges(key) for key in temp])))
 
-    elif option == 'Parallel':
+    elif option == "Parallel":
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.parallel_edges(key) for key in temp])))
 
-    else:
+    elif option == "Manual":
         keys = pattern.select_edges()
 
     if keys:

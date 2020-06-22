@@ -26,7 +26,7 @@ def RunCommand(is_interactive):
     compas_rhino.rs.ShowGroup(group_vertices)
     compas_rhino.rs.Redraw()
 
-    options = ['AllBoundaryVertices', 'Corners', 'ByContinuousEdges', 'Manual']
+    options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
 
     while True:
         option = compas_rhino.rs.GetString("Selection mode:", strings=options)
@@ -48,7 +48,7 @@ def RunCommand(is_interactive):
             temp = pattern.select_edges()
             keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
 
-        elif option == 'Manual':
+        elif option == "Manual":
             keys = pattern.select_vertices()
 
         # if keys:

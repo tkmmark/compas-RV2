@@ -6,8 +6,6 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas.utilities import flatten
 
-from compas_rhino.modifiers import VertexModifier
-
 
 __commandname__ = "RV2force_move_vertices"
 
@@ -25,16 +23,19 @@ def RunCommand(is_interactive):
     layer = force.settings['layer']
     group_vertices = "{}::vertices".format(layer)
 
-    options = ['Continuous', 'Manual']
-    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
+    options = ["Continuous", "Manual"]
+    option = compas_rhino.rs.GetString("Selection Type.", strings=options)
 
-    if option == 'Continuous':
+    if not option:
+        return
+
+    elif option == "Continuous":
         compas_rhino.rs.ShowGroup(group_vertices)
         compas_rhino.rs.Redraw()
         temp = force.select_edges()
         keys = list(set(flatten([force.datastructure.continuous_vertices(key) for key in temp])))
 
-    else:
+    elif option == "Manual":
         compas_rhino.rs.ShowGroup(group_vertices)
         compas_rhino.rs.Redraw()
         keys = force.select_vertices()

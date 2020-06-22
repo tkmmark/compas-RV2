@@ -26,17 +26,20 @@ def RunCommand(is_interactive):
     compas_rhino.rs.ShowGroup(group_vertices)
     compas_rhino.rs.Redraw()
 
-    options = ['All', 'Continuous', 'ESC']
-    option = compas_rhino.rs.GetString("Selection Type.", options[-1], options)
+    options = ["All", "Continuous", "Manual"]
+    option = compas_rhino.rs.GetString("Selection Type.", strings=options)
 
-    if option == 'All':
+    if not option:
+        return
+
+    elif option == "All":
         keys = list(force.datastructure.vertices())
 
-    elif option == 'Continuous':
+    elif option == "Continuous":
         temp = force.select_edges()
         keys = list(set(flatten([force.datastructure.continuous_vertices(key) for key in temp])))
 
-    else:
+    elif option == "Manual":
         keys = force.select_vertices()
 
     public = [name for name in force.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]

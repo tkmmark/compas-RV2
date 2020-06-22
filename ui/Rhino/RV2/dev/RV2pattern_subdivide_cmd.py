@@ -2,6 +2,8 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+import compas_rhino
+
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas.datastructures import mesh_subdivide_quad
@@ -23,13 +25,15 @@ def RunCommand(is_interactive):
     if not pattern:
         return
 
-    options = ['Finer', 'Coarser', 'ESC']
+    options = ["Finer", "Coarser"]
     while True:
-        option = compas_rhino.rs.GetString('Select mode', options[-1], options)
-        if not option or option == 'ESC':
+
+        option = compas_rhino.rs.GetString("Select mode", strings=options)
+
+        if not option:
             break
 
-        if option == 'Finer':
+        if option == "Finer":
             subd = mesh_subdivide_quad(pattern.datastructure, k=1)
             for key, attr in pattern.datastructure.vertices(True):
                 names = list(attr.keys())
