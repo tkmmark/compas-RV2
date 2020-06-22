@@ -5,6 +5,8 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.datastructures import Pattern
 from compas_rv2.rhino import get_scene
+from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
+from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
 
 
 __commandname__ = "RV2pattern_from_features"
@@ -20,7 +22,8 @@ def RunCommand(is_interactive):
     if not srf_guid:
         return
 
-    crv_guids = compas_rhino.select_curves("Optional. Select curves to align the pattern.") or []
+    #crv_guids = compas_rhino.select_curves("Optional. Select curves to align the pattern.") or []
+    crv_guids = []
     pt_guids = compas_rhino.select_points("Optional. Select points for pole singularities.") or []
 
     input_subdivision_spacing = compas_rhino.rs.GetReal("Input subdivision spacing", 1.0)
@@ -29,7 +32,15 @@ def RunCommand(is_interactive):
 
     mesh_edge_length = compas_rhino.rs.GetReal("Pattern edge-length target.", 1.0)
 
+    print("Decompose surface and generate a pattern...")
     pattern = Pattern.from_surface_and_features(input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids, pt_guids)
+    print("Pattern topology generated.")
+
+    print("Relax pattern on surface...")
+    constraints = automated_smoothing_surface_constraints(pattern, srf_guid)
+    constraints.update(automated_smoothing_constraints(pattern, points=pt_guids, curves=crv_guids))
+    constrained_smoothing(pattern, kmax=30, damping=0.5, constraints=constraints, algorithm='area')
+    print("Pattern relaxed on surface.")
 
     scene.clear()
     scene.add(pattern, name='pattern')
