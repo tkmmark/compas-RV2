@@ -44,10 +44,6 @@ def RunCommand(is_interactive):
     with open(filepath, "r") as f:
         session = json.load(f, cls=DataDecoder)
 
-    # split the settings into "pattern", "form", "force", "thrust"
-    # and add each section to the corresponding object in the scene
-    # the update settings dialog should differentiate between those sections
-
     scene.clear()
 
     if 'settings' in session:

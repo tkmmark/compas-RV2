@@ -40,19 +40,13 @@ def RunCommand(is_interactive):
         scene.update()
 
     # manually Select or Unselect
-    # shoudl this not be included in the while loop?
+    # should this not be included in the while loop?
 
     options = ["Select", "Unselect"]
     option1 = compas_rhino.rs.GetString("Select or unselect vertices as supports:", strings=options)
 
     if not option1:
         return
-
-    # layer = pattern.settings['layer']
-    # group_supports = "{}::vertices::supports".format(layer)
-
-    # compas_rhino.rs.ShowGroup(group_supports)
-    # compas_rhino.rs.Redraw()
 
     options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
 
@@ -62,7 +56,7 @@ def RunCommand(is_interactive):
         if not option2:
             return
 
-        elif option2 == "AllBoundaryVertices":
+        if option2 == "AllBoundaryVertices":
             keys = pattern.datastructure.vertices_on_boundary()
 
         elif option2 == "Corners":
