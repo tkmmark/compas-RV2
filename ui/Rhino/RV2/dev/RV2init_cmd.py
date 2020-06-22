@@ -5,22 +5,15 @@ from __future__ import division
 import os
 import scriptcontext as sc
 
-try:
-    import compas        # noqa: F401
-    import compas_rhino  # noqa: F401
-    import compas_cloud  # noqa: F401
-    import compas_tna    # noqa: F401
-    import compas_rv2    # noqa: F401
+import compas_rhino
 
-except ImportError:
-    # do something here to fix the problem
-    raise
+compas_rhino.unload_modules('compas_tna')
+compas_rhino.unload_modules('compas_rv2')
 
-else:
-    from compas_cloud import Proxy
-    from compas_rv2.web import Browser
-    from compas_rv2.scene import Scene
-    from compas_rv2.rhino import ErrorHandler
+from compas_cloud import Proxy  # noqa: E402
+from compas_rv2.web import Browser  # noqa: E402
+from compas_rv2.scene import Scene  # noqa: E402
+from compas_rv2.rhino import ErrorHandler  # noqa: E402
 
 
 __commandname__ = "RV2init"
