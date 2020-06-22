@@ -27,7 +27,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "Continuous":
+    if option == "Continuous":
         temp = form.select_edges()
         keys = list(set(flatten([form.datastructure.continuous_edges(key) for key in temp])))
 

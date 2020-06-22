@@ -30,7 +30,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "Continuous":
+    if option == "Continuous":
         compas_rhino.rs.ShowGroup(group_vertices)
         compas_rhino.rs.Redraw()
         temp = form.select_edges()

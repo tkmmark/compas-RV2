@@ -19,11 +19,11 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    p = get_proxy()
-    if not p:
+    proxy = get_proxy()
+    if not proxy:
         return
 
-    conforming_delaunay_triangulation = p.function('compas_triangle.delaunay.conforming_delaunay_triangulation')
+    conforming_delaunay_triangulation = proxy.function('compas_triangle.delaunay.conforming_delaunay_triangulation')
 
     boundary_guids = compas_rhino.select_curves('Select outer boundary.')
     if not boundary_guids:
@@ -38,15 +38,24 @@ def RunCommand(is_interactive):
 
     # boundary
     boundary = []
-    boundary_seg_guids = compas_rhino.rs.ExplodeCurves(boundary_guids[0])
-    for guid in boundary_seg_guids:
-        curve = RhinoCurve.from_guid(guid)
-        N = int(curve.length() / target_length) or 1
-        points = curve.divide(N, over_space=True)
-        boundary.extend(map(list, points))
-
-    if len(boundary_seg_guids) > len(boundary_guids):
-        compas_rhino.delete_objects(boundary_seg_guids)
+    for guid in boundary_guids:
+        compas_rhino.rs.EnableRedraw(False)
+        segments = compas_rhino.rs.ExplodeCurves(guid)
+        for segment in segments:
+            curve = RhinoCurve.from_guid(segment)
+            N = max(int(curve.length() / target_length), 1)
+            points = curve.divide(N, over_space=True)
+            boundary.extend(map(list, points))
+        compas_rhino.rs.DeleteObjects(segments)
+        compas_rhino.rs.EnableRedraw(True)
+    # boundary_seg_guids = compas_rhino.rs.ExplodeCurves(boundary_guids[0])
+    # for guid in boundary_seg_guids:
+    #     curve = RhinoCurve.from_guid(guid)
+    #     N = int(curve.length() / target_length) or 1
+    #     points = curve.divide(N, over_space=True)
+    #     boundary.extend(map(list, points))
+    # if len(boundary_seg_guids) > len(boundary_guids):
+    #     compas_rhino.delete_objects(boundary_seg_guids)
 
     # polylines
     polylines = []
@@ -68,8 +77,7 @@ def RunCommand(is_interactive):
 
     area = target_length ** 2 * 0.5 * 0.5 * 1.732
 
-    vertices, faces = conforming_delaunay_triangulation(
-        boundary, polylines=polylines, polygons=polygons, area=area)
+    vertices, faces = conforming_delaunay_triangulation(boundary, polylines=polylines, polygons=polygons, angle=30, area=area)
 
     # fix all the vertices on the constraints
     # is_fixed is thus relevant hor horizontal as well...
@@ -81,6 +89,7 @@ def RunCommand(is_interactive):
     scene.update()
 
     print('Pattern object successfully created.')
+
 
 # ==============================================================================
 # Main

@@ -15,6 +15,22 @@ from compas.geometry import midpoint_point_point_xy
 __commandname__ = "RV2boundary_boundaries"
 
 
+def split_boundary(pattern):
+    boundaries = pattern.vertices_on_boundaries()
+    exterior = boundaries[0]
+    opening = []
+    openings = [opening]
+    for vertex in exterior:
+        opening.append(vertex)
+        if pattern.vertex_attribute(vertex, 'is_anchor'):
+            opening = [vertex]
+            openings.append(opening)
+    openings[-1] += openings[0]
+    del openings[0]
+    openings[:] = [opening for opening in openings if len(opening) > 2]
+    return openings
+
+
 def relax_pattern(pattern, relax):
     key_index = pattern.key_index()
     xyz = pattern.vertices_attributes('xyz')
@@ -87,19 +103,9 @@ def RunCommand(is_interactive):
         return
 
     # split the exterior boundary
-    boundaries = pattern.datastructure.vertices_on_boundaries()
-    exterior = boundaries[0]
-    opening = []
-    openings = [opening]
-    for vertex in exterior:
-        opening.append(vertex)
-        if pattern.datastructure.vertex_attribute(vertex, 'is_anchor'):
-            opening = [vertex]
-            openings.append(opening)
-    openings[-1] += openings[0]
-    del openings[0]
-    openings[:] = [opening for opening in openings if len(opening) > 2]
+    openings = split_boundary(pattern.datastructure)
 
+    # make a label drawing function
     draw_labels = partial(_draw_labels, pattern, openings)
 
     # draw a label per opening
@@ -127,8 +133,8 @@ def RunCommand(is_interactive):
     # relax the pattern
     relax_pattern(pattern.datastructure, relax)
 
-    count = 0
     # update Qs to match target sag
+    count = 0
     while True and count < 10:
         count += 1
         sags = [compute_sag(pattern.datastructure, opening) for opening in openings]

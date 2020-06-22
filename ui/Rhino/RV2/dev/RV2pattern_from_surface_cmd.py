@@ -50,6 +50,7 @@ def RunCommand(is_interactive):
 
     print('Pattern object successfully created. Input object has been hidden.')
 
+
 # ==============================================================================
 # Main
 # ==============================================================================

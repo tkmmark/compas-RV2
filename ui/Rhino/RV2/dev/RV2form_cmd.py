@@ -19,6 +19,7 @@ def RunCommand(is_interactive):
         return
 
     pattern = scene.get("pattern")[0]
+
     if not pattern:
         print("There is no Pattern in the scene.")
         return

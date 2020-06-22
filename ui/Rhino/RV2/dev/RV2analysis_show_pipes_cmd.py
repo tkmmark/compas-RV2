@@ -18,8 +18,8 @@ def RunCommand(is_interactive):
     if not thrust:
         return
 
-    if thrust.settings['show.pipes'] is False:
-        thrust.settings['show.pipes']   = True
+    if not thrust.settings['show.pipes']:
+        thrust.settings['show.pipes'] = True
 
     else:
         thrust.settings['show.pipes'] = False

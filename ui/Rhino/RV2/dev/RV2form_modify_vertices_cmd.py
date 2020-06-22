@@ -33,7 +33,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "All":
+    if option == "All":
         keys = list(form.datastructure.vertices())
 
     elif option == "Continuous":

@@ -27,7 +27,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "Continuous":
+    if option == "Continuous":
         temp = force.select_edges()
         keys = list(set(flatten([force.datastructure.continuous_edges(key) for key in temp])))
 

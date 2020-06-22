@@ -15,6 +15,7 @@ def RunCommand(is_interactive):
         return
 
     form = scene.get("form")[0]
+
     if not form:
         print("There is no FormDiagram in the scene.")
         return

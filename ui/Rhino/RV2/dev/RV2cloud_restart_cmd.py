@@ -45,7 +45,6 @@ def RunCommand(is_interactive):
 # Main
 # ==============================================================================
 
-
 if __name__ == "__main__":
 
     RunCommand(True)

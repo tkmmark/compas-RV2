@@ -3,9 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rhino.geometry import RhinoSurface
 from compas_rv2.datastructures import Pattern
-from compas_rv2.rhino import PatternObject
 from compas_rv2.rhino import get_scene
 
 
@@ -38,6 +36,7 @@ def RunCommand(is_interactive):
     scene.update()
 
     print('Pattern object successfully created.')
+
 
 # ==============================================================================
 # Main
