@@ -11,6 +11,11 @@ from compas_singular.algorithms import boundary_triangulation
 from compas_singular.algorithms import SkeletonDecomposition
 from compas_singular.rhino.objects.surface import RhinoSurface
 
+try:
+    import rhinoscriptsyntax as rs
+except Exception:
+    compas.raise_if_ironpython()
+
 
 __all__ = ['Pattern']
 
