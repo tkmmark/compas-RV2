@@ -176,7 +176,6 @@ def RunCommand(is_interactive):
         else:
             N = [int(option1[8:])]
 
-
         while True:
             option2 = compas_rhino.rs.GetString("Select sag/span percentage:", strings=options2)
 
