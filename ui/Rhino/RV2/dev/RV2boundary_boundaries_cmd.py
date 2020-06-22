@@ -155,50 +155,61 @@ def RunCommand(is_interactive):
 
     # allow user to select label
     # and specify a target sag
-    options1 = ["Opening{}".format(i) for i, opening in enumerate(openings)]
-    options2 = ["Sag5", "Sag10", "Sag15", "Sag20", "Sag25", "Sag30"]
+    options1 = ['All'] + ["Boundary{}".format(i) for i, opening in enumerate(openings)]
+    options2 = ["Sag_{}".format(i * 5) for i in range(1, 11)]
 
     while True:
-        option1 = compas_rhino.rs.GetString("Select opening.", strings=options1)
+        option1 = compas_rhino.rs.GetString("Select boundary:", strings=options1)
+
         if not option1:
             break
-        N = int(option1[7:])
+
+        if option1 == 'All':
+            N = [i for i, opening in enumerate(openings)]
+
+        else:
+            N = [int(option1[8:])]
+
 
         while True:
-            option2 = compas_rhino.rs.GetString("Select sag.", strings=options2)
+            option2 = compas_rhino.rs.GetString("Select sag/span percentage:", strings=options2)
 
             if not option2:
                 break
 
-            targets[N] = float(option2[3:]) / 100
+            for boundary in N:
 
-            count = 0
+                targets[boundary] = float(option2[4:]) / 100
 
-            while True and count < 10:
-                count += 1
-                sags = [compute_sag(pattern.datastructure, opening) for opening in openings]
+                count = 0
 
-                if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
-                    break
+                while True and count < 10:
+                    count += 1
+                    sags = [compute_sag(pattern.datastructure, opening) for opening in openings]
 
-                for i in range(len(openings)):
-                    sag = sags[i]
-                    target = targets[i]
-                    q = Q[i]
-                    q = sag / target * q
-                    Q[i] = q
-                    opening = openings[i]
-                    pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
-                relax_pattern(pattern.datastructure, relax)
+                    if all((sag - target) ** 2 < TOL2 for sag, target in zip(sags, targets)):
+                        break
 
-            if count == 10:
-                print("did not converge after 10 iterations")
-            else:
-                print("converged after %s iterations" % count)
+                    for i in range(len(openings)):
+                        sag = sags[i]
+                        target = targets[i]
+                        q = Q[i]
+                        q = sag / target * q
+                        Q[i] = q
+                        opening = openings[i]
+                        pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
+                    relax_pattern(pattern.datastructure, relax)
+
+                if count == 10:
+                    print("did not converge after 10 iterations")
+                else:
+                    print("converged after %s iterations" % count)
 
             compas_rhino.delete_objects(guids, purge=True)
             scene.update()
             guids = draw_labels()
+
+            break
 
     compas_rhino.delete_objects(guids, purge=True)
     scene.update()
