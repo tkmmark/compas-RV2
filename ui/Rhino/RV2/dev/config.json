@@ -92,7 +92,6 @@
             {"name": "RV2boundary_supports",            "menu_text": "Identify Supports",               "icon": 15},
             {"name": "RV2boundary_openings",            "menu_text": "Add Openings",                    "icon": 16},
             {"name": "RV2boundary_boundaries",          "menu_text": "Update Boundaries",               "icon": 17},
-            {"name": "RV2boundary_loads",               "menu_text": "Define Loads",                    "icon": 18},
 
             {"name": "RV2form",                         "menu_text": "Create FormDiagram",              "icon": 19,      "tooltip": "Create form diagram"},
             {"name": "RV2force",                        "menu_text": "Create ForceDiagram",             "icon": 20,      "tooltip": "Create force diagram"},
@@ -187,8 +186,7 @@
                         [
                             {"command": "RV2boundary_supports"},
                             {"command": "RV2boundary_openings"},
-                            {"command": "RV2boundary_boundaries"},
-                            {"command": "RV2boundary_loads"}
+                            {"command": "RV2boundary_boundaries"}
                         ]
 
                     },

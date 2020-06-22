@@ -81,6 +81,7 @@ def RunCommand(is_interactive):
 
     max_angle = max(form.datastructure.edges_attribute('_a'))
     tol = form.settings['tol.angles']
+
     if max_angle < tol:
         print('Horizontal equilibrium found!')
         print('Maximum angle deviation:', max_angle)

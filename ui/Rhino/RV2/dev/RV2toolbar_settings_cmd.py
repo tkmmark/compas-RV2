@@ -25,7 +25,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "ObjectSettings":
+    if option == "ObjectSettings":
         RV2settings_objects_cmd.RunCommand(True)
 
     elif option == "SolverSettings":

@@ -31,17 +31,17 @@ def RunCommand(is_interactive):
     bq = 5
     iq = 1
 
-    options = ['boundary_edges', 'interior_edges']
+    options = ['BoundaryEdges', 'InteriorEdges']
     while True:
         option = compas_rhino.rs.GetString('Enter weights (q) for edges:', strings=options)
 
         if not option:
             break
 
-        if option == 'boundary_edges':
+        if option == 'BoundaryEdges':
             bq = compas_rhino.rs.GetReal('q for boundary edges', bq, 0.1, 10)
 
-        if option == 'interior_edges':
+        elif option == 'InteriorEdges':
             iq = compas_rhino.rs.GetReal('q for interior edges', iq, 0.1, 10)
 
     relax = proxy.function("compas.numerical.fd_numpy")

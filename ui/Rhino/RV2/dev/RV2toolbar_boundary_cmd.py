@@ -35,7 +35,7 @@ def RunCommand(is_interactive):
         if not option:
             return
 
-        elif option == "IdentifySupports":
+        if option == "IdentifySupports":
             RV2boundary_supports_cmd.RunCommand(True)
 
         elif option == "AddOpenings":

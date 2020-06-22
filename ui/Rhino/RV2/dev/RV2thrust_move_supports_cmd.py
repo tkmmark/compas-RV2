@@ -15,6 +15,7 @@ def RunCommand(is_interactive):
         return
 
     thrust = scene.get("thrust")[0]
+
     if not thrust:
         print("There is no ThrustDiagram in the scene.")
         return

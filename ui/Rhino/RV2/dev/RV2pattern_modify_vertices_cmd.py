@@ -35,7 +35,7 @@ def RunCommand(is_interactive):
         if not option:
             return
 
-        elif option == "Corners":
+        if option == "Corners":
             keys = []
             for key in pattern.datastructure.vertices_on_boundary():
                 if pattern.datastructure.vertex_degree(key) == 2:

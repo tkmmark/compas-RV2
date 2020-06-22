@@ -29,7 +29,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "FromLines":
+    if option == "FromLines":
         RV2pattern_from_lines_cmd.RunCommand(True)
 
     elif option == "FromMesh":

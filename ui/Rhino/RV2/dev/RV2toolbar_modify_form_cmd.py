@@ -32,7 +32,7 @@ def RunCommand(is_interactive):
     if not option:
         return
 
-    elif option == "DiagramAttributes":
+    if option == "DiagramAttributes":
         RV2form_attributes_cmd.RunCommand(True)
 
     elif option == "VerticesAttributes":
