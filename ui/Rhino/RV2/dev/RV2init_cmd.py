@@ -20,6 +20,7 @@ else:
     from compas_cloud import Proxy
     from compas_rv2.web import Browser
     from compas_rv2.scene import Scene
+    from compas_rv2.rhino import ErrorHandler
 
 
 __commandname__ = "RV2init"
@@ -42,7 +43,8 @@ def RunCommand(is_interactive):
 
     Browser()
 
-    sc.sticky["RV2.proxy"] = Proxy()
+    errorHandler = ErrorHandler(title="Server side Error", showLocalTraceback=False)
+    sc.sticky["RV2.proxy"] = Proxy(errorHandler=errorHandler)
 
     sc.sticky["RV2.system"] = {
         "session.dirname": CWD,
