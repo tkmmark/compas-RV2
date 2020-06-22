@@ -29,12 +29,15 @@ def RunCommand(is_interactive):
     thrust = scene.get('thrust')[0]
 
     if not form:
+        print("There is no FormDiagram in the scene.")
         return
 
     if not force:
+        print("There is no ForceDiagram in the scene.")
         return
 
     if not thrust:
+        print("There is no ThrustDiagram in the scene.")
         return
 
     bbox = form.datastructure.bounding_box_xy()

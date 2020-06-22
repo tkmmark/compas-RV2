@@ -10,12 +10,14 @@ __commandname__ = "RV2boundary_supports"
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
     pattern = scene.get("pattern")[0]
     if not pattern:
+        print("There is no Pattern in the scene.")
         return
 
     # mark all fixed vertices as anchors

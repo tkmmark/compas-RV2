@@ -212,7 +212,8 @@ def get_rv2():
 
 def get_scene():
     rv2 = get_rv2()
-    return rv2['scene']
+    if rv2:
+        return rv2['scene']
 
 
 def get_proxy():

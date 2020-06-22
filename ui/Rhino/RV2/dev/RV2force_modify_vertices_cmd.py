@@ -18,6 +18,7 @@ def RunCommand(is_interactive):
 
     force = scene.get("force")[0]
     if not force:
+        print("There is no ForceDiagram in the scene.")
         return
 
     layer = force.settings['layer']

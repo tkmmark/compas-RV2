@@ -9,13 +9,14 @@ __commandname__ = "RV2boundary_loads"
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
 
     pattern = scene.get("pattern")[0]
-
     if not pattern:
+        print("There is no Pattern in the scene.")
         return
 
     raise NotImplementedError

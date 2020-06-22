@@ -21,6 +21,7 @@ def RunCommand(is_interactive):
 
     thrust = scene.get("thrust")[0]
     if not thrust:
+        print("There is no ThrustDiagram in the scene.")
         return
 
     AttributesForm.from_sceneNode(thrust)

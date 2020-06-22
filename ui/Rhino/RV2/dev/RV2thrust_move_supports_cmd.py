@@ -14,6 +14,11 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
+    thrust = scene.get("thrust")[0]
+    if not thrust:
+        print("There is no ThrustDiagram in the scene.")
+        return
+
     raise NotImplementedError
 
 

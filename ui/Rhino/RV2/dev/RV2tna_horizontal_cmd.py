@@ -26,9 +26,11 @@ def RunCommand(is_interactive):
     force = scene.get('force')[0]
 
     if not form:
+        print("There is no FormDiagram in the scene.")
         return
 
     if not force:
+        print("There is no ForceDiagram in the scene.")
         return
 
     kmax = scene.settings['tna.horizontal.kmax']
