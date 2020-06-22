@@ -74,7 +74,7 @@ def RunCommand(is_interactive):
     dx = 1.5 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
     dy = y_form - y_force
 
-    force.datastructure.transform(Translation([dx, dy, 0]))
+    force.datastructure.transform(Translation.from_vector([dx, dy, 0]))
     force.datastructure.update_angle_deviations()
 
     scene.update()
