@@ -105,9 +105,8 @@ class Pattern(MeshMixin, Mesh):
         for key in list(self.edges()):
             if self.has_edge(key):
                 u, v = key
-                l = self.edge_length(u, v)
-                if l < tol:
-                    mesh_collapse_edge(self, u, v, t=0.5, allow_boundary=True)
+                if self.edge_length(u, v) < tol:
+                    self.collapse_edge(u, v, t=0.5, allow_boundary=True)
 
     def smooth(self, fixed, kmax=10):
         mesh_smooth_area(self, fixed=fixed, kmax=kmax)

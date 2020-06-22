@@ -9,12 +9,7 @@ __all__ = ['ThrustDiagram']
 
 
 class ThrustDiagram(FormDiagram):
-    """The RV2 ThrustDiagram.
-
-    Examples
-    --------
-    >>>
-    """
+    """The RV2 ThrustDiagram."""
 
 
 # ==============================================================================
