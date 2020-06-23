@@ -74,6 +74,17 @@ class ThrustObject(MeshObject):
     def guid_pipe(self, values):
         self._guid_pipe = dict(values)
 
+    def clear(self):
+        super(ThrustObject, self).clear()
+        guids_reactions = list(self.guid_reaction.keys())
+        guids_residuals = list(self.guid_residual.keys())
+        guids_pipes = list(self.guid_pipe.keys())
+        guids = guids_reactions + guids_residuals + guids_pipes
+        delete_objects(guids, purge=True)
+        self._guid_reaction = {}
+        self._guid_residual = {}
+        self._guid_pipe = {}
+
     def draw(self):
         layer = self.settings['layer']
 
@@ -122,14 +133,15 @@ class ThrustObject(MeshObject):
         color_edges = {key: self.settings['color.edges'] for key in keys}
 
         # color analysis
+
         if self.settings['show.color.analysis']:
             if self.datastructure.dual:
-                _keys    = list(self.datastructure.dual.edges())
+                _keys = list(self.datastructure.dual.edges())
                 print(_keys)
                 lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
-                keys   = [self.datastructure.dual.primal_edge(key) for key in _keys]
-                lmin    = min(lengths)
-                lmax    = max(lengths)
+                keys = [self.datastructure.dual.primal_edge(key) for key in _keys]
+                lmin = min(lengths)
+                lmax = max(lengths)
                 for key, length in zip(keys, lengths):
                     if lmin != lmax:
                         color_edges[key] = i_to_rgb((length - lmin) / (lmax - lmin))

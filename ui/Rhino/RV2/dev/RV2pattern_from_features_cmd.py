@@ -22,7 +22,6 @@ def RunCommand(is_interactive):
     if not srf_guid:
         return
 
-    #crv_guids = compas_rhino.select_curves("Optional. Select curves to align the pattern.") or []
     crv_guids = []
     pt_guids = compas_rhino.select_points("Optional. Select points for pole singularities.") or []
 

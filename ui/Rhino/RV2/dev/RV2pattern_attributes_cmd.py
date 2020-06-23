@@ -5,7 +5,7 @@ from __future__ import division
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import AttributesForm
 
-__commandname__ = "RV2thrust_attributes"
+__commandname__ = "RV2pattern_attributes"
 
 
 def RunCommand(is_interactive):

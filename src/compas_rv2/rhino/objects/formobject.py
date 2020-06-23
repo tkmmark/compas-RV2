@@ -72,13 +72,14 @@ class FormObject(MeshObject):
 
     def draw(self):
         """Draw the form diagram in the Rhino scene using the current settings."""
+
         layer = self.settings['layer']
 
         self.artist.layer = layer
         self.artist.clear_layer()
 
         group_vertices = "{}::vertices".format(layer)
-        group_edges    = "{}::edges".format(layer)
+        group_edges = "{}::edges".format(layer)
 
         # group_supports = "{}::supports".format(group_vertices)
         # group_free = "{}::free".format(group_vertices)
@@ -145,7 +146,7 @@ class FormObject(MeshObject):
         guids_edges = list(self.guid_edge.keys())
         delete_objects(guids_edges, purge=True)
 
-        keys  = list(self.datastructure.edges_where({'_is_edge': True}))
+        keys = list(self.datastructure.edges_where({'_is_edge': True}))
         color = {key: self.settings['color.edges'] for key in keys}
 
         color.update({key: self.settings['color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
@@ -153,11 +154,11 @@ class FormObject(MeshObject):
         # color analysis
         if self.settings['show.color.analysis']:
             if self.datastructure.dual:
-                _keys    = list(self.datastructure.dual.edges())
+                _keys = list(self.datastructure.dual.edges())
                 lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
-                keys   = [self.datastructure.dual.primal_edge(key) for key in _keys]
-                lmin    = min(lengths)
-                lmax    = max(lengths)
+                keys = [self.datastructure.dual.primal_edge(key) for key in _keys]
+                lmin = min(lengths)
+                lmax = max(lengths)
                 for key, length in zip(keys, lengths):
                     if lmin != lmax:
                         color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
@@ -175,17 +176,17 @@ class FormObject(MeshObject):
 
         if self.settings['show.angles']:
 
-            tol    = self.settings['tol.angles']
-            keys   = list(self.datastructure.edges_where({'_is_edge': True}))
+            tol = self.settings['tol.angles']
+            keys = list(self.datastructure.edges_where({'_is_edge': True}))
             angles = self.datastructure.edges_attribute('_a', keys=keys)
-            amin   = min(angles)
-            amax   = max(angles)
+            amin = min(angles)
+            amax = max(angles)
             if (amax - amin)**2 > 0.001**2:
-                text  = {}
+                text = {}
                 color = {}
                 for key, angle in zip(keys, angles):
                     if angle > tol:
-                        text[key]  = "{:.0f}".format(angle)
+                        text[key] = "{:.0f}".format(angle)
                         color[key] = i_to_rgb((angle - amin) / (amax - amin))
                 guids = self.artist.draw_edgelabels(text, color)
                 self.guid_edgelabel = zip(guids, keys)
