@@ -11,11 +11,6 @@ from compas_singular.algorithms import boundary_triangulation
 from compas_singular.algorithms import SkeletonDecomposition
 from compas_singular.rhino.objects.surface import RhinoSurface
 
-try:
-    import rhinoscriptsyntax as rs
-except Exception:
-    compas.raise_if_ironpython()
-
 
 __all__ = ['Pattern']
 
@@ -91,8 +86,7 @@ class Pattern(MeshMixin, Mesh):
                Available at: https://www.researchgate.net/publication/340096530_Topology_Finding_of_Patterns_for_Structural_Design.
 
         """
-
-        outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, input_subdivision_spacing, crv_guids = crv_guids, pt_guids = pt_guids)
+        outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, input_subdivision_spacing, crv_guids=crv_guids, pt_guids=pt_guids)
         tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy_rpc')
         decomposition = SkeletonDecomposition.from_mesh(tri_mesh)
         coarse_mesh = decomposition.decomposition_mesh(point_features)
