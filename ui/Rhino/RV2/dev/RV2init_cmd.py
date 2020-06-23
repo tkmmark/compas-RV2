@@ -7,9 +7,6 @@ import scriptcontext as sc
 
 import compas_rhino
 
-compas_rhino.unload_modules('compas_tna')
-compas_rhino.unload_modules('compas_rv2')
-
 from compas_cloud import Proxy  # noqa: E402
 from compas_rv2.web import Browser  # noqa: E402
 from compas_rv2.scene import Scene  # noqa: E402
