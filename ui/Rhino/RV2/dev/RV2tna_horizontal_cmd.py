@@ -36,7 +36,7 @@ def RunCommand(is_interactive):
     kmax = scene.settings['tna.horizontal.kmax']
     alpha = scene.settings['tna.horizontal.alpha']
 
-    options = ['alpha', 'iterations']
+    options = ['Alpha', 'Iterations']
 
     while True:
         option = compas_rhino.rs.GetString('Options for horizontal equilibrium solver:', strings=options)
@@ -44,7 +44,7 @@ def RunCommand(is_interactive):
         if not option:
             break
 
-        elif option == 'alpha':
+        if option == 'Alpha':
             alpha_options = ['form{}'.format(int(i * 10)) for i in range(11)]
             temp = compas_rhino.rs.GetString('Select parallelisation weight', alpha_options[0], alpha_options)
             if not temp:
@@ -52,7 +52,7 @@ def RunCommand(is_interactive):
             else:
                 alpha = int(temp[4:])
 
-        elif option == 'iterations':
+        elif option == 'Iterations':
             kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
 
     scene.settings['tna.horizontal.kmax'] = kmax
