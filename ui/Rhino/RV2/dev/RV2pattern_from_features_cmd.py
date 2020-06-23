@@ -37,16 +37,24 @@ def RunCommand(is_interactive):
     print("Pattern topology generated.")
 
     print("Relax pattern on surface...")
+    kmax = compas_rhino.rs.GetInteger("Number of iterations for constrained Laplacian smoothing.", 50)
     constraints = automated_smoothing_surface_constraints(pattern, srf_guid)
     constraints.update(automated_smoothing_constraints(pattern, points=pt_guids, curves=crv_guids))
-    constrained_smoothing(pattern, kmax=30, damping=0.5, constraints=constraints, algorithm='area')
+    constrained_smoothing(pattern, kmax=kmax, damping=0.5, constraints=constraints, algorithm='area')
+    objs = set(constraints.values())
+    inputs = [srf_guid] + crv_guids + pt_guids
+    for obj in objs:
+        if obj not in inputs:
+            compas_rhino.rs.DeleteObject(obj)
+    for guid in inputs:
+        compas_rhino.rs.HideObject(guid)
     print("Pattern relaxed on surface.")
 
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print('Pattern object successfully created.')
+    print('Pattern object successfully created. Input object has been hidden.')
 
 
 # ==============================================================================
