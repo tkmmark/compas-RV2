@@ -5,7 +5,7 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas.geometry import Translation
-from compas_tna.equilibrium import horizontal_
+from compas_tna.equilibrium import horizontal_nodal
 from compas_rv2.rhino import ForceConduit
 
 
@@ -35,8 +35,8 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    kmax = scene.settings['tna.horizontal.kmax']
-    alpha = scene.settings['tna.horizontal.alpha']
+    kmax = scene.settings['solver']['tna.horizontal.kmax']
+    alpha = scene.settings['solver']['tna.horizontal.alpha']
 
     options = ['Alpha', 'Iterations']
 
@@ -62,14 +62,14 @@ def RunCommand(is_interactive):
         elif option == 'Iterations':
             kmax = compas_rhino.rs.GetInteger('Enter number of iterations', kmax, 1, 10000)
 
-    scene.settings['tna.horizontal.kmax'] = kmax
-    scene.settings['tna.horizontal.alpha'] = alpha
+    scene.settings['solver']['tna.horizontal.kmax'] = kmax
+    scene.settings['solver']['tna.horizontal.alpha'] = alpha
 
     edges = force.datastructure.ordered_edges(form.datastructure)
     conduit = ForceConduit([])
 
     with conduit.enabled():
-        horizontal_(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha, callback=redraw)
+        horizontal_nodal(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha, callback=redraw)
 
     bbox_form = form.datastructure.bounding_box_xy()
     bbox_force = force.datastructure.bounding_box_xy()
