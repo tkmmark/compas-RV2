@@ -56,7 +56,6 @@ class FormObject(MeshObject):
         'show.vertices': True,
         'show.edges': True,
         'show.angles': True,
-        'show.color.analysis': False,
         'color.vertices': [0, 255, 0],
         'color.vertices:is_fixed': [0, 255, 255],
         'color.vertices:is_external': [0, 0, 0],
@@ -152,7 +151,7 @@ class FormObject(MeshObject):
         color.update({key: self.settings['color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
 
         # color analysis
-        if self.settings['show.color.analysis']:
+        if self.scene.settings['rv2']['visualization.mode.force']:
             if self.datastructure.dual:
                 _keys = list(self.datastructure.dual.edges())
                 lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]

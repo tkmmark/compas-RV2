@@ -70,7 +70,6 @@ def RunCommand(is_interactive):
 
     formdata, scale = result
 
-    force.settings['show.color.analysis'] = form.settings['show.color.analysis']
     force.settings['tol.angles'] = form.settings['tol.angles']
 
     force.datastructure.attributes['scale'] = scale

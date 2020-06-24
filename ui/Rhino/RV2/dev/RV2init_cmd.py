@@ -19,8 +19,7 @@ __commandname__ = "RV2init"
 SETTINGS = {
 
     "rv2": {
-        "section1.bool.example": False,
-        "section2.num.example": 1.0,
+        "visualization.mode.force": False,
     },
 
     "solver": {

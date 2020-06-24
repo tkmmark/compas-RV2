@@ -14,29 +14,12 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    form = scene.get("form")[0]
-    if not form:
-        return
-
-    force = scene.get("force")[0]
-    if not force:
-        return
-
-    thrust = scene.get("thrust")[0]
-    if not thrust:
-        return
-
-    if not form.settings['show.color.analysis']:
-        form.settings['show.color.analysis'] = True
-        force.settings['show.color.analysis'] = True
-        thrust.settings['show.color.analysis'] = True
-        print('Color analysis mode ON.')
-
+    if scene.settings['rv2']['visualization.mode.force']:
+        print('Visualization Mode: Force is ON.')
+        scene.settings['rv2']['visualization.mode.force'] = False
     else:
-        form.settings['show.color.analysis'] = False
-        force.settings['show.color.analysis'] = False
-        thrust.settings['show.color.analysis'] = False
-        print('Color analysis mode OFF.')
+        scene.settings['rv2']['visualization.mode.force'] = True
+        print('Visualization Mode: Force is OFF.')
 
     scene.update()
 
