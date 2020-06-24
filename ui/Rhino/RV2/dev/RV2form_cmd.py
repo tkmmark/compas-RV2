@@ -30,7 +30,10 @@ def RunCommand(is_interactive):
 
     form = FormDiagram.from_pattern(pattern.datastructure)
     form.edges_attribute('fmin', 0.1)
-    form.vertices_attribute('_is_fixed', False)
+    form.vertices_attribute('is_fixed', False)
+    fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
+    if fixed:
+        form.vertices_attribute('is_anchor', True, keys=fixed)
 
     thrust = form.copy(cls=ThrustDiagram)
 

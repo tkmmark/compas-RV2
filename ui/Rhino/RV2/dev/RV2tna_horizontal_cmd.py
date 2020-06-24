@@ -4,23 +4,25 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
-from compas_rv2.rhino import get_proxy
 from compas.geometry import Translation
+from compas_tna.equilibrium import horizontal_
+from compas_rv2.rhino import ForceConduit
 
 
 __commandname__ = "RV2tna_horizontal"
 
 
 def RunCommand(is_interactive):
+
+    def redraw(k, xy):
+        if k % 10 == 0:
+            print(k)
+            conduit.lines = [[[xy[i][1], -xy[i][0]], [xy[j][1], -xy[j][0]]] for i, j in edges]
+            conduit.redraw()
+
     scene = get_scene()
     if not scene:
         return
-
-    proxy = get_proxy()
-    if not proxy:
-        return
-
-    horizontal = proxy.function('compas_rv2.equilibrium.horizontal_nodal_proxy')
 
     form = scene.get('form')[0]
     force = scene.get('force')[0]
@@ -46,22 +48,28 @@ def RunCommand(is_interactive):
 
         if option == 'Alpha':
             alpha_options = ['form{}'.format(int(i * 10)) for i in range(11)]
-            temp = compas_rhino.rs.GetString('Select parallelisation weight', alpha_options[0], alpha_options)
+            alpha_default = 0
+            for i in range(11):
+                if alpha == i * 10:
+                    alpha_default = i
+                    break
+            temp = compas_rhino.rs.GetString('Select parallelisation weight', alpha_options[alpha_default], alpha_options)
             if not temp:
                 alpha = 100
             else:
                 alpha = int(temp[4:])
 
         elif option == 'Iterations':
-            kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
+            kmax = compas_rhino.rs.GetInteger('Enter number of iterations', kmax, 1, 10000)
 
     scene.settings['tna.horizontal.kmax'] = kmax
     scene.settings['tna.horizontal.alpha'] = alpha
 
-    formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data, kmax=kmax, alpha=alpha)
+    edges = force.datastructure.ordered_edges(form.datastructure)
+    conduit = ForceConduit([])
 
-    form.datastructure.data = formdata
-    force.datastructure.data = forcedata
+    with conduit.enabled():
+        horizontal_(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha, callback=redraw)
 
     bbox_form = form.datastructure.bounding_box_xy()
     bbox_force = force.datastructure.bounding_box_xy()
