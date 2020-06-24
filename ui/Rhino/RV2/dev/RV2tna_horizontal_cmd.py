@@ -33,8 +33,8 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    kmax = scene.settings['tna.horizontal.kmax']
-    alpha = scene.settings['tna.horizontal.alpha']
+    kmax = scene.settings['solver']['tna.horizontal.kmax']
+    alpha = scene.settings['solver']['tna.horizontal.alpha']
 
     options = ['Alpha', 'Iterations']
 
@@ -55,8 +55,8 @@ def RunCommand(is_interactive):
         elif option == 'Iterations':
             kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
 
-    scene.settings['tna.horizontal.kmax'] = kmax
-    scene.settings['tna.horizontal.alpha'] = alpha
+    scene.settings['solver']['tna.horizontal.kmax'] = kmax
+    scene.settings['solver']['tna.horizontal.alpha'] = alpha
 
     formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data, kmax=kmax, alpha=alpha)
 

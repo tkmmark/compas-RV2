@@ -17,10 +17,19 @@ __commandname__ = "RV2init"
 
 
 SETTINGS = {
-    "tna.vertical.kmax": 300,
-    "tna.vertical.zmax": 4.0,
-    "tna.horizontal.kmax": 100,
-    "tna.horizontal.alpha": 100,
+
+    "rv2": {
+        "section1.bool.example": False,
+        "section2.num.example": 1.0,
+    },
+
+    "solver": {
+        "tna.vertical.kmax": 300,
+        "tna.vertical.zmax": 4.0,
+        "tna.horizontal.kmax": 100,
+        "tna.horizontal.alpha": 100,
+    }
+
 }
 
 

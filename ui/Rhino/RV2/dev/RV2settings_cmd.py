@@ -6,7 +6,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import SettingsForm
 
 
-__commandname__ = "RV2settings_solver"
+__commandname__ = "RV2settings"
 
 
 def RunCommand(is_interactive):
@@ -15,7 +15,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    SettingsForm.from_settings(scene.settings["solver"], 'Solver')
+    SettingsForm.from_scene(scene, object_types=["PatternObject", "FormObject", "ForceObject", "ThrustObject"], global_settings=["rv2", "solver"])
 
     scene.update()
 

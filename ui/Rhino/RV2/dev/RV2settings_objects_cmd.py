@@ -15,7 +15,7 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    SettingsForm.from_scene(scene)
+    SettingsForm.from_scene(scene, object_types=["PatternObject", "FormObject", "ForceObject", "ThrustObject"], global_settings=["rv2"])
 
     scene.update()
 
