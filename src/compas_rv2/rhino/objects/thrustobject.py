@@ -25,7 +25,6 @@ class ThrustObject(MeshObject):
         'show.loads': False,
         'show.pipes': False,
         'viz.mode': None,  # discrete, continuous
-        'show.color.analysis': False,
         'color.mode': None,  # minmax
         'color.vertices': [255, 0, 255],
         'color.vertices:is_fixed': [0, 255, 0],
@@ -134,7 +133,7 @@ class ThrustObject(MeshObject):
 
         # color analysis
 
-        if self.settings['show.color.analysis']:
+        if self.scene.settings['rv2']['visualization.mode.force']:
             if self.datastructure.dual:
                 _keys = list(self.datastructure.dual.edges())
                 print(_keys)
@@ -208,7 +207,7 @@ class ThrustObject(MeshObject):
             tol = self.settings['tol.pipes']
             keys = list(self.datastructure.edges_where({'_is_edge': True, '_is_external': False}))
             color = self.settings['color.pipes']
-            if self.settings['show.color.analysis']:
+            if self.scene.settings['rv2']['visualization.mode.force']:
                 color = color_edges
             scale = self.settings['scale.pipes']
             guids = self.artist.draw_pipes(keys, color, scale, tol)

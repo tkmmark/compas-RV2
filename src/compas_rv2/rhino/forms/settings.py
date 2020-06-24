@@ -5,6 +5,7 @@ from __future__ import division
 
 import compas
 from compas_rv2.rhino import get_scene
+from collections import OrderedDict
 
 try:
     import Eto.Drawing as drawing
@@ -111,18 +112,36 @@ class Settings_Tab(forms.TabPage):
 class SettingsForm(forms.Form):
 
     @classmethod
-    def from_scene(cls, scene):
+    def from_scene(cls, scene, object_types=None, global_settings=None):
 
-        all_settings = {}
+        all_settings = OrderedDict()
+
+        if global_settings:
+            for name in global_settings:
+                all_settings[name] = scene.settings[name]
+
         # pre-populate class default settins
-        for object_type in scene.registered_object_types:
-            if hasattr(object_type, 'settings'):
-                if isinstance(object_type.settings, dict):  # avoid property objects
-                    all_settings[object_type.__name__] = object_type.settings
-        # # overwite with object setting if added as node
+        if object_types:
+            for object_type_name in object_types:
+                object_type = [object_type for object_type in scene.registered_object_types if object_type.__name__ == object_type_name]
+                if len(object_type) > 0:
+                    object_type = object_type[0]
+                    if hasattr(object_type, 'settings'):
+                        if isinstance(object_type.settings, dict):  # avoid property objects
+                            all_settings[object_type.__name__] = object_type.settings
+                else:
+                    raise TypeError("%s is not registered in the scene" % object_type_name)
+        else:
+            for object_type in scene.registered_object_types:
+                if hasattr(object_type, 'settings'):
+                    if isinstance(object_type.settings, dict):  # avoid property objects
+                        all_settings[object_type.__name__] = object_type.settings
+        # overwite with object setting if added as node
         for key in scene.nodes:
             node = scene.nodes[key]
-            all_settings[node.__class__.__name__] = node.settings
+            node_type = node.__class__.__name__
+            if node_type in all_settings:
+                all_settings[node_type] = node.settings
 
         settingsForm = cls()
         settingsForm.scene = scene
