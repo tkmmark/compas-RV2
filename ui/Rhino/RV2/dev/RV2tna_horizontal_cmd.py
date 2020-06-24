@@ -58,7 +58,12 @@ def RunCommand(is_interactive):
     scene.settings['solver']['tna.horizontal.kmax'] = kmax
     scene.settings['solver']['tna.horizontal.alpha'] = alpha
 
-    formdata, forcedata = horizontal(form.datastructure.data, force.datastructure.data, kmax=kmax, alpha=alpha)
+    result = horizontal(form.datastructure.data, force.datastructure.data, kmax=kmax, alpha=alpha)
+    if not result:
+        print("horizontal equilibrium failed")
+        return
+
+    formdata, forcedata = result
 
     form.datastructure.data = formdata
     force.datastructure.data = forcedata

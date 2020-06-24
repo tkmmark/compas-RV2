@@ -63,7 +63,12 @@ def RunCommand(is_interactive):
     scene.settings['solver']['tna.vertical.zmax'] = zmax
     scene.settings['solver']['tna.vertical.kmax'] = kmax
 
-    formdata, scale = vertical(form.datastructure.data, zmax, kmax=kmax)
+    result = vertical(form.datastructure.data, zmax, kmax=kmax)
+    if not result:
+        print("vertical equilibrium failed")
+        return
+
+    formdata, scale = result
 
     force.settings['show.color.analysis'] = form.settings['show.color.analysis']
     force.settings['tol.angles'] = form.settings['tol.angles']
