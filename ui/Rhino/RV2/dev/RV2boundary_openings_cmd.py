@@ -23,6 +23,8 @@ def RunCommand(is_interactive):
     # delete selected vertices and faces
     # update scene
 
+    raise NotImplementedError
+
 
 # ==============================================================================
 # Main

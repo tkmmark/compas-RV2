@@ -14,6 +14,8 @@ __commandname__ = "RV2pattern_from_features"
 
 def RunCommand(is_interactive):
 
+    raise NotImplementedError
+
     scene = get_scene()
     if not scene:
         return
