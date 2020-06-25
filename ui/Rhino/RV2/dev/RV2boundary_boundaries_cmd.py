@@ -35,7 +35,9 @@ def relax_pattern(pattern, relax):
     key_index = pattern.key_index()
     xyz = pattern.vertices_attributes('xyz')
     loads = [[0.0, 0.0, 0.0] for _ in xyz]
-    fixed = [key_index[key] for key in pattern.vertices_where({'is_anchor': True})]
+    anchors = [key_index[key] for key in pattern.vertices_where({'is_anchor': True})]
+    fixed = [key_index[key] for key in pattern.vertices_where({'is_fixed': True})]
+    fixed = list(set(anchors + fixed))
     edges = [(key_index[u], key_index[v]) for u, v in pattern.edges()]
     q = list(pattern.edges_attribute('q'))
     xyz, q, f, l, r = relax(xyz, edges, fixed, q, loads)
