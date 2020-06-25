@@ -9,7 +9,6 @@ from compas_rv2.rhino import get_scene
 import RV2boundary_supports_cmd
 import RV2boundary_openings_cmd
 import RV2boundary_boundaries_cmd
-import RV2boundary_loads_cmd
 
 
 __commandname__ = "RV2toolbar_boundary"
@@ -26,7 +25,7 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    options = ["IdentifySupports", "AddOpenings", "UpdateBoundaries", "DefineLoads"]
+    options = ["IdentifySupports", "AddOpenings", "UpdateBoundaries"]
 
     while True:
 
@@ -43,9 +42,6 @@ def RunCommand(is_interactive):
 
         elif option == "UpdateBoundaries":
             RV2boundary_boundaries_cmd.RunCommand(True)
-
-        elif option == "DefineLoads":
-            RV2boundary_loads_cmd.RunCommand(True)
 
 
 # ==============================================================================
