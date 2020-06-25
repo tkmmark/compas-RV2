@@ -223,23 +223,6 @@
 
                             {"command": "RV2thrust_move_supports"}
                         ]
-                    },
-
-                    {"type": "separator"},
-
-                    {
-                        "name" : "Analysis",
-                        "items":
-                        [
-                        ]
-                    },
-
-                    {"type": "separator"},
-                    {
-                        "name" : "Extensions",
-                        "items":
-                        [
-                        ]
                     }
                 ]
             }

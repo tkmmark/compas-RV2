@@ -15,7 +15,7 @@ class ThrustObject(MeshObject):
 
     settings = {
         'layer': "RV2::ThrustDiagram",
-        'show.vertices': False,
+        'show.vertices': True,
         'show.edges': False,
         'show.faces': True,
         'show.reactions': True,
@@ -105,7 +105,9 @@ class ThrustObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        keys = list(self.datastructure.vertices())
+        anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
+        fixed = list(self.datastructure.vertices_where({'is_fixed': True}))
+        keys = list(set(anchors + fixed))
         color = {key: self.settings['color.vertices'] for key in keys}
         color.update({key: self.settings['color.vertices:is_fixed'] for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
         color.update({key: self.settings['color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
@@ -127,19 +129,6 @@ class ThrustObject(MeshObject):
 
         keys = list(self.datastructure.edges_where({'_is_edge': True}))
         color_edges = {key: self.settings['color.edges'] for key in keys}
-
-        # color analysis
-
-        # if self.scene.settings['RV2']['visualization.mode.force']:
-        #     if self.datastructure.dual:
-        #         _keys = list(self.datastructure.dual.edges())
-        #         lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
-        #         keys = [self.datastructure.dual.primal_edge(key) for key in _keys]
-        #         lmin = min(lengths)
-        #         lmax = max(lengths)
-        #         for key, length in zip(keys, lengths):
-        #             if lmin != lmax:
-        #                 color_edges[key] = i_to_rgb((length - lmin) / (lmax - lmin))
 
         guids = self.artist.draw_edges(keys, color_edges)
         self.guid_edge = zip(guids, keys)
@@ -205,8 +194,6 @@ class ThrustObject(MeshObject):
             tol = self.settings['tol.pipes']
             keys = list(self.datastructure.edges_where({'_is_edge': True}))
             color = self.settings['color.pipes']
-            # if self.scene.settings['RV2']['visualization.mode.force']:
-            #     color = color_edges
             scale = self.settings['scale.pipes']
             guids = self.artist.draw_pipes(keys, color, scale, tol)
             self.guid_pipe = zip(guids, keys)

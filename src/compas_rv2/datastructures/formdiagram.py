@@ -25,7 +25,7 @@ class FormDiagram(MeshMixin, FormDiagram):
     """
 
     @classmethod
-    def from_pattern(cls, pattern, feet=2):
+    def from_pattern(cls, pattern):
         """Construct a form diagram from a pattern.
 
         Parameters
