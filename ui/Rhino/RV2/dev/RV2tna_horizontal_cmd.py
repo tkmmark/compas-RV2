@@ -6,7 +6,7 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas.geometry import Translation
 from compas_tna.equilibrium import horizontal_nodal
-from compas_rv2.rhino import ForceConduit
+from compas_rv2.rhino import HorizontalConduit
 
 
 __commandname__ = "RV2tna_horizontal"
@@ -14,7 +14,7 @@ __commandname__ = "RV2tna_horizontal"
 
 def RunCommand(is_interactive):
 
-    def redraw(k, xy):
+    def redraw(k, xy, edges):
         if k % conduit.refreshrate:
             return
         print(k)
@@ -75,8 +75,7 @@ def RunCommand(is_interactive):
     scene.settings['Solvers']['tna.horizontal.refreshrate'] = refresh
 
     if refresh > 0:
-        edges = force.datastructure.ordered_edges(form.datastructure)
-        conduit = ForceConduit([], refreshrate=refresh)
+        conduit = HorizontalConduit([], refreshrate=refresh)
         with conduit.enabled():
             horizontal_nodal(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha, callback=redraw)
     else:
