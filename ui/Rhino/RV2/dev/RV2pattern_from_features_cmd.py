@@ -25,7 +25,6 @@ def RunCommand(is_interactive):
     crv_guids = []
     pt_guids = compas_rhino.select_points("Optional. Select points for pole singularities.") or []
 
-    #input_subdivision_spacing = compas_rhino.rs.GetReal("Input subdivision spacing", 1.0)
     box = compas_rhino.rs.BoundingBox([srf_guid])
     input_subdivision_spacing = 0.05 * compas_rhino.rs.Distance(box[0], box[6])
 

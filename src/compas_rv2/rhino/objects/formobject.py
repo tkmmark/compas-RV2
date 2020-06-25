@@ -56,7 +56,7 @@ class FormObject(MeshObject):
         'show.vertices': True,
         'show.edges': True,
         'color.vertices': [0, 255, 0],
-        'color.vertices:is_fixed': [0, 255, 255],
+        'color.vertices:is_fixed': [0, 0, 255],
         'color.vertices:is_anchor': [255, 0, 0],
         'color.edges': [0, 127, 0],
     }

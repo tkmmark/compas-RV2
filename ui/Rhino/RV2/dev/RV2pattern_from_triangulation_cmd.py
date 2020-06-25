@@ -26,6 +26,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
+    # constrained_delaunay_triangulation = proxy.function('compas_triangle.delaunay.constrained_delaunay_triangulation')
     conforming_delaunay_triangulation = proxy.function('compas_triangle.delaunay.conforming_delaunay_triangulation')
 
     boundary_guids = compas_rhino.select_curves('Select outer boundary.')
@@ -90,12 +91,10 @@ def RunCommand(is_interactive):
     area = target_length ** 2 * 0.5 * 0.5 * 1.732
 
     vertices, faces = conforming_delaunay_triangulation(boundary, polylines=polylines, polygons=polygons, angle=30, area=area)
+    # vertices, faces = constrained_delaunay_triangulation(boundary, polylines=polylines, polygons=polygons)
     vertices[:] = [[float(x), float(y), float(z)] for x, y, z in vertices]
 
     pattern = Pattern.from_vertices_and_faces(vertices, faces)
-
-    # vertices on constraints should store a reference to the constraint
-    # vertices with more than one constraint are corners and should be marked as anchor/fixed
 
     gkey_key = {geometric_key(pattern.vertex_coordinates(key)): key for key in pattern.vertices()}
 
@@ -105,9 +104,7 @@ def RunCommand(is_interactive):
             key = gkey_key[gkey]
             if len(guids) > 1:
                 pattern.vertex_attribute(key, 'is_fixed', True)
-            # pattern.vertex_attribute(key, 'constraint', [str(guid) for guid in guids])
-            # if gkey in on_hole:
-            #     pattern.vertex_attribute(key, 'is_fixed', True)
+            pattern.vertex_attribute(key, 'constraints', [str(guid) for guid in guids])
 
     scene.clear()
     scene.add(pattern, name='pattern')

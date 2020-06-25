@@ -19,8 +19,6 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    raise NotImplementedError
-
 
 # ==============================================================================
 # Main

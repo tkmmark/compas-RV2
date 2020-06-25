@@ -41,6 +41,7 @@ class PatternObject(MeshObject):
         'color.vertices': [255, 255, 255],
         'color.vertices:is_anchor': [255, 0, 0],
         'color.vertices:is_fixed': [0, 0, 255],
+        'color.vertices:is_constrained': [0, 255, 255],
         'color.edges': [0, 0, 0],
         'color.faces': [200, 200, 200],
         'from_surface.density.U': 10,
@@ -79,10 +80,12 @@ class PatternObject(MeshObject):
         keys = list(self.datastructure.vertices())
 
         color = {key: self.settings['color.vertices'] for key in keys}
+        color_constrained = self.settings['color.vertices:is_constrained']
         color_fixed = self.settings['color.vertices:is_fixed']
         color_anchor = self.settings['color.vertices:is_anchor']
-        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+        color.update({key: color_constrained for key in self.datastructure.vertices() if self.datastructure.vertex_attribute(key, 'constraints')})
+        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True})})
+        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True})})
 
         guids = self.artist.draw_vertices(keys, color)
         self.guid_vertex = zip(guids, keys)
