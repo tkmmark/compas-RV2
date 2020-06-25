@@ -41,7 +41,7 @@ def RunCommand(is_interactive):
     diagonal = length_vector(subtract_vectors(bbox_form[2], bbox_form[0]))
     zmax = 0.25 * diagonal
 
-    scene.settings['solver']['tna.vertical.zmax'] = round(zmax, 1)
+    scene.settings['Solvers']['tna.vertical.zmax'] = round(zmax, 1)
     scene.clear()
     scene.add(form, name='form')
     scene.add(thrust, name='thrust')

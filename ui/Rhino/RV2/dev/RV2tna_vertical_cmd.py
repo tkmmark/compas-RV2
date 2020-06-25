@@ -43,8 +43,8 @@ def RunCommand(is_interactive):
     bbox = form.datastructure.bounding_box_xy()
     diagonal = length_vector(subtract_vectors(bbox[2], bbox[0]))
 
-    zmax = scene.settings['solver']['tna.vertical.zmax']
-    kmax = scene.settings['solver']['tna.vertical.kmax']
+    zmax = scene.settings['Solvers']['tna.vertical.zmax']
+    kmax = scene.settings['Solvers']['tna.vertical.kmax']
 
     options = ['TargetHeight', 'Iterations']
 
@@ -60,8 +60,8 @@ def RunCommand(is_interactive):
         elif option == 'Iterations':
             kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
 
-    scene.settings['solver']['tna.vertical.zmax'] = zmax
-    scene.settings['solver']['tna.vertical.kmax'] = kmax
+    scene.settings['Solvers']['tna.vertical.zmax'] = zmax
+    scene.settings['Solvers']['tna.vertical.kmax'] = kmax
 
     result = vertical(form.datastructure.data, zmax, kmax=kmax)
     if not result:
@@ -70,11 +70,13 @@ def RunCommand(is_interactive):
 
     formdata, scale = result
 
-    force.settings['tol.angles'] = form.settings['tol.angles']
-
     force.datastructure.attributes['scale'] = scale
     form.datastructure.data = formdata
     thrust.datastructure.data = formdata
+
+    form.datastructure.dual = force.datastructure
+    force.datastructure.primal = form.datastructure
+    thrust.datastructure.dual = force.datastructure
 
     scene.update()
 

@@ -35,7 +35,7 @@ def RunCommand(is_interactive):
     hole_guids = compas_rhino.select_curves('Select inner boundaries.')
     segments_guids = compas_rhino.select_curves('Select constraint curves.')
 
-    target_length = rs.GetReal('Specifiy target edge length.')
+    target_length = rs.GetReal('Specifiy target edge length.', 1.0)
     if not target_length:
         return
 
@@ -56,8 +56,6 @@ def RunCommand(is_interactive):
                     gkey_constraints[gkey] = []
                 gkey_constraints[gkey].append(segment)
             boundary.extend(points)
-        # for segment in segments:
-        #     compas_rhino.rs.ObjectLayer(segment, "RV2::Constraints::Boundary")
         compas_rhino.delete_objects(segments, purge=True)
         compas_rhino.rs.EnableRedraw(True)
 
@@ -74,24 +72,20 @@ def RunCommand(is_interactive):
                     gkey_constraints[gkey] = []
                 gkey_constraints[gkey].append(guid)
             polylines.append(points)
-            # compas_rhino.rs.ObjectLayer(guid, "RV2::Constraints::Curves")
 
     # hole polygons
-    on_hole = []
     polygons = []
     if hole_guids:
         for guid in hole_guids:
             curve = RhinoCurve.from_guid(guid)
             N = int(curve.length() / target_length) or 1
             points = map(list, curve.divide(N, over_space=True))
-            for point in points:
+            for point in points[:-1]:
                 gkey = geometric_key(point)
                 if gkey not in gkey_constraints:
                     gkey_constraints[gkey] = []
                 gkey_constraints[gkey].append(guid)
-                on_hole.append(gkey)
             polygons.append(points)
-            # compas_rhino.rs.ObjectLayer(guid, "RV2::Constraints::Holes")
 
     area = target_length ** 2 * 0.5 * 0.5 * 1.732
 
@@ -111,9 +105,9 @@ def RunCommand(is_interactive):
             key = gkey_key[gkey]
             if len(guids) > 1:
                 pattern.vertex_attribute(key, 'is_fixed', True)
-            pattern.vertex_attribute(key, 'constraint', [str(guid) for guid in guids])
-            if gkey in on_hole:
-                pattern.vertex_attribute(key, 'is_fixed', True)
+            # pattern.vertex_attribute(key, 'constraint', [str(guid) for guid in guids])
+            # if gkey in on_hole:
+            #     pattern.vertex_attribute(key, 'is_fixed', True)
 
     scene.clear()
     scene.add(pattern, name='pattern')

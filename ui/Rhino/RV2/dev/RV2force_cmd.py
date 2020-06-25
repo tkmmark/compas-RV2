@@ -31,7 +31,7 @@ def RunCommand(is_interactive):
     ymin_force, ymax_force = bbox_force[0][1], bbox_force[3][1]
     y_form = ymin_form + 0.5 * (ymax_form - ymin_form)
     y_force = ymin_force + 0.5 * (ymax_force - ymin_force)
-    dx = 1.5 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
+    dx = 1.3 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
     dy = y_form - y_force
 
     force.transform(Translation.from_vector([dx, dy, 0]))

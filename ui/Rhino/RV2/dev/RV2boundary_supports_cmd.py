@@ -66,8 +66,8 @@ def RunCommand(is_interactive):
                     keys.append(key)
 
         elif option2 == "ByContinuousEdges":
-            temp = pattern.select_edges()
-            keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+            edges = pattern.select_edges()
+            keys = list(set(flatten([pattern.datastructure.vertices_on_edge_loop(edge) for edge in edges])))
 
         elif option2 == "Manual":
             keys = pattern.select_vertices()

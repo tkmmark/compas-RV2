@@ -18,15 +18,18 @@ __commandname__ = "RV2init"
 
 SETTINGS = {
 
-    "rv2": {
-        "visualization.mode.force": False,
+    "RV2": {
+        "show.forces": False,
+        "show.angles": True,
+        "tol.angles": 5.0
     },
 
-    "solver": {
+    "Solvers": {
         "tna.vertical.kmax": 300,
         "tna.vertical.zmax": 4.0,
         "tna.horizontal.kmax": 100,
         "tna.horizontal.alpha": 100,
+        "tna.horizontal.refreshrate": 10,
     }
 
 }

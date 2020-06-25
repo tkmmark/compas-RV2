@@ -15,10 +15,11 @@ __commandname__ = "RV2tna_horizontal"
 def RunCommand(is_interactive):
 
     def redraw(k, xy):
-        if k % 10 == 0:
-            print(k)
-            conduit.lines = [[[xy[i][1], -xy[i][0]], [xy[j][1], -xy[j][0]]] for i, j in edges]
-            conduit.redraw()
+        if k % conduit.refreshrate:
+            return
+        print(k)
+        conduit.lines = [[[xy[i][1], -xy[i][0]], [xy[j][1], -xy[j][0]]] for i, j in edges]
+        conduit.redraw()
 
     scene = get_scene()
     if not scene:
@@ -35,10 +36,11 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    kmax = scene.settings['solver']['tna.horizontal.kmax']
-    alpha = scene.settings['solver']['tna.horizontal.alpha']
+    kmax = scene.settings['Solvers']['tna.horizontal.kmax']
+    alpha = scene.settings['Solvers']['tna.horizontal.alpha']
+    refresh = scene.settings['Solvers']['tna.horizontal.refreshrate']
 
-    options = ['Alpha', 'Iterations']
+    options = ['Alpha', 'Iterations', 'RefreshRate']
 
     while True:
         option = compas_rhino.rs.GetString('Options for horizontal equilibrium solver:', strings=options)
@@ -62,14 +64,23 @@ def RunCommand(is_interactive):
         elif option == 'Iterations':
             kmax = compas_rhino.rs.GetInteger('Enter number of iterations', kmax, 1, 10000)
 
-    scene.settings['solver']['tna.horizontal.kmax'] = kmax
-    scene.settings['solver']['tna.horizontal.alpha'] = alpha
+        elif option == 'RefreshRate':
+            refresh = compas_rhino.rs.GetInteger('Refresh rate for dynamic visualisation', refresh, 0, 1000)
 
-    edges = force.datastructure.ordered_edges(form.datastructure)
-    conduit = ForceConduit([])
+    if refresh > kmax:
+        refresh = 0
 
-    with conduit.enabled():
-        horizontal_nodal(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha, callback=redraw)
+    scene.settings['Solvers']['tna.horizontal.kmax'] = kmax
+    scene.settings['Solvers']['tna.horizontal.alpha'] = alpha
+    scene.settings['Solvers']['tna.horizontal.refreshrate'] = refresh
+
+    if refresh > 0:
+        edges = force.datastructure.ordered_edges(form.datastructure)
+        conduit = ForceConduit([], refreshrate=refresh)
+        with conduit.enabled():
+            horizontal_nodal(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha, callback=redraw)
+    else:
+        horizontal_nodal(form.datastructure, force.datastructure, kmax=kmax, alpha=alpha)
 
     bbox_form = form.datastructure.bounding_box_xy()
     bbox_force = force.datastructure.bounding_box_xy()
@@ -79,7 +90,7 @@ def RunCommand(is_interactive):
     ymin_force, ymax_force = bbox_force[0][1], bbox_force[3][1]
     y_form = ymin_form + 0.5 * (ymax_form - ymin_form)
     y_force = ymin_force + 0.5 * (ymax_force - ymin_force)
-    dx = 1.5 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
+    dx = 1.3 * (xmax_form - xmin_form) + (xmin_form - xmin_force)
     dy = y_form - y_force
 
     force.datastructure.transform(Translation.from_vector([dx, dy, 0]))
@@ -88,7 +99,7 @@ def RunCommand(is_interactive):
     scene.update()
 
     max_angle = max(form.datastructure.edges_attribute('_a'))
-    tol = form.settings['tol.angles']
+    tol = scene.settings['RV2']['tol.angles']
 
     if max_angle < tol:
         print('Horizontal equilibrium found!')
