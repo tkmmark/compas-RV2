@@ -7,12 +7,14 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas.datastructures import mesh_subdivide_quad
-
+from compas_rv2.datastructures import Pattern
+from compas.utilities import geometric_key
 
 __commandname__ = "RV2pattern_subdivide"
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
@@ -36,11 +38,22 @@ def RunCommand(is_interactive):
 
         if option == "Finer":
             subd = mesh_subdivide_quad(pattern.datastructure, k=1)
-            for key, attr in pattern.datastructure.vertices(True):
-                names = list(attr.keys())
-                values = list(attr.values())
-                subd.vertex_attributes(key, names, values)
+            # for key, attr in pattern.datastructure.vertices(True):
+            #     names = list(attr.keys())
+            #     values = list(attr.values())
+            #     subd.vertex_attributes(key, names, values)
+            subd = Pattern.from_vertices_and_faces(* subd.to_vertices_and_faces())
+            names = subd.default_vertex_attributes.keys()
+            defaults = subd.default_vertex_attributes.values()
+            gkey_key = subd.gkey_key()
+            for key, gkey in pattern.datastructure.gkey_key().items():
+                if gkey in gkey_key:
+                    values = pattern.datastructure.vertex_attributes(key, names)
+                    for name, value, default in zip(names, values, defaults):
+                        if value != default:
+                            subd.vertex_attribute(gkey_key[gkey], name, value)
             pattern.datastructure = subd
+            pattern.artist.datastructure = subd
             scene.update()
 
         else:

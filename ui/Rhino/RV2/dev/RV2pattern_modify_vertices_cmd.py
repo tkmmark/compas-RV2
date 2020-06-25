@@ -47,20 +47,15 @@ def RunCommand(is_interactive):
         elif option == "ByContinuousEdges":
 
             temp = pattern.select_edges()
-            keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+            keys = list(set(flatten([pattern.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
         elif option == "Manual":
             keys = pattern.select_vertices()
 
-        # if keys:
-        #     public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
-        #     if pattern.update_vertices_attributes(keys, names=public):
-        #         scene.update()
-
         if keys:
-            pattern.datastructure.vertices_attribute('is_fixed', True, keys=keys)
-
-        scene.update()
+            public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+            if pattern.update_vertices_attributes(keys, names=public):
+                scene.update()
 
 
 # ==============================================================================

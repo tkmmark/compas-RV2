@@ -7,6 +7,8 @@ from compas_rv2.datastructures import ThrustDiagram
 from compas_rv2.datastructures import FormDiagram
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
+from compas.geometry import scale_vector
+from compas.geometry import sum_vectors
 
 
 __commandname__ = "RV2form"
@@ -30,6 +32,12 @@ def RunCommand(is_interactive):
 
     form = FormDiagram.from_pattern(pattern.datastructure)
     form.vertices_attribute('is_fixed', False)
+
+    normals = [form.face_normal(face) for face in form.faces_where({'_is_loaded': True})]
+    scale = 1 / len(normals)
+    normal = scale_vector(sum_vectors(normals), scale)
+    if normal[2] < 0:
+        form.flip_cycles()
 
     fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
 

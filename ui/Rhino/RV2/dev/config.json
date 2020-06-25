@@ -85,6 +85,12 @@
             {"name": "RV2pattern_from_skeleton",        "menu_text": "From Skeleton",                   "icon": 12},
             {"name": "RV2pattern_from_triangulation",   "menu_text": "From Triangulation",              "icon": 13},
             {"name": "RV2pattern_from_features",        "menu_text": "From Features",                   "icon": 14},
+            {"name": "RV2pattern_relax",                "menu_text": "Relax"                                      },
+            {"name": "RV2pattern_smooth",               "menu_text": "Smooth"                                     },
+            {"name": "RV2pattern_subdivide",            "menu_text": "Subdivide"                                  },
+            {"name": "RV2pattern_modify_vertices",      "menu_text": "Modify Pattern Vertices"                    },
+            {"name": "RV2pattern_modify_edges",         "menu_text": "Modify Pattern Edges"                       },
+            {"name": "RV2pattern_move_vertices",        "menu_text": "Move Pattern Vertices"                      },
 
             {"name": "RV2toolbar_boundary",             "menu_text": "Boundary Conditions",             "icon": 15,      "tooltip": "Define boundary conditions"},
 
@@ -156,6 +162,18 @@
                             {"command": "RV2pattern_from_features"}
                         ]
                     },
+                    {
+                        "name" : "Modify Pattern",
+                        "items":
+                        [
+                            {"command": "RV2pattern_relax"},
+                            {"command": "RV2pattern_smooth"},
+                            {"type": "separator"},
+                            {"command": "RV2pattern_modify_vertices"},
+                            {"command": "RV2pattern_modify_edges"},
+                            {"command": "RV2pattern_move_vertices"}
+                        ]
+                    },
 
                     {"type": "separator"},
 
@@ -186,14 +204,10 @@
                         "items":
                         [
                             {"command": "RV2form_attributes"},
-
                             {"type": "separator"},
-
                             {"command": "RV2form_modify_vertices"},
                             {"command": "RV2form_modify_edges"},
-
                             {"type": "separator"},
-
                             {"command": "RV2form_move_vertices"}
                         ]
                     },
@@ -202,14 +216,10 @@
                         "items":
                         [
                             {"command": "RV2force_attributes"},
-
                             {"type": "separator"},
-
                             {"command": "RV2force_modify_vertices"},
                             {"command": "RV2force_modify_edges"},
-
                             {"type": "separator"},
-
                             {"command": "RV2force_move_vertices"}
                         ]
                     },
@@ -218,9 +228,7 @@
                         "items":
                         [
                             {"command": "RV2thrust_attributes"},
-
                             {"type": "separator"},
-
                             {"command": "RV2thrust_move_supports"}
                         ]
                     }
