@@ -6,13 +6,13 @@ import compas_rhino
 
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
-from compas.datastructures import mesh_subdivide_quad
 
 
 __commandname__ = "RV2pattern_subdivide"
 
 
 def RunCommand(is_interactive):
+
     scene = get_scene()
     if not scene:
         return
@@ -35,13 +35,10 @@ def RunCommand(is_interactive):
             break
 
         if option == "Finer":
-            subd = mesh_subdivide_quad(pattern.datastructure, k=1)
-            for key, attr in pattern.datastructure.vertices(True):
-                names = list(attr.keys())
-                values = list(attr.values())
-                subd.vertex_attributes(key, names, values)
-            pattern.datastructure = subd
-            scene.update()
+            raise NotImplementedError
+
+        elif option == "Coarser":
+            raise NotImplementedError
 
         else:
             raise NotImplementedError

@@ -2,11 +2,13 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
+from compas.utilities import flatten
 
 
-__commandname__ = "RV2pattern_relax"
+__commandname__ = "RV2pattern_smooth"
 
 
 def RunCommand(is_interactive):
@@ -26,24 +28,19 @@ def RunCommand(is_interactive):
     fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
 
     if not fixed:
-        print("Pattern has no fixed vertices! Relaxation requires fixed vertices.")
+        print("Pattern has no fixed vertices! Smoothing requires fixed vertices.")
         return
 
-    relax = proxy.function("compas.numerical.fd_numpy")
+    options = ['True', 'False']
+    option = compas_rhino.rs.GetString("Keep all boundaries fixed.", options[0], options)
 
-    key_index = pattern.datastructure.key_index()
-    xyz = pattern.datastructure.vertices_attributes('xyz')
-    loads = [[0.0, 0.0, 0.0] for _ in xyz]
-    fixed[:] = [key_index[key] for key in fixed]
-    edges = [(key_index[u], key_index[v]) for u, v in pattern.datastructure.edges()]
+    if not option:
+        return
 
-    q = pattern.datastructure.edges_attribute('q')
+    if option == 'True':
+        fixed = fixed + list(flatten(pattern.datastructure.vertices_on_boundaries()))
 
-    xyz, q, f, l, r = relax(xyz, edges, fixed, q, loads)
-
-    for key in pattern.datastructure.vertices():
-        index = key_index[key]
-        pattern.datastructure.vertex_attributes(key, 'xyz', xyz[index])
+    pattern.datastructure.smooth_area(fixed=fixed)
 
     scene.update()
 

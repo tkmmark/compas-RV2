@@ -55,15 +55,10 @@ class FormObject(MeshObject):
         'layer': "RV2::FormDiagram",
         'show.vertices': True,
         'show.edges': True,
-        'show.angles': True,
-        'show.color.analysis': False,
         'color.vertices': [0, 255, 0],
-        'color.vertices:is_fixed': [0, 255, 255],
-        'color.vertices:is_external': [0, 0, 0],
+        'color.vertices:is_fixed': [0, 0, 255],
         'color.vertices:is_anchor': [255, 0, 0],
         'color.edges': [0, 127, 0],
-        'color.edges:is_external': [0, 0, 0],
-        'tol.angles': 5,
     }
 
     def __init__(self, scene, diagram, **kwargs):
@@ -81,21 +76,8 @@ class FormObject(MeshObject):
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
 
-        # group_supports = "{}::supports".format(group_vertices)
-        # group_free = "{}::free".format(group_vertices)
-        # group_external = "{}::external".format(group_vertices)
-
         if not compas_rhino.rs.IsGroup(group_vertices):
             compas_rhino.rs.AddGroup(group_vertices)
-
-        # if not compas_rhino.rs.IsGroup(group_supports):
-        #     compas_rhino.rs.AddGroup(group_supports)
-
-        # if not compas_rhino.rs.IsGroup(group_free):
-        #     compas_rhino.rs.AddGroup(group_free)
-
-        # if not compas_rhino.rs.IsGroup(group_external):
-        #     compas_rhino.rs.AddGroup(group_external)
 
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
@@ -105,19 +87,12 @@ class FormObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        # supports = list(self.datastructure.vertices_where({'is_anchor': True}))
-        # external = list(self.datastructure.vertices_where({'_is_external': True}))
-        # free = list(self.datastructure.vertices_where({'is_anchor': False, '_is_external': False}))
-        # keys = supports + external + free
-
         keys = list(self.datastructure.vertices())
 
         color = {key: self.settings['color.vertices'] for key in keys}
         color_fixed = self.settings['color.vertices:is_fixed']
-        color_external = self.settings['color.vertices:is_external']
         color_anchor = self.settings['color.vertices:is_anchor']
         color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-        color.update({key: color_external for key in self.datastructure.vertices_where({'_is_external': True}) if key in keys})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
 
         guids = self.artist.draw_vertices(keys, color)
@@ -125,21 +100,10 @@ class FormObject(MeshObject):
 
         compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
 
-        # key_guid = dict(zip(keys, guids))
-        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in supports], group_supports)
-        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in external], group_external)
-        # compas_rhino.rs.AddObjectsToGroup([key_guid[key] for key in free], group_free)
-
         if self.settings['show.vertices']:
             compas_rhino.rs.ShowGroup(group_vertices)
-            # compas_rhino.rs.ShowGroup(group_supports)
-            # compas_rhino.rs.ShowGroup(group_external)
-            # compas_rhino.rs.ShowGroup(group_free)
         else:
             compas_rhino.rs.HideGroup(group_vertices)
-            # compas_rhino.rs.ShowGroup(group_supports)
-            # compas_rhino.rs.HideGroup(group_external)
-            # compas_rhino.rs.HideGroup(group_free)
 
         # edges
 
@@ -149,10 +113,8 @@ class FormObject(MeshObject):
         keys = list(self.datastructure.edges_where({'_is_edge': True}))
         color = {key: self.settings['color.edges'] for key in keys}
 
-        color.update({key: self.settings['color.edges:is_external'] for key in self.datastructure.edges_where({'_is_external': True})})
-
         # color analysis
-        if self.settings['show.color.analysis']:
+        if self.scene.settings['RV2']['show.forces']:
             if self.datastructure.dual:
                 _keys = list(self.datastructure.dual.edges())
                 lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
@@ -174,9 +136,9 @@ class FormObject(MeshObject):
 
         # angles
 
-        if self.settings['show.angles']:
+        if self.scene.settings['RV2']['show.angles']:
 
-            tol = self.settings['tol.angles']
+            tol = self.scene.settings['RV2']['tol.angles']
             keys = list(self.datastructure.edges_where({'_is_edge': True}))
             angles = self.datastructure.edges_attribute('_a', keys=keys)
             amin = min(angles)

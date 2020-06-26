@@ -21,19 +21,22 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    options = ["Continuous", "Parallel", "Manual"]
+    options = ["All", "Continuous", "Parallel", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
 
     if not option:
         return
 
-    if option == "Continuous":
-        temp = force.select_edges()
-        keys = list(set(flatten([force.datastructure.continuous_edges(key) for key in temp])))
+    if option == "All":
+        keys = list(force.datastructure.edges())
+
+    elif option == "Continuous":
+        edges = force.select_edges()
+        keys = list(set(flatten([force.datastructure.edge_loop(edge) for edge in edges])))
 
     elif option == "Parallel":
         temp = force.select_edges()
-        keys = list(set(flatten([force.datastructure.parallel_edges(key) for key in temp])))
+        keys = list(set(flatten([force.datastructure.edge_strip(key) for key in temp])))
 
     elif option == "Manual":
         keys = force.select_edges()

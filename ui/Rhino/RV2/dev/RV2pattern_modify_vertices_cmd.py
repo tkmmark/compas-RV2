@@ -21,11 +21,11 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    layer = pattern.settings['layer']
-    group_vertices = "{}::vertices".format(layer)
+    # layer = pattern.settings['layer']
+    # group_vertices = "{}::vertices".format(layer)
 
-    compas_rhino.rs.ShowGroup(group_vertices)
-    compas_rhino.rs.Redraw()
+    # compas_rhino.rs.ShowGroup(group_vertices)
+    # compas_rhino.rs.Redraw()
 
     options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
 
@@ -47,20 +47,15 @@ def RunCommand(is_interactive):
         elif option == "ByContinuousEdges":
 
             temp = pattern.select_edges()
-            keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+            keys = list(set(flatten([pattern.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
         elif option == "Manual":
             keys = pattern.select_vertices()
 
-        # if keys:
-        #     public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
-        #     if pattern.update_vertices_attributes(keys, names=public):
-        #         scene.update()
-
         if keys:
-            pattern.datastructure.vertices_attribute('is_fixed', True, keys=keys)
-
-        scene.update()
+            public = [name for name in pattern.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+            if pattern.update_vertices_attributes(keys, names=public):
+                scene.update()
 
 
 # ==============================================================================

@@ -2,6 +2,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
+from functools import partial
 import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas.utilities import flatten
@@ -48,7 +49,7 @@ def RunCommand(is_interactive):
     if not option1:
         return
 
-    options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
+    options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "ByConstraint", "Manual"]
 
     while True:
         option2 = compas_rhino.rs.GetString("Selection mode:", strings=options)
@@ -66,8 +67,22 @@ def RunCommand(is_interactive):
                     keys.append(key)
 
         elif option2 == "ByContinuousEdges":
-            temp = pattern.select_edges()
-            keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+            edges = pattern.select_edges()
+            keys = list(set(flatten([pattern.datastructure.vertices_on_edge_loop(edge) for edge in edges])))
+
+        elif option2 == "ByConstraint":
+
+            def predicate(constraints, key, attr):
+                if not constraints:
+                    return False
+                if not attr['constraints']:
+                    return False
+                return any(constraint in attr['constraints'] for constraint in constraints)
+
+            temp = pattern.select_vertices()
+            keys = list(set(flatten(
+                [pattern.datastructure.vertices_where_predicate(
+                    partial(predicate, pattern.datastructure.vertex_attribute(vertex, 'constraints'))) for vertex in temp])))
 
         elif option2 == "Manual":
             keys = pattern.select_vertices()

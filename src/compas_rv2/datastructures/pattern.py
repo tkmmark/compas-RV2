@@ -49,6 +49,7 @@ class Pattern(MeshMixin, Mesh):
             'x': 0.0,
             'y': 0.0,
             'z': 0.0,
+            'constraints': None,
             'is_fixed': False,
         })
         self.default_edge_attributes.update({

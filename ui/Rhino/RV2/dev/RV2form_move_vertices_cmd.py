@@ -34,7 +34,7 @@ def RunCommand(is_interactive):
         compas_rhino.rs.ShowGroup(group_vertices)
         compas_rhino.rs.Redraw()
         temp = form.select_edges()
-        keys = list(set(flatten([form.datastructure.continuous_vertices(key) for key in temp])))
+        keys = list(set(flatten([form.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
     elif option == "Manual":
         compas_rhino.rs.ShowGroup(group_vertices)
@@ -43,6 +43,8 @@ def RunCommand(is_interactive):
 
     if keys:
         if form.move_vertices(keys):
+            if form.datastructure.dual:
+                form.datastructure.dual.update_angle_deviations()
             scene.update()
 
 

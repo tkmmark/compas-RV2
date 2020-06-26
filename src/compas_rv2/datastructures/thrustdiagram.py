@@ -11,6 +11,12 @@ __all__ = ['ThrustDiagram']
 class ThrustDiagram(FormDiagram):
     """The RV2 ThrustDiagram."""
 
+    def __init__(self, *args, **kwargs):
+        super(ThrustDiagram, self).__init__(*args, **kwargs)
+        self.attributes.update({
+            'name': 'ThrustDiagram',
+        })
+
 
 # ==============================================================================
 # Main

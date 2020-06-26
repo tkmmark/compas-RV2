@@ -21,7 +21,7 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    options = ["Continuous", "Parallel", "Manual"]
+    options = ["All", "Continuous", "Parallel", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type", strings=options)
 
     if not option:
@@ -29,11 +29,11 @@ def RunCommand(is_interactive):
 
     if option == "Continuous":
         temp = pattern.select_edges()
-        keys = list(set(flatten([pattern.datastructure.continuous_edges(key) for key in temp])))
+        keys = list(set(flatten([pattern.datastructure.edge_loop(key) for key in temp])))
 
     elif option == "Parallel":
         temp = pattern.select_edges()
-        keys = list(set(flatten([pattern.datastructure.parallel_edges(key) for key in temp])))
+        keys = list(set(flatten([pattern.datastructure.edge_strip(key) for key in temp])))
 
     elif option == "Manual":
         keys = pattern.select_edges()

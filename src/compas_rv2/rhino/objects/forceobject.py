@@ -54,13 +54,9 @@ class ForceObject(MeshObject):
         'layer': "RV2::ForceDiagram",
         'show.vertices': True,
         'show.edges': True,
-        'show.angles': True,  # move to global settings?
-        'show.color.analysis': False,  # temporary duplicate from formdiagram
         'color.vertices': [0, 255, 255],
         'color.vertices:is_fixed': [0, 255, 255],
         'color.edges': [0, 0, 255],
-        'color.edges:is_external': [0, 0, 0],
-        'tol.angles': 5  # temporary duplicate from formdiagram
     }
 
     def __init__(self, scene, diagram, **kwargs):
@@ -106,14 +102,10 @@ class ForceObject(MeshObject):
 
         keys = list(self.datastructure.edges())
         color = {key: self.settings['color.edges'] for key in keys}
-        for key in keys:
-            key_ = self.datastructure.primal.face_adjacency_halfedge(*key)
-            if self.datastructure.primal.edge_attribute(key_, '_is_external'):
-                color[key] = self.settings["color.edges:is_external"]
 
         # color analysis
 
-        if self.settings['show.color.analysis']:
+        if self.scene.settings['RV2']['show.forces']:
             lengths = [self.datastructure.edge_length(*key) for key in keys]
             lmin = min(lengths)
             lmax = max(lengths)
@@ -132,9 +124,9 @@ class ForceObject(MeshObject):
 
         # angles
 
-        if self.settings['show.angles']:
+        if self.scene.settings['RV2']['show.angles']:
 
-            tol = self.settings['tol.angles']
+            tol = self.scene.settings['RV2']['tol.angles']
             keys = list(self.datastructure.edges())
             angles = self.datastructure.edges_attribute('_a', keys=keys)
             amin = min(angles)

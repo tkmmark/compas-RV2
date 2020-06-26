@@ -71,8 +71,7 @@
 
             {"name": "RV2toolbar_settings",             "menu_text": "Settings",                        "icon": 3,      "tooltip": "RV2 settings"},
 
-            {"name": "RV2settings_objects",             "menu_text": "Object Settings",                 "icon": 4},
-            {"name": "RV2settings_solver",              "menu_text": "Solver Settings",                 "icon": 5},
+            {"name": "RV2settings",                     "menu_text": "Settings",                        "icon": 3},
 
             {"name": "RV2cloud_check",                  "menu_text": "Check",                           "icon": 6},
             {"name": "RV2cloud_restart",                "menu_text": "Restart",                         "icon": 7},
@@ -86,6 +85,13 @@
             {"name": "RV2pattern_from_skeleton",        "menu_text": "From Skeleton",                   "icon": 12},
             {"name": "RV2pattern_from_triangulation",   "menu_text": "From Triangulation",              "icon": 13},
             {"name": "RV2pattern_from_features",        "menu_text": "From Features",                   "icon": 14},
+            {"name": "RV2pattern_relax",                "menu_text": "Relax"                                      },
+            {"name": "RV2pattern_smooth",               "menu_text": "Smooth"                                     },
+            {"name": "RV2pattern_subdivide",            "menu_text": "Subdivide"                                  },
+            {"name": "RV2pattern_modify_vertices",      "menu_text": "Modify Pattern Vertices"                    },
+            {"name": "RV2pattern_modify_edges",         "menu_text": "Modify Pattern Edges"                       },
+            {"name": "RV2pattern_move_vertices",        "menu_text": "Move Pattern Vertices"                      },
+            {"name": "RV2pattern_delete",               "menu_text": "Delete Vertices/Faces"                      },
 
             {"name": "RV2toolbar_boundary",             "menu_text": "Boundary Conditions",             "icon": 15,      "tooltip": "Define boundary conditions"},
 
@@ -105,6 +111,8 @@
             {"name": "RV2form_modify_vertices",         "menu_text": "Modify Vertices Attributes",      "icon": 24},
             {"name": "RV2form_modify_edges",            "menu_text": "Modify Edges Attributes",         "icon": 25},
             {"name": "RV2form_move_vertices",           "menu_text": "Move Vertices",                   "icon": 26},
+            {"name": "RV2form_relax",                   "menu_text": "Relax"                                      },
+            {"name": "RV2form_smooth",                  "menu_text": "Smooth"                                     },
 
             {"name": "RV2toolbar_modify_force",         "menu_text": "Modify Froce Diagram",            "icon": 27,      "tooltip": "Modify Force Diagram"},
 
@@ -116,23 +124,11 @@
             {"name": "RV2toolbar_modify_thrust",        "menu_text": "Modify Thrust Diagram",           "icon": 31,      "tooltip": "Modify Thrust Diagram"},
 
             {"name": "RV2thrust_attributes",            "menu_text": "Modify ThrustDiagram Attributes", "icon": 31},
-            {"name": "RV2thrust_move_supports",         "menu_text": "Move Supports",                   "icon": 32},
-
-            {"name": "RV2analysis_lumped_stress",       "menu_text": "Lumped Stress"   },
-            {"name": "RV2analysis_curvature",           "menu_text": "Curvature"       },
-            {"name": "RV2analysis_horizontal_forces",   "menu_text": "Horizontal Forces"},
-            {"name": "RV2analysis_show_pipes",          "menu_text": "Display Pipes",                   "icon": 33},
-            {"name": "RV2analysis_show_colors",         "menu_text": "Color Analysis",                  "icon": 34}
+            {"name": "RV2thrust_move_supports",         "menu_text": "Move Supports",                   "icon": 32}
         ],
 
         "menus":
         [
-            {
-                "name": "COMPAS",
-                "items":
-                [
-                ]
-            },
             {
                 "name" : "RhinoVAULT 2",
                 "items":
@@ -146,15 +142,7 @@
                             {"command": "RV2file_save"}
                         ]
                     },
-                    {
-                        "name" : "Settings",
-                        "items":
-                        [
-                            {"command": "RV2settings_objects"},
-                            {"command": "RV2settings_solver"}
-
-                        ]
-                    },
+                    {"command": "RV2settings"},
                     {
                         "name" : "Cloud",
                         "items":
@@ -175,6 +163,21 @@
                             {"command": "RV2pattern_from_skeleton"},
                             {"command": "RV2pattern_from_triangulation"},
                             {"command": "RV2pattern_from_features"}
+                        ]
+                    },
+                    {
+                        "name" : "Modify Pattern",
+                        "items":
+                        [
+                            {"command": "RV2pattern_relax"},
+                            {"command": "RV2pattern_smooth"},
+                            {"type": "separator"},
+                            {"command": "RV2pattern_modify_vertices"},
+                            {"command": "RV2pattern_modify_edges"},
+                            {"type": "separator"},
+                            {"command": "RV2pattern_move_vertices"},
+                            {"type": "separator"},
+                            {"command": "RV2pattern_delete"}
                         ]
                     },
 
@@ -207,15 +210,14 @@
                         "items":
                         [
                             {"command": "RV2form_attributes"},
-
                             {"type": "separator"},
-
                             {"command": "RV2form_modify_vertices"},
                             {"command": "RV2form_modify_edges"},
-
                             {"type": "separator"},
-
-                            {"command": "RV2form_move_vertices"}
+                            {"command": "RV2form_move_vertices"},
+                            {"type": "separator"},
+                            {"command": "RV2form_relax"},
+                            {"command": "RV2form_smooth"}
                         ]
                     },
                     {
@@ -223,14 +225,10 @@
                         "items":
                         [
                             {"command": "RV2force_attributes"},
-
                             {"type": "separator"},
-
                             {"command": "RV2force_modify_vertices"},
                             {"command": "RV2force_modify_edges"},
-
                             {"type": "separator"},
-
                             {"command": "RV2force_move_vertices"}
                         ]
                     },
@@ -239,29 +237,8 @@
                         "items":
                         [
                             {"command": "RV2thrust_attributes"},
-
                             {"type": "separator"},
-
                             {"command": "RV2thrust_move_supports"}
-                        ]
-                    },
-
-                    {"type": "separator"},
-
-                    {
-                        "name" : "Analysis",
-                        "items":
-                        [
-                            {"command": "RV2analysis_show_pipes"},
-                            {"command": "RV2analysis_show_colors"}
-                        ]
-                    },
-
-                    {"type": "separator"},
-                    {
-                        "name" : "Extensions",
-                        "items":
-                        [
                         ]
                     }
                 ]

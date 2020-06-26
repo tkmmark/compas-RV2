@@ -19,6 +19,10 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
+    # select vertices and faces
+    # delete selected vertices and faces
+    # update scene
+
     raise NotImplementedError
 
 

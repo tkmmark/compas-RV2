@@ -38,7 +38,7 @@ def RunCommand(is_interactive):
 
     elif option == "Continuous":
         temp = form.select_edges()
-        keys = list(set(flatten([form.datastructure.continuous_vertices(key) for key in temp])))
+        keys = list(set(flatten([form.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
     elif option == "Manual":
         keys = form.select_vertices()

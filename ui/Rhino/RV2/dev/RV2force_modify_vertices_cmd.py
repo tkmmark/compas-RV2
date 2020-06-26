@@ -21,11 +21,11 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    layer = force.settings['layer']
-    group_vertices = "{}::vertices".format(layer)
+    # layer = force.settings['layer']
+    # group_vertices = "{}::vertices".format(layer)
 
-    compas_rhino.rs.ShowGroup(group_vertices)
-    compas_rhino.rs.Redraw()
+    # compas_rhino.rs.ShowGroup(group_vertices)
+    # compas_rhino.rs.Redraw()
 
     options = ["All", "Continuous", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
@@ -38,7 +38,7 @@ def RunCommand(is_interactive):
 
     elif option == "Continuous":
         temp = force.select_edges()
-        keys = list(set(flatten([force.datastructure.continuous_vertices(key) for key in temp])))
+        keys = list(set(flatten([force.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
     elif option == "Manual":
         keys = force.select_vertices()

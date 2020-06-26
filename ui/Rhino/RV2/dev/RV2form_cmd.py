@@ -7,6 +7,8 @@ from compas_rv2.datastructures import ThrustDiagram
 from compas_rv2.datastructures import FormDiagram
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
+from compas.geometry import scale_vector
+from compas.geometry import sum_vectors
 
 
 __commandname__ = "RV2form"
@@ -29,8 +31,20 @@ def RunCommand(is_interactive):
         return
 
     form = FormDiagram.from_pattern(pattern.datastructure)
-    form.edges_attribute('fmin', 0.1)
-    form.vertices_attribute('_is_fixed', False)
+    form.vertices_attribute('is_fixed', False)
+
+    normals = [form.face_normal(face) for face in form.faces_where({'_is_loaded': True})]
+    scale = 1 / len(normals)
+    normal = scale_vector(sum_vectors(normals), scale)
+    if normal[2] < 0:
+        form.flip_cycles()
+
+    fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
+
+    if fixed:
+        for key in fixed:
+            if form.has_vertex(key):
+                form.vertex_attribute(key, 'is_anchor', True)
 
     thrust = form.copy(cls=ThrustDiagram)
 
@@ -38,7 +52,7 @@ def RunCommand(is_interactive):
     diagonal = length_vector(subtract_vectors(bbox_form[2], bbox_form[0]))
     zmax = 0.25 * diagonal
 
-    scene.settings['tna.vertical.zmax'] = round(zmax, 1)
+    scene.settings['Solvers']['tna.vertical.zmax'] = round(zmax, 1)
     scene.clear()
     scene.add(form, name='form')
     scene.add(thrust, name='thrust')
