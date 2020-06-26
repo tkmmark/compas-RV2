@@ -8,7 +8,7 @@ from compas_rv2.rhino import get_proxy
 from compas.utilities import flatten
 
 
-__commandname__ = "RV2pattern_smooth"
+__commandname__ = "RV2form_smooth"
 
 
 def RunCommand(is_interactive):
@@ -20,16 +20,14 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    pattern = scene.get("pattern")[0]
-    if not pattern:
-        print("There is no Pattern in the scene.")
+    form = scene.get("form")[0]
+    if not form:
+        print("There is no FormDiagram in the scene.")
         return
 
-    fixed = list(pattern.datastructure.vertices_where({'is_fixed': True}))
-
-    if not fixed:
-        print("Pattern has no fixed vertices! Smoothing requires fixed vertices.")
-        return
+    anchors = list(form.datastructure.vertices_where({'is_anchor': True}))
+    fixed = list(form.datastructure.vertices_where({'is_fixed': True}))
+    fixed = list(set(anchors + fixed))
 
     options = ['True', 'False']
     option = compas_rhino.rs.GetString("Keep all boundaries fixed.", options[0], options)
@@ -38,9 +36,9 @@ def RunCommand(is_interactive):
         return
 
     if option == 'True':
-        fixed = fixed + list(flatten(pattern.datastructure.vertices_on_boundaries()))
+        fixed = fixed + list(flatten(form.datastructure.vertices_on_boundaries()))
 
-    pattern.datastructure.smooth_area(fixed=fixed)
+    form.datastructure.smooth_area(fixed=fixed)
 
     scene.update()
 

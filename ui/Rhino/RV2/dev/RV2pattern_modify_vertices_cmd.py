@@ -21,11 +21,11 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    layer = pattern.settings['layer']
-    group_vertices = "{}::vertices".format(layer)
+    # layer = pattern.settings['layer']
+    # group_vertices = "{}::vertices".format(layer)
 
-    compas_rhino.rs.ShowGroup(group_vertices)
-    compas_rhino.rs.Redraw()
+    # compas_rhino.rs.ShowGroup(group_vertices)
+    # compas_rhino.rs.Redraw()
 
     options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
 

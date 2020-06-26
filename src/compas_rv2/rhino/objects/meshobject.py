@@ -300,7 +300,71 @@ class MeshObject(object):
         gp.SetBasePoint(start, False)
         gp.DrawLineFromPoint(start, True)
         gp.DynamicDraw += OnDynamicDraw
-        gp.Constrain(start, start + vector)
+        gp.Constrain(Rhino.Geometry.Line(start, start + vector))
+        gp.Get()
+
+        if gp.CommandResult() != Rhino.Commands.Result.Success:
+            return False
+
+        end = gp.Point()
+        vector = list(end - start)
+        for key in keys:
+            xyz = self.datastructure.vertex_attributes(key, 'xyz')
+            self.datastructure.vertex_attributes(key, 'xyz', add_vectors(xyz, vector))
+
+        return True
+
+    def move_vertices_horizontal(self, keys):
+        """Move selected vertices in a horizontal plane.
+
+        Parameters
+        ----------
+        keys : list
+            The identifiers of the vertices.
+        """
+        def OnDynamicDraw(sender, e):
+            end = e.CurrentPoint
+            vector = end - start
+            for a, b in lines:
+                a = a + vector
+                b = b + vector
+                e.Display.DrawDottedLine(a, b, color)
+            for a, b in connectors:
+                a = a + vector
+                e.Display.DrawDottedLine(a, b, color)
+
+        Point3d = Rhino.Geometry.Point3d
+        Vector3d = Rhino.Geometry.Vector3d
+        color = Rhino.ApplicationSettings.AppearanceSettings.FeedbackColor
+        lines = []
+        connectors = []
+
+        for key in keys:
+            a = self.datastructure.vertex_coordinates(key)
+            nbrs = self.datastructure.vertex_neighbors(key)
+            for nbr in nbrs:
+                b = self.datastructure.vertex_coordinates(nbr)
+                line = [Point3d(*a), Point3d(*b)]
+                if nbr in keys:
+                    lines.append(line)
+                else:
+                    connectors.append(line)
+
+        gp = Rhino.Input.Custom.GetPoint()
+        gp.SetCommandPrompt('Point to move from?')
+        gp.Get()
+
+        if gp.CommandResult() != Rhino.Commands.Result.Success:
+            return False
+
+        start = gp.Point()
+        vector = Vector3d(0, 0, 1)
+
+        gp.SetCommandPrompt('Point to move to?')
+        gp.SetBasePoint(start, False)
+        gp.DrawLineFromPoint(start, True)
+        gp.DynamicDraw += OnDynamicDraw
+        gp.Constrain(Rhino.Geometry.Plane(start, vector), False)
         gp.Get()
 
         if gp.CommandResult() != Rhino.Commands.Result.Success:

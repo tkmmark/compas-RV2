@@ -2,7 +2,6 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas_rhino
 from compas_rv2.rhino import get_scene
 
 
@@ -22,11 +21,6 @@ def RunCommand(is_interactive):
         print("There is no ThrustDiagram in the scene.")
         return
 
-    layer = thrust.settings['layer']
-    group_vertices = "{}::vertices".format(layer)
-
-    compas_rhino.rs.ShowGroup(group_vertices)
-    compas_rhino.rs.Redraw()
     keys = thrust.select_vertices()
     keys[:] = [key for key in keys if thrust.datastructure.vertex_attribute(key, 'is_anchor')]
 

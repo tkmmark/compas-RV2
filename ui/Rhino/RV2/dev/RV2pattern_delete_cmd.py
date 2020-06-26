@@ -8,7 +8,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 
 
-__commandname__ = "RV2pattern_subdivide"
+__commandname__ = "RV2pattern_delete"
 
 
 def RunCommand(is_interactive):
@@ -26,18 +26,22 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    options = ["Finer", "Coarser"]
-    while True:
+    options = ["Vertices", "Faces"]
 
-        option = compas_rhino.rs.GetString("Select mode", strings=options)
+    while True:
+        option = compas_rhino.rs.GetString("Element type", strings=options)
 
         if not option:
             break
 
-        if option == "Finer":
-            raise NotImplementedError
+        if option == "Vertices":
+            keys = pattern.select_vertices()
+            for key in keys:
+                if pattern.datastructure.has_vertex(key):
+                    pattern.datastructure.delete_vertex(key)
+            scene.update()
 
-        elif option == "Coarser":
+        elif option == "Faces":
             raise NotImplementedError
 
         else:

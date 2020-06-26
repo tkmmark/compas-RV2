@@ -91,6 +91,7 @@
             {"name": "RV2pattern_modify_vertices",      "menu_text": "Modify Pattern Vertices"                    },
             {"name": "RV2pattern_modify_edges",         "menu_text": "Modify Pattern Edges"                       },
             {"name": "RV2pattern_move_vertices",        "menu_text": "Move Pattern Vertices"                      },
+            {"name": "RV2pattern_delete",               "menu_text": "Delete Vertices/Faces"                      },
 
             {"name": "RV2toolbar_boundary",             "menu_text": "Boundary Conditions",             "icon": 15,      "tooltip": "Define boundary conditions"},
 
@@ -110,6 +111,8 @@
             {"name": "RV2form_modify_vertices",         "menu_text": "Modify Vertices Attributes",      "icon": 24},
             {"name": "RV2form_modify_edges",            "menu_text": "Modify Edges Attributes",         "icon": 25},
             {"name": "RV2form_move_vertices",           "menu_text": "Move Vertices",                   "icon": 26},
+            {"name": "RV2form_relax",                   "menu_text": "Relax"                                      },
+            {"name": "RV2form_smooth",                  "menu_text": "Smooth"                                     },
 
             {"name": "RV2toolbar_modify_force",         "menu_text": "Modify Froce Diagram",            "icon": 27,      "tooltip": "Modify Force Diagram"},
 
@@ -171,7 +174,10 @@
                             {"type": "separator"},
                             {"command": "RV2pattern_modify_vertices"},
                             {"command": "RV2pattern_modify_edges"},
-                            {"command": "RV2pattern_move_vertices"}
+                            {"type": "separator"},
+                            {"command": "RV2pattern_move_vertices"},
+                            {"type": "separator"},
+                            {"command": "RV2pattern_delete"}
                         ]
                     },
 
@@ -208,7 +214,10 @@
                             {"command": "RV2form_modify_vertices"},
                             {"command": "RV2form_modify_edges"},
                             {"type": "separator"},
-                            {"command": "RV2form_move_vertices"}
+                            {"command": "RV2form_move_vertices"},
+                            {"type": "separator"},
+                            {"command": "RV2form_relax"},
+                            {"command": "RV2form_smooth"}
                         ]
                     },
                     {
