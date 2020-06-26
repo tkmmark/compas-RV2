@@ -8,6 +8,13 @@ from compas_rv2.rhino import get_scene
 from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
 from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
 
+try:
+    import rhinoscriptsyntax as rs
+except ImportError:
+    import platform
+    if platform.python_implementation() == 'IronPython':
+        raise
+        
 
 __commandname__ = "RV2pattern_from_features"
 
@@ -27,13 +34,17 @@ def RunCommand(is_interactive):
 
     #input_subdivision_spacing = compas_rhino.rs.GetReal("Input subdivision spacing", 1.0)
     box = compas_rhino.rs.BoundingBox([srf_guid])
-    input_subdivision_spacing = 0.05 * compas_rhino.rs.Distance(box[0], box[6])
+    input_subdivision_spacing = 0.03 * compas_rhino.rs.Distance(box[0], box[6])
 
     mesh_edge_length = compas_rhino.rs.GetReal("Pattern edge-length target.", 1.0)
 
     print("Decompose surface and generate a pattern...")
     pattern = Pattern.from_surface_and_features(input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids, pt_guids)
     print("Pattern topology generated.")
+
+    scene.clear()
+    scene.add(pattern, name='pattern')
+    scene.update()
 
     print("Relax pattern on surface...")
     kmax = compas_rhino.rs.GetInteger("Number of iterations for constrained Laplacian smoothing.", 50)
@@ -49,8 +60,6 @@ def RunCommand(is_interactive):
         compas_rhino.rs.HideObject(guid)
     print("Pattern relaxed on surface.")
 
-    scene.clear()
-    scene.add(pattern, name='pattern')
     scene.update()
 
     print('Pattern object successfully created. Input object has been hidden.')
