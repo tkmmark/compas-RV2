@@ -35,7 +35,7 @@ def RunCommand(is_interactive):
     pt_guids = compas_rhino.select_points("Optional. Select points for pole singularities.") or []
 
     box = compas_rhino.rs.BoundingBox([srf_guid])
-    input_subdivision_spacing = 0.03 * compas_rhino.rs.Distance(box[0], box[6])
+    input_subdivision_spacing = 0.01 * compas_rhino.rs.Distance(box[0], box[6])
 
     mesh_edge_length = compas_rhino.rs.GetReal("Pattern edge-length target.", 1.0)
 
