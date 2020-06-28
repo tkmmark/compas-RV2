@@ -21,14 +21,14 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    options = ["Continuous", "Manual"]
+    options = ["ByContinuousEdges", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
     if not option:
         return
 
-    if option == "Continuous":
+    if option == "ByContinuousEdges":
         temp = pattern.select_edges()
-        keys = list(set(flatten([pattern.datastructure.continuous_vertices(key) for key in temp])))
+        keys = list(set(flatten([pattern.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
     elif option == "Manual":
         keys = pattern.select_vertices()

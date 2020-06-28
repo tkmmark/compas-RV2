@@ -15,6 +15,7 @@ class ThrustObject(MeshObject):
 
     settings = {
         'layer': "RV2::ThrustDiagram",
+        '_is.valid': False,
         'show.vertices': False,
         'show.edges': False,
         'show.faces': True,
@@ -31,6 +32,7 @@ class ThrustObject(MeshObject):
         'color.reactions': [0, 80, 0],
         'color.residuals': [0, 255, 255],
         'color.pipes': [0, 0, 255],
+        'color.invalid': [100, 255, 100],
         'scale.reactions': 0.1,
         'scale.residuals': 1.0,
         'scale.pipes': 0.01,
@@ -42,9 +44,27 @@ class ThrustObject(MeshObject):
     def __init__(self, scene, diagram, **kwargs):
         super(ThrustObject, self).__init__(scene, diagram, **kwargs)
         self.artist = ThrustArtist(self.datastructure)
+        self._guid_vertex_free = {}
+        self._guid_vertex_anchor = {}
         self._guid_reaction = {}
         self._guid_residual = {}
         self._guid_pipe = {}
+
+    @property
+    def guid_vertex_free(self):
+        return self._guid_vertex_free
+
+    @guid_vertex_free.setter
+    def guid_vertex_free(self, values):
+        self._guid_vertex_free = dict(values)
+
+    @property
+    def guid_vertex_anchor(self):
+        return self._guid_vertex_anchor
+
+    @guid_vertex_anchor.setter
+    def guid_vertex_anchor(self, values):
+        self._guid_vertex_anchor = dict(values)
 
     @property
     def guid_reaction(self):
@@ -72,14 +92,81 @@ class ThrustObject(MeshObject):
 
     def clear(self):
         super(ThrustObject, self).clear()
+        guids_vertices_free = list(self.guid_vertex_free.keys())
+        guids_vertices_anchor = list(self.guid_vertex_anchor.keys())
         guids_reactions = list(self.guid_reaction.keys())
         guids_residuals = list(self.guid_residual.keys())
         guids_pipes = list(self.guid_pipe.keys())
-        guids = guids_reactions + guids_residuals + guids_pipes
+        guids = guids_reactions + guids_residuals + guids_pipes + guids_vertices_free + guids_vertices_anchor
         delete_objects(guids, purge=True)
+        self._guid_vertex_free = {}
+        self._guid_vertex_anchor = {}
         self._guid_reaction = {}
         self._guid_residual = {}
         self._guid_pipe = {}
+
+    def select_vertices(self):
+        """Manually select vertices in the Rhino model view.
+
+        Returns
+        -------
+        list
+            The keys of the selected vertices.
+
+        Examples
+        --------
+        >>>
+        """
+        _filter = compas_rhino.rs.filter.point
+        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, group=False, filter=_filter)
+        if guids:
+            guid_vertex = {}
+            guid_vertex.update(self.guid_vertex_free)
+            guid_vertex.update(self.guid_vertex_anchor)
+            keys = [guid_vertex[guid] for guid in guids if guid in guid_vertex]
+        else:
+            keys = []
+        return keys
+
+    def select_vertices_free(self):
+        """Manually select free vertices in the Rhino model view.
+
+        Returns
+        -------
+        list
+            The keys of the selected vertices.
+
+        Examples
+        --------
+        >>>
+        """
+        _filter = compas_rhino.rs.filter.point
+        guids = compas_rhino.rs.GetObjects(message="Select Free Vertices.", preselect=True, select=True, group=False, filter=_filter)
+        if guids:
+            keys = [self.guid_vertex_free[guid] for guid in guids if guid in self.guid_vertex_free]
+        else:
+            keys = []
+        return keys
+
+    def select_vertices_anchor(self):
+        """Manually select anchor vertices in the Rhino model view.
+
+        Returns
+        -------
+        list
+            The keys of the selected vertices.
+
+        Examples
+        --------
+        >>>
+        """
+        _filter = compas_rhino.rs.filter.point
+        guids = compas_rhino.rs.GetObjects(message="Select Anchor Vertices.", preselect=True, select=True, group=False, filter=_filter)
+        if guids:
+            keys = [self.guid_vertex_anchor[guid] for guid in guids if guid in self.guid_vertex_anchor]
+        else:
+            keys = []
+        return keys
 
     def draw(self):
         layer = self.settings['layer']
@@ -87,12 +174,17 @@ class ThrustObject(MeshObject):
         self.artist.layer = layer
         self.artist.clear_layer()
 
-        group_vertices = "{}::vertices".format(layer)
+        group_vertices_free = "{}::vertices_free".format(layer)
+        group_vertices_anchor = "{}::vertices_anchor".format(layer)
+
         group_edges = "{}::edges".format(layer)
         group_faces = "{}::faces".format(layer)
 
-        if not compas_rhino.rs.IsGroup(group_vertices):
-            compas_rhino.rs.AddGroup(group_vertices)
+        if not compas_rhino.rs.IsGroup(group_vertices_free):
+            compas_rhino.rs.AddGroup(group_vertices_free)
+
+        if not compas_rhino.rs.IsGroup(group_vertices_anchor):
+            compas_rhino.rs.AddGroup(group_vertices_anchor)
 
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
@@ -102,26 +194,34 @@ class ThrustObject(MeshObject):
 
         # vertices
 
-        guids_vertices = list(self.guid_vertex.keys())
-        delete_objects(guids_vertices, purge=True)
+        guids_vertices_free = list(self.guid_vertex_free.keys())
+        guids_vertices_anchor = list(self.guid_vertex_anchor.keys())
+        delete_objects(guids_vertices_free + guids_vertices_anchor, purge=True)
 
-        keys = list(self.datastructure.vertices())
+        free = list(self.datastructure.vertices_where({'is_anchor': False}))
+        anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
 
-        color = {key: self.settings['color.vertices'] for key in keys}
-        color_fixed = self.settings['color.vertices:is_fixed']
+        color_free = self.settings['color.vertices'] if self.settings['_is.valid'] else self.settings['color.invalid']
         color_anchor = self.settings['color.vertices:is_anchor']
-        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
 
-        guids = self.artist.draw_vertices(keys, color)
-        self.guid_vertex = zip(guids, keys)
+        color = {key: color_free for key in free}
+        color.update({key: color_anchor for key in anchors})
 
-        compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
+        guids_vertices_free = self.artist.draw_vertices(free, color)
+        self.guid_vertex_free = zip(guids_vertices_free, free)
+
+        guids_vertices_anchor = self.artist.draw_vertices(anchors, color)
+        self.guid_vertex_anchor = zip(guids_vertices_anchor, anchors)
+
+        compas_rhino.rs.AddObjectsToGroup(guids_vertices_free, group_vertices_free)
+        compas_rhino.rs.AddObjectsToGroup(guids_vertices_anchor, group_vertices_anchor)
 
         if self.settings['show.vertices']:
-            compas_rhino.rs.ShowGroup(group_vertices)
+            compas_rhino.rs.HideGroup(group_vertices_free)
+            compas_rhino.rs.ShowGroup(group_vertices_anchor)
         else:
-            compas_rhino.rs.HideGroup(group_vertices)
+            compas_rhino.rs.HideGroup(group_vertices_free)
+            compas_rhino.rs.HideGroup(group_vertices_anchor)
 
         # edges
 
@@ -129,7 +229,7 @@ class ThrustObject(MeshObject):
         delete_objects(guids_edges, purge=True)
 
         keys = list(self.datastructure.edges_where({'_is_edge': True}))
-        color_edges = {key: self.settings['color.edges'] for key in keys}
+        color_edges = {key: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for key in keys}
 
         guids = self.artist.draw_edges(keys, color_edges)
         self.guid_edge = zip(guids, keys)
@@ -146,7 +246,7 @@ class ThrustObject(MeshObject):
         delete_objects(guids_faces, purge=True)
 
         keys = list(self.datastructure.faces_where({'_is_loaded': True}))
-        color = {key: self.settings['color.faces'] for key in keys}
+        color = {key: self.settings['color.faces'] if self.settings['_is.valid'] else self.settings['color.invalid'] for key in keys}
         guids = self.artist.draw_faces(keys, color)
         self.guid_face = zip(guids, keys)
         compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
@@ -158,7 +258,7 @@ class ThrustObject(MeshObject):
 
         # overlays
 
-        if self.settings['show.reactions']:
+        if self.settings['_is.valid'] and self.settings['show.reactions']:
 
             tol = self.settings['tol.reactions']
             anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
@@ -175,7 +275,7 @@ class ThrustObject(MeshObject):
             del self._guid_reaction
             self._guid_reaction = {}
 
-        if self.settings['show.residuals']:
+        if self.settings['_is.valid'] and self.settings['show.residuals']:
 
             tol = self.settings['tol.residuals']
             keys = list(self.datastructure.vertices_where({'is_anchor': False, 'is_fixed': False}))
@@ -190,7 +290,7 @@ class ThrustObject(MeshObject):
             del self._guid_residual
             self._guid_residual = {}
 
-        if self.settings['show.pipes']:
+        if self.settings['_is.valid'] and self.settings['show.pipes']:
 
             tol = self.settings['tol.pipes']
             keys = list(self.datastructure.edges_where({'_is_edge': True}))

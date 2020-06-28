@@ -21,6 +21,8 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
+    thrust = scene.get("thrust")[0]
+
     options = ["All", "Continuous", "Parallel", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
     if not option:
@@ -43,6 +45,8 @@ def RunCommand(is_interactive):
     if keys:
         public = [name for name in force.datastructure.default_edge_attributes.keys() if not name.startswith("_")]
         if force.update_edges_attributes(keys, names=public):
+            if thrust:
+                thrust.settings['_is.valid'] = False
             scene.update()
 
 
