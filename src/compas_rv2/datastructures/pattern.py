@@ -11,6 +11,11 @@ from compas_singular.algorithms import boundary_triangulation
 from compas_singular.algorithms import SkeletonDecomposition
 from compas_singular.rhino.objects.surface import RhinoSurface
 
+from compas.geometry import distance_point_point
+from compas.utilities import geometric_key
+
+import compas_rhino
+
 
 __all__ = ['Pattern']
 
@@ -91,12 +96,17 @@ class Pattern(MeshMixin, Mesh):
         tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, src='numpy_rpc')
         decomposition = SkeletonDecomposition.from_mesh(tri_mesh)
         coarse_mesh = decomposition.decomposition_mesh(point_features)
-        RhinoSurface.from_guid(srf_guid).mesh_uv_to_xyz(coarse_mesh)
-
+        polylines = decomposition.polylines
+        nurbs_curves = {(geometric_key(polyline[0]), geometric_key(polyline[-1])): compas_rhino.rs.AddInterpCrvOnSrfUV(srf_guid, [pt[:2] for pt in polyline]) for polyline in polylines}
+        vkey_map = {geometric_key(coarse_mesh.vertex_coordinates(vkey)): vkey for vkey in coarse_mesh.vertices()}
+        edges_to_curves = {tuple([vkey_map[gkey] for gkey in geom_key]): curve for geom_key, curve in nurbs_curves.items()}
+        for edge, curve in edges_to_curves.items():
+            polyline = [compas_rhino.rs.EvaluateCurve(curve, compas_rhino.rs.CurveParameter(curve, float(t) / 99.0)) for t in range(100)]
+            edges_to_curves[edge] = polyline
         coarse_mesh.collect_strips()
         coarse_mesh.set_strips_density_target(mesh_edge_length)
-        coarse_mesh.densification()
-
+        coarse_mesh.densification(edges_to_curves=edges_to_curves)
+        compas_rhino.rs.DeleteObjects(list(nurbs_curves.values()))
         dense_mesh = coarse_mesh.get_quad_mesh()
         vertices, faces = dense_mesh.to_vertices_and_faces()
         return cls.from_vertices_and_faces(vertices.values(), faces.values())

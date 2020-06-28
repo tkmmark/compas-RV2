@@ -8,6 +8,13 @@ from compas_rv2.rhino import get_scene
 from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
 from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
 
+try:
+    import rhinoscriptsyntax as rs
+except ImportError:
+    import platform
+    if platform.python_implementation() == 'IronPython':
+        raise
+        
 
 __commandname__ = "RV2pattern_from_features"
 
@@ -28,7 +35,7 @@ def RunCommand(is_interactive):
     pt_guids = compas_rhino.select_points("Optional. Select points for pole singularities.") or []
 
     box = compas_rhino.rs.BoundingBox([srf_guid])
-    input_subdivision_spacing = 0.05 * compas_rhino.rs.Distance(box[0], box[6])
+    input_subdivision_spacing = 0.01 * compas_rhino.rs.Distance(box[0], box[6])
 
     mesh_edge_length = compas_rhino.rs.GetReal("Pattern edge-length target.", 1.0)
 
