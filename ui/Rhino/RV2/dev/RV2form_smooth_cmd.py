@@ -29,7 +29,7 @@ def RunCommand(is_interactive):
 
     anchors = list(form.datastructure.vertices_where({'is_anchor': True}))
     fixed = list(form.datastructure.vertices_where({'is_fixed': True}))
-    fixed = list(set(anchors + fixed))
+    fixed = anchors + fixed
 
     options = ['True', 'False']
     option = compas_rhino.rs.GetString("Keep all boundaries fixed.", options[0], options)
@@ -38,7 +38,10 @@ def RunCommand(is_interactive):
         return
 
     if option == 'True':
-        fixed = fixed + list(flatten(form.datastructure.vertices_on_boundaries()))
+        fixed += list(flatten(form.datastructure.vertices_on_boundaries()))
+        fixed += list(flatten([form.datastructure.face_vertices(face) for face in form.datastructure.faces_where({'_is_loaded': False})]))
+
+    fixed = list(set(fixed))
 
     form.datastructure.smooth_area(fixed=fixed)
 
