@@ -8,20 +8,11 @@ from compas_rv2.rhino import get_scene
 from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
 from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
 
-try:
-    import rhinoscriptsyntax as rs
-except ImportError:
-    import platform
-    if platform.python_implementation() == 'IronPython':
-        raise
-        
 
 __commandname__ = "RV2pattern_from_features"
 
 
 def RunCommand(is_interactive):
-
-    raise NotImplementedError
 
     scene = get_scene()
     if not scene:

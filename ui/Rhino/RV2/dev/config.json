@@ -90,7 +90,6 @@
             {"name": "RV2pattern_delete",               "menu_text": "Delete Vertices/Faces"                      },
 
             {"name": "RV2boundary_supports",            "menu_text": "Identify Supports",               "icon": 15},
-            {"name": "RV2boundary_openings",            "menu_text": "Add Openings",                    "icon": 16},
             {"name": "RV2boundary_boundaries",          "menu_text": "Update Boundaries",               "icon": 17},
 
             {"name": "RV2form",                         "menu_text": "Create FormDiagram",              "icon": 19,      "tooltip": "Create form diagram"},
@@ -184,7 +183,6 @@
                         "items":
                         [
                             {"command": "RV2boundary_supports"},
-                            {"command": "RV2boundary_openings"},
                             {"command": "RV2boundary_boundaries"}
                         ]
 

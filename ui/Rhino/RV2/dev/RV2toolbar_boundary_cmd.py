@@ -7,7 +7,6 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 
 import RV2boundary_supports_cmd
-import RV2boundary_openings_cmd
 import RV2boundary_boundaries_cmd
 
 
@@ -25,20 +24,15 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    options = ["IdentifySupports", "AddOpenings", "UpdateBoundaries"]
+    options = ["IdentifySupports", "UpdateBoundaries"]
 
     while True:
-
         option = compas_rhino.rs.GetString("Define boundary conditions:", strings=options)
-
         if not option:
             return
 
         if option == "IdentifySupports":
             RV2boundary_supports_cmd.RunCommand(True)
-
-        elif option == "AddOpenings":
-            RV2boundary_openings_cmd.RunCommand(True)
 
         elif option == "UpdateBoundaries":
             RV2boundary_boundaries_cmd.RunCommand(True)
