@@ -26,7 +26,7 @@ def RunCommand(is_interactive):
         return
 
     options = ["DiagramAttributes", "VerticesAttributes", "EdgesAttributes", "MoveVertices"]
-    option = compas_rhino.rs.GetString("Modify force Diagram:", strings=options)
+    option = compas_rhino.rs.GetString("Modify force diagram:", strings=options)
 
     if not option:
         return

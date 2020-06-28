@@ -38,6 +38,7 @@ def RunCommand(is_interactive):
     anchors = list(set(fixed) | set(leaves))
     if anchors:
         pattern.datastructure.vertices_attribute('is_anchor', True, keys=anchors)
+        print("Fixed vertices of the pattern have automatically been defined as supports.")
         scene.update()
 
     # manually Select or Unselect

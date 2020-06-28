@@ -26,26 +26,34 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    options = ["Vertices", "Faces"]
+    keys = pattern.select_vertices()
+    for key in keys:
+        if pattern.datastructure.has_vertex(key):
+            pattern.datastructure.delete_vertex(key)
+    scene.update()
 
-    while True:
-        option = compas_rhino.rs.GetString("Element type", strings=options)
 
-        if not option:
-            break
 
-        if option == "Vertices":
-            keys = pattern.select_vertices()
-            for key in keys:
-                if pattern.datastructure.has_vertex(key):
-                    pattern.datastructure.delete_vertex(key)
-            scene.update()
+    # options = ["Vertices", "Faces"]
 
-        elif option == "Faces":
-            raise NotImplementedError
+    # while True:
+    #     option = compas_rhino.rs.GetString("Element type", strings=options)
 
-        else:
-            raise NotImplementedError
+    #     if not option:
+    #         break
+
+    #     if option == "Vertices":
+    #         keys = pattern.select_vertices()
+    #         for key in keys:
+    #             if pattern.datastructure.has_vertex(key):
+    #                 pattern.datastructure.delete_vertex(key)
+    #         scene.update()
+
+    #     elif option == "Faces":
+    #         raise NotImplementedError
+
+    #     else:
+    #         raise NotImplementedError
 
 
 # ==============================================================================

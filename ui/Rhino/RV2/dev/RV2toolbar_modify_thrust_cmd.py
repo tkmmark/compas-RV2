@@ -25,7 +25,7 @@ def RunCommand(is_interactive):
         return
 
     options = ["DiagramAttributes", "MoveSupports"]
-    option = compas_rhino.rs.GetString("Modify form Diagram:", strings=options)
+    option = compas_rhino.rs.GetString("Modify thrust diagram:", strings=options)
 
     if not option:
         return
