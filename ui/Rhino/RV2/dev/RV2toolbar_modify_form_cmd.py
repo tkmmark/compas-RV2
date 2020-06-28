@@ -10,6 +10,8 @@ import RV2form_attributes_cmd
 import RV2form_modify_vertices_cmd
 import RV2form_modify_edges_cmd
 import RV2form_move_vertices_cmd
+import RV2form_relax_cmd
+import RV2form_smooth_cmd
 
 
 __commandname__ = "RV2toolbar_modify_form"
@@ -26,7 +28,7 @@ def RunCommand(is_interactive):
         print("There is no FormDiagram in the scene.")
         return
 
-    options = ["DiagramAttributes", "VerticesAttributes", "EdgesAttributes", "MoveVertices"]
+    options = ["DiagramAttributes", "VerticesAttributes", "EdgesAttributes", "MoveVertices", "Relax", "Smooth"]
     option = compas_rhino.rs.GetString("Modify form diagram:", strings=options)
 
     if not option:
@@ -43,6 +45,12 @@ def RunCommand(is_interactive):
 
     elif option == "MoveVertices":
         RV2form_move_vertices_cmd.RunCommand(True)
+
+    elif option == "Relax":
+        RV2form_relax_cmd.RunCommand(True)
+
+    elif option == "Smooth":
+        RV2form_smooth_cmd.RunCommand(True)
 
 
 # ==============================================================================

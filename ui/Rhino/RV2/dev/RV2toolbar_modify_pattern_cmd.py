@@ -6,12 +6,12 @@ import compas_rhino
 
 from compas_rv2.rhino import get_scene
 
-import RV2pattern_relax_cmd
-import RV2pattern_smooth_cmd
 import RV2pattern_modify_vertices_cmd
 import RV2pattern_modify_edges_cmd
 import RV2pattern_move_vertices_cmd
 import RV2pattern_delete_cmd
+import RV2pattern_relax_cmd
+import RV2pattern_smooth_cmd
 
 
 __commandname__ = "RV2toolbar_modify_pattern"
@@ -23,27 +23,21 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    pattern = scene.get("force")[0]
+    pattern = scene.get("pattern")[0]
     if not pattern:
-        print("There is no ForceDiagram in the scene.")
+        print("There is no Pattern in the scene.")
         return
 
-    options = ["Relax", "Smooth", "ModifyVertices", "ModifyEdges", "MoveVertices", "DeleteVertices"]
+    options = ["VerticesAttributes", "EdgesAttributes", "MoveVertices", "DeleteVertices", "Relax", "Smooth"]
     option = compas_rhino.rs.GetString("Modify pattern:", strings=options)
 
     if not option:
         return
 
-    if option == "Relax":
-        RV2pattern_relax_cmd.RunCommand(True)
-
-    elif option == "Smooth":
-        RV2pattern_smooth_cmd.RunCommand(True)
-
-    elif option == "ModifyVertices":
+    if option == "VerticesAttributes":
         RV2pattern_modify_vertices_cmd.RunCommand(True)
 
-    elif option == "ModifyEdges":
+    elif option == "EdgesAttributes":
         RV2pattern_modify_edges_cmd.RunCommand(True)
 
     elif option == "MoveVertices":
@@ -51,6 +45,13 @@ def RunCommand(is_interactive):
 
     elif option == "DeleteVertices":
         RV2pattern_delete_cmd.RunCommand(True)
+
+    elif option == "Relax":
+        RV2pattern_relax_cmd.RunCommand(True)
+
+    elif option == "Smooth":
+        RV2pattern_smooth_cmd.RunCommand(True)
+
 
 # ==============================================================================
 # Main
