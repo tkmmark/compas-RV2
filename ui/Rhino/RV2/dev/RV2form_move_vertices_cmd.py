@@ -21,31 +21,43 @@ def RunCommand(is_interactive):
         print("There is no FormDiagram in the scene.")
         return
 
-    layer = form.settings['layer']
-    group_vertices = "{}::vertices".format(layer)
+    thrust = scene.get("thrust")[0]
+    if not thrust:
+        print("There is no ThrustDiagram in the scene.")
+        return
 
+    # hide the thrust vertices
+    thrust_vertices = "{}::vertices".format(thrust.settings['layer'])
+    compas_rhino.rs.HideGroup(thrust_vertices)
+
+    # show the form vertices
+    form_vertices = "{}::vertices".format(form.settings['layer'])
+    compas_rhino.rs.ShowGroup(form_vertices)
+
+    compas_rhino.rs.Redraw()
+
+    # selection options
     options = ["Continuous", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
-
     if not option:
         return
 
     if option == "Continuous":
-        compas_rhino.rs.ShowGroup(group_vertices)
-        compas_rhino.rs.Redraw()
         temp = form.select_edges()
         keys = list(set(flatten([form.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
     elif option == "Manual":
-        compas_rhino.rs.ShowGroup(group_vertices)
-        compas_rhino.rs.Redraw()
         keys = form.select_vertices()
 
     if keys:
         if form.move_vertices(keys):
             if form.datastructure.dual:
                 form.datastructure.dual.update_angle_deviations()
-            scene.update()
+
+    # the scene needs to be updated
+    # even if the vertices where not modified
+    # to reset group visibility to the configuration of settings
+    scene.update()
 
 
 # ==============================================================================

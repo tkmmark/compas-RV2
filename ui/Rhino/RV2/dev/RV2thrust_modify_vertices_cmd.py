@@ -4,9 +4,10 @@ from __future__ import division
 
 import compas_rhino
 from compas_rv2.rhino import get_scene
+from compas.utilities import flatten
 
 
-__commandname__ = "RV2thrust_move_supports"
+__commandname__ = "RV2thrust_modify_vertices"
 
 
 def RunCommand(is_interactive):
@@ -14,8 +15,6 @@ def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:
         return
-
-    # both form and thrust need to be available
 
     form = scene.get("form")[0]
     if not form:
@@ -37,20 +36,25 @@ def RunCommand(is_interactive):
 
     compas_rhino.rs.Redraw()
 
-    # select anchored vertices
-    keys = thrust.select_vertices()
-    keys[:] = [key for key in keys if thrust.datastructure.vertex_attribute(key, 'is_anchor')]
+    # selection options
+    options = ["Continuous", "Manual"]
+    option = compas_rhino.rs.GetString("Selection Type.", strings=options)
+    if not option:
+        return
 
-    if keys:
-        if thrust.move_vertices_vertical(keys):
-            for key in keys:
-                # update the corresponding form diagram vertices
-                z = thrust.datastructure.vertex_attribute(key, 'z')
-                form.datastructure.vertex_attribute(key, 'z', z)
+    if option == "Continuous":
+        temp = thrust.select_edges()
+        keys = list(set(flatten([thrust.datastructure.vertices_on_edge_loop(key) for key in temp])))
+
+    elif option == "Manual":
+        keys = thrust.select_vertices()
+
+    public = [name for name in thrust.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+    thrust.update_vertices_attributes(keys, names=public)
 
     # the scene needs to be updated
-    # in any case
-    # to reset object visualisation
+    # even if the vertices where not modified
+    # to reset group visibility to the configuration of settings
     scene.update()
 
 

@@ -21,15 +21,8 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    # layer = force.settings['layer']
-    # group_vertices = "{}::vertices".format(layer)
-
-    # compas_rhino.rs.ShowGroup(group_vertices)
-    # compas_rhino.rs.Redraw()
-
     options = ["All", "Continuous", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
-
     if not option:
         return
 

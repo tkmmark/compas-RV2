@@ -21,17 +21,10 @@ def RunCommand(is_interactive):
         print("There is no Pattern in the scene.")
         return
 
-    # layer = pattern.settings['layer']
-    # group_vertices = "{}::vertices".format(layer)
-
-    # compas_rhino.rs.ShowGroup(group_vertices)
-    # compas_rhino.rs.Redraw()
-
     options = ["AllBoundaryVertices", "Corners", "ByContinuousEdges", "Manual"]
 
     while True:
         option = compas_rhino.rs.GetString("Selection mode:", strings=options)
-
         if not option:
             return
 
@@ -45,7 +38,6 @@ def RunCommand(is_interactive):
             keys = pattern.datastructure.vertices_on_boundary()
 
         elif option == "ByContinuousEdges":
-
             temp = pattern.select_edges()
             keys = list(set(flatten([pattern.datastructure.vertices_on_edge_loop(key) for key in temp])))
 

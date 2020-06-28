@@ -23,7 +23,6 @@ def RunCommand(is_interactive):
 
     options = ["All", "Continuous", "Parallel", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type", strings=options)
-
     if not option:
         return
 

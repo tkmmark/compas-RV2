@@ -15,7 +15,7 @@ class ThrustObject(MeshObject):
 
     settings = {
         'layer': "RV2::ThrustDiagram",
-        'show.vertices': True,
+        'show.vertices': False,
         'show.edges': False,
         'show.faces': True,
         'show.reactions': True,
@@ -105,10 +105,13 @@ class ThrustObject(MeshObject):
         guids_vertices = list(self.guid_vertex.keys())
         delete_objects(guids_vertices, purge=True)
 
-        anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
-        keys = anchors
+        keys = list(self.datastructure.vertices())
+
         color = {key: self.settings['color.vertices'] for key in keys}
-        color.update({key: self.settings['color.vertices:is_anchor'] for key in self.datastructure.vertices_where({'is_anchor': True})})
+        color_fixed = self.settings['color.vertices:is_fixed']
+        color_anchor = self.settings['color.vertices:is_anchor']
+        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
+        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
 
         guids = self.artist.draw_vertices(keys, color)
         self.guid_vertex = zip(guids, keys)
