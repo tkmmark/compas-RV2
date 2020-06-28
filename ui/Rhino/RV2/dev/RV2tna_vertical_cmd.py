@@ -78,6 +78,8 @@ def RunCommand(is_interactive):
     force.datastructure.primal = form.datastructure
     thrust.datastructure.dual = force.datastructure
 
+    thrust.settings['_is.valid'] = True
+
     scene.update()
 
     print('Vertical equilibrium found!')

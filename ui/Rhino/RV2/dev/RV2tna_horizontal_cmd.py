@@ -27,6 +27,7 @@ def RunCommand(is_interactive):
 
     form = scene.get('form')[0]
     force = scene.get('force')[0]
+    thrust = scene.get('thrust')[0]
 
     if not form:
         print("There is no FormDiagram in the scene.")
@@ -94,6 +95,8 @@ def RunCommand(is_interactive):
 
     force.datastructure.transform(Translation.from_vector([dx, dy, 0]))
     force.datastructure.update_angle_deviations()
+
+    thrust.settings['_is.valid'] = False
 
     scene.update()
 

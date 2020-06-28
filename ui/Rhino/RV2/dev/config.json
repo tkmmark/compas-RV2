@@ -82,6 +82,7 @@
             {"name": "RV2pattern_from_triangulation",   "menu_text": "From Triangulation",              "icon": 13},
             {"name": "RV2pattern_from_features",        "menu_text": "From Features",                   "icon": 14},
             {"name": "RV2pattern_relax",                "menu_text": "Relax"                                      },
+            {"name": "RV2pattern_smooth",               "menu_text": "Smooth"                                     },
             {"name": "RV2pattern_subdivide",            "menu_text": "Subdivide"                                  },
             {"name": "RV2pattern_modify_vertices",      "menu_text": "Modify Vertices"                            },
             {"name": "RV2pattern_modify_edges",         "menu_text": "Modify Edges"                               },
@@ -169,7 +170,8 @@
                             {"type": "separator"},
                             {"command": "RV2pattern_delete"},
                             {"type": "separator"},
-                            {"command": "RV2pattern_relax"}
+                            {"command": "RV2pattern_relax"},
+                            {"command": "RV2pattern_smooth"}
                         ]
                     },
 

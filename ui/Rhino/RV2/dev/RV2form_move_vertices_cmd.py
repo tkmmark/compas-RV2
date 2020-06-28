@@ -22,27 +22,28 @@ def RunCommand(is_interactive):
         return
 
     thrust = scene.get("thrust")[0]
-    if not thrust:
-        print("There is no ThrustDiagram in the scene.")
-        return
-
-    # hide the thrust vertices
-    thrust_vertices = "{}::vertices".format(thrust.settings['layer'])
-    compas_rhino.rs.HideGroup(thrust_vertices)
 
     # show the form vertices
     form_vertices = "{}::vertices".format(form.settings['layer'])
     compas_rhino.rs.ShowGroup(form_vertices)
 
+    if thrust:
+        # hide the thrust vertices
+        thrust_vertices_free = "{}::vertices_free".format(thrust.settings['layer'])
+        thrust_vertices_anchor = "{}::vertices_anchor".format(thrust.settings['layer'])
+        compas_rhino.rs.HideGroup(thrust_vertices_free)
+        compas_rhino.rs.HideGroup(thrust_vertices_anchor)
+
     compas_rhino.rs.Redraw()
 
     # selection options
-    options = ["Continuous", "Manual"]
+    options = ["ByContinuousEdges", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
     if not option:
+        scene.update()
         return
 
-    if option == "Continuous":
+    if option == "ByContinuousEdges":
         temp = form.select_edges()
         keys = list(set(flatten([form.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
@@ -53,6 +54,8 @@ def RunCommand(is_interactive):
         if form.move_vertices(keys):
             if form.datastructure.dual:
                 form.datastructure.dual.update_angle_deviations()
+            if thrust:
+                thrust.settings['_is.valid'] = False
 
     # the scene needs to be updated
     # even if the vertices where not modified

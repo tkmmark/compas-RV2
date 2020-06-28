@@ -21,12 +21,14 @@ def RunCommand(is_interactive):
         print("There is no ForceDiagram in the scene.")
         return
 
-    options = ["Continuous", "Manual"]
+    thrust = scene.get("thrust")[0]
+
+    options = ["ByContinuousEdges", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
     if not option:
         return
 
-    if option == "Continuous":
+    if option == "ByContinuousEdges":
         temp = force.select_edges()
         keys = list(set(flatten([force.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
@@ -35,7 +37,10 @@ def RunCommand(is_interactive):
 
     if keys:
         if force.move_vertices(keys):
-            force.datastructure.update_angle_deviations()
+            if force.datastructure.primal:
+                force.datastructure.update_angle_deviations()
+            if thrust:
+                thrust.settings['_is.valid'] = False
             scene.update()
 
 

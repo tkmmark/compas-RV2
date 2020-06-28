@@ -31,15 +31,17 @@ def RunCommand(is_interactive):
     compas_rhino.rs.HideGroup(form_vertices)
 
     # show the thrust vertices
-    thrust_vertices = "{}::vertices".format(thrust.settings['layer'])
-    compas_rhino.rs.ShowGroup(thrust_vertices)
-
+    thrust_vertices_free = "{}::vertices_free".format(thrust.settings['layer'])
+    thrust_vertices_anchor = "{}::vertices_anchor".format(thrust.settings['layer'])
+    compas_rhino.rs.ShowGroup(thrust_vertices_free)
+    compas_rhino.rs.ShowGroup(thrust_vertices_anchor)
     compas_rhino.rs.Redraw()
 
     # selection options
     options = ["Continuous", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
     if not option:
+        scene.update()
         return
 
     if option == "Continuous":
@@ -49,8 +51,10 @@ def RunCommand(is_interactive):
     elif option == "Manual":
         keys = thrust.select_vertices()
 
-    public = [name for name in thrust.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
-    thrust.update_vertices_attributes(keys, names=public)
+    if keys:
+        public = [name for name in thrust.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+        if thrust.update_vertices_attributes(keys, names=public):
+            thrust.settings['_is.valid'] = False
 
     # the scene needs to be updated
     # even if the vertices where not modified

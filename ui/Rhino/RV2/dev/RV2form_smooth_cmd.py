@@ -25,6 +25,8 @@ def RunCommand(is_interactive):
         print("There is no FormDiagram in the scene.")
         return
 
+    thrust = scene.get("thrust")[0]
+
     anchors = list(form.datastructure.vertices_where({'is_anchor': True}))
     fixed = list(form.datastructure.vertices_where({'is_fixed': True}))
     fixed = list(set(anchors + fixed))
@@ -39,6 +41,9 @@ def RunCommand(is_interactive):
         fixed = fixed + list(flatten(form.datastructure.vertices_on_boundaries()))
 
     form.datastructure.smooth_area(fixed=fixed)
+
+    if thrust:
+        thrust.settings['_is.valid'] = False
 
     scene.update()
 

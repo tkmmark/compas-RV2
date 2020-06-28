@@ -32,14 +32,15 @@ def RunCommand(is_interactive):
     compas_rhino.rs.HideGroup(form_vertices)
 
     # show the thrust vertices
-    thrust_vertices = "{}::vertices".format(thrust.settings['layer'])
-    compas_rhino.rs.ShowGroup(thrust_vertices)
+    thrust_vertices_free = "{}::vertices_free".format(thrust.settings['layer'])
+    thrust_vertices_anchor = "{}::vertices_anchor".format(thrust.settings['layer'])
+    compas_rhino.rs.HideGroup(thrust_vertices_free)
+    compas_rhino.rs.ShowGroup(thrust_vertices_anchor)
 
     compas_rhino.rs.Redraw()
 
     # select anchored vertices
-    keys = thrust.select_vertices()
-    keys[:] = [key for key in keys if thrust.datastructure.vertex_attribute(key, 'is_anchor')]
+    keys = thrust.select_vertices_anchor()
 
     if keys:
         if thrust.move_vertices_vertical(keys):
@@ -47,6 +48,7 @@ def RunCommand(is_interactive):
                 # update the corresponding form diagram vertices
                 z = thrust.datastructure.vertex_attribute(key, 'z')
                 form.datastructure.vertex_attribute(key, 'z', z)
+            thrust.settings['_is.valid'] = False
 
     # the scene needs to be updated
     # in any case

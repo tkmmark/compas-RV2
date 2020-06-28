@@ -22,38 +22,42 @@ def RunCommand(is_interactive):
         return
 
     thrust = scene.get("thrust")[0]
-    if not thrust:
-        print("There is no ThrustDiagram in the scene.")
-        return
-
-    # hide the thrust vertices
-    thrust_vertices = "{}::vertices".format(thrust.settings['layer'])
-    compas_rhino.rs.HideGroup(thrust_vertices)
 
     # show the form vertices
     form_vertices = "{}::vertices".format(form.settings['layer'])
     compas_rhino.rs.ShowGroup(form_vertices)
 
+    if thrust:
+        # hide the thrust vertices
+        thrust_vertices_free = "{}::vertices_free".format(thrust.settings['layer'])
+        thrust_vertices_anchor = "{}::vertices_anchor".format(thrust.settings['layer'])
+        compas_rhino.rs.HideGroup(thrust_vertices_free)
+        compas_rhino.rs.HideGroup(thrust_vertices_anchor)
+
     compas_rhino.rs.Redraw()
 
     # selection options
-    options = ["All", "Continuous", "Manual"]
+    options = ["All", "ByContinuousEdges", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type.", strings=options)
     if not option:
+        scene.update()
         return
 
     if option == "All":
         keys = list(form.datastructure.vertices())
 
-    elif option == "Continuous":
+    elif option == "ByContinuousEdges":
         temp = form.select_edges()
         keys = list(set(flatten([form.datastructure.vertices_on_edge_loop(key) for key in temp])))
 
     elif option == "Manual":
         keys = form.select_vertices()
 
-    public = [name for name in form.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
-    form.update_vertices_attributes(keys, names=public)
+    if keys:
+        public = [name for name in form.datastructure.default_vertex_attributes.keys() if not name.startswith('_')]
+        if form.update_vertices_attributes(keys, names=public):
+            if thrust:
+                thrust.settings['_is.valid'] = False
 
     # the scene needs to be updated
     # even if the vertices where not modified
