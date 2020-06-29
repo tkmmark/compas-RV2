@@ -12,7 +12,7 @@ from compas_rv2.rhino import select_filepath_save
 from compas.utilities import DataEncoder
 
 
-__commandname__ = "RV2file_save"
+__commandname__ = "RV2file_save_as"
 
 
 HERE = compas_rhino.get_document_dirname()
@@ -32,12 +32,11 @@ def RunCommand(is_interactive):
     filename = system['session.filename']
     extension = system['session.extension']
 
-    if not filename:
-        filepath = select_filepath_save(dirname, extension)
-        if not filepath:
-            return
-        dirname, basename = os.path.split(filepath)
-        filename, _ = os.path.splitext(basename)
+    filepath = select_filepath_save(dirname, extension)
+    if not filepath:
+        return
+    dirname, basename = os.path.split(filepath)
+    filename, _ = os.path.splitext(basename)
 
     filepath = os.path.join(dirname, filename + '.' + extension)
 

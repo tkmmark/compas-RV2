@@ -72,6 +72,7 @@
 
             {"name": "RV2file_open",                    "menu_text": "Open File",                       "icon": 1},
             {"name": "RV2file_save",                    "menu_text": "Save File",                       "icon": 2},
+            {"name": "RV2file_save_as",                 "menu_text": "SaveAs File",                     "icon": 2},
 
             {"name": "RV2settings",                     "menu_text": "Settings",                        "icon": 3},
 
@@ -142,7 +143,8 @@
                         "items":
                         [
                             {"command": "RV2file_open"},
-                            {"command": "RV2file_save"}
+                            {"command": "RV2file_save"},
+                            {"command": "RV2file_save_as"}
                         ]
                     },
                     {"command": "RV2settings"},

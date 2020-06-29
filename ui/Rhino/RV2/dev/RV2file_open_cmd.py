@@ -9,6 +9,7 @@ import compas_rhino
 from compas_rv2.rhino import get_system
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_filepath_open
+from compas_rv2.datastructures import Pattern
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.datastructures import ThrustDiagram
@@ -52,16 +53,26 @@ def RunCommand(is_interactive):
     if 'data' in session:
         data = session['data']
 
-        if 'form' in data and 'force' in data:
+        if 'pattern' in data and data['pattern']:
+            pattern = Pattern.from_data(data['pattern'])
 
-            form = FormDiagram.from_data(data['form'])
-            force = ForceDiagram.from_data(data['force'])
-            force.primal = form
-            thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
+            scene.add(pattern, name="pattern")
 
-            scene.add(form, name="form")
-            scene.add(force, name="force")
-            scene.add(thrust, name="thrust")
+        else:
+            if 'form' in data and data['form']:
+                form = FormDiagram.from_data(data['form'])
+                thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
+
+                scene.add(form, name="form")
+                scene.add(thrust, name="thrust")
+
+            if 'force' in data and data['force']:
+                force = ForceDiagram.from_data(data['force'])
+
+                force.primal = form
+                form.dual = force
+
+                scene.add(force, name="force")
 
     scene.update()
 
