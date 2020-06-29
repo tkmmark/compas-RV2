@@ -58,7 +58,10 @@
 
                 "33_show_pipes",
                 "34_color_analysis",
-                "35_modify_pattern"
+                "35_modify_pattern",
+
+                "36_refresh",
+                "37_clear"
 
             ]
         },
@@ -121,7 +124,10 @@
             {"name": "RV2toolbar_boundary",             "menu_text": "Boundary Conditions",             "icon": 15,     "tooltip": "Define boundary conditions"},
             {"name": "RV2toolbar_modify_form",          "menu_text": "Modify Form Diagram",             "icon": 23,     "tooltip": "Modify Form Diagram"},
             {"name": "RV2toolbar_modify_force",         "menu_text": "Modify Force Diagram",            "icon": 27,     "tooltip": "Modify Force Diagram"},
-            {"name": "RV2toolbar_modify_thrust",        "menu_text": "Modify Thrust Diagram",           "icon": 31,     "tooltip": "Modify Thrust Diagram"}
+            {"name": "RV2toolbar_modify_thrust",        "menu_text": "Modify Thrust Diagram",           "icon": 31,     "tooltip": "Modify Thrust Diagram"},
+
+            {"name": "RV2redraw",                       "menu_text": "Redraw",                          "icon": 36,     "tooltip": "Refresh Scene"},
+            {"name": "RV2clear_all",                    "menu_text": "Clear All",                       "icon": 37,     "tooltip": "Clear Scene"}
         ],
 
         "menus":
@@ -274,7 +280,12 @@
 
                     {"left": "RV2toolbar_modify_form"},
                     {"left": "RV2toolbar_modify_force"},
-                    {"left": "RV2toolbar_modify_thrust"}
+                    {"left": "RV2toolbar_modify_thrust"},
+
+                    {"type": "separator"},
+
+                    {"left": "RV2redraw"},
+                    {"left": "RV2clear_all"}
 
                 ]
             }
