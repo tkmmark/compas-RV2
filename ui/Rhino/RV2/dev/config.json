@@ -57,7 +57,8 @@
                 "32_modify_thrust_move_supports",
 
                 "33_show_pipes",
-                "34_color_analysis"
+                "34_color_analysis",
+                "35_modify_pattern"
 
             ]
         },
@@ -84,8 +85,8 @@
             {"name": "RV2pattern_relax",                "menu_text": "Relax"                                      },
             {"name": "RV2pattern_smooth",               "menu_text": "Smooth"                                     },
             {"name": "RV2pattern_subdivide",            "menu_text": "Subdivide"                                  },
-            {"name": "RV2pattern_modify_vertices",      "menu_text": "Modify Vertices"                            },
-            {"name": "RV2pattern_modify_edges",         "menu_text": "Modify Edges"                               },
+            {"name": "RV2pattern_modify_vertices",      "menu_text": "Vertices Attributes"                        },
+            {"name": "RV2pattern_modify_edges",         "menu_text": "Edges Attributes"                           },
             {"name": "RV2pattern_move_vertices",        "menu_text": "Move Vertices"                              },
             {"name": "RV2pattern_delete",               "menu_text": "Delete Vertices"                            },
 
@@ -98,24 +99,25 @@
             {"name": "RV2tna_horizontal",               "menu_text": "Horizontal Equilibrium",          "icon": 21,      "tooltip": "Horizontal equilibrium"},
             {"name": "RV2tna_vertical",                 "menu_text": "Vertical Equilibrium",            "icon": 22,      "tooltip": "Vertical equilibrium"},
 
-            {"name": "RV2form_attributes",              "menu_text": "Modify Diagram",                  "icon": 23},
-            {"name": "RV2form_modify_vertices",         "menu_text": "Modify Vertices",                 "icon": 24},
-            {"name": "RV2form_modify_edges",            "menu_text": "Modify Edges",                    "icon": 25},
+            {"name": "RV2form_attributes",              "menu_text": "Diagram Attributes",              "icon": 23},
+            {"name": "RV2form_modify_vertices",         "menu_text": "Vertices Attributes",             "icon": 24},
+            {"name": "RV2form_modify_edges",            "menu_text": "Edges Attributes",                "icon": 25},
             {"name": "RV2form_move_vertices",           "menu_text": "Move Vertices",                   "icon": 26},
             {"name": "RV2form_relax",                   "menu_text": "Relax"                                      },
+            {"name": "RV2form_smooth",                  "menu_text": "Smooth"                                     },
 
-            {"name": "RV2force_attributes",             "menu_text": "Modify Diagram",                  "icon": 27},
-            {"name": "RV2force_modify_vertices",        "menu_text": "Modify Vertices",                 "icon": 28},
-            {"name": "RV2force_modify_edges",           "menu_text": "Modify Edges",                    "icon": 29},
+            {"name": "RV2force_attributes",             "menu_text": "Diagram Attributes",              "icon": 27},
+            {"name": "RV2force_modify_vertices",        "menu_text": "Vertices Attributes",             "icon": 28},
+            {"name": "RV2force_modify_edges",           "menu_text": "Edges Attributes",                "icon": 29},
             {"name": "RV2force_move_vertices",          "menu_text": "Move Vertices",                   "icon": 30},
 
-            {"name": "RV2thrust_attributes",            "menu_text": "Modify Diagram",                  "icon": 31},
-            {"name": "RV2thrust_modify_vertices",       "menu_text": "Modify Vertices",                 "icon": 24},
+            {"name": "RV2thrust_attributes",            "menu_text": "Diagram Attributes",              "icon": 31},
+            {"name": "RV2thrust_modify_vertices",       "menu_text": "Vertices Attributes",             "icon": 24},
             {"name": "RV2thrust_move_supports",         "menu_text": "Move Supports",                   "icon": 32},
 
             {"name": "RV2toolbar_settings",             "menu_text": "Settings",                        "icon": 3,      "tooltip": "RV2 settings"},
             {"name": "RV2toolbar_pattern",              "menu_text": "Create Pattern",                  "icon": 9,      "tooltip": "Create pattern"},
-            {"name": "RV2toolbar_modify_pattern",       "menu_text": "Modify Pattern",                  "icon": 9,      "tooltip": "Modify pattern"},
+            {"name": "RV2toolbar_modify_pattern",       "menu_text": "Modify Pattern",                  "icon": 35,      "tooltip": "Modify pattern"},
             {"name": "RV2toolbar_boundary",             "menu_text": "Boundary Conditions",             "icon": 15,     "tooltip": "Define boundary conditions"},
             {"name": "RV2toolbar_modify_form",          "menu_text": "Modify Form Diagram",             "icon": 23,     "tooltip": "Modify Form Diagram"},
             {"name": "RV2toolbar_modify_force",         "menu_text": "Modify Force Diagram",            "icon": 27,     "tooltip": "Modify Force Diagram"},
@@ -210,7 +212,8 @@
                             {"type": "separator"},
                             {"command": "RV2form_move_vertices"},
                             {"type": "separator"},
-                            {"command": "RV2form_relax"}
+                            {"command": "RV2form_relax"},
+                            {"command": "RV2form_smooth"}
                         ]
                     },
                     {

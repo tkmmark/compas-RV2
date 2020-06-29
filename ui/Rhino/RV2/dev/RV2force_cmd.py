@@ -22,6 +22,7 @@ def RunCommand(is_interactive):
         return
 
     force = ForceDiagram.from_formdiagram(form.datastructure)
+    force.default_edge_attributes.update({'lmin': 0.1})
 
     bbox_form = form.datastructure.bounding_box_xy()
     bbox_force = force.bounding_box_xy()
