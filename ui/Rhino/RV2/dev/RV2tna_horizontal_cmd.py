@@ -45,7 +45,6 @@ def RunCommand(is_interactive):
 
     while True:
         option = compas_rhino.rs.GetString('Options for horizontal equilibrium solver:', strings=options)
-
         if not option:
             break
 
