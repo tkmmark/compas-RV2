@@ -16,7 +16,7 @@ class ThrustObject(MeshObject):
     settings = {
         'layer': "RV2::ThrustDiagram",
         '_is.valid': False,
-        'show.vertices': False,
+        'show.vertices': True,
         'show.edges': False,
         'show.faces': True,
         'show.reactions': True,

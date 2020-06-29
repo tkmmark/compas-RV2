@@ -25,7 +25,7 @@ def RunCommand(is_interactive):
         print("There is no ThrustDiagram in the scene.")
         return
 
-    options = ["DiagramAttributes", "ModifyVertices", "MoveSupports"]
+    options = ["DiagramAttributes", "VerticesAttributes", "MoveSupports"]
     option = compas_rhino.rs.GetString("Modify thrust diagram:", strings=options)
 
     if not option:
@@ -34,7 +34,7 @@ def RunCommand(is_interactive):
     if option == "DiagramAttributes":
         RV2thrust_attributes_cmd.RunCommand(True)
 
-    elif option == "ModifyVertices":
+    elif option == "VerticesAttributes":
         RV2thrust_modify_vertices_cmd.RunCommand(True)
 
     elif option == "MoveSupports":
