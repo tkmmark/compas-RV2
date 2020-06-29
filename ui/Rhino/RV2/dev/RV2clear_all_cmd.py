@@ -12,11 +12,16 @@ __commandname__ = "RV2clear_all"
 
 def RunCommand(is_interactive):
 
-    options = ["Yes", "No"]
+    scene = get_scene()
+    if not scene:
+        return
 
+    options = ["Yes", "No"]
     option = compas_rhino.rs.GetString("Clear all RV2 objects?", strings=options, defaultString="No")
+    if not option:
+        return
+
     if option == "Yes":
-        scene = get_scene()
         scene.clear()
 
 

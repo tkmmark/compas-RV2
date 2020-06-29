@@ -21,6 +21,11 @@ def RunCommand(is_interactive):
         print("There is no FormDiagram in the scene.")
         return
 
+    force = scene.get("force")[0]
+    if force:
+        # recreating the force diagram does not work
+        return
+
     force = ForceDiagram.from_formdiagram(form.datastructure)
     force.default_edge_attributes.update({'lmin': 0.1})
 
