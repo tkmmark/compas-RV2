@@ -11,7 +11,7 @@ proxy = Proxy(errorHandler=errorHandler, background=False)
 pca = proxy.function('compas.numerical.pca_numpy')
 
 HERE = os.path.dirname(__file__)
-FILE_I = os.path.join(HERE, 'bm_blocks.json')
+FILE_I = os.path.join(HERE, 'blocks.json')
 
 with open(FILE_I, 'r') as f:
     blocks = [Mesh.from_data(data) for data in json.load(f)]

@@ -4,16 +4,14 @@ from compas.datastructures import Mesh
 from compas_rhino.artists import MeshArtist
 
 HERE = os.path.dirname(__file__)
-FILE_I = os.path.join(HERE, 'bm_dual.json')
-FILE_O1 = os.path.join(HERE, 'bm_idos.json')
-FILE_O2 = os.path.join(HERE, 'bm_edos.json')
+FILE_I = os.path.join(HERE, 'form_dual.json')
+FILE_O1 = os.path.join(HERE, 'form_idos.json')
+FILE_O2 = os.path.join(HERE, 'form_edos.json')
 
 mesh = Mesh.from_json(FILE_I)
 
 idos = mesh.copy()
 edos = mesh.copy()
-
-# idos.flip_cycles()
 
 for vertex in mesh.vertices():
     point = mesh.vertex_coordinates(vertex)

@@ -4,9 +4,9 @@ from compas.datastructures import Mesh
 from compas_rhino.artists import MeshArtist
 
 HERE = os.path.dirname(__file__)
-FILE_I1 = os.path.join(HERE, 'bm_idos.json')
-FILE_I2 = os.path.join(HERE, 'bm_edos.json')
-FILE_O = os.path.join(HERE, 'bm_blocks.json')
+FILE_I1 = os.path.join(HERE, 'form_idos.json')
+FILE_I2 = os.path.join(HERE, 'form_edos.json')
+FILE_O = os.path.join(HERE, 'blocks.json')
 
 idos = Mesh.from_json(FILE_I1)
 edos = Mesh.from_json(FILE_I2)
