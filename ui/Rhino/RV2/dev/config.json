@@ -70,9 +70,9 @@
         [
             {"name": "RV2init",                         "menu_text": "Initialise RV2",                  "icon": 0,      "tooltip": "Initialise RV2"},
 
-            {"name": "RV2file_open",                    "menu_text": "Open File",                       "icon": 1},
-            {"name": "RV2file_save",                    "menu_text": "Save File",                       "icon": 2},
-            {"name": "RV2file_save_as",                 "menu_text": "SaveAs File",                     "icon": 2},
+            {"name": "RV2file_open",                    "menu_text": "Open File",                       "icon": 1,      "tooltip": "Open RV2 session"},
+            {"name": "RV2file_save",                    "menu_text": "Save File",                       "icon": 2,      "tooltip": "Save RV2 session"},
+            {"name": "RV2file_save_as",                 "menu_text": "SaveAs File",                     "icon": 2,      "tooltip": "Save RV2 session"},
 
             {"name": "RV2settings",                     "menu_text": "Settings",                        "icon": 3},
 
@@ -266,6 +266,11 @@
                 "items":
                 [
                     {"left": "RV2init"},
+
+                    {"type": "separator"},
+
+                    {"left": "RV2file_open"},
+                    {"left": "RV2file_save_as"},
 
                     {"type": "separator"},
 
