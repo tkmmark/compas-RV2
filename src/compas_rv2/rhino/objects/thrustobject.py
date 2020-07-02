@@ -262,12 +262,10 @@ class ThrustObject(MeshObject):
 
             tol = self.settings['tol.reactions']
             anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
-            fixed = list(self.datastructure.vertices_where({'is_fixed': True}))
-            keys = list(set(anchors + fixed))
             color = self.settings['color.reactions']
             scale = self.settings['scale.reactions']
-            guids = self.artist.draw_reactions(keys, color, scale, tol)
-            self.guid_reaction = zip(guids, keys)
+            guids = self.artist.draw_reactions(anchors, color, scale, tol)
+            self.guid_reaction = zip(guids, anchors)
 
         else:
             guids_reactions = list(self.guid_reaction.keys())
@@ -278,7 +276,7 @@ class ThrustObject(MeshObject):
         if self.settings['_is.valid'] and self.settings['show.residuals']:
 
             tol = self.settings['tol.residuals']
-            keys = list(self.datastructure.vertices_where({'is_anchor': False, 'is_fixed': False}))
+            keys = list(self.datastructure.vertices_where({'is_anchor': False}))
             color = self.settings['color.residuals']
             scale = self.settings['scale.residuals']
             guids = self.artist.draw_residuals(keys, color, scale, tol)
