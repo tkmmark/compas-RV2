@@ -14,6 +14,7 @@ try:
     find_object = sc.doc.Objects.Find
     import Eto.Drawing as drawing
     import Eto.Forms as forms
+    import Rhino
 except Exception:
     compas.raise_if_ironpython()
 
@@ -298,13 +299,13 @@ class Tree_Tab(forms.TabPage):
         self.Content.apply()
 
 
-class AttributesForm(forms.Form):
+class AttributesForm(forms.Dialog[bool]):
 
     @classmethod
     def from_sceneNode(cls, sceneNode):
         attributesForm = cls()
         attributesForm.setup(sceneNode)
-        attributesForm.Show()
+        Rhino.UI.EtoExtensions.ShowSemiModal(attributesForm, Rhino.RhinoDoc.ActiveDoc, Rhino.UI.RhinoEtoApp.MainWindow)
         return attributesForm
 
     def setup(self, sceneNode):
