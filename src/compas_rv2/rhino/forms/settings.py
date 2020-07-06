@@ -10,6 +10,7 @@ from collections import OrderedDict
 try:
     import Eto.Drawing as drawing
     import Eto.Forms as forms
+    import Rhino.UI
 except Exception:
     compas.raise_if_ironpython()
 
@@ -109,7 +110,7 @@ class Settings_Tab(forms.TabPage):
         self.settings.update(self.new_settings)
 
 
-class SettingsForm(forms.Form):
+class SettingsForm(forms.Dialog[bool]):
 
     @classmethod
     def from_scene(cls, scene, object_types=None, global_settings=None):
@@ -146,7 +147,7 @@ class SettingsForm(forms.Form):
         settingsForm = cls()
         settingsForm.scene = scene
         settingsForm.setup(all_settings)
-        settingsForm.Show()
+        Rhino.UI.EtoExtensions.ShowSemiModal(settingsForm, Rhino.RhinoDoc.ActiveDoc, Rhino.UI.RhinoEtoApp.MainWindow)
         return settingsForm
 
     @classmethod
@@ -155,7 +156,7 @@ class SettingsForm(forms.Form):
         all_settings = {name: settings}
         settingsForm = cls()
         settingsForm.setup(all_settings)
-        settingsForm.Show()
+        Rhino.UI.EtoExtensions.ShowSemiModal(settingsForm, Rhino.RhinoDoc.ActiveDoc, Rhino.UI.RhinoEtoApp.MainWindow)
         return settingsForm
 
     def setup(self, all_settings):
