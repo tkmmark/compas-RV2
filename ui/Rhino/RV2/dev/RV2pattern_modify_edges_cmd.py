@@ -23,10 +23,14 @@ def RunCommand(is_interactive):
 
     options = ["All", "Continuous", "Parallel", "Manual"]
     option = compas_rhino.rs.GetString("Selection Type", strings=options)
+
     if not option:
         return
 
-    if option == "Continuous":
+    if option == "All":
+        keys = keys = list(pattern.datastructure.edges())
+
+    elif option == "Continuous":
         temp = pattern.select_edges()
         keys = list(set(flatten([pattern.datastructure.edge_loop(key) for key in temp])))
 
