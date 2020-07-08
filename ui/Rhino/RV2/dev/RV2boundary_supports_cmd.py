@@ -62,10 +62,7 @@ def RunCommand(is_interactive):
             keys = pattern.datastructure.vertices_on_boundary()
 
         elif option2 == "Corners":
-            keys = []
-            for key in pattern.datastructure.vertices_on_boundary():
-                if pattern.datastructure.vertex_degree(key) == 2:
-                    keys.append(key)
+            keys = pattern.datastructure.corner_vertices()
 
         elif option2 == "ByContinuousEdges":
             edges = pattern.select_edges()

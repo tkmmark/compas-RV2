@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 # from compas.utilities import pairwise
+from compas.geometry import angle_vectors
 
 
 __all__ = ['MeshMixin']
@@ -139,6 +140,22 @@ class MeshMixin(object):
         if edges[-1][1] != edges[0][0]:
             vertices.append(edges[-1][1])
         return vertices
+
+    def corner_vertices(self, tol=160):
+        vkeys = []
+        for key in self.vertices_on_boundary():
+            if self.vertex_degree(key) == 2:
+                vkeys.append(key)
+            else:
+                nbrs = []
+                for nkey in self.vertex_neighbors(key):
+                    if self.is_edge_on_boundary(key, nkey):
+                        nbrs.append(nkey)
+                u = (self.edge_vector(key, nbrs[0]))
+                v = (self.edge_vector(key, nbrs[1]))
+                if angle_vectors(u, v, deg=True) < tol:
+                    vkeys.append(key)
+        return vkeys
 
     # def faces_on_edge_loop(self, uv):
     #     pass

@@ -25,17 +25,15 @@ def RunCommand(is_interactive):
 
     while True:
         option = compas_rhino.rs.GetString("Selection mode:", strings=options)
+
         if not option:
             return
 
-        if option == "Corners":
-            keys = []
-            for key in pattern.datastructure.vertices_on_boundary():
-                if pattern.datastructure.vertex_degree(key) == 2:
-                    keys.append(key)
-
-        elif option == "AllBoundaryVertices":
+        if option == "AllBoundaryVertices":
             keys = pattern.datastructure.vertices_on_boundary()
+
+        elif option == "Corners":
+            keys = pattern.datastructure.corner_vertices()
 
         elif option == "ByContinuousEdges":
             temp = pattern.select_edges()
