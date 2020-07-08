@@ -23,11 +23,15 @@ def RunCommand(is_interactive):
     lines = compas_rhino.get_line_coordinates(guids)
     pattern = Pattern.from_lines(lines, delete_boundary_face=True)
 
+    if not pattern.face:
+        print("No faces found! Pattern object was not created.")
+        return
+
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print('Pattern object successfully created.')
+    print("Pattern object successfully created.")
 
 
 # ==============================================================================
