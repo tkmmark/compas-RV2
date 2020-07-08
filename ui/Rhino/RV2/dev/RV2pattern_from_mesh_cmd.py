@@ -23,11 +23,13 @@ def RunCommand(is_interactive):
 
     pattern = RhinoMesh.from_guid(guid).to_compas(cls=Pattern)
 
+    compas_rhino.rs.HideObject(guid)
+
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print('Pattern object successfully created.')
+    print("Pattern object successfully created. Input mesh has been hidden.")
 
 
 # ==============================================================================

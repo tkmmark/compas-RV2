@@ -127,6 +127,7 @@ def RunCommand(is_interactive):
 
     lines = compas_rhino.get_line_coordinates(guids)
     compas_rhino.rs.HideObjects(guids)
+
     skeleton = Skeleton.from_skeleton_lines(lines)
     if not skeleton:
         return
@@ -165,7 +166,7 @@ def RunCommand(is_interactive):
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print('Pattern object successfully created.')
+    print("Pattern object successfully created. Input lines have been hidden.")
 
 
 # ==============================================================================

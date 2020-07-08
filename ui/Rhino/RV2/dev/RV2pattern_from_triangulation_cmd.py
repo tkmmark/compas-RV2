@@ -106,11 +106,13 @@ def RunCommand(is_interactive):
                 pattern.vertex_attribute(key, 'is_fixed', True)
             pattern.vertex_attribute(key, 'constraints', [str(guid) for guid in guids])
 
+    compas_rhino.rs.HideObject(boundary_guids + hole_guids + segments_guids)
+
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print('Pattern object successfully created.')
+    print("Pattern object successfully created. Input geometry have been hidden.")
 
 
 # ==============================================================================
