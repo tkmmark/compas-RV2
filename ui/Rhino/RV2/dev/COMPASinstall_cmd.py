@@ -110,17 +110,21 @@ def RunCommand(is_interactive):
             options = []
             for p in packages:
                 if p['name'].find('compas') == 0:
-                    options.append((p['name'].replace('-', '_'), False))
+                    entry = "%s   %s   %s" % (p['name'].replace('-', '_'), p['version'], p['channel'])
+                    options.append((entry, False))
 
-            results = rs.CheckListBox(options, "Install compas packages to install from [%s]:" % selected)
-            if results:
-                to_install = []
-                for name, yes in results:
-                    if yes:
-                        to_install.append(name)
-                install_env_packages(selected, envs=envs, packages=to_install)
+            if options:
+                results = rs.CheckListBox(options, "Install compas packages to install from [%s]:" % selected)
+                if results:
+                    to_install = []
+                    for package, yes in results:
+                        if yes:
+                            name = package.split("   ")[0]
+                            to_install.append(name)
+                    install_env_packages(selected, envs=envs, packages=to_install)
 
-
+            else:
+                print("no compas package found in env: %s" % selected)
 # ==============================================================================
 # Main
 # ==============================================================================
