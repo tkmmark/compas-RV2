@@ -95,7 +95,7 @@ def RunCommand(is_interactive):
     # TODO: detect version
     ipylib_path = compas_rhino._get_ironpython_lib_path("6.0")
     print(ipylib_path)
-    compas_packages = [(name, False) for name in os.listdir(ipylib_path) if name.split("_")[0] =="compas" and name != "compas_bootstrapper.py"]
+    compas_packages = [(name, False) for name in os.listdir(ipylib_path) if name.split("_")[0] == "compas" and name != "compas_bootstrapper.py"]
     results = rs.CheckListBox(compas_packages, "Select Packages to uninstall")
 
     if results:
@@ -104,6 +104,7 @@ def RunCommand(is_interactive):
 # ==============================================================================
 # Main
 # ==============================================================================
+
 
 if __name__ == '__main__':
 

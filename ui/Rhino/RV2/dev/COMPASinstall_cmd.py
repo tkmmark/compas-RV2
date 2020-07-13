@@ -114,7 +114,7 @@ def RunCommand(is_interactive):
                     options.append((entry, False))
 
             if options:
-                results = rs.CheckListBox(options, "Install compas packages to install from [%s]:" % selected)
+                results = rs.CheckListBox(options, "Select compas packages to install from [%s]:" % selected)
                 if results:
                     to_install = []
                     for package, yes in results:
@@ -128,6 +128,7 @@ def RunCommand(is_interactive):
 # ==============================================================================
 # Main
 # ==============================================================================
+
 
 if __name__ == '__main__':
 
