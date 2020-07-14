@@ -2,7 +2,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-from compas_rhino.conduits import Conduit
+from compas_rhino.conduits import BaseConduit
 
 from Rhino.Geometry import Point3d
 from Rhino.Geometry import Line
@@ -19,7 +19,7 @@ except NameError:
 __all__ = ['ForceConduit']
 
 
-class ForceConduit(Conduit):
+class ForceConduit(BaseConduit):
     """A Rhino display conduit for lines.
 
     Parameters
