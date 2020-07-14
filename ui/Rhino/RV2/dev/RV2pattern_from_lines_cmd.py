@@ -27,6 +27,8 @@ def RunCommand(is_interactive):
         print("No faces found! Pattern object was not created.")
         return
 
+    compas_rhino.rs.HideObjects(guids)
+
     scene.clear()
     scene.add(pattern, name='pattern')
     scene.update()
