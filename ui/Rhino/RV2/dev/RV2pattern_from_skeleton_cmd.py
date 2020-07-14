@@ -143,7 +143,7 @@ def RunCommand(is_interactive):
         if not action:
             return
 
-        if action['name'] == 'finish':
+        if action['name'] == 'Finish':
             break
 
         action['action'](skeletonobject)
