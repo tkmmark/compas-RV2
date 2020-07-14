@@ -62,52 +62,52 @@ config = {
     "message": "Modify",
     "options": [
         {
-            "name": "finish",
+            "name": "Finish",
             "message": "Finish",
             "action": None
         },
         {
-            "name": "move_skeleton_vertices",
+            "name": "MoveSkeletonVertices",
             "message": "Move_Skeleton_Vertices",
             "action": skeleton_move_skeleton_vertex
         },
         {
-            "name": "move_coarse_mesh_corner_vertices",
+            "name": "MoveCoarseMeshVertices",
             "message": "Move_Coarse_Mesh_Corner_Vertices",
             "action": skeleton_move_mesh_vertex
         },
         {
-            "name": "node_width",
+            "name": "NodeWidth",
             "message": "Node_Width",
             "action": skeleton_dynamic_draw_nodewidth
         },
         {
-            "name": "leaf_width",
+            "name": "LeafWidth",
             "message": "Leaf_Width",
             "action": skeleton_dynamic_draw_leafwidth
         },
         {
-            "name": "leaf_extend",
+            "name": "LeafExtend",
             "message": "Leaf_Extend",
             "action": skeleton_dynamic_draw_leafextend
         },
         {
-            "name": "add_lines",
+            "name": "AddLines",
             "message": "Add_Lines",
             "action": skeleton_add_lines
         },
         {
-            "name": "remove_lines",
+            "name": "RemoveLines",
             "message": "Remove_Lines",
             "action": skeleton_remove_lines
         },
         {
-            "name": "subdivide",
+            "name": "Subdivide",
             "message": "Subdivide",
             "action": skeleton_subdivide
         },
         {
-            "name": "merge",
+            "name": "Merge",
             "message": "Merge",
             "action": skeleton_merge
         }

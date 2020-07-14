@@ -7,9 +7,9 @@ from compas_rv2.rhino import select_vertices as rv2_select_vertices
 from compas_rv2.rhino import select_faces as rv2_select_faces
 from compas_rv2.rhino import select_edges as rv2_select_edges
 from compas_rv2.rhino import delete_objects
-from compas_rhino.modifiers import VertexModifier
-from compas_rhino.modifiers import EdgeModifier
-from compas_rhino.modifiers import FaceModifier
+from compas_rhino.objects.modifiers import VertexModifier
+from compas_rhino.objects.modifiers import EdgeModifier
+from compas_rhino.objects.modifiers import FaceModifier
 from compas.geometry import add_vectors
 
 import Rhino
