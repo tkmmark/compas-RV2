@@ -1,5 +1,18 @@
 if __name__ == '__main__':
 
+    packages = ['compas', 'compas_rhino', 'compas_tna', 'compas_cloud', 'compas_skeleton', 'compas_singular', 'compas_rv2']
+
+    import importlib
+
+    print("\n", "-"*10, "Checking packages", "-"*10)
+    for p in packages:
+        try:
+            importlib.import_module(p)
+            print('   {} {}'.format(p.ljust(20), "OK"))
+        except ImportError as e:
+            print(p, "ERROR: cannot be imported, make sure it is installed")
+            raise ImportError(e)
+
     import compas_rhino
     from compas_rhino.install import install
     from compas_rhino.uninstall import uninstall
@@ -7,7 +20,6 @@ if __name__ == '__main__':
     from compas_rhino.uninstall_plugin import uninstall_plugin
     import argparse
     import os
-
 
     parser = argparse.ArgumentParser(
         description='RhinoVault2 Installation command-line utility.')
@@ -36,5 +48,6 @@ if __name__ == '__main__':
 
     print("\n", "-"*10, "Installing COMPAS packages", "-"*10)
 
-    packages = ['compas', 'compas_rhino', 'compas_tna', 'compas_cloud', 'compas_skeleton', 'compas_singular', 'compas_rv2']
     install(packages=packages)
+
+    print("\n", "-"*10, "Installation is successful", "-"*10)
