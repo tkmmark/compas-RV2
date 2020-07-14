@@ -7,6 +7,8 @@ import subprocess
 import json
 import os
 import compas
+import compas_rhino
+from compas_rhino.uninstall import uninstall
 
 try:
     from compas_bootstrapper import CONDA_EXE
@@ -90,41 +92,15 @@ def list_envs(show_packages=True):
 
 
 def RunCommand(is_interactive):
+    # TODO: detect version
+    ipylib_path = compas_rhino._get_ironpython_lib_path("6.0")
+    print(ipylib_path)
+    compas_packages = [(name, False) for name in os.listdir(ipylib_path) if name.split("_")[0] == "compas" and name != "compas_bootstrapper.py"]
+    results = rs.CheckListBox(compas_packages, "Select Packages to uninstall")
 
-    print('fetching conda envs....')
+    if results:
+        uninstall(results)
 
-    envs = list_envs(show_packages=False)
-    envs_dict = {}
-    for env_path in envs:
-        if env_path.find('envs') < 0:
-            name = 'base'
-        else:
-            name = os.path.split(env_path)[-1]
-        envs_dict[name] = env_path
-    options = envs_dict.keys()
-
-    if options:
-        selected = rs.ListBox(options, "Select env to install")
-        if selected:
-            packages = list_package(selected)
-            options = []
-            for p in packages:
-                if p['name'].find('compas') == 0:
-                    entry = "%s   %s   %s" % (p['name'].replace('-', '_'), p['version'], p['channel'])
-                    options.append((entry, False))
-
-            if options:
-                results = rs.CheckListBox(options, "Select compas packages to install from [%s]:" % selected)
-                if results:
-                    to_install = []
-                    for package, yes in results:
-                        if yes:
-                            name = package.split("   ")[0]
-                            to_install.append(name)
-                    install_env_packages(selected, envs=envs, packages=to_install)
-
-            else:
-                print("no compas package found in env: %s" % selected)
 # ==============================================================================
 # Main
 # ==============================================================================
