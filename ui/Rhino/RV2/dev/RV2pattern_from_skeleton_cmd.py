@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rhino.utilities import is_curve_line
 from compas_rhino.ui import CommandMenu
 from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import Skeleton
@@ -24,29 +25,42 @@ def skeleton_move_mesh_vertex(skeletonobject):
 
 
 def skeleton_dynamic_draw_nodewidth(skeletonobject):
-    skeletonobject.dynamic_draw_width('node_width')
-
+    if skeletonobject.datastructure.skeleton_vertices[0]:
+        skeletonobject.dynamic_draw_width('node_width')
+    else:
+        print("This skeleton doesn't have node vertices!")
+        return
 
 def skeleton_dynamic_draw_leafwidth(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices:
+    if skeletonobject.datastructure.skeleton_vertices[1]:
         skeletonobject.dynamic_draw_width('leaf_width')
     else:
         print("This skeleton doesn't have leaf vertices!")
+        return
 
 
 def skeleton_dynamic_draw_leafextend(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices:
+    if skeletonobject.datastructure.skeleton_vertices[1]:
         skeletonobject.dynamic_draw_width('leaf_extend')
     else:
         print("This skeleton doesn't have leaf vertices!")
+        return
 
 
 def skeleton_add_lines(skeletonobject):
-    skeletonobject.add_lines()
+    if skeletonobject.datastructure.skeleton_branches:
+        skeletonobject.add_lines()
+    else:
+        print("cannot add lines to a dome skeleton!")
+        return
 
 
 def skeleton_remove_lines(skeletonobject):
-    skeletonobject.remove_lines()
+    if skeletonobject.datastructure.skeleton_branches:
+        skeletonobject.remove_lines()
+    else:
+        print("no lines to be removed!")
+        return
 
 
 def skeleton_subdivide(skeletonobject):
@@ -120,15 +134,37 @@ def RunCommand(is_interactive):
     if not scene:
         return
 
-    # skeleton from lines
-    guids = compas_rhino.select_lines()
+    # skeleton from single point or a set of lines
+    guids = compas_rhino.rs.GetObjects(
+        message="Select a single point or a group of lines",
+        filter=compas_rhino.rs.filter.point | compas_rhino.rs.filter.curve
+        )
+
     if not guids:
         return
 
-    lines = compas_rhino.get_line_coordinates(guids)
-    compas_rhino.rs.HideObjects(guids)
+    # detect input object type
+    guids_points = []
+    guids_lines = []
+    for guid in guids:
+        if is_curve_line(guid):
+            guids_lines.append(guid)
 
-    skeleton = Skeleton.from_skeleton_lines(lines)
+        if compas_rhino.rs.IsPoint(guid):
+            guids_points.append(guid)
+
+    if len(guids_points) == 1 and len(guids_lines) == 0:
+        point = compas_rhino.get_point_coordinates(guids_points)[0]
+        compas_rhino.rs.HideObjects(guids_points)
+
+        skeleton = Skeleton.from_center_point(point)
+
+    elif len(guids_points) == 0 and len(guids_lines) > 0:
+        lines = compas_rhino.get_line_coordinates(guids_lines)
+        compas_rhino.rs.HideObjects(guids_lines)
+
+        skeleton = Skeleton.from_skeleton_lines(lines)
+
     if not skeleton:
         return
 
