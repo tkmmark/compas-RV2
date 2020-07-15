@@ -5,6 +5,8 @@ from __future__ import division
 import compas_rhino
 from compas_rv2.datastructures import Pattern
 from compas_rv2.rhino import get_scene
+from compas_rv2.rhino import get_proxy
+
 from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
 from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
 
@@ -16,6 +18,10 @@ def RunCommand(is_interactive):
 
     scene = get_scene()
     if not scene:
+        return
+
+    proxy = get_proxy()
+    if not proxy:
         return
 
     srf_guid = compas_rhino.select_surface("Select a surface.")
@@ -30,8 +36,10 @@ def RunCommand(is_interactive):
 
     mesh_edge_length = compas_rhino.rs.GetReal("Pattern edge-length target.", 1.0)
 
+    delaunay = proxy.function("compas.geometry.triangulation.triangulation_numpy")
+
     print("Decompose surface and generate a pattern...")
-    pattern = Pattern.from_surface_and_features(input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids, pt_guids)
+    pattern = Pattern.from_surface_and_features(input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids, pt_guids, delaunay)
     print("Pattern topology generated.")
 
     print("Relax pattern on surface...")

@@ -3,9 +3,9 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino.objects.meshobject import MeshObject
 from compas_rv2.rhino import delete_objects
-from compas_rhino.artists import MeshArtist
+from compas_rv2.rhino.artists import MeshArtist
+from compas_rv2.rhino.objects.meshobject import MeshObject
 
 
 __all__ = ["PatternObject"]
