@@ -39,6 +39,10 @@ class Settings_Tab(forms.TabPage):
             split = key.split('.')
             prefix = split[0]
             postfix = '.'.join(split[1:])
+
+            if prefix[0] == "_":
+                continue
+
             if prefix not in sections:
                 sections[prefix] = {}
             sections[prefix][postfix] = (key, settings[key])

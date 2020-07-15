@@ -80,10 +80,10 @@ class PatternObject(MeshObject):
         keys = list(self.datastructure.vertices())
 
         color = {key: self.settings['color.vertices'] for key in keys}
-        color_constrained = self.settings['color.vertices:is_constrained']
+        # color_constrained = self.settings['color.vertices:is_constrained']
         color_fixed = self.settings['color.vertices:is_fixed']
         color_anchor = self.settings['color.vertices:is_anchor']
-        color.update({key: color_constrained for key in self.datastructure.vertices() if self.datastructure.vertex_attribute(key, 'constraints')})
+        # color.update({key: color_constrained for key in self.datastructure.vertices() if self.datastructure.vertex_attribute(key, 'constraints')})
         color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True})})
         color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True})})
 
