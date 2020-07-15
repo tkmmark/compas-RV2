@@ -36,7 +36,7 @@ def RunCommand(is_interactive):
 
     mesh_edge_length = compas_rhino.rs.GetReal("Pattern edge-length target.", 1.0)
 
-    delaunay = proxy.function("compas.geometry.triangulation.triangulation_numpy")
+    delaunay = proxy.function("compas.geometry.triangulation.triangulation_numpy.delaunay_from_points_numpy")
 
     # print("Decompose surface and generate a pattern...")
     pattern = Pattern.from_surface_and_features(input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids, pt_guids, delaunay)
