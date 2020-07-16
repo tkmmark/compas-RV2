@@ -32,9 +32,10 @@ def RunCommand(is_interactive):
     fixed = anchors + fixed
 
     options = ['True', 'False']
-    option = compas_rhino.rs.GetString("Keep all boundaries fixed.", options[0], options)
+    option = compas_rhino.rs.GetString("Press Enter to smooth or ESC to exit. Keep all boundaries fixed?", options[0], options)
 
-    if not option:
+    if option is None:
+        print('Form smoothing aborted!')
         return
 
     if option == 'True':
