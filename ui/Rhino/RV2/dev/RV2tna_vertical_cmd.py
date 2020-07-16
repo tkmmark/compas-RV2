@@ -46,26 +46,17 @@ def RunCommand(is_interactive):
     zmax = scene.settings['Solvers']['tna.vertical.zmax']
     kmax = scene.settings['Solvers']['tna.vertical.kmax']
 
-    options = ['TargetHeight', 'Iterations']
+    target_height = compas_rhino.rs.GetReal('Press Enter to run or ESC to exit', zmax, 0.1 * diagonal, 1.0 * diagonal)
 
-    while True:
-        option = compas_rhino.rs.GetString('Options for vertical equilibrium solver:', strings=options)
+    if not target_height:
+        print("Vertical equilibrium aborted!")
+        return
 
-        if not option:
-            break
-
-        if option == 'TargetHeight':
-            zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.1 * diagonal, 1.0 * diagonal)
-
-        elif option == 'Iterations':
-            kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
-
-    scene.settings['Solvers']['tna.vertical.zmax'] = zmax
-    scene.settings['Solvers']['tna.vertical.kmax'] = kmax
+    scene.settings['Solvers']['tna.vertical.zmax'] = target_height
 
     result = vertical(form.datastructure.data, zmax, kmax=kmax)
     if not result:
-        print("vertical equilibrium failed")
+        print("Vertical equilibrium failed!")
         return
 
     formdata, scale = result

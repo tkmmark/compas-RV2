@@ -44,7 +44,12 @@ def RunCommand(is_interactive):
     options = ['Alpha', 'Iterations', 'RefreshRate']
 
     while True:
-        option = compas_rhino.rs.GetString('Options for horizontal equilibrium solver:', strings=options)
+        option = compas_rhino. rs.GetString('Press Enter to run or ESC to exit', strings=options)
+
+        if option is None:
+            print("Horizontal equilibrium aborted!")
+            return
+
         if not option:
             break
 
