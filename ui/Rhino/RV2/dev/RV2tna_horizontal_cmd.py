@@ -44,7 +44,7 @@ def RunCommand(is_interactive):
     options = ['Alpha', 'Iterations', 'RefreshRate']
 
     while True:
-        option = compas_rhino. rs.GetString('Press Enter to run or ESC to exit', strings=options)
+        option = compas_rhino. rs.GetString('Press Enter to run or ESC to exit.', strings=options)
 
         if option is None:
             print("Horizontal equilibrium aborted!")
@@ -67,10 +67,14 @@ def RunCommand(is_interactive):
                 alpha = int(temp[4:])
 
         elif option == 'Iterations':
-            kmax = compas_rhino.rs.GetInteger('Enter number of iterations', kmax, 1, 10000)
+            new_kmax = compas_rhino.rs.GetInteger('Enter number of iterations', kmax, 1, 10000)
+            if new_kmax or new_kmax is not None:
+                kmax = new_kmax
 
         elif option == 'RefreshRate':
-            refresh = compas_rhino.rs.GetInteger('Refresh rate for dynamic visualisation', refresh, 0, 1000)
+            new_refresh = compas_rhino.rs.GetInteger('Refresh rate for dynamic visualisation', refresh, 0, 1000)
+            if new_refresh or new_refresh is not None:
+                refresh = new_refresh
 
     if refresh > kmax:
         refresh = 0

@@ -8,6 +8,8 @@ from compas_rv2.rhino import get_proxy
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
 
+import Rhino
+
 
 __commandname__ = "RV2tna_vertical"
 
@@ -46,15 +48,27 @@ def RunCommand(is_interactive):
     zmax = scene.settings['Solvers']['tna.vertical.zmax']
     kmax = scene.settings['Solvers']['tna.vertical.kmax']
 
-    target_height = compas_rhino.rs.GetReal('Press Enter to run or ESC to exit', zmax, 0.1 * diagonal, 1.0 * diagonal)
+    options = ['TargetHeight']
 
-    if not target_height:
-        print("Vertical equilibrium aborted!")
-        return
+    while True:
+        option = compas_rhino.rs.GetString('Press Enter to run or ESC to exit.', strings=options)
 
-    scene.settings['Solvers']['tna.vertical.zmax'] = target_height
+        if option is None:
+            print("Vetical equilibrium aborted!")
+            return
+
+        if not option:
+            break
+
+        if option == 'TargetHeight':
+            new_zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.1 * diagonal, 1.0 * diagonal)
+            if new_zmax or new_zmax is not None:
+                zmax = new_zmax
+
+    scene.settings['Solvers']['tna.vertical.zmax'] = zmax
 
     result = vertical(form.datastructure.data, zmax, kmax=kmax)
+
     if not result:
         print("Vertical equilibrium failed!")
         return
@@ -74,7 +88,7 @@ def RunCommand(is_interactive):
     scene.update()
 
     print('Vertical equilibrium found!')
-    print('ThrustDiagram object successfully created.')
+    print('ThrustDiagram object successfully created with target height of {}.'.format(zmax))
 
 
 # ==============================================================================
