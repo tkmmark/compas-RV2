@@ -8,7 +8,7 @@ from compas_rv2.rhino import get_proxy
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
 
-import Rhino
+# import Rhino
 
 
 __commandname__ = "RV2tna_vertical"
@@ -61,7 +61,7 @@ def RunCommand(is_interactive):
             break
 
         if option == 'TargetHeight':
-            new_zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.1 * diagonal, 1.0 * diagonal)
+            new_zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.0, 1.0 * diagonal)
             if new_zmax or new_zmax is not None:
                 zmax = new_zmax
 
