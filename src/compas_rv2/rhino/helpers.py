@@ -7,6 +7,12 @@ from ast import literal_eval
 import compas_rhino
 from compas_rhino.etoforms import TextForm
 
+from compas_rv2.datastructures import Pattern
+from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import ForceDiagram
+from compas_rv2.datastructures import ThrustDiagram
+import json
+
 try:
     import System
     import Rhino
@@ -231,6 +237,84 @@ def get_system():
         return None
     return compas_rhino.sc.sticky["RV2.system"]
 
+
+def save_session():
+
+    scene = get_scene()
+
+    session = {
+        "data": {"pattern": None, "form": None, "force": None},
+        "settings": scene.settings,
+    }
+
+    pattern = scene.get('pattern')[0]
+    if pattern:
+        session['data']['pattern'] = pattern.datastructure.to_data()
+
+    form = scene.get('form')[0]
+    if form:
+        session['data']['form'] = form.datastructure.to_data()
+
+    force = scene.get('force')[0]
+    if force:
+        session['data']['force'] = force.datastructure.to_data()
+
+    return session
+
+
+def load_session(session):
+
+    print("loading session")
+
+    scene = get_scene()
+
+    scene.clear()
+
+    if 'settings' in session:
+        scene.settings = session['settings']
+
+    if 'data' in session:
+        data = session['data']
+
+        if 'pattern' in data and data['pattern']:
+            pattern = Pattern.from_data(data['pattern'])
+
+            scene.add(pattern, name="pattern")
+
+        else:
+            if 'form' in data and data['form']:
+                form = FormDiagram.from_data(data['form'])
+                thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
+
+                scene.add(form, name="form")
+                scene.add(thrust, name="thrust")
+
+            if 'force' in data and data['force']:
+                force = ForceDiagram.from_data(data['force'])
+
+                force.primal = form
+                form.dual = force
+
+                scene.add(force, name="force")
+
+    scene.update()
+
+
+def record():
+
+    session = json.loads(json.dumps(save_session()))
+    sc.sticky["RV2.sessions"].append(session)
+    print("recorded sessions:", len(sc.sticky["RV2.sessions"]))
+
+
+def undo_redo(sender, e):
+    if e.Tag == "undo":
+        load_session(sc.sticky["RV2.sessions"][-1])
+        sc.sticky["RV2.sessions"] = sc.sticky["RV2.sessions"][:-1]
+        print("remained sessions:", len(sc.sticky["RV2.sessions"]))
+
+    if e.Tag == "redo":
+        pass
 
 # ==============================================================================
 # Main
