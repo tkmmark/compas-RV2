@@ -40,9 +40,6 @@ HOME = os.path.expanduser('~')
 CWD = HERE or HOME
 
 
-    print("custom undo", e.Tag)
-
-
 def RunCommand(is_interactive):
 
     Browser()
@@ -62,7 +59,6 @@ def RunCommand(is_interactive):
     sc.sticky["RV2"] = {"scene": scene}
 
     sc.sticky["RV2.sessions"] = []
-
 
 
 # ==============================================================================

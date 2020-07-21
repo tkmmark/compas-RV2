@@ -7,15 +7,13 @@ from compas_rv2.rhino import get_scene
 from compas.geometry import Translation
 from compas_tna.equilibrium import horizontal_nodal
 from compas_rv2.rhino import HorizontalConduit
-from compas_rv2.rhino.helpers import record, undo_redo
-import scriptcontext as sc
+from compas_rv2.rhino.helpers import rv2_undo
 
 __commandname__ = "RV2tna_horizontal"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
-
-    record()
 
     def redraw(k, xy, edges):
         if k % conduit.refreshrate:
@@ -121,7 +119,6 @@ def RunCommand(is_interactive):
         print('Horizontal equilibrium NOT found! Consider running more iterations.')
         print('Maximum angle deviation:', max_angle)
 
-    sc.doc.AddCustomUndoEvent("Undo TNA", undo_redo, "undo")
 
 # ==============================================================================
 # Main

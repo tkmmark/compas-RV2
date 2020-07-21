@@ -316,6 +316,14 @@ def undo_redo(sender, e):
     if e.Tag == "redo":
         pass
 
+
+def rv2_undo(command):
+    def wrapper(*args, **kwargs):
+        record()
+        command(*args, **kwargs)
+        sc.doc.AddCustomUndoEvent("RV2 Undo", undo_redo, "undo")
+    return wrapper
+
 # ==============================================================================
 # Main
 # ==============================================================================
