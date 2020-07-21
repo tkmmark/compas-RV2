@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_vertices as rv2_select_vertices
 from compas_rv2.rhino import select_faces as rv2_select_faces
 from compas_rv2.rhino import select_edges as rv2_select_edges
@@ -16,6 +17,8 @@ import Rhino
 
 
 __all__ = ['MeshObject']
+
+_ITEM_OBJECT = {}
 
 
 class MeshObject(object):
@@ -66,8 +69,7 @@ class MeshObject(object):
 
     __module__ = 'compas_rv2.rhino'
 
-    def __init__(self, scene, datastructure, name=None, visible=True, settings={}, **kwargs):
-        self.scene = scene
+    def __init__(self, datastructure, name=None, visible=True, settings={}, **kwargs):
         self.datastructure = datastructure
         self.name = name
         self.guid = None
@@ -83,6 +85,23 @@ class MeshObject(object):
         self._guid_facenormal = {}
         self._settings = {}
         self._settings.update(settings)
+
+    @staticmethod
+    def register(item_type, object_type):
+        _ITEM_OBJECT[item_type] = object_type
+
+    @staticmethod
+    def build(item, **kwargs):
+        object_type = _ITEM_OBJECT[type(item)]
+        return object_type(item, **kwargs)
+
+    @staticmethod
+    def registered_object_types():
+        return [_ITEM_OBJECT[key] for key in _ITEM_OBJECT]
+
+    @property
+    def scene(self):
+        return get_scene()
 
     @property
     def settings(self):

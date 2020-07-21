@@ -61,8 +61,8 @@ class FormObject(MeshObject):
         'color.edges': [0, 127, 0],
     }
 
-    def __init__(self, scene, diagram, **kwargs):
-        super(FormObject, self).__init__(scene, diagram, **kwargs)
+    def __init__(self, diagram, **kwargs):
+        super(FormObject, self).__init__(diagram, **kwargs)
         self.artist = FormArtist(self.datastructure)
 
     def draw(self):

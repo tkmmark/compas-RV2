@@ -6,5 +6,6 @@ pip install git+https://github.com/BlockResearchGroup/compas_cloud.git#egg=compa
 pip install git+https://github.com/BlockResearchGroup/compas_tna.git#egg=compas_tna
 pip install git+https://github.com/BlockResearchGroup/compas_skeleton.git#egg=compas_skeleton
 pip install git+https://github.com/BlockResearchGroup/compas_triangle.git#egg=compas_triangle
+pip install git+https://github.com/BlockResearchGroup/compas_singular.git#egg=compas_singular
 pip install .
 python scripts/pack.py

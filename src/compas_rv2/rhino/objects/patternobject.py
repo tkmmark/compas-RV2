@@ -48,8 +48,8 @@ class PatternObject(MeshObject):
         'from_surface.density.V': 10,
     }
 
-    def __init__(self, scene, pattern, **kwargs):
-        super(PatternObject, self).__init__(scene, pattern, **kwargs)
+    def __init__(self, pattern, **kwargs):
+        super(PatternObject, self).__init__(pattern, **kwargs)
         self.artist = MeshArtist(self.datastructure)
 
     def draw(self):

@@ -6,12 +6,10 @@ import compas_rhino
 import uuid
 
 from compas_rv2.rhino import SettingsForm
+from compas_rv2.rhino import MeshObject
 
 
 __all__ = ['Scene']
-
-
-_ITEM_WRAPPER = {}
 
 
 class Scene(object):
@@ -22,7 +20,7 @@ class Scene(object):
         self.settings = settings
 
     def add(self, item, **kwargs):
-        node = Scene.build(self, item, **kwargs)
+        node = MeshObject.build(item, **kwargs)
         guid = uuid.uuid4()
         node.id = guid
         self.nodes[guid] = node
@@ -67,19 +65,9 @@ class Scene(object):
     def update_selection(self, guids):
         compas_rhino.rs.SelectObjects(guids)
 
-    # register object_type AND artist_type (or register artist_type with object_type)
-    @staticmethod
-    def register(item_type, wrapper_type):
-        _ITEM_WRAPPER[item_type] = wrapper_type
-
-    @staticmethod
-    def build(scene, item, **kwargs):
-        wrapper = _ITEM_WRAPPER[type(item)]
-        return wrapper(scene, item, **kwargs)
-
     @property
     def registered_object_types(self):
-        return [_ITEM_WRAPPER[key] for key in _ITEM_WRAPPER]
+        return MeshObject.registered_object_types()
 
 
 # ==============================================================================

@@ -59,8 +59,8 @@ class ForceObject(MeshObject):
         'color.edges': [0, 0, 255],
     }
 
-    def __init__(self, scene, diagram, **kwargs):
-        super(ForceObject, self).__init__(scene, diagram, **kwargs)
+    def __init__(self, diagram, **kwargs):
+        super(ForceObject, self).__init__(diagram, **kwargs)
         self.artist = ForceArtist(self.datastructure)
 
     def draw(self):
