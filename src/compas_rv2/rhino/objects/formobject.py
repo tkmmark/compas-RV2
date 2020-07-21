@@ -17,8 +17,6 @@ class FormObject(MeshObject):
 
     Parameters
     ----------
-    scene : :class:`compas_rv2.scene.Scene`
-        The RhinoVault 2 scene.
     diagram : :class:`compas_rv2.datastructures.FormDiagram`
         The form diagram data structure.
 
