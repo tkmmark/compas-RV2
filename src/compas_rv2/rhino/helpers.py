@@ -303,25 +303,52 @@ def load_session(session):
 def record():
 
     session = json.loads(json.dumps(save_session()))
+
+    sc.sticky["RV2.sessions"] = sc.sticky["RV2.sessions"][:sc.sticky["RV2.sessions.current"]+1]
     sc.sticky["RV2.sessions"].append(session)
-    print("recorded sessions:", len(sc.sticky["RV2.sessions"]))
+
+    if len(sc.sticky["RV2.sessions"]) > 10:
+        sc.sticky["RV2.sessions"] = sc.sticky["RV2.sessions"][-10:]
+
+    sc.sticky["RV2.sessions.current"] = len(sc.sticky["RV2.sessions"]) - 1
+    # print("recorded sessions:", len(sc.sticky["RV2.sessions"]))
+    # print("current sessions:", sc.sticky["RV2.sessions.current"])
 
 
-def undo_redo(sender, e):
+def undo(sender, e):
+
     if e.Tag == "undo":
-        load_session(sc.sticky["RV2.sessions"][-1])
-        sc.sticky["RV2.sessions"] = sc.sticky["RV2.sessions"][:-1]
-        print("remained sessions:", len(sc.sticky["RV2.sessions"]))
+        if sc.sticky["RV2.sessions.current"] - 1 < 0:
+            print("no more recorded sessions to undo")
+            return
+
+        sc.sticky["RV2.sessions.current"] -= 1
+        session = sc.sticky["RV2.sessions"][sc.sticky["RV2.sessions.current"]]
+        load_session(session)
+        e.Document.AddCustomUndoEvent("RV2 Redo", undo, "redo")
 
     if e.Tag == "redo":
-        pass
+        if sc.sticky["RV2.sessions.current"] + 1 >= len(sc.sticky["RV2.sessions"]):
+            print("no more recorded sessions to redo")
+            return
+
+        sc.sticky["RV2.sessions.current"] += 1
+        session = sc.sticky["RV2.sessions"][sc.sticky["RV2.sessions.current"]]
+        load_session(session)
+        e.Document.AddCustomUndoEvent("RV2 Redo", undo, "undo")
+
+    print("current sessions:", sc.sticky["RV2.sessions.current"]+1)
+    print("total sessions:", len(sc.sticky["RV2.sessions"]))
 
 
 def rv2_undo(command):
     def wrapper(*args, **kwargs):
-        record()
+        if len(sc.sticky["RV2.sessions"]) == 0:
+            sc.sticky["RV2.sessions.current"] = 0
+            record()
         command(*args, **kwargs)
-        sc.doc.AddCustomUndoEvent("RV2 Undo", undo_redo, "undo")
+        record()
+        sc.doc.AddCustomUndoEvent("RV2 Undo", undo, "undo")
     return wrapper
 
 # ==============================================================================
