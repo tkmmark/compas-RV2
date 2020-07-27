@@ -9,6 +9,7 @@ import compas_rhino
 from compas_rv2.rhino import get_system
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_filepath_save
+from compas_rv2.rhino import save_session
 from compas.utilities import DataEncoder
 
 
@@ -44,22 +45,7 @@ def RunCommand(is_interactive):
     # this should be templated somewhere
     # perhaps there should be a Session class/object/singleton
 
-    session = {
-        "data": {"pattern": None, "form": None, "force": None},
-        "settings": scene.settings,
-    }
-
-    pattern = scene.get('pattern')[0]
-    if pattern:
-        session['data']['pattern'] = pattern.datastructure.to_data()
-
-    form = scene.get('form')[0]
-    if form:
-        session['data']['form'] = form.datastructure.to_data()
-
-    force = scene.get('force')[0]
-    if force:
-        session['data']['force'] = force.datastructure.to_data()
+    session = save_session()
 
     with open(filepath, 'w+') as f:
         json.dump(session, f, cls=DataEncoder)

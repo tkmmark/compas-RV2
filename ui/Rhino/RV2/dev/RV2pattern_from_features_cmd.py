@@ -9,11 +9,13 @@ from compas_rv2.rhino import get_proxy
 
 from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
 from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
+from compas_rv2.rhino import rv2_undo
 
 
 __commandname__ = "RV2pattern_from_features"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     scene = get_scene()

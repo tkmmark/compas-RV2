@@ -7,11 +7,12 @@ from compas_rv2.rhino import get_scene
 from compas.geometry import Translation
 from compas_tna.equilibrium import horizontal_nodal
 from compas_rv2.rhino import HorizontalConduit
-
+from compas_rv2.rhino.helpers import rv2_undo
 
 __commandname__ = "RV2tna_horizontal"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     def redraw(k, xy, edges):

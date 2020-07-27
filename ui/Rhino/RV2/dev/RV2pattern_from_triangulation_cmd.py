@@ -9,6 +9,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas_rhino.geometry import RhinoCurve
 from compas_rv2.datastructures import Pattern
+from compas_rv2.rhino import rv2_undo
 
 import rhinoscriptsyntax as rs
 
@@ -16,6 +17,7 @@ import rhinoscriptsyntax as rs
 __commandname__ = "RV2pattern_from_triangulation"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     scene = get_scene()
