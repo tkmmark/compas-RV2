@@ -43,6 +43,7 @@ __all__ = [
     "select_vertices",
     "select_edges",
     "select_faces",
+    "rv2_undo"
 ]
 
 
@@ -294,6 +295,7 @@ def load_session(session):
 
                 force.primal = form
                 form.dual = force
+                force.update_angle_deviations()
 
                 scene.add(force, name="force")
 

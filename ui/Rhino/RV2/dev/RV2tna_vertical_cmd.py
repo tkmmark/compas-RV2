@@ -7,6 +7,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
+from compas_rv2.rhino import rv2_undo
 
 # import Rhino
 
@@ -14,6 +15,7 @@ from compas.geometry import length_vector
 __commandname__ = "RV2tna_vertical"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     scene = get_scene()

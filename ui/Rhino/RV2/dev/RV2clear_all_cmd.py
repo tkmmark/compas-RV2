@@ -5,11 +5,13 @@ from __future__ import division
 
 from compas_rv2.rhino import get_scene
 import compas_rhino
+from compas_rv2.rhino import rv2_undo
 
 
 __commandname__ = "RV2clear_all"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     scene = get_scene()

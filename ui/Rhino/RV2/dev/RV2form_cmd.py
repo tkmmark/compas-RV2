@@ -9,11 +9,13 @@ from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
 from compas.geometry import scale_vector
 from compas.geometry import sum_vectors
+from compas_rv2.rhino import rv2_undo
 
 
 __commandname__ = "RV2form"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     scene = get_scene()
