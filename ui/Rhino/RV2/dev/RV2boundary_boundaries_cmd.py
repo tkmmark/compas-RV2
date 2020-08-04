@@ -89,6 +89,7 @@ def _draw_labels(pattern, openings):
 
 TOL2 = 0.001 ** 2
 
+
 @rv2_undo
 def RunCommand(is_interactive):
     scene = get_scene()

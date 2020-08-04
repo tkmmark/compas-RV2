@@ -345,12 +345,28 @@ def undo(sender, e):
 
 def rv2_undo(command):
     def wrapper(*args, **kwargs):
+
+        # print("Current undo record", sc.doc.CurrentUndoRecordSerialNumber)
+        sc.doc.EndUndoRecord(sc.doc.CurrentUndoRecordSerialNumber)
+
+        undoRecord = sc.doc.BeginUndoRecord("RV2 Undo")
+
+        if undoRecord == 0:
+            print("undo record did not start")
+        else:
+            print("Custom undo recording", undoRecord)
+
         if len(sc.sticky["RV2.sessions"]) == 0:
             sc.sticky["RV2.sessions.current"] = 0
             record()
         command(*args, **kwargs)
         record()
+
         sc.doc.AddCustomUndoEvent("RV2 Undo", undo, "undo")
+
+        if undoRecord > 0:
+            sc.doc.EndUndoRecord(undoRecord)
+
     return wrapper
 
 # ==============================================================================
