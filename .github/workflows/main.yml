@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+ conda:
+    name: Ex2 Windows
+    runs-on: "windows-latest"
+    steps:
+      - uses: goanpeca/setup-miniconda@v1
+        with:
+          miniconda-version: "latest"
+          activate-environment: foo
+      - name: Bash
+        shell: bash -l {0}
+        run: |
+          conda info
+          conda list
+      - name: PowerShell
+        shell: powershell
+        run: |
+          conda info
+          conda list
+      - name: PowerShell Core
+        shell: pwsh
+        run: |
+          conda info
+          conda list
+      - name: Cmd.exe
+        shell: cmd /C CALL {0}
+        run: >-
+          conda info &&
+          conda list
