@@ -30,7 +30,7 @@ jobs:
       - name: compas-install
         shell: PowerShell
         run: |
-          pip install COMPAS
+          pip install COMPAS==0.16.0
       
       - name: plugins-install
         shell: PowerShell
@@ -47,6 +47,7 @@ jobs:
       
       - name: rv2-pack
         run: |
+          python scripts/unzip_electron.py
           python scripts/pack.py
       
       - name: Create Release
