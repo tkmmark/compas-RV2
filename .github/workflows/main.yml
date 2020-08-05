@@ -45,6 +45,7 @@ jobs:
       - name: rv2-install
         run: |
           python scripts/unzip_electron.py
+          python ui\Rhino\RV2\dev\rui.py
           pip install .
       
       - name: rv2-pack
