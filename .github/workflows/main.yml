@@ -14,17 +14,31 @@ jobs:
     name: Ex2 Windows
     runs-on: "windows-latest"
     steps:
+      - uses: actions/checkout@v2
       - uses: goanpeca/setup-miniconda@v1
         with:
           miniconda-version: "latest"
           activate-environment: rv2
           python-version: 3.7
       - name: conda-install
-        shell: cmd /C CALL {0}
-        run: >-
+        shell: PowerShell
+        run: |
           conda install conda-pack cython -y
       - name: compas-install
-        shell: cmd /C CALL {0}
-        run: >-
+        shell: PowerShell
+        run: |
           pip install COMPAS
-          
+      - name: plugins-install
+        shell: PowerShell
+        run: |
+          pip install git+https://github.com/BlockResearchGroup/compas_cloud.git#egg=compas_cloud
+          pip install git+https://github.com/BlockResearchGroup/compas_tna.git#egg=compas_tna
+          pip install git+https://github.com/BlockResearchGroup/compas_skeleton.git#egg=compas_skeleton
+          pip install git+https://github.com/BlockResearchGroup/compas_triangle.git#egg=compas_triangle
+          pip install git+https://github.com/BlockResearchGroup/compas_singular.git#egg=compas_singular
+      - name: rv2-install
+        run: |
+          pip install .
+      - name: rv2-pack
+        run: |
+          python scripts/pack.py
