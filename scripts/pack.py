@@ -9,6 +9,7 @@ import argparse
 parser = argparse.ArgumentParser(description='RhinoVault2 release package tool.')
 parser.add_argument('--skip_packing', action='store_true', help="skip packaging to dist folder")
 parser.add_argument('--rhi', action='store_true', help="pack into rhi installer")
+parser.add_argument('--version', default="v0.0.0", help="version number")
 
 args = parser.parse_args()
 
@@ -49,7 +50,7 @@ else:
         shutil.make_archive("dist/RV2", "zip", "ui/Rhino/RV2/dev")
         os.rename("dist/RV2.zip", "dist/RV2.rhi")
     else:
-        shutil.make_archive("dist/RV2", "zip", "ui/Rhino/RV2")
+        shutil.make_archive(f"dist/RV2_{args.version}", "zip", "ui/Rhino/RV2")
 
     shutil.rmtree("ui/Rhino/RV2/dev/env")
 
