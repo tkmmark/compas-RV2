@@ -1,3 +1,4 @@
+
 # This is a basic workflow to help you get started with Actions
 
 name: Release
@@ -15,6 +16,9 @@ jobs:
     name: Release-Windows
     runs-on: "windows-latest"
     steps:
+      - uses: olegtarasov/get-tag@v2
+        id: tagName
+
       - uses: actions/checkout@v2
       
       - uses: goanpeca/setup-miniconda@v1
@@ -28,28 +32,20 @@ jobs:
         run: |
           conda install conda-pack cython -y
       
-      - name: compas-install
+      - name: dependencies-install
         shell: PowerShell
         run: |
-          pip install git+https://github.com/compas-dev/compas#egg=compas
-      
-      - name: plugins-install
-        shell: PowerShell
-        run: |
-          pip install git+https://github.com/BlockResearchGroup/compas_cloud.git#egg=compas_cloud
-          pip install git+https://github.com/BlockResearchGroup/compas_tna.git#egg=compas_tna
-          pip install git+https://github.com/BlockResearchGroup/compas_skeleton.git#egg=compas_skeleton
-          pip install git+https://github.com/BlockResearchGroup/compas_triangle.git#egg=compas_triangle
-          pip install git+https://github.com/BlockResearchGroup/compas_singular.git#egg=compas_singular
+          pip install -r requirements.lock.txt
       
       - name: rv2-install
         run: |
+          python scripts/unzip_electron.py
+          python ui\Rhino\RV2\dev\rui.py
           pip install .
       
       - name: rv2-pack
         run: |
-          python scripts/unzip_electron.py
-          python scripts/pack.py
+          python scripts/pack.py --version ${{ steps.tagName.outputs.tag }}
       
       - name: Create Release
         id: create_release
@@ -69,6 +65,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: dist/RV2.zip
-          asset_name: RV2.zip
+          asset_path: dist/RV2_${{ steps.tagName.outputs.tag }}.zip
+          asset_name: RV2_${{ steps.tagName.outputs.tag }}.zip
           asset_content_type: application/zip
