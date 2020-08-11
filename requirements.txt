@@ -1,6 +1,6 @@
-compas==0.16.2
-compas_cloud==0.1.0
-git+git://github.com/BlockResearchGroup/compas_tna.git@e6eeae41597f4e9af4f40c72040df488b607eeea#egg=compas_tna
-git+git://github.com/BlockResearchGroup/compas_skeleton.git@e69936da4423d314684a153258d739eb862a17a0#egg=compas_skeleton
-git+git://github.com/BlockResearchGroup/compas_triangle.git@fb446165760c9a1aac28113b5eb1cb40e822127c#egg=compas_triangle
-git+git://github.com/BlockResearchGroup/compas_singular.git@5be1a6ae24b18f449dbe03efb21d7d51da95a58b#egg=compas_singular
+compas
+compas_cloud
+compas_tna
+compas_skeleton
+compas_triangle
+compas_singular
