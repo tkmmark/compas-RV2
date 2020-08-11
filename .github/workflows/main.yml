@@ -28,19 +28,10 @@ jobs:
         run: |
           conda install conda-pack cython -y
       
-      - name: compas-install
+      - name: dependencies-install
         shell: PowerShell
         run: |
-          pip install git+https://github.com/compas-dev/compas#egg=compas
-      
-      - name: plugins-install
-        shell: PowerShell
-        run: |
-          pip install git+https://github.com/BlockResearchGroup/compas_cloud.git#egg=compas_cloud
-          pip install git+https://github.com/BlockResearchGroup/compas_tna.git#egg=compas_tna
-          pip install git+https://github.com/BlockResearchGroup/compas_skeleton.git#egg=compas_skeleton
-          pip install git+https://github.com/BlockResearchGroup/compas_triangle.git#egg=compas_triangle
-          pip install git+https://github.com/BlockResearchGroup/compas_singular.git#egg=compas_singular
+          pip install -r requirements.txt
       
       - name: rv2-install
         run: |
