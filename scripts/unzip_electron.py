@@ -14,5 +14,7 @@ if os.path.exists("electron"):
 
 print("unziping electron")
 zf = ZipFile("electron.zip", 'r')
-zf.extractall("electron")
+zf.extractall(os.path.join(ELECTRON_FOLDER, "electron"))
 zf.close()
+
+assert os.path.exists(os.path.join(ELECTRON_FOLDER, "electron"))
