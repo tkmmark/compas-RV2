@@ -5,7 +5,7 @@ from __future__ import division
 import os
 from ast import literal_eval
 import compas_rhino
-from compas_rhino.etoforms import TextForm
+from compas_rhino.forms import TextForm
 
 try:
     import System

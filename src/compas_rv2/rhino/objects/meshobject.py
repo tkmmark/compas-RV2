@@ -7,9 +7,12 @@ from compas_rv2.rhino import select_vertices as rv2_select_vertices
 from compas_rv2.rhino import select_faces as rv2_select_faces
 from compas_rv2.rhino import select_edges as rv2_select_edges
 from compas_rv2.rhino import delete_objects
-from compas_rhino.objects.modifiers import VertexModifier
-from compas_rhino.objects.modifiers import EdgeModifier
-from compas_rhino.objects.modifiers import FaceModifier
+
+from compas_rhino.objects import mesh_update_vertex_attributes
+from compas_rhino.objects import mesh_update_edge_attributes
+from compas_rhino.objects import mesh_update_face_attributes
+from compas_rhino.objects import mesh_move_vertices
+
 from compas.geometry import add_vectors
 
 import Rhino
@@ -238,7 +241,7 @@ class MeshObject(object):
         if keys:
             compas_rhino.rs.UnselectAllObjects()
             rv2_select_vertices(self.datastructure, keys)
-            return VertexModifier.update_vertex_attributes(self.datastructure, keys, names)
+            return mesh_update_vertex_attributes(self.datastructure, keys, names)
 
     def move_vertices(self, keys):
         """Move selected vertices.
@@ -248,7 +251,7 @@ class MeshObject(object):
         keys : list
             The identifiers of the vertices.
         """
-        return VertexModifier.move_vertices(self.datastructure, keys)
+        return mesh_move_vertices(self.datastructure, keys)
 
     def move_vertices_vertical(self, keys):
         """Move selected vertices along the Z axis.
@@ -422,7 +425,7 @@ class MeshObject(object):
         if keys:
             compas_rhino.rs.UnselectAllObjects()
             rv2_select_edges(self.datastructure, keys)
-            return EdgeModifier.update_edge_attributes(self.datastructure, keys, names)
+            return mesh_update_edge_attributes(self.datastructure, keys, names)
 
     # ==========================================================================
     # Faces
@@ -468,7 +471,7 @@ class MeshObject(object):
         if keys:
             compas_rhino.rs.UnselectAllObjects()
             rv2_select_faces(self.datastructure, keys)
-            return FaceModifier.update_face_attributes(self.datastructure, keys, names)
+            return mesh_update_face_attributes(self.datastructure, keys, names)
 
 
 # ==============================================================================
