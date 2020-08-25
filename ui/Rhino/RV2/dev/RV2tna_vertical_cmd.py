@@ -7,11 +7,15 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas.geometry import subtract_vectors
 from compas.geometry import length_vector
+from compas_rv2.rhino import rv2_undo
+
+# import Rhino
 
 
 __commandname__ = "RV2tna_vertical"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
 
     scene = get_scene()
@@ -46,26 +50,29 @@ def RunCommand(is_interactive):
     zmax = scene.settings['Solvers']['tna.vertical.zmax']
     kmax = scene.settings['Solvers']['tna.vertical.kmax']
 
-    options = ['TargetHeight', 'Iterations']
+    options = ['TargetHeight']
 
     while True:
-        option = compas_rhino.rs.GetString('Options for vertical equilibrium solver:', strings=options)
+        option = compas_rhino.rs.GetString('Press Enter to run or ESC to exit.', strings=options)
+
+        if option is None:
+            print("Vetical equilibrium aborted!")
+            return
 
         if not option:
             break
 
         if option == 'TargetHeight':
-            zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.1 * diagonal, 1.0 * diagonal)
-
-        elif option == 'Iterations':
-            kmax = compas_rhino.rs.GetInteger('Enter number of iterations', 100, 1, 10000)
+            new_zmax = compas_rhino.rs.GetReal('Enter target height of the ThrustDiagram', zmax, 0.0, 1.0 * diagonal)
+            if new_zmax or new_zmax is not None:
+                zmax = new_zmax
 
     scene.settings['Solvers']['tna.vertical.zmax'] = zmax
-    scene.settings['Solvers']['tna.vertical.kmax'] = kmax
 
     result = vertical(form.datastructure.data, zmax, kmax=kmax)
+
     if not result:
-        print("vertical equilibrium failed")
+        print("Vertical equilibrium failed!")
         return
 
     formdata, scale = result
@@ -83,7 +90,7 @@ def RunCommand(is_interactive):
     scene.update()
 
     print('Vertical equilibrium found!')
-    print('ThrustDiagram object successfully created.')
+    print('ThrustDiagram object successfully created with target height of {}.'.format(zmax))
 
 
 # ==============================================================================

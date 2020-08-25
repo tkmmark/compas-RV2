@@ -41,8 +41,8 @@ class ThrustObject(MeshObject):
         'tol.pipes': 1e-3,
     }
 
-    def __init__(self, scene, diagram, **kwargs):
-        super(ThrustObject, self).__init__(scene, diagram, **kwargs)
+    def __init__(self, diagram, **kwargs):
+        super(ThrustObject, self).__init__(diagram, **kwargs)
         self.artist = ThrustArtist(self.datastructure)
         self._guid_vertex_free = {}
         self._guid_vertex_anchor = {}

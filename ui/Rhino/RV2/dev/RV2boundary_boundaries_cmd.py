@@ -11,6 +11,7 @@ from compas.geometry import centroid_points
 from compas.geometry import distance_point_point_xy
 from compas.geometry import intersection_line_line_xy
 from compas.geometry import midpoint_point_point_xy
+from compas_rv2.rhino import rv2_undo
 
 __commandname__ = "RV2boundary_boundaries"
 
@@ -89,6 +90,7 @@ def _draw_labels(pattern, openings):
 TOL2 = 0.001 ** 2
 
 
+@rv2_undo
 def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:

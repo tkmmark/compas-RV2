@@ -7,6 +7,12 @@ from ast import literal_eval
 import compas_rhino
 from compas_rhino.forms import TextForm
 
+from compas_rv2.datastructures import Pattern
+from compas_rv2.datastructures import FormDiagram
+from compas_rv2.datastructures import ForceDiagram
+from compas_rv2.datastructures import ThrustDiagram
+import json
+
 try:
     import System
     import Rhino
@@ -37,6 +43,7 @@ __all__ = [
     "select_vertices",
     "select_edges",
     "select_faces",
+    "rv2_undo"
 ]
 
 
@@ -231,6 +238,136 @@ def get_system():
         return None
     return compas_rhino.sc.sticky["RV2.system"]
 
+
+def save_session():
+
+    scene = get_scene()
+
+    session = {
+        "data": {"pattern": None, "form": None, "force": None},
+        "settings": scene.settings,
+    }
+
+    pattern = scene.get('pattern')[0]
+    if pattern:
+        session['data']['pattern'] = pattern.datastructure.to_data()
+
+    form = scene.get('form')[0]
+    if form:
+        session['data']['form'] = form.datastructure.to_data()
+
+    force = scene.get('force')[0]
+    if force:
+        session['data']['force'] = force.datastructure.to_data()
+
+    return session
+
+
+def load_session(session):
+
+    print("loading session")
+
+    scene = get_scene()
+
+    scene.clear()
+
+    if 'settings' in session:
+        scene.settings = session['settings']
+
+    if 'data' in session:
+        data = session['data']
+
+        if 'pattern' in data and data['pattern']:
+            pattern = Pattern.from_data(data['pattern'])
+
+            scene.add(pattern, name="pattern")
+
+        else:
+            if 'form' in data and data['form']:
+                form = FormDiagram.from_data(data['form'])
+                thrust = form.copy(cls=ThrustDiagram)  # this is not a good idea
+
+                scene.add(form, name="form")
+                scene.add(thrust, name="thrust")
+
+            if 'force' in data and data['force']:
+                force = ForceDiagram.from_data(data['force'])
+
+                force.primal = form
+                form.dual = force
+                force.update_angle_deviations()
+
+                scene.add(force, name="force")
+
+    scene.update()
+
+
+def record():
+
+    session = json.loads(json.dumps(save_session()))
+
+    sc.sticky["RV2.sessions"] = sc.sticky["RV2.sessions"][:sc.sticky["RV2.sessions.current"]+1]
+    sc.sticky["RV2.sessions"].append(session)
+
+    if len(sc.sticky["RV2.sessions"]) > 10:
+        sc.sticky["RV2.sessions"] = sc.sticky["RV2.sessions"][-10:]
+
+    sc.sticky["RV2.sessions.current"] = len(sc.sticky["RV2.sessions"]) - 1
+    # print("recorded sessions:", len(sc.sticky["RV2.sessions"]))
+    # print("current sessions:", sc.sticky["RV2.sessions.current"])
+
+
+def undo(sender, e):
+
+    if e.Tag == "undo":
+        if sc.sticky["RV2.sessions.current"] - 1 < 0:
+            print("no more recorded sessions to undo")
+            return
+
+        sc.sticky["RV2.sessions.current"] -= 1
+        session = sc.sticky["RV2.sessions"][sc.sticky["RV2.sessions.current"]]
+        load_session(session)
+        e.Document.AddCustomUndoEvent("RV2 Redo", undo, "redo")
+
+    if e.Tag == "redo":
+        if sc.sticky["RV2.sessions.current"] + 1 >= len(sc.sticky["RV2.sessions"]):
+            print("no more recorded sessions to redo")
+            return
+
+        sc.sticky["RV2.sessions.current"] += 1
+        session = sc.sticky["RV2.sessions"][sc.sticky["RV2.sessions.current"]]
+        load_session(session)
+        e.Document.AddCustomUndoEvent("RV2 Redo", undo, "undo")
+
+    print("current sessions:", sc.sticky["RV2.sessions.current"]+1)
+    print("total sessions:", len(sc.sticky["RV2.sessions"]))
+
+
+def rv2_undo(command):
+    def wrapper(*args, **kwargs):
+
+        # print("Current undo record", sc.doc.CurrentUndoRecordSerialNumber)
+        sc.doc.EndUndoRecord(sc.doc.CurrentUndoRecordSerialNumber)
+
+        undoRecord = sc.doc.BeginUndoRecord("RV2 Undo")
+
+        if undoRecord == 0:
+            print("undo record did not start")
+        else:
+            print("Custom undo recording", undoRecord)
+
+        if len(sc.sticky["RV2.sessions"]) == 0:
+            sc.sticky["RV2.sessions.current"] = 0
+            record()
+        command(*args, **kwargs)
+        record()
+
+        sc.doc.AddCustomUndoEvent("RV2 Undo", undo, "undo")
+
+        if undoRecord > 0:
+            sc.doc.EndUndoRecord(undoRecord)
+
+    return wrapper
 
 # ==============================================================================
 # Main

@@ -17,8 +17,6 @@ class FormObject(MeshObject):
 
     Parameters
     ----------
-    scene : :class:`compas_rv2.scene.Scene`
-        The RhinoVault 2 scene.
     diagram : :class:`compas_rv2.datastructures.FormDiagram`
         The form diagram data structure.
 
@@ -61,8 +59,8 @@ class FormObject(MeshObject):
         'color.edges': [0, 127, 0],
     }
 
-    def __init__(self, scene, diagram, **kwargs):
-        super(FormObject, self).__init__(scene, diagram, **kwargs)
+    def __init__(self, diagram, **kwargs):
+        super(FormObject, self).__init__(diagram, **kwargs)
         self.artist = FormArtist(self.datastructure)
 
     def draw(self):

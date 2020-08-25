@@ -58,6 +58,8 @@ def RunCommand(is_interactive):
 
     sc.sticky["RV2"] = {"scene": scene}
 
+    sc.sticky["RV2.sessions"] = []
+
 
 # ==============================================================================
 # Main

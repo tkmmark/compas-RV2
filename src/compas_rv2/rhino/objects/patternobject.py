@@ -16,8 +16,6 @@ class PatternObject(MeshObject):
 
     Parameters
     ----------
-    scene : :class:`compas_rv2.scene.Scene`
-        The RhinoVault 2 scene.
     pattern : :class:`compas_rv2.datastructures.Pattern`
         The pattern data structure.
 
@@ -48,8 +46,8 @@ class PatternObject(MeshObject):
         'from_surface.density.V': 10,
     }
 
-    def __init__(self, scene, pattern, **kwargs):
-        super(PatternObject, self).__init__(scene, pattern, **kwargs)
+    def __init__(self, pattern, **kwargs):
+        super(PatternObject, self).__init__(pattern, **kwargs)
         self.artist = MeshArtist(self.datastructure)
 
     def draw(self):

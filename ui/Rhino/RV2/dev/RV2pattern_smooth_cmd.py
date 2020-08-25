@@ -6,11 +6,13 @@ import compas_rhino
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas.utilities import flatten
+from compas_rv2.rhino import rv2_undo
 
 
 __commandname__ = "RV2pattern_smooth"
 
 
+@rv2_undo
 def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:
@@ -32,9 +34,10 @@ def RunCommand(is_interactive):
         return
 
     options = ['True', 'False']
-    option = compas_rhino.rs.GetString("Keep all boundaries fixed.", options[0], options)
+    option = compas_rhino.rs.GetString("Press Enter to smooth or ESC to exit. Keep all boundaries fixed?", options[0], options)
 
-    if not option:
+    if option is None:
+        print('Pattern smoothing aborted!')
         return
 
     if option == 'True':

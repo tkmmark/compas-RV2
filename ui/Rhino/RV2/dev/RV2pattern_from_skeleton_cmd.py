@@ -9,6 +9,7 @@ from compas_rv2.rhino import get_scene
 from compas_rv2.datastructures import Skeleton
 from compas_rv2.datastructures import Pattern
 from compas_rv2.rhino import SkeletonObject
+from compas_rv2.rhino import rv2_undo
 
 
 __commandname__ = "RV2pattern_from_skeleton"
@@ -30,6 +31,7 @@ def skeleton_dynamic_draw_nodewidth(skeletonobject):
     else:
         print("This skeleton doesn't have node vertices!")
         return
+
 
 def skeleton_dynamic_draw_leafwidth(skeletonobject):
     if skeletonobject.datastructure.skeleton_vertices[1]:
@@ -129,24 +131,25 @@ config = {
 }
 
 
+@rv2_undo
 def RunCommand(is_interactive):
     scene = get_scene()
     if not scene:
         return
 
     # skeleton from single point or a set of lines
-    guids = compas_rhino.rs.GetObjects(
+    guids_temp = compas_rhino.rs.GetObjects(
         message="Select a single point or a group of lines",
         filter=compas_rhino.rs.filter.point | compas_rhino.rs.filter.curve
         )
 
-    if not guids:
+    if not guids_temp:
         return
 
     # detect input object type
     guids_points = []
     guids_lines = []
-    for guid in guids:
+    for guid in guids_temp:
         if is_curve_line(guid):
             guids_lines.append(guid)
 
@@ -154,23 +157,33 @@ def RunCommand(is_interactive):
             guids_points.append(guid)
 
     if len(guids_points) == 1 and len(guids_lines) == 0:
-        point = compas_rhino.get_point_coordinates(guids_points)[0]
-        compas_rhino.rs.HideObjects(guids_points)
-
+        guids = guids_points
+        point = compas_rhino.get_point_coordinates(guids)[0]
         skeleton = Skeleton.from_center_point(point)
 
     elif len(guids_points) == 0 and len(guids_lines) > 0:
-        lines = compas_rhino.get_line_coordinates(guids_lines)
-        compas_rhino.rs.HideObjects(guids_lines)
-
+        guids = guids_lines
+        lines = compas_rhino.get_line_coordinates(guids)
         skeleton = Skeleton.from_skeleton_lines(lines)
 
     if not skeleton:
         return
 
+    compas_rhino.rs.HideObjects(guids)
     skeletonobject = SkeletonObject(skeleton)
     skeletonobject.draw()
-    skeletonobject.dynamic_draw_widths()
+    result = skeletonobject.dynamic_draw_widths()
+
+    if not result:
+        skeletonobject.clear()
+        compas_rhino.rs.ShowObjects(guids)
+        compas_rhino.delete_layers([
+            skeletonobject.settings['layer'],
+            skeletonobject.settings['skeleton.layer'],
+            skeletonobject.settings['mesh.layer']
+            ])
+
+        return
 
     # modify skeleton
     while True:
@@ -194,6 +207,7 @@ def RunCommand(is_interactive):
     # clear skeleton
     skeletonobject.clear()
     compas_rhino.delete_layers([
+        skeletonobject.settings['layer'],
         skeletonobject.settings['skeleton.layer'],
         skeletonobject.settings['mesh.layer']
         ])
