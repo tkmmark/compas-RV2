@@ -19,20 +19,6 @@ __all__ = ['ThrustArtist']
 class ThrustArtist(MeshArtist):
     """A customised `MeshArtist` for the RV2 `ThrustDiagram`."""
 
-    # @property
-    # def vertex_xyz(self):
-    #     """dict:
-    #     The view coordinates of the mesh vertices.
-    #     The view coordinates default to the actual mesh coordinates.
-    #     """
-    #     if not self._vertex_xyz:
-    #         self._vertex_xyz = {vertex: self.mesh.vertex_attributes(vertex, 'xyz') for vertex in self.mesh.vertices()}
-    #     return self._vertex_xyz
-
-    # @vertex_xyz.setter
-    # def vertex_xyz(self, vertex_xyz):
-    #     self._vertex_xyz = vertex_xyz
-
     def draw_reactions(self, vertices, color, scale, tol):
         """Draw the reaction forces at the anchored vertices of the diagram.
 

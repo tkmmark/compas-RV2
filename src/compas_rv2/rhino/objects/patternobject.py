@@ -11,21 +11,7 @@ __all__ = ["PatternObject"]
 
 
 class PatternObject(MeshObject):
-    """Scene object for mesh-based data structures in RV2.
-
-    Parameters
-    ----------
-    pattern : :class:`compas_rv2.datastructures.Pattern`
-        The pattern data structure.
-
-    Attributes
-    ----------
-    scene : :class:`compas_rv2.scene.Scene`
-        The RhinoVault 2 scene.
-    pattern : :class:`compas_rv2.datastructures.Pattern`
-        The pattern data structure.
-    artist : :class:`compas_rv2.rhino.PatternArtist`
-        The specialised pasttern artist.
+    """Scene object for patterns in RV2.
     """
 
     SETTINGS = {
@@ -44,6 +30,8 @@ class PatternObject(MeshObject):
     }
 
     def draw(self):
+        """Draw the objects representing the force diagram.
+        """
         layer = self.settings['layer']
         self.artist.layer = layer
         self.artist.clear_layer()
@@ -52,7 +40,12 @@ class PatternObject(MeshObject):
             return
         self.artist.vertex_xyz = self.vertex_xyz
 
-        # groups
+        # ======================================================================
+        # Groups
+        # ------
+        # Create groups for vertices, edges, and faces.
+        # These groups will be turned on/off based on the visibility settings of the diagram
+        # ======================================================================
 
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
@@ -67,7 +60,11 @@ class PatternObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_faces):
             compas_rhino.rs.AddGroup(group_faces)
 
-        # vertices
+        # ======================================================================
+        # Vertices
+        # --------
+        # Draw the vertices and add them to the vertex group.
+        # ======================================================================
 
         vertices = list(self.mesh.vertices())
         color = {vertex: self.settings['color.vertices'] for vertex in vertices}
@@ -85,7 +82,11 @@ class PatternObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_vertices)
 
-        # edges
+        # ======================================================================
+        # Edges
+        # -----
+        # Draw the edges and add them to the edge group.
+        # ======================================================================
 
         edges = list(self.mesh.edges())
         color = {edge: self.settings['color.edges'] for edge in edges}
@@ -99,7 +100,11 @@ class PatternObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_edges)
 
-        # faces
+        # ======================================================================
+        # Faces
+        # -----
+        # Draw the faces and add them to the face group.
+        # ======================================================================
 
         faces = list(self.mesh.faces())
         color = {face: self.settings['color.faces'] for face in faces}

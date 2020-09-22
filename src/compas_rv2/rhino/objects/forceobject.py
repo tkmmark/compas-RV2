@@ -18,36 +18,6 @@ __all__ = ["ForceObject"]
 
 class ForceObject(MeshObject):
     """Scene object for RV2 force diagrams.
-
-    Parameters
-    ----------
-    diagram : :class:`compas_rv2.datastructures.ForceDiagram`
-        The force diagram data structure.
-
-    Attributes
-    ----------
-    artist : :class:`compas_rv2.rhino.ForceArtist`
-        The specialised force diagram artist.
-
-    Notes
-    -----
-    Force diagrams have two editable vertex attributes that can be modified
-    by the user through the Rhino interface:
-
-    * `x`: the X coordinate
-    * `y`: the Y coordinate.
-
-    Examples
-    --------
-    >>> form = ...
-    >>> force = ForceDiagram.from_formdiagram(form)
-    >>> scene = Scene()
-    >>> scene.settings = {... this should be stuff related to the scene, not to the settings of individual nodes ...}
-    >>> node = scene.add(force, name='force', settings=settings)
-    >>> scene.update()
-    >>> node.settings['show.vertices'] = True
-    >>> node.settings['color.vertices'] = {key: (255, 0, 0) for key in node.datastructure.vertices_wehere({'is_fixed': True})}
-    >>> scene.update()
     """
 
     SETTINGS = {
@@ -81,6 +51,8 @@ class ForceObject(MeshObject):
         return vertex_xyz
 
     def draw(self):
+        """Draw the objects representing the force diagram.
+        """
         layer = self.settings["layer"]
         self.artist.layer = layer
         self.artist.clear_layer()
@@ -89,7 +61,12 @@ class ForceObject(MeshObject):
             return
         self.artist.vertex_xyz = self.vertex_xyz
 
-        # groups
+        # ======================================================================
+        # Groups
+        # ------
+        # Create groups for vertices and edges.
+        # These groups will be turned on/off based on the visibility settings of the diagram
+        # ======================================================================
 
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
@@ -100,7 +77,11 @@ class ForceObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
 
-        # vertices
+        # ======================================================================
+        # Vertices
+        # --------
+        # Draw the vertices and add them to the vertex group.
+        # ======================================================================
 
         vertices = list(self.mesh.vertices())
         color = {vertex: self.settings["color.vertices"] for vertex in vertices}
@@ -113,7 +94,11 @@ class ForceObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_vertices)
 
-        # edges
+        # ======================================================================
+        # Edges
+        # --------
+        # Draw the edges and add them to the edge group.
+        # ======================================================================
 
         edges = list(self.mesh.edges())
         color = {edge: self.settings['color.edges'] for edge in edges}
@@ -137,7 +122,11 @@ class ForceObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_edges)
 
-        # angles
+        # ======================================================================
+        # Labels
+        # ------
+        # Add labels for the angle deviations.
+        # ======================================================================
 
         if self.scene.settings['RV2']['show.angles']:
             tol = self.scene.settings['RV2']['tol.angles']

@@ -11,10 +11,11 @@ __all__ = ["ThrustObject"]
 
 
 class ThrustObject(MeshObject):
+    """Scene object for thrust diagrams in RV2."""
 
     SETTINGS = {
-        'layer': "RV2::ThrustDiagram",
         '_is.valid': False,
+        'layer': "RV2::ThrustDiagram",
         'show.vertices': True,
         'show.edges': False,
         'show.faces': True,
@@ -104,6 +105,8 @@ class ThrustObject(MeshObject):
         self._guid_pipe = {}
 
     def draw(self):
+        """Draw the objects representing the thrust diagram.
+        """
         layer = self.settings['layer']
         self.artist.layer = layer
         self.artist.clear_layer()
@@ -112,7 +115,13 @@ class ThrustObject(MeshObject):
             return
         self.artist.vertex_xyz = self.vertex_xyz
 
-        # groups
+        # ======================================================================
+        # Groups
+        # ------
+        # Create groups for vertices, edges, and faces.
+        # These groups will be turned on/off based on the visibility settings of the diagram.
+        # Separate groups are created for free and anchored vertices.
+        # ======================================================================
 
         group_free = "{}::vertices_free".format(layer)
         group_anchor = "{}::vertices_anchor".format(layer)
@@ -132,7 +141,12 @@ class ThrustObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_faces):
             compas_rhino.rs.AddGroup(group_faces)
 
-        # vertices
+        # ======================================================================
+        # Vertices
+        # --------
+        # Draw the vertices and add them to the vertex group.
+        # Free vertices and anchored vertices are drawn separately.
+        # ======================================================================
 
         free = list(self.mesh.vertices_where({'is_anchor': False}))
         anchors = list(self.mesh.vertices_where({'is_anchor': True}))
@@ -154,7 +168,11 @@ class ThrustObject(MeshObject):
             compas_rhino.rs.HideGroup(group_free)
             compas_rhino.rs.HideGroup(group_anchor)
 
-        # edges
+        # ======================================================================
+        # Edges
+        # -----
+        # Draw the edges and add them to the edge group.
+        # ======================================================================
 
         edges = list(self.mesh.edges_where({'_is_edge': True}))
         color = {edge: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for edge in edges}
@@ -167,7 +185,11 @@ class ThrustObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_edges)
 
-        # faces
+        # ======================================================================
+        # Faces
+        # -----
+        # Draw the faces and add them to the face group.
+        # ======================================================================
 
         faces = list(self.mesh.faces_where({'_is_loaded': True}))
         color = {face: self.settings['color.faces'] if self.settings['_is.valid'] else self.settings['color.invalid'] for face in faces}
@@ -180,7 +202,11 @@ class ThrustObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_faces)
 
-        # overlays
+        # ======================================================================
+        # Overlays
+        # --------
+        # Color overlays for various display modes.
+        # ======================================================================
 
         if self.settings['_is.valid'] and self.settings['show.reactions']:
             tol = self.settings['tol.reactions']

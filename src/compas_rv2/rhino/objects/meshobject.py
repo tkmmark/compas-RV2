@@ -16,11 +16,9 @@ from compas_rhino.objects import mesh_update_vertex_attributes
 from compas_rhino.objects import mesh_update_edge_attributes
 from compas_rhino.objects import mesh_update_face_attributes
 
-# from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import select_vertices as rv2_select_vertices
 from compas_rv2.rhino import select_faces as rv2_select_faces
 from compas_rv2.rhino import select_edges as rv2_select_edges
-# from compas_rv2.rhino import delete_objects
 
 
 __all__ = ['MeshObject']
@@ -28,46 +26,6 @@ __all__ = ['MeshObject']
 
 class MeshObject(MeshObject):
     """Scene object for mesh-based data structures in RV2.
-
-    Parameters
-    ----------
-    scene : :class:`compas_rv2.scene.Scene`
-        The RhinoVault 2 scene.
-    diagram : :class:`compas_rv2.datastructures.FormDiagram`
-        The form diagram data structure.
-
-    Attributes
-    ----------
-    diagram : :class:`compas_rv2.datastructures.FormDiagram`
-        The form diagram data structure.
-    name : str
-        ...
-    guid : str
-        ...
-    visible : bool
-        ...
-    settings : dict
-        ...
-    artist : :class:`compas_rv2.rhino.FormArtist`
-        The specialised form diagram artist.
-
-    Other Attributes
-    ----------------
-    guid_vertex : dict
-        Dictionary mapping Rhino object GUIDs to data structure vertex identifiers.
-    guid_edge : dict
-        Dictionary mapping Rhino object GUIDs to data structure edge identifiers.
-    guid_face : dict
-        Dictionary mapping Rhino object GUIDs to data structure face identifiers.
-
-    Notes
-    -----
-    Form diagrams have editable vertex attributes that can be modified
-    by the user through the Rhino interface:
-
-    * `x`: the X coordinate,
-    * `y`: the Y coordinate, and
-    * `z`: the Z coordinate.
     """
 
     @property
@@ -110,10 +68,6 @@ class MeshObject(MeshObject):
         """
         return compas_rhino.update_settings(self.datastructure.attributes)
 
-    # ==========================================================================
-    # Vertices
-    # ==========================================================================
-
     def update_vertices_attributes(self, keys, names=None):
         """Update the attributes of selected vertices.
 
@@ -135,6 +89,50 @@ class MeshObject(MeshObject):
             compas_rhino.rs.UnselectAllObjects()
             rv2_select_vertices(self.datastructure, keys)
             return mesh_update_vertex_attributes(self.datastructure, keys, names)
+
+    def update_edges_attributes(self, keys, names=None):
+        """Update the attributes of selected edges.
+
+        Parameters
+        ----------
+        keys : list
+            The identifiers of the edges of which the attributes should be updated.
+        names : list, optional
+            The names of the attributes that should be updated.
+            Default is ``None``, in which case all attributes are updated.
+
+        Returns
+        -------
+        bool
+            True if the update was successful.
+            False otherwise.
+        """
+        if keys:
+            compas_rhino.rs.UnselectAllObjects()
+            rv2_select_edges(self.datastructure, keys)
+            return mesh_update_edge_attributes(self.datastructure, keys, names)
+
+    def update_faces_attributes(self, keys, names=None):
+        """Update the attributes of selected faces.
+
+        Parameters
+        ----------
+        keys : list
+            The identifiers of the faces of which the attributes should be updated.
+        names : list, optional
+            The names of the attributes that should be updated.
+            Default is ``None``, in which case all attributes are updated.
+
+        Returns
+        -------
+        bool
+            True if the update was successful.
+            False otherwise.
+        """
+        if keys:
+            compas_rhino.rs.UnselectAllObjects()
+            rv2_select_faces(self.datastructure, keys)
+            return mesh_update_face_attributes(self.datastructure, keys, names)
 
     def move_vertices_vertical(self, keys):
         """Move selected vertices along the Z axis.
@@ -263,58 +261,6 @@ class MeshObject(MeshObject):
             self.datastructure.vertex_attributes(key, 'xyz', add_vectors(xyz, vector))
 
         return True
-
-    # ==========================================================================
-    # Edges
-    # ==========================================================================
-
-    def update_edges_attributes(self, keys, names=None):
-        """Update the attributes of selected edges.
-
-        Parameters
-        ----------
-        keys : list
-            The identifiers of the edges of which the attributes should be updated.
-        names : list, optional
-            The names of the attributes that should be updated.
-            Default is ``None``, in which case all attributes are updated.
-
-        Returns
-        -------
-        bool
-            True if the update was successful.
-            False otherwise.
-        """
-        if keys:
-            compas_rhino.rs.UnselectAllObjects()
-            rv2_select_edges(self.datastructure, keys)
-            return mesh_update_edge_attributes(self.datastructure, keys, names)
-
-    # ==========================================================================
-    # Faces
-    # ==========================================================================
-
-    def update_faces_attributes(self, keys, names=None):
-        """Update the attributes of selected faces.
-
-        Parameters
-        ----------
-        keys : list
-            The identifiers of the faces of which the attributes should be updated.
-        names : list, optional
-            The names of the attributes that should be updated.
-            Default is ``None``, in which case all attributes are updated.
-
-        Returns
-        -------
-        bool
-            True if the update was successful.
-            False otherwise.
-        """
-        if keys:
-            compas_rhino.rs.UnselectAllObjects()
-            rv2_select_faces(self.datastructure, keys)
-            return mesh_update_face_attributes(self.datastructure, keys, names)
 
 
 # ==============================================================================

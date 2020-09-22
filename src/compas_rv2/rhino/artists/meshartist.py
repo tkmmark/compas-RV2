@@ -10,11 +10,3 @@ __all__ = ['MeshArtist']
 
 class MeshArtist(MeshArtist):
     """A customised `MeshArtist` for RV2 `Mesh`-based data structures."""
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == '__main__':
-    pass

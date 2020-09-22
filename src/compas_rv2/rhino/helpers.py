@@ -6,6 +6,8 @@ import os
 import json
 from ast import literal_eval
 
+import scriptcontext as sc
+
 import compas_rhino
 from compas_rhino.forms import TextForm
 
@@ -13,20 +15,6 @@ from compas_rv2.datastructures import Pattern
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.datastructures import ThrustDiagram
-
-try:
-    import scriptcontext as sc
-
-except ImportError:
-    pass
-
-else:
-    find_object = sc.doc.Objects.Find
-
-    try:
-        purge_object = sc.doc.Objects.Purge
-    except AttributeError:
-        purge_object = None
 
 
 __all__ = [
