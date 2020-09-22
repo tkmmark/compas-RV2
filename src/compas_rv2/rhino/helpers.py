@@ -3,7 +3,9 @@ from __future__ import absolute_import
 from __future__ import division
 
 import os
+import json
 from ast import literal_eval
+
 import compas_rhino
 from compas_rhino.forms import TextForm
 
@@ -11,7 +13,6 @@ from compas_rv2.datastructures import Pattern
 from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.datastructures import ThrustDiagram
-import json
 
 try:
     import System
@@ -210,11 +211,11 @@ def select_filepath_save(root, ext):
 
 
 def get_rv2():
-    if "RV2" not in compas_rhino.sc.sticky:
+    if "RV2" not in sc.sticky:
         form = TextForm('Initialise the plugin first!', 'RV2')
         form.show()
         return None
-    return compas_rhino.sc.sticky["RV2"]
+    return sc.sticky["RV2"]
 
 
 def get_scene():
@@ -224,19 +225,19 @@ def get_scene():
 
 
 def get_proxy():
-    if "RV2.proxy" not in compas_rhino.sc.sticky:
+    if "RV2.proxy" not in sc.sticky:
         form = TextForm('Initialise the plugin first!', 'RV2')
         form.show()
         return None
-    return compas_rhino.sc.sticky["RV2.proxy"]
+    return sc.sticky["RV2.proxy"]
 
 
 def get_system():
-    if "RV2.system" not in compas_rhino.sc.sticky:
+    if "RV2.system" not in sc.sticky:
         form = TextForm('Initialise the plugin first!', 'RV2')
         form.show()
         return None
-    return compas_rhino.sc.sticky["RV2.system"]
+    return sc.sticky["RV2.system"]
 
 
 def save_session():
