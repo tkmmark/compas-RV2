@@ -110,6 +110,7 @@ class ThrustObject(MeshObject):
         self.clear()
         if not self.visible:
             return
+        self.artist.vertex_xyz = self.vertex_xyz
 
         # groups
 
@@ -133,8 +134,8 @@ class ThrustObject(MeshObject):
 
         # vertices
 
-        free = list(self.datastructure.vertices_where({'is_anchor': False}))
-        anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
+        free = list(self.mesh.vertices_where({'is_anchor': False}))
+        anchors = list(self.mesh.vertices_where({'is_anchor': True}))
         color_free = self.settings['color.vertices'] if self.settings['_is.valid'] else self.settings['color.invalid']
         color_anchor = self.settings['color.vertices:is_anchor']
         color = {vertex: color_free for vertex in free}
@@ -155,7 +156,7 @@ class ThrustObject(MeshObject):
 
         # edges
 
-        edges = list(self.datastructure.edges_where({'_is_edge': True}))
+        edges = list(self.mesh.edges_where({'_is_edge': True}))
         color = {edge: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for edge in edges}
         guids = self.artist.draw_edges(edges, color)
         self.guid_edge = zip(guids, edges)
@@ -168,7 +169,7 @@ class ThrustObject(MeshObject):
 
         # faces
 
-        faces = list(self.datastructure.faces_where({'_is_loaded': True}))
+        faces = list(self.mesh.faces_where({'_is_loaded': True}))
         color = {face: self.settings['color.faces'] if self.settings['_is.valid'] else self.settings['color.invalid'] for face in faces}
         guids = self.artist.draw_faces(faces, color)
         self.guid_face = zip(guids, faces)
@@ -183,7 +184,7 @@ class ThrustObject(MeshObject):
 
         if self.settings['_is.valid'] and self.settings['show.reactions']:
             tol = self.settings['tol.reactions']
-            anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
+            anchors = list(self.mesh.vertices_where({'is_anchor': True}))
             color = self.settings['color.reactions']
             scale = self.settings['scale.reactions']
             guids = self.artist.draw_reactions(anchors, color, scale, tol)
@@ -191,7 +192,7 @@ class ThrustObject(MeshObject):
 
         if self.settings['_is.valid'] and self.settings['show.residuals']:
             tol = self.settings['tol.residuals']
-            vertices = list(self.datastructure.vertices_where({'is_anchor': False}))
+            vertices = list(self.mesh.vertices_where({'is_anchor': False}))
             color = self.settings['color.residuals']
             scale = self.settings['scale.residuals']
             guids = self.artist.draw_residuals(vertices, color, scale, tol)
@@ -199,7 +200,7 @@ class ThrustObject(MeshObject):
 
         if self.settings['_is.valid'] and self.settings['show.pipes']:
             tol = self.settings['tol.pipes']
-            edges = list(self.datastructure.edges_where({'_is_edge': True}))
+            edges = list(self.mesh.edges_where({'_is_edge': True}))
             color = self.settings['color.pipes']
             scale = self.settings['scale.pipes']
             guids = self.artist.draw_pipes(edges, color, scale, tol)

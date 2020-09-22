@@ -3,6 +3,11 @@ from __future__ import absolute_import
 from __future__ import division
 
 from compas.utilities import i_to_rgb
+from compas.geometry import Point
+from compas.geometry import Scale
+from compas.geometry import Translation
+from compas.geometry import Rotation
+
 import compas_rhino
 
 from .meshobject import MeshObject
@@ -56,6 +61,27 @@ class FormObject(MeshObject):
         'color.edges': [0, 127, 0],
     }
 
+    @property
+    def vertex_xyz(self):
+        """dict : The view coordinates of the mesh object."""
+        origin = Point(0, 0, 0)
+        if self.anchor is not None:
+            xyz = self.mesh.vertex_attributes(self.anchor, 'xyz')
+            point = Point(* xyz)
+            T1 = Translation.from_vector(origin - point)
+            S = Scale.from_factors([self.scale] * 3)
+            R = Rotation.from_euler_angles(self.rotation)
+            T2 = Translation.from_vector(self.location)
+            X = T2 * R * S * T1
+        else:
+            S = Scale.from_factors([self.scale] * 3)
+            R = Rotation.from_euler_angles(self.rotation)
+            T = Translation.from_vector(self.location)
+            X = T * R * S
+        mesh = self.mesh.transformed(X)
+        vertex_xyz = {vertex: mesh.vertex_attributes(vertex, 'xy') + [0.0] for vertex in mesh.vertices()}
+        return vertex_xyz
+
     def draw(self):
         layer = self.settings['layer']
         self.artist.layer = layer
@@ -63,7 +89,6 @@ class FormObject(MeshObject):
         self.clear()
         if not self.visible:
             return
-
         self.artist.vertex_xyz = self.vertex_xyz
 
         # groups
