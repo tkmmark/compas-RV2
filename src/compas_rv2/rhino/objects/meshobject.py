@@ -26,9 +26,6 @@ from compas_rv2.rhino import select_edges as rv2_select_edges
 __all__ = ['MeshObject']
 
 
-_ITEM_OBJECT = {}
-
-
 class MeshObject(MeshObject):
     """Scene object for mesh-based data structures in RV2.
 
