@@ -35,18 +35,18 @@ def RunCommand(is_interactive):
         return
 
     # Get input data.
-    srf_guid = compas_rhino.select_surface("Select a surface to decompose.")
-    if not srf_guid:
+    surf_guid = compas_rhino.select_surface("Select a surface to decompose.")
+    if not surf_guid:
         return
-    crv_guids = []
-    pt_guids = compas_rhino.select_points("Select points to include in the decomposition.")
+    point_guids = compas_rhino.select_points("Select points to include in the decomposition.")
+    curve_guids = []
 
-    surface = RhinoSurface.from_guid(srf_guid)
-    curves = [RhinoCurve.from_guid(guid) for guid in crv_guids]
-    points = [RhinoPoint.from_guid(guid) for guid in pt_guids]
+    surface = RhinoSurface.from_guid(surf_guid)
+    curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
+    points = [RhinoPoint.from_guid(guid) for guid in point_guids]
 
     # Compute the feature discretisation length.
-    box = compas_rhino.rs.BoundingBox([srf_guid])
+    box = compas_rhino.rs.BoundingBox([surf_guid])
     diagonal = compas_rhino.rs.Distance(box[0], box[6])
     D = 0.01 * diagonal
 
@@ -54,7 +54,7 @@ def RunCommand(is_interactive):
     L = compas_rhino.rs.GetReal("Define the target edge length of the pattern.", 1.0)
 
     # Generate the pattern
-    pattern = Pattern.from_features(D, L, srf_guid, crv_guids, pt_guids)
+    pattern = Pattern.from_surface_and_features(D, L, surf_guid, curve_guids, point_guids)
 
     scene.clear()
     scene.add(pattern, name='pattern')

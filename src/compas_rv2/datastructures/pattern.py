@@ -96,9 +96,10 @@ class Pattern(MeshMixin, Mesh):
         from compas_singular.rhino import RhinoSurface
         from compas_singular.rhino import RhinoCurve
 
-        surface = RhinoSurface.from_guid(srf_guid)
-        curves = [RhinoCurve.from_guid(guid) for guid in crv_guids]
-        points = [RhinoPoint.from_guid(guid) for guid in pt_guids]
+        surface = RhinoSurface.from_guid(surf_guid)
+        curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
+        points = [RhinoPoint.from_guid(guid) for guid in point_guids]
+
         result = surface.discrete_mapping(discretisation, crv_guids=curve_guids, pt_guids=point_guids)
         outer_boundary, inner_boundaries, polyline_features, point_features = result
         trimesh = boundary_triangulation(*result, delaunay=delaunay)
@@ -107,7 +108,7 @@ class Pattern(MeshMixin, Mesh):
         gkey_vertex = {geometric_key(coarsemesh.vertex_coordinates(vertex)): vertex for vertex in coarsemesh.vertices()}
         edge_curve = {}
         for polyline in decomposition.polylines:
-            curve = compas_rhino.rs.AddInterpCrvOnSrfUV(srf_guid, [point[:2] for point in polyline])
+            curve = compas_rhino.rs.AddInterpCrvOnSrfUV(surf_guid, [point[:2] for point in polyline])
             u = gkey_vertex[geometric_key(polyline[0])]
             v = gkey_vertex[geometric_key(polyline[-1])]
             edge_curve[u, v] = [
