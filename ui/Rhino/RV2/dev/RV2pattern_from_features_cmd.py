@@ -60,18 +60,25 @@ def RunCommand(is_interactive):
     scene.add(pattern, name='pattern')
     scene.update()
 
+    kmax = 10
+
     # Constrain mesh components to the feature geometry.
     constraints = automated_smoothing_surface_constraints(pattern, surface)
     constraints.update(
         automated_smoothing_constraints(pattern, rhinopoints=points, rhinocurves=curves)
     )
 
-    # Smooth with constraints.
-    constrained_smoothing(
-        pattern, kmax=10, damping=0.5, constraints=constraints, algorithm="area"
-    )
+    while True:
+        option = compas_rhino.rs.GetString("Smoothen the pattern?", "Yes", ["Yes", "No"])
+        if not option:
+            break
+        if option == "No":
+            break
 
-    scene.update()
+        constrained_smoothing(
+            pattern, kmax=kmax, damping=0.5, constraints=constraints, algorithm="area"
+        )
+        scene.update()
 
     print('Pattern object successfully created. Input object has been hidden.')
 
