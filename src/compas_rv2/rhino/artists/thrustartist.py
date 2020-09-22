@@ -9,7 +9,8 @@ import compas_rhino
 from compas.geometry import add_vectors
 from compas.geometry import scale_vector
 from compas.geometry import length_vector
-from compas_rv2.rhino.artists.meshartist import MeshArtist
+
+from .meshartist import MeshArtist
 
 
 __all__ = ['ThrustArtist']
@@ -18,7 +19,21 @@ __all__ = ['ThrustArtist']
 class ThrustArtist(MeshArtist):
     """A customised `MeshArtist` for the RV2 `ThrustDiagram`."""
 
-    def draw_reactions(self, keys, color, scale, tol):
+    # @property
+    # def vertex_xyz(self):
+    #     """dict:
+    #     The view coordinates of the mesh vertices.
+    #     The view coordinates default to the actual mesh coordinates.
+    #     """
+    #     if not self._vertex_xyz:
+    #         self._vertex_xyz = {vertex: self.mesh.vertex_attributes(vertex, 'xyz') for vertex in self.mesh.vertices()}
+    #     return self._vertex_xyz
+
+    # @vertex_xyz.setter
+    # def vertex_xyz(self, vertex_xyz):
+    #     self._vertex_xyz = vertex_xyz
+
+    def draw_reactions(self, vertices, color, scale, tol):
         """Draw the reaction forces at the anchored vertices of the diagram.
 
         Parameters
@@ -41,19 +56,19 @@ class ThrustArtist(MeshArtist):
         The residual force components are stored per vertex in the `rx`, `ry`, and `rz` attributes.
 
         """
+        vertex_xyz = self.vertex_xyz
         lines = []
-        for key in keys:
-            a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
+        for vertex in vertices:
+            a = vertex_xyz[vertex]
+            r = self.mesh.vertex_attributes(vertex, ['_rx', '_ry', '_rz'])
             r = scale_vector(r, scale)
             if length_vector(r) < tol:
                 continue
             b = add_vectors(a, r)
             lines.append({'start': a, 'end': b, 'color': color, 'arrow': "start"})
-        guids = compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
-        return guids
+        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
 
-    def draw_residuals(self, keys, color, scale, tol):
+    def draw_residuals(self, vertices, color, scale, tol):
         """Draw the vertical component of the residual forces at the non-anchored vertices of the diagram.
 
         Parameters
@@ -75,31 +90,32 @@ class ThrustArtist(MeshArtist):
         The residual force components are stored per vertex in the `rx`, `ry`, and `rz` attributes.
 
         """
+        vertex_xyz = self.vertex_xyz
         lines = []
-        for key in keys:
-            a = self.mesh.vertex_attributes(key, 'xyz')
-            r = self.mesh.vertex_attributes(key, ['_rx', '_ry', '_rz'])
+        for vertex in vertices:
+            a = vertex_xyz[vertex]
+            r = self.mesh.vertex_attributes(vertex, ['_rx', '_ry', '_rz'])
             r = scale_vector(r, scale)
             if length_vector(r) < tol:
                 continue
             b = add_vectors(a, r)
             lines.append({'start': a, 'end': b, 'color': color, 'arrow': "start"})
-        guids = compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
-        return guids
+        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
 
-    def draw_pipes(self, keys, color, scale, tol):
+    def draw_pipes(self, edges, color, scale, tol):
+        vertex_xyz = self.vertex_xyz
         cylinders = []
-        for key in keys:
-            u, v = key
-            start = self.mesh.vertex_attributes(u, 'xyz')
-            end = self.mesh.vertex_attributes(v, 'xyz')
-            force = self.mesh.edge_attribute(key, '_f')
+        for edge in edges:
+            u, v = edge
+            start = vertex_xyz[u]
+            end = vertex_xyz[v]
+            force = self.mesh.edge_attribute(edge, '_f')
             force = scale * force
             if force < tol:
                 continue
             radius = sqrt(force / pi)
             if isinstance(color, dict):
-                pipe_color = color[key]
+                pipe_color = color[edge]
             else:
                 pipe_color = color
             cylinders.append({
@@ -108,13 +124,4 @@ class ThrustArtist(MeshArtist):
                 'radius': radius,
                 'color': pipe_color
             })
-        guids = compas_rhino.draw_cylinders(cylinders, layer=self.layer, clear=False, redraw=False)
-        return guids
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == '__main__':
-    pass
+        return compas_rhino.draw_cylinders(cylinders, layer=self.layer, clear=False, redraw=False)

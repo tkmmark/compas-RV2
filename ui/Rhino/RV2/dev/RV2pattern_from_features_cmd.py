@@ -2,18 +2,18 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-from compas.utilities import geometric_key
-from compas.utilities import linspace
+# from compas.utilities import geometric_key
+# from compas.utilities import linspace
 
 import compas_rhino
-from compas_rhino.artists import MeshArtist
-from compas_rhino.geometry import RhinoPoint
+# from compas_rhino.artists import MeshArtist
+# from compas_rhino.geometry import RhinoPoint
 
-from compas_singular.rhino import automated_smoothing_surface_constraints
-from compas_singular.rhino import automated_smoothing_constraints
-from compas_singular.rhino import constrained_smoothing
-from compas_singular.rhino import RhinoSurface
-from compas_singular.rhino import RhinoCurve
+# from compas_singular.rhino import automated_smoothing_surface_constraints
+# from compas_singular.rhino import automated_smoothing_constraints
+# from compas_singular.rhino import constrained_smoothing
+# from compas_singular.rhino import RhinoSurface
+# from compas_singular.rhino import RhinoCurve
 
 from compas_rv2.datastructures import Pattern
 from compas_rv2.rhino import get_scene
@@ -41,9 +41,9 @@ def RunCommand(is_interactive):
     point_guids = compas_rhino.select_points("Select points to include in the decomposition.")
     curve_guids = []
 
-    surface = RhinoSurface.from_guid(surf_guid)
-    curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
-    points = [RhinoPoint.from_guid(guid) for guid in point_guids]
+    # surface = RhinoSurface.from_guid(surf_guid)
+    # curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
+    # points = [RhinoPoint.from_guid(guid) for guid in point_guids]
 
     # Compute the feature discretisation length.
     box = compas_rhino.rs.BoundingBox([surf_guid])
@@ -60,25 +60,25 @@ def RunCommand(is_interactive):
     scene.add(pattern, name='pattern')
     scene.update()
 
-    kmax = 10
+    # kmax = 10
 
-    # Constrain mesh components to the feature geometry.
-    constraints = automated_smoothing_surface_constraints(pattern, surface)
-    constraints.update(
-        automated_smoothing_constraints(pattern, rhinopoints=points, rhinocurves=curves)
-    )
+    # # Constrain mesh components to the feature geometry.
+    # constraints = automated_smoothing_surface_constraints(pattern, surface)
+    # constraints.update(
+    #     automated_smoothing_constraints(pattern, rhinopoints=points, rhinocurves=curves)
+    # )
 
-    while True:
-        option = compas_rhino.rs.GetString("Smoothen the pattern?", "Yes", ["Yes", "No"])
-        if not option:
-            break
-        if option == "No":
-            break
+    # while True:
+    #     option = compas_rhino.rs.GetString("Smoothen the pattern?", "Yes", ["Yes", "No"])
+    #     if not option:
+    #         break
+    #     if option == "No":
+    #         break
 
-        constrained_smoothing(
-            pattern, kmax=kmax, damping=0.5, constraints=constraints, algorithm="area"
-        )
-        scene.update()
+    #     constrained_smoothing(
+    #         pattern, kmax=kmax, damping=0.5, constraints=constraints, algorithm="area"
+    #     )
+    #     scene.update()
 
     print('Pattern object successfully created. Input object has been hidden.')
 

@@ -4,7 +4,7 @@ from __future__ import division
 
 from compas.datastructures import Mesh
 from compas.datastructures import mesh_smooth_area
-from compas.geometry import distance_point_point
+# from compas.geometry import distance_point_point
 from compas.utilities import linspace
 from compas.utilities import geometric_key
 
@@ -92,13 +92,13 @@ class Pattern(MeshMixin, Mesh):
                Available at: https://www.researchgate.net/publication/340096530_Topology_Finding_of_Patterns_for_Structural_Design.
 
         """
-        from compas_rhino.geometry import RhinoPoint
+        # from compas_rhino.geometry import RhinoPoint
         from compas_singular.rhino import RhinoSurface
-        from compas_singular.rhino import RhinoCurve
+        # from compas_singular.rhino import RhinoCurve
 
         surface = RhinoSurface.from_guid(surf_guid)
-        curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
-        points = [RhinoPoint.from_guid(guid) for guid in point_guids]
+        # curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
+        # points = [RhinoPoint.from_guid(guid) for guid in point_guids]
 
         result = surface.discrete_mapping(discretisation, crv_guids=curve_guids, pt_guids=point_guids)
         outer_boundary, inner_boundaries, polyline_features, point_features = result

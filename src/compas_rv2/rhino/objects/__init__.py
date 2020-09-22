@@ -9,19 +9,4 @@ from .formobject import FormObject  # noqa: F401
 from .forceobject import ForceObject  # noqa: F401
 from .thrustobject import ThrustObject  # noqa: F401
 
-
-from compas_rv2.datastructures import Skeleton
-from compas_rv2.datastructures import Pattern
-from compas_rv2.datastructures import FormDiagram
-from compas_rv2.datastructures import ForceDiagram
-from compas_rv2.datastructures import ThrustDiagram
-
-
-MeshObject.register(Skeleton, SkeletonObject)
-MeshObject.register(Pattern, PatternObject)
-MeshObject.register(FormDiagram, FormObject)
-MeshObject.register(ForceDiagram, ForceObject)
-MeshObject.register(ThrustDiagram, ThrustObject)
-
-
 __all__ = [name for name in dir() if not name.startswith('_')]

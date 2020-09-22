@@ -2,29 +2,30 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas_rhino
-from compas_rv2.rhino import get_scene
-from compas_rv2.rhino import select_vertices as rv2_select_vertices
-from compas_rv2.rhino import select_faces as rv2_select_faces
-from compas_rv2.rhino import select_edges as rv2_select_edges
-from compas_rv2.rhino import delete_objects
-
-from compas_rhino.objects import mesh_update_vertex_attributes
-from compas_rhino.objects import mesh_update_edge_attributes
-from compas_rhino.objects import mesh_update_face_attributes
-from compas_rhino.objects import mesh_move_vertices
+import Rhino
 
 from compas.geometry import add_vectors
 
-import Rhino
+import compas_rhino
+from compas_rhino.objects import MeshObject
+from compas_rhino.objects import mesh_update_vertex_attributes
+from compas_rhino.objects import mesh_update_edge_attributes
+from compas_rhino.objects import mesh_update_face_attributes
+
+# from compas_rv2.rhino import get_scene
+from compas_rv2.rhino import select_vertices as rv2_select_vertices
+from compas_rv2.rhino import select_faces as rv2_select_faces
+from compas_rv2.rhino import select_edges as rv2_select_edges
+# from compas_rv2.rhino import delete_objects
 
 
 __all__ = ['MeshObject']
 
+
 _ITEM_OBJECT = {}
 
 
-class MeshObject(object):
+class MeshObject(MeshObject):
     """Scene object for mesh-based data structures in RV2.
 
     Parameters
@@ -68,140 +69,13 @@ class MeshObject(object):
     * `z`: the Z coordinate.
     """
 
-    __module__ = 'compas_rv2.rhino'
-
-    def __init__(self, datastructure, name=None, visible=True, settings={}, **kwargs):
-        self.datastructure = datastructure
-        self.name = name
-        self.guid = None
-        self.visible = visible
-        self.artist = None
-        self._guid_vertex = {}
-        self._guid_edge = {}
-        self._guid_face = {}
-        self._guid_vertexlabel = {}
-        self._guid_edgelabel = {}
-        self._guid_facelabel = {}
-        self._guid_vertexnormal = {}
-        self._guid_facenormal = {}
-        self._settings = {}
-        self._settings.update(settings)
-
-    @staticmethod
-    def register(item_type, object_type):
-        _ITEM_OBJECT[item_type] = object_type
-
-    @staticmethod
-    def build(item, **kwargs):
-        object_type = _ITEM_OBJECT[type(item)]
-        return object_type(item, **kwargs)
-
-    @staticmethod
-    def registered_object_types():
-        return [_ITEM_OBJECT[key] for key in _ITEM_OBJECT]
-
     @property
-    def scene(self):
-        return get_scene()
+    def datastructure(self):
+        return self.mesh
 
-    @property
-    def settings(self):
-        return self._settings
-
-    @settings.setter
-    def settings(self, settings):
-        return self._settings.update(settings)
-
-    @property
-    def guid_vertex(self):
-        return self._guid_vertex
-
-    @guid_vertex.setter
-    def guid_vertex(self, values):
-        self._guid_vertex = dict(values)
-
-    @property
-    def guid_edge(self):
-        return self._guid_edge
-
-    @guid_edge.setter
-    def guid_edge(self, values):
-        self._guid_edge = dict(values)
-
-    @property
-    def guid_face(self):
-        return self._guid_face
-
-    @guid_face.setter
-    def guid_face(self, values):
-        self._guid_face = dict(values)
-
-    @property
-    def guid_vertexlabel(self):
-        return self._guid_vertexlabel
-
-    @guid_vertexlabel.setter
-    def guid_vertexlabel(self, values):
-        self._guid_vertexlabel = dict(values)
-
-    @property
-    def guid_facelabel(self):
-        return self._guid_facelabel
-
-    @guid_facelabel.setter
-    def guid_facelabel(self, values):
-        self._guid_facelabel = dict(values)
-
-    @property
-    def guid_edgelabel(self):
-        return self._guid_edgelabel
-
-    @guid_edgelabel.setter
-    def guid_edgelabel(self, values):
-        self._guid_edgelabel = dict(values)
-
-    @property
-    def guid_vertexnormal(self):
-        return self._guid_vertexnormal
-
-    @guid_vertexnormal.setter
-    def guid_vertexnormal(self, values):
-        self._guid_vertexnormal = dict(values)
-
-    @property
-    def guid_facenormal(self):
-        return self._guid_facenormal
-
-    @guid_facenormal.setter
-    def guid_facenormal(self, values):
-        self._guid_facenormal = dict(values)
-
-    # ==========================================================================
-    # Mesh
-    # ==========================================================================
-
-    def draw(self):
-        raise NotImplementedError
-
-    def clear(self):
-        guids_vertices = list(self.guid_vertex.keys())
-        guids_edges = list(self.guid_edge.keys())
-        guids_faces = list(self.guid_face.keys())
-        guids_vertexlabels = list(self.guid_vertexlabel.keys())
-        guids_edgelabels = list(self.guid_edgelabel.keys())
-        guids_facelabels = list(self.guid_facelabel.keys())
-        guids_vertexnormals = list(self.guid_vertexnormal.keys())
-        guids_facenormals = list(self.guid_facenormal.keys())
-        guids = guids_vertices + guids_edges + guids_faces + guids_vertexlabels + guids_edgelabels + guids_facelabels + guids_vertexnormals + guids_facenormals
-        delete_objects(guids, purge=True)
-        self._guid_vertex = {}
-        self._guid_edge = {}
-        self._guid_face = {}
-        self._guid_vertexlabel = {}
-        self._guid_edgelabel = {}
-        self._guid_facelabel = {}
-        self._guid_vertexnormal = {}
-        self._guid_facenormal = {}
+    @datastructure.setter
+    def datastructure(self, datastructure):
+        self.mesh = datastructure
 
     def update_attributes(self):
         """Update the attributes of the data structure through a Rhino dialog.
@@ -217,26 +91,6 @@ class MeshObject(object):
     # ==========================================================================
     # Vertices
     # ==========================================================================
-
-    def select_vertices(self):
-        """Manually select vertices in the Rhino model view.
-
-        Returns
-        -------
-        list
-            The keys of the selected vertices.
-
-        Examples
-        --------
-        >>>
-        """
-        _filter = compas_rhino.rs.filter.point
-        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, group=False, filter=_filter)
-        if guids:
-            keys = [self.guid_vertex[guid] for guid in guids if guid in self.guid_vertex]
-        else:
-            keys = []
-        return keys
 
     def update_vertices_attributes(self, keys, names=None):
         """Update the attributes of selected vertices.
@@ -259,16 +113,6 @@ class MeshObject(object):
             compas_rhino.rs.UnselectAllObjects()
             rv2_select_vertices(self.datastructure, keys)
             return mesh_update_vertex_attributes(self.datastructure, keys, names)
-
-    def move_vertices(self, keys):
-        """Move selected vertices.
-
-        Parameters
-        ----------
-        keys : list
-            The identifiers of the vertices.
-        """
-        return mesh_move_vertices(self.datastructure, keys)
 
     def move_vertices_vertical(self, keys):
         """Move selected vertices along the Z axis.
@@ -402,26 +246,6 @@ class MeshObject(object):
     # Edges
     # ==========================================================================
 
-    def select_edges(self):
-        """Manually select edges in the Rhino model view.
-
-        Returns
-        -------
-        list
-            The keys of the selected edges.
-
-        Examples
-        --------
-        >>>
-        """
-        _filter = compas_rhino.rs.filter.curve
-        guids = compas_rhino.rs.GetObjects(message="Select Edges.", preselect=True, select=True, group=False, filter=_filter)
-        if guids:
-            keys = [self.guid_edge[guid] for guid in guids if guid in self.guid_edge]
-        else:
-            keys = []
-        return keys
-
     def update_edges_attributes(self, keys, names=None):
         """Update the attributes of selected edges.
 
@@ -447,26 +271,6 @@ class MeshObject(object):
     # ==========================================================================
     # Faces
     # ==========================================================================
-
-    def select_faces(self):
-        """Manually select faces in the Rhino model view.
-
-        Returns
-        -------
-        list
-            The keys of the selected faces.
-
-        Examples
-        --------
-        >>>
-        """
-        _filter = compas_rhino.rs.filter.mesh
-        guids = compas_rhino.rs.GetObjects(message="Select Faces.", preselect=True, select=True, group=False, filter=_filter)
-        if guids:
-            keys = [self.guid_face[guid] for guid in guids if guid in self.guid_face]
-        else:
-            keys = []
-        return keys
 
     def update_faces_attributes(self, keys, names=None):
         """Update the attributes of selected faces.

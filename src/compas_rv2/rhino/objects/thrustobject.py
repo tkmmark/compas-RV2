@@ -3,9 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino.objects.meshobject import MeshObject
-from compas_rv2.rhino import ThrustArtist
-from compas_rv2.rhino import delete_objects
+
+from .meshobject import MeshObject
 
 
 __all__ = ["ThrustObject"]
@@ -13,7 +12,7 @@ __all__ = ["ThrustObject"]
 
 class ThrustObject(MeshObject):
 
-    settings = {
+    SETTINGS = {
         'layer': "RV2::ThrustDiagram",
         '_is.valid': False,
         'show.vertices': True,
@@ -43,28 +42,27 @@ class ThrustObject(MeshObject):
 
     def __init__(self, diagram, **kwargs):
         super(ThrustObject, self).__init__(diagram, **kwargs)
-        self.artist = ThrustArtist(self.datastructure)
-        self._guid_vertex_free = {}
-        self._guid_vertex_anchor = {}
+        self._guid_free = {}
+        self._guid_anchor = {}
         self._guid_reaction = {}
         self._guid_residual = {}
         self._guid_pipe = {}
 
     @property
-    def guid_vertex_free(self):
-        return self._guid_vertex_free
+    def guid_free(self):
+        return self._guid_free
 
-    @guid_vertex_free.setter
-    def guid_vertex_free(self, values):
-        self._guid_vertex_free = dict(values)
+    @guid_free.setter
+    def guid_free(self, values):
+        self._guid_free = dict(values)
 
     @property
-    def guid_vertex_anchor(self):
-        return self._guid_vertex_anchor
+    def guid_anchor(self):
+        return self._guid_anchor
 
-    @guid_vertex_anchor.setter
-    def guid_vertex_anchor(self, values):
-        self._guid_vertex_anchor = dict(values)
+    @guid_anchor.setter
+    def guid_anchor(self, values):
+        self._guid_anchor = dict(values)
 
     @property
     def guid_reaction(self):
@@ -92,18 +90,122 @@ class ThrustObject(MeshObject):
 
     def clear(self):
         super(ThrustObject, self).clear()
-        guids_vertices_free = list(self.guid_vertex_free.keys())
-        guids_vertices_anchor = list(self.guid_vertex_anchor.keys())
-        guids_reactions = list(self.guid_reaction.keys())
-        guids_residuals = list(self.guid_residual.keys())
-        guids_pipes = list(self.guid_pipe.keys())
-        guids = guids_reactions + guids_residuals + guids_pipes + guids_vertices_free + guids_vertices_anchor
-        delete_objects(guids, purge=True)
-        self._guid_vertex_free = {}
-        self._guid_vertex_anchor = {}
+        guids = []
+        guids += list(self.guid_free)
+        guids += list(self.guid_anchor)
+        guids += list(self.guid_reaction)
+        guids += list(self.guid_residual)
+        guids += list(self.guid_pipe)
+        compas_rhino.delete_objects(guids, purge=True)
+        self._guid_free = {}
+        self._guid_anchor = {}
         self._guid_reaction = {}
         self._guid_residual = {}
         self._guid_pipe = {}
+
+    def draw(self):
+        layer = self.settings['layer']
+        self.artist.layer = layer
+        self.artist.clear_layer()
+        self.clear()
+        if not self.visible:
+            return
+
+        # groups
+
+        group_free = "{}::vertices_free".format(layer)
+        group_anchor = "{}::vertices_anchor".format(layer)
+
+        group_edges = "{}::edges".format(layer)
+        group_faces = "{}::faces".format(layer)
+
+        if not compas_rhino.rs.IsGroup(group_free):
+            compas_rhino.rs.AddGroup(group_free)
+
+        if not compas_rhino.rs.IsGroup(group_anchor):
+            compas_rhino.rs.AddGroup(group_anchor)
+
+        if not compas_rhino.rs.IsGroup(group_edges):
+            compas_rhino.rs.AddGroup(group_edges)
+
+        if not compas_rhino.rs.IsGroup(group_faces):
+            compas_rhino.rs.AddGroup(group_faces)
+
+        # vertices
+
+        free = list(self.datastructure.vertices_where({'is_anchor': False}))
+        anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
+        color_free = self.settings['color.vertices'] if self.settings['_is.valid'] else self.settings['color.invalid']
+        color_anchor = self.settings['color.vertices:is_anchor']
+        color = {vertex: color_free for vertex in free}
+        color.update({vertex: color_anchor for vertex in anchors})
+        guids_free = self.artist.draw_vertices(free, color)
+        guids_anchor = self.artist.draw_vertices(anchors, color)
+        self.guid_free = zip(guids_free, free)
+        self.guid_anchor = zip(guids_anchor, anchors)
+        compas_rhino.rs.AddObjectsToGroup(guids_free, group_free)
+        compas_rhino.rs.AddObjectsToGroup(guids_anchor, group_anchor)
+
+        if self.settings['show.vertices']:
+            compas_rhino.rs.HideGroup(group_free)
+            compas_rhino.rs.ShowGroup(group_anchor)
+        else:
+            compas_rhino.rs.HideGroup(group_free)
+            compas_rhino.rs.HideGroup(group_anchor)
+
+        # edges
+
+        edges = list(self.datastructure.edges_where({'_is_edge': True}))
+        color = {edge: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for edge in edges}
+        guids = self.artist.draw_edges(edges, color)
+        self.guid_edge = zip(guids, edges)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
+
+        if self.settings['show.edges']:
+            compas_rhino.rs.ShowGroup(group_edges)
+        else:
+            compas_rhino.rs.HideGroup(group_edges)
+
+        # faces
+
+        faces = list(self.datastructure.faces_where({'_is_loaded': True}))
+        color = {face: self.settings['color.faces'] if self.settings['_is.valid'] else self.settings['color.invalid'] for face in faces}
+        guids = self.artist.draw_faces(faces, color)
+        self.guid_face = zip(guids, faces)
+        compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
+
+        if self.settings.get('show.faces', True):
+            compas_rhino.rs.ShowGroup(group_faces)
+        else:
+            compas_rhino.rs.HideGroup(group_faces)
+
+        # overlays
+
+        if self.settings['_is.valid'] and self.settings['show.reactions']:
+            tol = self.settings['tol.reactions']
+            anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
+            color = self.settings['color.reactions']
+            scale = self.settings['scale.reactions']
+            guids = self.artist.draw_reactions(anchors, color, scale, tol)
+            self.guid_reaction = zip(guids, anchors)
+
+        if self.settings['_is.valid'] and self.settings['show.residuals']:
+            tol = self.settings['tol.residuals']
+            vertices = list(self.datastructure.vertices_where({'is_anchor': False}))
+            color = self.settings['color.residuals']
+            scale = self.settings['scale.residuals']
+            guids = self.artist.draw_residuals(vertices, color, scale, tol)
+            self.guid_residual = zip(guids, vertices)
+
+        if self.settings['_is.valid'] and self.settings['show.pipes']:
+            tol = self.settings['tol.pipes']
+            edges = list(self.datastructure.edges_where({'_is_edge': True}))
+            color = self.settings['color.pipes']
+            scale = self.settings['scale.pipes']
+            guids = self.artist.draw_pipes(edges, color, scale, tol)
+            self.guid_pipe = zip(guids, edges)
+
+        self.redraw()
 
     def select_vertices(self):
         """Manually select vertices in the Rhino model view.
@@ -117,12 +219,11 @@ class ThrustObject(MeshObject):
         --------
         >>>
         """
-        _filter = compas_rhino.rs.filter.point
-        guids = compas_rhino.rs.GetObjects(message="Select Vertices.", preselect=True, select=True, group=False, filter=_filter)
+        guids = compas_rhino.select_points()
         if guids:
             guid_vertex = {}
-            guid_vertex.update(self.guid_vertex_free)
-            guid_vertex.update(self.guid_vertex_anchor)
+            guid_vertex.update(self.guid_free)
+            guid_vertex.update(self.guid_anchor)
             keys = [guid_vertex[guid] for guid in guids if guid in guid_vertex]
         else:
             keys = []
@@ -140,10 +241,9 @@ class ThrustObject(MeshObject):
         --------
         >>>
         """
-        _filter = compas_rhino.rs.filter.point
-        guids = compas_rhino.rs.GetObjects(message="Select Free Vertices.", preselect=True, select=True, group=False, filter=_filter)
+        guids = compas_rhino.select_points(message="Select free vertices.")
         if guids:
-            keys = [self.guid_vertex_free[guid] for guid in guids if guid in self.guid_vertex_free]
+            keys = [self.guid_free[guid] for guid in guids if guid in self.guid_free]
         else:
             keys = []
         return keys
@@ -160,153 +260,9 @@ class ThrustObject(MeshObject):
         --------
         >>>
         """
-        _filter = compas_rhino.rs.filter.point
-        guids = compas_rhino.rs.GetObjects(message="Select Anchor Vertices.", preselect=True, select=True, group=False, filter=_filter)
+        guids = compas_rhino.select_points(message="Select anchor vertices.")
         if guids:
-            keys = [self.guid_vertex_anchor[guid] for guid in guids if guid in self.guid_vertex_anchor]
+            keys = [self.guid_anchor[guid] for guid in guids if guid in self.guid_anchor]
         else:
             keys = []
         return keys
-
-    def draw(self):
-        layer = self.settings['layer']
-
-        self.artist.layer = layer
-        self.artist.clear_layer()
-
-        group_vertices_free = "{}::vertices_free".format(layer)
-        group_vertices_anchor = "{}::vertices_anchor".format(layer)
-
-        group_edges = "{}::edges".format(layer)
-        group_faces = "{}::faces".format(layer)
-
-        if not compas_rhino.rs.IsGroup(group_vertices_free):
-            compas_rhino.rs.AddGroup(group_vertices_free)
-
-        if not compas_rhino.rs.IsGroup(group_vertices_anchor):
-            compas_rhino.rs.AddGroup(group_vertices_anchor)
-
-        if not compas_rhino.rs.IsGroup(group_edges):
-            compas_rhino.rs.AddGroup(group_edges)
-
-        if not compas_rhino.rs.IsGroup(group_faces):
-            compas_rhino.rs.AddGroup(group_faces)
-
-        # vertices
-
-        guids_vertices_free = list(self.guid_vertex_free.keys())
-        guids_vertices_anchor = list(self.guid_vertex_anchor.keys())
-        delete_objects(guids_vertices_free + guids_vertices_anchor, purge=True)
-
-        free = list(self.datastructure.vertices_where({'is_anchor': False}))
-        anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
-
-        color_free = self.settings['color.vertices'] if self.settings['_is.valid'] else self.settings['color.invalid']
-        color_anchor = self.settings['color.vertices:is_anchor']
-
-        color = {key: color_free for key in free}
-        color.update({key: color_anchor for key in anchors})
-
-        guids_vertices_free = self.artist.draw_vertices(free, color)
-        self.guid_vertex_free = zip(guids_vertices_free, free)
-
-        guids_vertices_anchor = self.artist.draw_vertices(anchors, color)
-        self.guid_vertex_anchor = zip(guids_vertices_anchor, anchors)
-
-        compas_rhino.rs.AddObjectsToGroup(guids_vertices_free, group_vertices_free)
-        compas_rhino.rs.AddObjectsToGroup(guids_vertices_anchor, group_vertices_anchor)
-
-        if self.settings['show.vertices']:
-            compas_rhino.rs.HideGroup(group_vertices_free)
-            compas_rhino.rs.ShowGroup(group_vertices_anchor)
-        else:
-            compas_rhino.rs.HideGroup(group_vertices_free)
-            compas_rhino.rs.HideGroup(group_vertices_anchor)
-
-        # edges
-
-        guids_edges = list(self.guid_edge.keys())
-        delete_objects(guids_edges, purge=True)
-
-        keys = list(self.datastructure.edges_where({'_is_edge': True}))
-        color_edges = {key: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for key in keys}
-
-        guids = self.artist.draw_edges(keys, color_edges)
-        self.guid_edge = zip(guids, keys)
-        compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
-
-        if self.settings['show.edges']:
-            compas_rhino.rs.ShowGroup(group_edges)
-        else:
-            compas_rhino.rs.HideGroup(group_edges)
-
-        # faces
-
-        guids_faces = list(self.guid_face.keys())
-        delete_objects(guids_faces, purge=True)
-
-        keys = list(self.datastructure.faces_where({'_is_loaded': True}))
-        color = {key: self.settings['color.faces'] if self.settings['_is.valid'] else self.settings['color.invalid'] for key in keys}
-        guids = self.artist.draw_faces(keys, color)
-        self.guid_face = zip(guids, keys)
-        compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
-
-        if self.settings.get('show.faces', True):
-            compas_rhino.rs.ShowGroup(group_faces)
-        else:
-            compas_rhino.rs.HideGroup(group_faces)
-
-        # overlays
-
-        if self.settings['_is.valid'] and self.settings['show.reactions']:
-
-            tol = self.settings['tol.reactions']
-            anchors = list(self.datastructure.vertices_where({'is_anchor': True}))
-            color = self.settings['color.reactions']
-            scale = self.settings['scale.reactions']
-            guids = self.artist.draw_reactions(anchors, color, scale, tol)
-            self.guid_reaction = zip(guids, anchors)
-
-        else:
-            guids_reactions = list(self.guid_reaction.keys())
-            delete_objects(guids_reactions, purge=True)
-            del self._guid_reaction
-            self._guid_reaction = {}
-
-        if self.settings['_is.valid'] and self.settings['show.residuals']:
-
-            tol = self.settings['tol.residuals']
-            keys = list(self.datastructure.vertices_where({'is_anchor': False}))
-            color = self.settings['color.residuals']
-            scale = self.settings['scale.residuals']
-            guids = self.artist.draw_residuals(keys, color, scale, tol)
-            self.guid_residual = zip(guids, keys)
-
-        else:
-            guids_residuals = list(self.guid_residual)
-            delete_objects(guids_residuals, purge=True)
-            del self._guid_residual
-            self._guid_residual = {}
-
-        if self.settings['_is.valid'] and self.settings['show.pipes']:
-
-            tol = self.settings['tol.pipes']
-            keys = list(self.datastructure.edges_where({'_is_edge': True}))
-            color = self.settings['color.pipes']
-            scale = self.settings['scale.pipes']
-            guids = self.artist.draw_pipes(keys, color, scale, tol)
-            self.guid_pipe = zip(guids, keys)
-
-        else:
-            guids_pipes = list(self.guid_pipe)
-            delete_objects(guids_pipes, purge=True)
-            del self._guid_pipe
-            self._guid_pipe = {}
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == '__main__':
-    pass
