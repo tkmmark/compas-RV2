@@ -2,6 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from uuid import uuid4
+
 import compas_rhino
 
 from compas_rv2.rhino import SettingsForm
@@ -21,7 +23,8 @@ class Scene(object):
     def add(self, item, **kwargs):
         kwargs['scene'] = self
         node = MeshObject.build(item, **kwargs)
-        guid = node.id
+        guid = uuid4()
+        node.name = kwargs['name']
         self.nodes[guid] = node
         return node
 
@@ -39,7 +42,8 @@ class Scene(object):
         compas_rhino.rs.EnableRedraw(False)
         for guid in self.nodes:
             node = self.nodes[guid]
-            node.draw()
+            if node.visible:
+                node.draw()
         compas_rhino.rs.EnableRedraw(True)
         compas_rhino.rs.Redraw()
 

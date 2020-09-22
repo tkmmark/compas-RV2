@@ -49,6 +49,7 @@ def RunCommand(is_interactive):
                 form.vertex_attribute(key, 'is_anchor', True)
 
     thrust = form.copy(cls=ThrustDiagram)
+    thrust.name = 'thrust'
 
     bbox_form = form.bounding_box_xy()
     diagonal = length_vector(subtract_vectors(bbox_form[2], bbox_form[0]))

@@ -57,9 +57,9 @@ class FormObject(MeshObject):
         layer = self.settings['layer']
         self.artist.layer = layer
         self.artist.clear_layer()
-        self.clear()
-        if not self.visible:
-            return
+        # self.clear()
+        # if not self.visible:
+        #     return
         self.artist.vertex_xyz = self.vertex_xyz
 
         # ======================================================================
@@ -84,6 +84,9 @@ class FormObject(MeshObject):
         # Draw the vertices and add them to the vertex group.
         # ======================================================================
 
+        guids = list(self.guid_vertex)
+        compas_rhino.delete_objects(guids, purge=True)
+
         vertices = list(self.mesh.vertices())
         color = {vertex: self.settings['color.vertices'] for vertex in vertices}
         color_fixed = self.settings['color.vertices:is_fixed']
@@ -105,6 +108,9 @@ class FormObject(MeshObject):
         # --------
         # Draw the edges and add them to the edge group.
         # ======================================================================
+
+        guids = list(self.guid_edge)
+        compas_rhino.delete_objects(guids, purge=True)
 
         edges = list(self.mesh.edges_where({'_is_edge': True}))
         color = {edge: self.settings['color.edges'] for edge in edges}
@@ -136,6 +142,9 @@ class FormObject(MeshObject):
         # Add labels for the angle deviations.
         # ======================================================================
 
+        guids = list(self.guid_edgelabel)
+        compas_rhino.delete_objects(guids, purge=True)
+
         if self.scene.settings['RV2']['show.angles']:
             tol = self.scene.settings['RV2']['tol.angles']
             edges = list(self.mesh.edges_where({'_is_edge': True}))
@@ -152,4 +161,4 @@ class FormObject(MeshObject):
                 guids = self.artist.draw_edgelabels(text, color)
                 self.guid_edgelabel = zip(guids, edges)
 
-        self.redraw()
+        # self.redraw()
