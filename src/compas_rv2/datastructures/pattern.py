@@ -5,7 +5,7 @@ from __future__ import division
 from compas.datastructures import Mesh
 from compas.datastructures import mesh_smooth_area
 from compas.geometry import distance_point_point
-from compas.geometry import linspace
+from compas.utilities import linspace
 from compas.utilities import geometric_key
 
 import compas_rhino
