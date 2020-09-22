@@ -4,17 +4,16 @@ from __future__ import division
 
 from compas.datastructures import Mesh
 from compas.datastructures import mesh_smooth_area
-from compas_rv2.datastructures.meshmixin import MeshMixin
-
-from compas_singular.algorithms import surface_discrete_mapping
-from compas_singular.algorithms import boundary_triangulation
-from compas_singular.algorithms import SkeletonDecomposition
-from compas_singular.rhino.objects.surface import RhinoSurface
-
 from compas.geometry import distance_point_point
+from compas.geometry import linspace
 from compas.utilities import geometric_key
 
 import compas_rhino
+
+from compas_singular.algorithms import boundary_triangulation
+from compas_singular.algorithms import SkeletonDecomposition
+
+from compas_rv2.datastructures.meshmixin import MeshMixin
 
 
 __all__ = ['Pattern']
@@ -59,23 +58,24 @@ class Pattern(MeshMixin, Mesh):
         })
 
     @classmethod
-    def from_surface_and_features(cls, input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids=[], pt_guids=[], delaunay=None):
+    def from_surface_and_features(cls, discretisation, target_edge_length, surf_guid, curve_guids=[], point_guids=[], delaunay=None):
         """Get a pattern object from a NURBS surface with optional point and curve features on the surface.
         The pattern is aligned to the surface boundaries and curve features.
         The pattern contains a pole singularity at the feature points. Pole singularities are a specific type of singularity.
 
         Parameters
         ----------
-        input_subdivision_spacing : float
-            The surface boundary and curve feature subdivision spacing. Values between 0.01 and 0.05 of the length of the diagonal of the bounding box are recommended.
-        mesh_edge_length : float
+        discretisation : float
+            The surface boundary and curve feature discretisation length.
+            Values between 1% and 5% of the length of the diagonal of the bounding box are recommended.
+        target_edge_length : float
             The edge target length for densification.
-        srf_guid : Rhino surface guid
+        surf_guid : str
             A Rhino surface guid.
-        crv_guids : list, []
-            Optional. A list of Rhino curve guids.
-        pt_guids : list, []
-            Optional. A list of Rhino point guids. WIP
+        curves : list of str, optional
+            A list of Rhino curve guids.
+        points : list of str, optional
+            A list of Rhino point guids.
 
         Returns
         -------
@@ -92,24 +92,33 @@ class Pattern(MeshMixin, Mesh):
                Available at: https://www.researchgate.net/publication/340096530_Topology_Finding_of_Patterns_for_Structural_Design.
 
         """
-        outer_boundary, inner_boundaries, polyline_features, point_features = surface_discrete_mapping(srf_guid, input_subdivision_spacing, crv_guids=crv_guids, pt_guids=pt_guids)
-        tri_mesh = boundary_triangulation(outer_boundary, inner_boundaries, polyline_features, point_features, delaunay)
-        decomposition = SkeletonDecomposition.from_mesh(tri_mesh)
-        coarse_mesh = decomposition.decomposition_mesh(point_features)
-        polylines = decomposition.polylines
-        nurbs_curves = {(geometric_key(polyline[0]), geometric_key(polyline[-1])): compas_rhino.rs.AddInterpCrvOnSrfUV(srf_guid, [pt[:2] for pt in polyline]) for polyline in polylines}
-        vkey_map = {geometric_key(coarse_mesh.vertex_coordinates(vkey)): vkey for vkey in coarse_mesh.vertices()}
-        edges_to_curves = {tuple([vkey_map[gkey] for gkey in geom_key]): curve for geom_key, curve in nurbs_curves.items()}
-        for edge, curve in edges_to_curves.items():
-            polyline = [compas_rhino.rs.EvaluateCurve(curve, compas_rhino.rs.CurveParameter(curve, float(t) / 99.0)) for t in range(100)]
-            edges_to_curves[edge] = polyline
-        coarse_mesh.collect_strips()
-        coarse_mesh.set_strips_density_target(mesh_edge_length)
-        coarse_mesh.densification(edges_to_curves=edges_to_curves)
-        compas_rhino.rs.DeleteObjects(list(nurbs_curves.values()))
-        dense_mesh = coarse_mesh.get_quad_mesh()
-        vertices, faces = dense_mesh.to_vertices_and_faces()
-        return cls.from_vertices_and_faces(vertices.values(), faces.values())
+        from compas_rhino.geometry import RhinoPoint
+        from compas_singular.rhino import RhinoSurface
+        from compas_singular.rhino import RhinoCurve
+
+        surface = RhinoSurface.from_guid(srf_guid)
+        curves = [RhinoCurve.from_guid(guid) for guid in crv_guids]
+        points = [RhinoPoint.from_guid(guid) for guid in pt_guids]
+        result = surface.discrete_mapping(discretisation, crv_guids=curve_guids, pt_guids=point_guids)
+        outer_boundary, inner_boundaries, polyline_features, point_features = result
+        trimesh = boundary_triangulation(*result, delaunay=delaunay)
+        decomposition = SkeletonDecomposition.from_mesh(trimesh)
+        coarsemesh = decomposition.decomposition_mesh(point_features)
+        gkey_vertex = {geometric_key(coarsemesh.vertex_coordinates(vertex)): vertex for vertex in coarsemesh.vertices()}
+        edge_curve = {}
+        for polyline in decomposition.polylines:
+            curve = compas_rhino.rs.AddInterpCrvOnSrfUV(srf_guid, [point[:2] for point in polyline])
+            u = gkey_vertex[geometric_key(polyline[0])]
+            v = gkey_vertex[geometric_key(polyline[-1])]
+            edge_curve[u, v] = [
+                compas_rhino.rs.EvaluateCurve(curve, compas_rhino.rs.CurveParameter(curve, t))
+                for t in linspace(0, 1, 100)]
+            compas_rhino.delete_object(curve)
+        coarsemesh.collect_strips()
+        coarsemesh.set_strips_density_target(target_edge_length)
+        coarsemesh.densification(edges_to_curves=edge_curve)
+        densemesh = coarsemesh.get_quad_mesh()
+        return cls.from_vertices_and_faces(*densemesh.to_vertices_and_faces())
 
     def collapse_small_edges(self, tol=1e-2):
         for key in list(self.edges()):
