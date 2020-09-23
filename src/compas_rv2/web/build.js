@@ -17,6 +17,8 @@ async function bundleElectronApp(options) {
   fs.renameSync(appPaths[0], electron_app_path)
   fs.rmdirSync(temp_path)
   console.log('moved to '+ electron_app_path)
+
+  if (process.platform === "darwin") return
   
   if (fs.existsSync(zip_path)) fs.unlinkSync(zip_path)
   zipFolder(electron_app_path, zip_path, err => {
