@@ -60,9 +60,9 @@ class PatternObject(MeshObject):
         layer = self.settings['layer']
         self.artist.layer = layer
         self.artist.clear_layer()
-        # self.clear()
-        # if not self.visible:
-        #     return
+        self.clear()
+        if not self.visible:
+            return
         self.artist.vertex_xyz = self.vertex_xyz
 
         # ======================================================================
@@ -91,9 +91,6 @@ class PatternObject(MeshObject):
         # Draw the vertices and add them to the vertex group.
         # ======================================================================
 
-        guids = list(self.guid_vertex)
-        compas_rhino.delete_objects(guids, purge=True)
-
         vertices = list(self.mesh.vertices())
         color = {vertex: self.settings['color.vertices'] for vertex in vertices}
         color_fixed = self.settings['color.vertices:is_fixed']
@@ -116,9 +113,6 @@ class PatternObject(MeshObject):
         # Draw the edges and add them to the edge group.
         # ======================================================================
 
-        guids = list(self.guid_edge)
-        compas_rhino.delete_objects(guids, purge=True)
-
         edges = list(self.mesh.edges())
         color = {edge: self.settings['color.edges'] for edge in edges}
 
@@ -136,9 +130,6 @@ class PatternObject(MeshObject):
         # -----
         # Draw the faces and add them to the face group.
         # ======================================================================
-
-        guids = list(self.guid_face)
-        compas_rhino.delete_objects(guids, purge=True)
 
         faces = list(self.mesh.faces())
         color = {face: self.settings['color.faces'] for face in faces}

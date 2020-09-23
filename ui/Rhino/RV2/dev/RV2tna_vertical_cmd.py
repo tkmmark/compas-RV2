@@ -80,6 +80,7 @@ def RunCommand(is_interactive):
     force.datastructure.attributes['scale'] = scale
     form.datastructure.data = formdata
     thrust.datastructure.data = formdata
+    # this is a hack
     thrust.name = 'thrust'
 
     form.datastructure.dual = force.datastructure

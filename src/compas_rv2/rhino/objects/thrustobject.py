@@ -135,9 +135,9 @@ class ThrustObject(MeshObject):
         layer = self.settings['layer']
         self.artist.layer = layer
         self.artist.clear_layer()
-        # self.clear()
-        # if not self.visible:
-        #     return
+        self.clear()
+        if not self.visible:
+            return
         self.artist.vertex_xyz = self.vertex_xyz
 
         # ======================================================================
@@ -173,10 +173,6 @@ class ThrustObject(MeshObject):
         # Free vertices and anchored vertices are drawn separately.
         # ======================================================================
 
-        guids = list(self.guid_free)
-        guids += list(self.guid_anchor)
-        compas_rhino.delete_objects(guids, purge=True)
-
         free = list(self.mesh.vertices_where({'is_anchor': False}))
         anchors = list(self.mesh.vertices_where({'is_anchor': True}))
         color_free = self.settings['color.vertices'] if self.settings['_is.valid'] else self.settings['color.invalid']
@@ -203,9 +199,6 @@ class ThrustObject(MeshObject):
         # Draw the edges and add them to the edge group.
         # ======================================================================
 
-        guids = list(self.guid_edge)
-        compas_rhino.delete_objects(guids, purge=True)
-
         edges = list(self.mesh.edges_where({'_is_edge': True}))
         color = {edge: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for edge in edges}
         guids = self.artist.draw_edges(edges, color)
@@ -223,9 +216,6 @@ class ThrustObject(MeshObject):
         # Draw the faces and add them to the face group.
         # ======================================================================
 
-        guids = list(self.guid_face)
-        compas_rhino.delete_objects(guids, purge=True)
-
         faces = list(self.mesh.faces_where({'_is_loaded': True}))
         color = {face: self.settings['color.faces'] if self.settings['_is.valid'] else self.settings['color.invalid'] for face in faces}
         guids = self.artist.draw_faces(faces, color)
@@ -242,11 +232,6 @@ class ThrustObject(MeshObject):
         # --------
         # Color overlays for various display modes.
         # ======================================================================
-
-        guids = list(self.guid_reaction)
-        guids += list(self.guid_residual)
-        guids += list(self.guid_pipe)
-        compas_rhino.delete_objects(guids, purge=True)
 
         if self.settings['_is.valid'] and self.settings['show.reactions']:
             tol = self.settings['tol.reactions']
