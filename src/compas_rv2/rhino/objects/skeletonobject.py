@@ -233,6 +233,11 @@ class SkeletonObject(BaseObject):
         if not self.visible:
             return
         self.artist.vertex_xyz = self.vertex_xyz
+        # self.artist.subd_vertex_xyz = self.subd_vertex_xyz
+
+        self.artist.draw_skeleton_vertices()
+        self.artist.draw_skeleton_edges()
+        self.artist.draw_subd()
 
         # conditional drawing based on settings
         # similar to mesh, network, diagram ...
