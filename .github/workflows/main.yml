@@ -30,6 +30,7 @@ jobs:
     
     - name: build
       run: |
+        cd compas_installer
         npm install
         npm run build
         ls dist
