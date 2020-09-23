@@ -236,3 +236,13 @@ class SkeletonObject(BaseObject):
 
         # conditional drawing based on settings
         # similar to mesh, network, diagram ...
+
+    def move(self):
+        pass
+
+    def modify(self):
+        pass
+
+    def select(self):
+        pass
+
