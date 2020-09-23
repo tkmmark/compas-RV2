@@ -105,19 +105,20 @@ class Pattern(MeshMixin, Mesh):
         trimesh = boundary_triangulation(*result, delaunay=delaunay)
         decomposition = SkeletonDecomposition.from_mesh(trimesh)
         coarsemesh = decomposition.decomposition_mesh(point_features)
-        gkey_vertex = {geometric_key(coarsemesh.vertex_coordinates(vertex)): vertex for vertex in coarsemesh.vertices()}
-        edge_curve = {}
-        for polyline in decomposition.polylines:
-            curve = compas_rhino.rs.AddInterpCrvOnSrfUV(surf_guid, [point[:2] for point in polyline])
-            u = gkey_vertex[geometric_key(polyline[0])]
-            v = gkey_vertex[geometric_key(polyline[-1])]
-            edge_curve[u, v] = [
-                compas_rhino.rs.EvaluateCurve(curve, compas_rhino.rs.CurveParameter(curve, t))
-                for t in linspace(0, 1, 100)]
-            compas_rhino.delete_object(curve)
+        # gkey_vertex = {geometric_key(coarsemesh.vertex_coordinates(vertex)): vertex for vertex in coarsemesh.vertices()}
+        # edge_curve = {}
+        # for polyline in decomposition.polylines:
+        #     curve = compas_rhino.rs.AddInterpCrvOnSrfUV(surf_guid, [point[:2] for point in polyline])
+        #     u = gkey_vertex[geometric_key(polyline[0])]
+        #     v = gkey_vertex[geometric_key(polyline[-1])]
+        #     edge_curve[u, v] = [
+        #         compas_rhino.rs.EvaluateCurve(curve, compas_rhino.rs.CurveParameter(curve, t))
+        #         for t in linspace(0, 1, 100)]
+        #     compas_rhino.delete_object(curve)
         coarsemesh.collect_strips()
         coarsemesh.set_strips_density_target(target_edge_length)
-        coarsemesh.densification(edges_to_curves=edge_curve)
+        # coarsemesh.densification(edges_to_curves=edge_curve)
+        coarsemesh.densification()
         densemesh = coarsemesh.get_quad_mesh()
         return cls.from_vertices_and_faces(*densemesh.to_vertices_and_faces())
 

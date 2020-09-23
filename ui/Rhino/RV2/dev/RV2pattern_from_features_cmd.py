@@ -46,7 +46,7 @@ def RunCommand(is_interactive):
     # Compute the feature discretisation length.
     box = compas_rhino.rs.BoundingBox([surf_guid])
     diagonal = compas_rhino.rs.Distance(box[0], box[6])
-    D = 0.01 * diagonal
+    D = 0.05 * diagonal
 
     # Get the target length for the final quad mesh.
     L = compas_rhino.rs.GetReal("Define the target edge length of the pattern.", 1.0)

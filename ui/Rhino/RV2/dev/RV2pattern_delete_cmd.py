@@ -2,8 +2,6 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas_rhino
-
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
 from compas_rv2.rhino import rv2_undo
@@ -33,29 +31,6 @@ def RunCommand(is_interactive):
         if pattern.datastructure.has_vertex(key):
             pattern.datastructure.delete_vertex(key)
     scene.update()
-
-
-
-    # options = ["Vertices", "Faces"]
-
-    # while True:
-    #     option = compas_rhino.rs.GetString("Element type", strings=options)
-
-    #     if not option:
-    #         break
-
-    #     if option == "Vertices":
-    #         keys = pattern.select_vertices()
-    #         for key in keys:
-    #             if pattern.datastructure.has_vertex(key):
-    #                 pattern.datastructure.delete_vertex(key)
-    #         scene.update()
-
-    #     elif option == "Faces":
-    #         raise NotImplementedError
-
-    #     else:
-    #         raise NotImplementedError
 
 
 # ==============================================================================
