@@ -8,12 +8,13 @@ from compas_rv2.datastructures import FormDiagram
 from compas_rv2.datastructures import ForceDiagram
 from compas_rv2.datastructures import ThrustDiagram
 
+from .skeletonartist import SkeletonArtist
 from .meshartist import MeshArtist
 from .formartist import FormArtist
 from .forceartist import ForceArtist
 from .thrustartist import ThrustArtist
 
-MeshArtist.register(Skeleton, MeshArtist)
+MeshArtist.register(Skeleton, SkeletonArtist)
 MeshArtist.register(Pattern, MeshArtist)
 MeshArtist.register(FormDiagram, FormArtist)
 MeshArtist.register(ForceDiagram, ForceArtist)

@@ -2,17 +2,17 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import Rhino
-from Rhino.Geometry import Point3d
+# import Rhino
+# from Rhino.Geometry import Point3d
 
 import compas_rhino
 from compas.geometry import Point
 from compas.geometry import Scale
 from compas.geometry import Translation
 from compas.geometry import Rotation
-from compas.geometry import subtract_vectors
-from compas.geometry import add_vectors
-from compas.geometry import scale_vector
+# from compas.geometry import subtract_vectors
+# from compas.geometry import add_vectors
+# from compas.geometry import scale_vector
 
 from compas_rhino.objects import BaseObject
 # from compas_rhino.objects.modify import mesh_update_attributes
