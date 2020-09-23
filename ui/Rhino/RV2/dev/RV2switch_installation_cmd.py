@@ -99,7 +99,9 @@ def RunCommand(is_interactive):
     selected = rs.ListBox(["Releases", "Dev(conda)"], "Select which source to install")
 
     if selected == "Releases":
-        location = rs.ListBox(register_json["Plugins"], "Select from which location to install")
+
+        plugins = [path for path in register_json["Plugins"] if os.path.exists(path)]
+        location = rs.ListBox(plugins, "Select from which location to install")
         if location:
             # TODO: make this work on mac
             python_path = os.path.join(location, "dev", "env", "python.exe")
