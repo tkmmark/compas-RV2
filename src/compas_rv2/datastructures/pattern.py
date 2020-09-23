@@ -105,10 +105,10 @@ class Pattern(MeshMixin, Mesh):
         gkey_vertex = {geometric_key(coarsemesh.vertex_coordinates(vertex)): vertex for vertex in coarsemesh.vertices()}
         edge_curve = {}
         for polyline in decomposition.polylines:
-            a = polyline[0]
-            b = polyline[-1]
-            u = gkey_vertex[geometric_key(a)]
-            v = gkey_vertex[geometric_key(b)]
+            a = geometric_key(polyline[0])
+            b = geometric_key(polyline[-1])
+            u = gkey_vertex[a]
+            v = gkey_vertex[b]
             points = [point[:2] for point in polyline]
             curve = AddInterpCrvOnSrfUV(surf_guid, points)
             edge_curve[u, v] = curve
