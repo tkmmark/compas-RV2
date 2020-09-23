@@ -24,7 +24,6 @@ class Scene(object):
         kwargs['scene'] = self
         node = MeshObject.build(item, **kwargs)
         guid = uuid4()
-        node.name = kwargs['name']
         self.nodes[guid] = node
         return node
 
@@ -42,8 +41,7 @@ class Scene(object):
         compas_rhino.rs.EnableRedraw(False)
         for guid in self.nodes:
             node = self.nodes[guid]
-            if node.visible:
-                node.draw()
+            node.draw()
         compas_rhino.rs.EnableRedraw(True)
         compas_rhino.rs.Redraw()
 
