@@ -1,6 +1,6 @@
-compas==0.16.2
+git+git://github.com/compas-dev/compas.git@f3ca59b6aff1c04eb123ba725e332e364ebebe15#egg=compas
+git+git://github.com/compas-dev/compas_triangle.git@1a86f1557baa436279422bce3e14f89c4d77057b#egg=compas_triangle
 compas_cloud==0.1.0
-git+git://github.com/BlockResearchGroup/compas_tna.git@e6eeae41597f4e9af4f40c72040df488b607eeea#egg=compas_tna
-git+git://github.com/BlockResearchGroup/compas_skeleton.git@e69936da4423d314684a153258d739eb862a17a0#egg=compas_skeleton
-git+git://github.com/BlockResearchGroup/compas_triangle.git@fb446165760c9a1aac28113b5eb1cb40e822127c#egg=compas_triangle
-git+git://github.com/BlockResearchGroup/compas_singular.git@5be1a6ae24b18f449dbe03efb21d7d51da95a58b#egg=compas_singular
+git+git://github.com/BlockResearchGroup/compas_tna.git@bc9b6350c8b2c9355df6a9919aceb32b70d1aafc#egg=compas_tna
+git+git://github.com/BlockResearchGroup/compas_skeleton.git@85527114f4eb757a5b8d9c11425ad2c1c84aee7c#egg=compas_skeleton
+git+git://github.com/BlockResearchGroup/compas_singular.git@943fd9979a1864a106884d46051a0dfab4387944#egg=compas_singular
