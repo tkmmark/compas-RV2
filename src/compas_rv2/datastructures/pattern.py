@@ -92,14 +92,11 @@ class Pattern(MeshMixin, Mesh):
                Available at: https://www.researchgate.net/publication/340096530_Topology_Finding_of_Patterns_for_Structural_Design.
 
         """
-        # from compas_rhino.geometry import RhinoPoint
         from compas_singular.rhino import RhinoSurface
-        # from compas_singular.rhino import RhinoCurve
 
+        AddInterpCrvOnSrfUV = compas_rhino.rs.AddInterpCrvOnSrfUV
+        compas_rhino.rs.EnableRedraw(False)
         surface = RhinoSurface.from_guid(surf_guid)
-        # curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
-        # points = [RhinoPoint.from_guid(guid) for guid in point_guids]
-
         result = surface.discrete_mapping(discretisation, crv_guids=curve_guids, pt_guids=point_guids)
         outer_boundary, inner_boundaries, polyline_features, point_features = result
         trimesh = boundary_triangulation(*result, delaunay=delaunay)
@@ -108,17 +105,20 @@ class Pattern(MeshMixin, Mesh):
         gkey_vertex = {geometric_key(coarsemesh.vertex_coordinates(vertex)): vertex for vertex in coarsemesh.vertices()}
         edge_curve = {}
         for polyline in decomposition.polylines:
-            curve = compas_rhino.rs.AddInterpCrvOnSrfUV(surf_guid, [point[:2] for point in polyline])
-            u = gkey_vertex[geometric_key(polyline[0])]
-            v = gkey_vertex[geometric_key(polyline[-1])]
-            edge_curve[u, v] = [
-                compas_rhino.rs.EvaluateCurve(curve, compas_rhino.rs.CurveParameter(curve, t))
-                for t in linspace(0, 1, 50)]
-            compas_rhino.delete_object(curve)
+            a = polyline[0]
+            b = polyline[-1]
+            u = gkey_vertex[geometric_key(a)]
+            v = gkey_vertex[geometric_key(b)]
+            points = [point[:2] for point in polyline]
+            curve = AddInterpCrvOnSrfUV(surf_guid, points)
+            edge_curve[u, v] = curve
         coarsemesh.collect_strips()
         coarsemesh.set_strips_density_target(target_edge_length)
         coarsemesh.densification(edges_to_curves=edge_curve)
+        compas_rhino.delete_objects(edge_curve.values(), purge=True)
         densemesh = coarsemesh.get_quad_mesh()
+        compas_rhino.rs.EnableRedraw(True)
+        compas_rhino.rs.Redraw()
         return cls.from_vertices_and_faces(*densemesh.to_vertices_and_faces())
 
     def collapse_small_edges(self, tol=1e-2):
