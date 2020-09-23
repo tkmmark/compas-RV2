@@ -17,15 +17,18 @@ jobs:
     runs-on: "windows-latest"
     steps:
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-      
-      - name: rv2-install
-        run: |
-          git clone https://github.com/BlockResearchGroup/compas_installer.git
-          cd compas_installer
-          npm run build
-          ls dist
+    - name: Check out compas_installer
+      uses: actions/checkout@master
+      with:
+        repository: BlockResearchGroup/compas_installer
+
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    
+    - name: build
+      run: |
+        npm run build
+        ls dist
       
