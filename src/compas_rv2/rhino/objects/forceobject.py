@@ -105,7 +105,7 @@ class ForceObject(MeshObject):
 
         # color analysis
 
-        if self.scene.settings['RV2']['show.forces']:
+        if self.scene and self.scene.settings['RV2']['show.forces']:
             lengths = [self.mesh.edge_length(*edge) for edge in edges]
             lmin = min(lengths)
             lmax = max(lengths)
@@ -128,7 +128,7 @@ class ForceObject(MeshObject):
         # Add labels for the angle deviations.
         # ======================================================================
 
-        if self.scene.settings['RV2']['show.angles']:
+        if self.scene and self.scene.settings['RV2']['show.angles']:
             tol = self.scene.settings['RV2']['tol.angles']
             edges = list(self.mesh.edges())
             angles = self.mesh.edges_attribute('_a', keys=edges)

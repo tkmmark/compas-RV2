@@ -110,7 +110,7 @@ class FormObject(MeshObject):
         color = {edge: self.settings['color.edges'] for edge in edges}
 
         # color analysis
-        if self.scene.settings['RV2']['show.forces']:
+        if self.scene and self.scene.settings['RV2']['show.forces']:
             if self.mesh.dual:
                 _edges = list(self.mesh.dual.edges())
                 lengths = [self.mesh.dual.edge_length(*edge) for edge in _edges]
@@ -136,7 +136,7 @@ class FormObject(MeshObject):
         # Add labels for the angle deviations.
         # ======================================================================
 
-        if self.scene.settings['RV2']['show.angles']:
+        if self.scene and self.scene.settings['RV2']['show.angles']:
             tol = self.scene.settings['RV2']['tol.angles']
             edges = list(self.mesh.edges_where({'_is_edge': True}))
             angles = self.mesh.edges_attribute('_a', keys=edges)
