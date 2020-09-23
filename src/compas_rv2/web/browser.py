@@ -8,8 +8,8 @@ HERE = os.path.dirname(os.path.realpath(__file__))
 def Browser():
     from zipfile import ZipFile
 
-    if compas.MONO: 
-        BIN = os.path.join(HERE, 'electron', 'frontpage.app','Contents','MacOS', 'frontpage')
+    if compas.MONO:
+        BIN = os.path.join(HERE, 'electron', 'frontpage.app', 'Contents', 'MacOS', 'frontpage')
 
         if not os.path.exists(BIN):
             print("Init page skipped. To enable it, go to src/compas_rv2/web, delete electron folder, then run: npm install && npm run build")
