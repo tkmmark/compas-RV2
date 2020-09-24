@@ -43,6 +43,7 @@ class SkeletonObject(BaseObject):
     """Scene object for Skeleton in Rhino."""
 
     SETTINGS = {
+        'layer': "RV2::Skeleton",
         'color.vertices': (255, 255, 255),
         'color.edges': (0, 0, 0),
         'color.faces': (0, 0, 0),
@@ -250,10 +251,16 @@ class SkeletonObject(BaseObject):
         self._guid_subd = {}
 
     def clear_skeleton(self):
-        pass
+        guid_skeleton_vertex = list(self.guid_skeleton_vertex.keys())
+        guid_skeleton_edge = list(self.guid_skeleton_edge.keys())
+        delete_objects(guid_skeleton_vertex + guid_skeleton_edge, purge=True)
+        self._guid_skeleton_vertex = {}
+        self._guid_skeleton_edge = {}
 
-    def clear_corse_mesh_vertices(self):
-        pass
+    def clear_mesh_vertices(self):
+        guid_mesh_vertex = list(self.guid_mesh_vertex.keys())
+        delete_objects(guid_mesh_vertex, purge=True)
+        self._guid_mesh_vertex = {}
 
     def clear_subd(self):
         guid_subd = list(self.guid_subd.keys())
@@ -263,6 +270,8 @@ class SkeletonObject(BaseObject):
     def draw(self):
         """Draw the object representing the mesh.
         """
+        layer = self.settings['layer']
+        self.artist.layer = layer
         self.clear()
         if not self.visible:
             return
@@ -276,6 +285,10 @@ class SkeletonObject(BaseObject):
         # similar to mesh, network, diagram ...
 
     def draw_skeleton(self):
+        layer = self.settings['layer']
+        self.artist.layer = layer
+        self.artist.skeleton = self.skeleton
+
         skeleton_vertices = list(self.skeleton.skeleton_vertices[0] + self.skeleton.skeleton_vertices[1])
         guids_vertices = self.artist.draw_skeleton_vertices(skeleton_vertices)
         self.guid_skeleton_vertex = zip(guids_vertices, skeleton_vertices)
@@ -284,10 +297,21 @@ class SkeletonObject(BaseObject):
         guids_edges = self.artist.draw_skeleton_edges(skeleton_edges)
         self.guid_skeleton_edge = zip(guids_edges, skeleton_edges)
 
-    def draw_coarse_mesh_vertices(self):
-        pass
+    def draw_mesh_vertices(self):
+        layer = self.settings['layer']
+        self.artist.layer = layer
+        self.artist.skeleton = self.skeleton
+
+        mesh_vertices_keys = list(self.skeleton.vertices())
+        skeleton_vertices = self.skeleton.skeleton_vertices[0] + self.skeleton.skeleton_vertices[1]
+        vertices = list(set(mesh_vertices_keys) - set(skeleton_vertices))
+        guids = self.artist.draw_mesh_vertices(vertices)
+
+        self.guid_mesh_vertex = zip(guids, vertices)
 
     def draw_subd(self):
+        layer = self.settings['layer']
+        self.artist.layer = layer
         self.artist.subd = self.skeleton.to_mesh()
         guids = list(self.artist.draw_subd())
         self.guid_subd = zip(guids, [None])
@@ -300,6 +324,16 @@ class SkeletonObject(BaseObject):
 
     def select(self):
         pass
+
+    # ==============================================================================
+    # editing
+    # ==============================================================================
+
+    def add_lines(self):
+        raise NotImplementedError
+
+    def remove_lines(self):
+        raise NotImplementedError
 
     def dynamic_draw_widths(self):
         """Dynamic draw leaf width, node width, leaf extend and update the mesh in rhino.
@@ -452,3 +486,146 @@ class SkeletonObject(BaseObject):
 
         self.draw_subd()
         return gp.CommandResult()
+
+    def move_mesh_vertex(self):
+        """ Move the position of a mesh vertex. """
+        guid = compas_rhino.rs.GetObject(
+            message="Select a vertex.",
+            preselect=True,
+            filter=compas_rhino.rs.filter.point | compas_rhino.rs.filter.textdot
+            )
+
+        if not guid:
+            return
+
+        guid_key = self.guid_mesh_vertex
+        guid_key.update(self.guid_skeleton_vertex)
+
+        key = guid_key[guid]
+        sp = self.skeleton.vertex_coordinates(key)
+        mesh_move_vertex(self.skeleton, key)
+        ep = self.skeleton.vertex_coordinates(key)
+
+        vec = Vector.from_start_end(sp, ep)
+        vec_prvs = self.skeleton.vertex_attribute(key, 'transform')
+        vec = add_vectors(vec_prvs, vec)
+        self.skeleton.vertex[key].update({'transform': list(vec)})
+
+    def move_skeleton_vertex(self):
+        """ Move the position of a skeleton vertex and update all its descencent vertices.
+
+        Examples
+        --------
+        >>> lines = [
+        >>> ([0.0, 0.0, 0.0], [0.0, 10.0, 0.0]),
+        >>> ([0.0, 0.0, 0.0], [-8.6, -5.0, 0.0]),
+        >>> ([0.0, 0.0, 0.0], [8.6, -5.0, 0.0])
+        >>> ]
+        >>> skeleton = Skeleton.from_skeleton_lines(lines)
+        >>> skeletonobjcet = SkeletonObject(skeleton)
+        >>> skeletonobjcet.move_skeleton_vertex()
+        >>> skeletonobjcet.draw()
+
+        """
+        guid = compas_rhino.rs.GetObject(
+            message="Select a vertex.",
+            preselect=True,
+            filter=compas_rhino.rs.filter.point | compas_rhino.rs.filter.textdot
+            )
+
+        if guid not in list(self.guid_skeleton_vertex.keys()):
+            print('Not a skeleton vertex! Please select again:')
+            return
+
+        else:
+            key = self.guid_skeleton_vertex[guid]
+            if not self.skeleton.skeleton_vertices[1]:
+                self._move_skeleton_centerpt(key)  # this is a dome with only one skeleton vertex
+            else:
+                if self.skeleton.vertex_attribute(key, 'type') == 'skeleton_leaf':
+                    self._move_skeleton_leaf(key)
+                else:
+                    self._move_skeleton_joint(key)
+
+    def _move_skeleton_joint(self, key):
+
+        joints_f_before = []
+        nbrs_f_before = []
+        joints_f_after = []
+        nbrs_f_after = []
+
+        nbrs = self.skeleton.vertex_attribute(key, 'neighbors')
+
+        for nbr in nbrs:
+            if self.skeleton.vertex_attribute(nbr, 'type') == 'skeleton_leaf':
+                nbrs_f_before.append(self.skeleton._get_leaf_vertex_frame(nbr))
+            else:
+                f_left = self.skeleton._get_joint_vertex_frame(nbr, key)[0]
+                f_right = self.skeleton._get_joint_vertex_frame(nbr, key)[1]
+                nbrs_f_before.append([f_left, f_right])
+
+            joints_f_before.append(self.skeleton._get_joint_vertex_frame(key, nbr)[0])
+
+        mesh_move_vertex(self.skeleton, key)
+
+        for nbr in nbrs:
+            if self.skeleton.vertex_attribute(nbr, 'type') == 'skeleton_leaf':
+                nbrs_f_after.append(self.skeleton._get_leaf_vertex_frame(nbr))
+            else:
+                f_left = self.skeleton._get_joint_vertex_frame(nbr, key)[0]
+                f_right = self.skeleton._get_joint_vertex_frame(nbr, key)[1]
+                nbrs_f_after.append([f_left, f_right])
+
+            joints_f_after.append(self.skeleton._get_joint_vertex_frame(key, nbr)[0])
+
+        for i, nbr in enumerate(nbrs):
+            if self.skeleton.vertex_attribute(nbr, 'type') == 'skeleton_leaf':
+                self.skeleton._mount_leaf_transformation(nbr, nbrs_f_before[i], nbrs_f_after[i])
+            else:
+                self.skeleton._mount_joint_transformation(
+                    nbr, key, nbrs_f_before[i][0], nbrs_f_after[i][0], 'left')
+                self.skeleton._mount_joint_transformation(
+                    nbr, key, nbrs_f_before[i][1], nbrs_f_after[i][1], 'right')
+
+            self.skeleton._mount_joint_transformation(
+                key, nbr, joints_f_before[i], joints_f_after[i], 'left')
+
+        self.skeleton.update_mesh_vertices_pos()
+
+    def _move_skeleton_leaf(self, key):
+        v = key
+        u = self.skeleton.vertex_attribute(v, 'neighbors')[0]
+
+        leaf_f_before = self.skeleton._get_leaf_vertex_frame(v)
+        joints_f_before = self.skeleton._get_joint_vertex_frame(u, v)
+
+        mesh_move_vertex(self.skeleton, v)
+
+        leaf_f_after = self.skeleton._get_leaf_vertex_frame(v)
+        joints_f_after = self.skeleton._get_joint_vertex_frame(u, v)
+
+        self.skeleton._mount_leaf_transformation(v, leaf_f_before, leaf_f_after)
+        self.skeleton._mount_joint_transformation(u, v, joints_f_before[0], joints_f_after[0], 'left')
+        self.skeleton._mount_joint_transformation(u, v, joints_f_before[1], joints_f_after[1], 'right')
+
+        self.skeleton.update_mesh_vertices_pos()
+
+    def _move_skeleton_centerpt(self, key):
+        f_before = self.skeleton._get_centerpt_frame(key)
+
+        mesh_move_vertex(self.skeleton, key)
+        f_after = self.skeleton._get_centerpt_frame(key)
+
+        nbrs = self.skeleton.vertex_neighbors(key)
+        for nbr in nbrs:
+            self.skeleton._mount_skeleton_vertex_transformation(nbr, f_before, f_after)
+
+        self.skeleton.update_mesh_vertices_pos()
+
+# ============================================================================
+# Main
+# ============================================================================
+
+
+if __name__ == '__main__':
+    pass

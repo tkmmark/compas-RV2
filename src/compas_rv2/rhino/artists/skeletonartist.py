@@ -110,7 +110,7 @@ class SkeletonArtist(BaseArtist):
                 'pos': vertex_xyz[vertex],
                 'name': "{}.vertex.{}".format(self.skeleton.name, vertex),
                 'color': vertex_color[vertex]})
-        return compas_rhino.draw_points(points, layer=self.layer, clear=False, redraw=False)
+        return compas_rhino.draw_points(points, layer=self.layer, clear=False, redraw=True)
 
     def draw_skeleton_edges(self, edges=None, color=None):
         """Draw the skeleton edges."""
@@ -124,7 +124,7 @@ class SkeletonArtist(BaseArtist):
                 'end': vertex_xyz[edge[1]],
                 'color': edge_color[edge],
                 'name': "{}.edge.{}-{}".format(self.skeleton.name, *edge)})
-        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
+        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=True)
 
     # ==========================================================================
     # The coarse mesh
@@ -135,15 +135,15 @@ class SkeletonArtist(BaseArtist):
         mesh_vertices = set(self.skeleton.vertices())
         skeleton_vertices = set(self.skeleton.skeleton_vertices[0] + self.skeleton.skeleton_vertices[1])
         vertex_xyz = self.vertex_xyz
-        vertex_color = colordict(color, vertices, default=self.color_mesh_vertices)
         vertices = vertices or list(mesh_vertices - skeleton_vertices)
+        vertex_color = colordict(color, vertices, default=self.color_mesh_vertices)
         points = []
         for vertex in vertices:
             points.append({
                 'pos': vertex_xyz[vertex],
                 'name': "{}.vertex.{}".format(self.skeleton.name, vertex),
                 'color': vertex_color[vertex]})
-        return compas_rhino.draw_points(points, layer=self.layer, clear=False, redraw=False)
+        return compas_rhino.draw_points(points, layer=self.layer, clear=False, redraw=True)
 
     def draw_mesh_edges(self, edges=None, color=None):
         """Draw the edges of the coarse mesh."""
