@@ -175,12 +175,10 @@ def RunCommand(is_interactive):
     result = skeletonobject.dynamic_draw_widths()
 
     if not result:
+        layer = skeletonobject.settings['layer']
         skeletonobject.clear()
         compas_rhino.rs.ShowObjects(guids)
-        compas_rhino.delete_layers([
-            skeletonobject.settings['layer']
-            ])
-
+        compas_rhino.delete_layers([layer])
         return
 
     # modify skeleton
@@ -203,10 +201,10 @@ def RunCommand(is_interactive):
     pattern = Pattern.from_vertices_and_faces(xyz, faces)
 
     # clear skeleton
+    layer = skeletonobject.settings['layer']
     skeletonobject.clear()
-    compas_rhino.delete_layers([
-        skeletonobject.settings['layer']
-        ])
+    compas_rhino.rs.ShowObjects(guids)
+    compas_rhino.delete_layers([layer])
 
     scene.clear()
     scene.add(pattern, name='pattern')

@@ -401,7 +401,9 @@ class SkeletonObject(BaseObject):
         gp.SetBasePoint(sp, False)
         gp.ConstrainDistanceFromBasePoint(0.01)
         gp.Get()
+
         print(gp.CommandResult())
+
         if gp.CommandResult() != Rhino.Commands.Result.Success:
             return gp.CommandResult()
 
