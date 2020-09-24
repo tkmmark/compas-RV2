@@ -196,7 +196,7 @@
     </menu>
   </menus>
   <tool_bar_groups>
-    <tool_bar_group guid="9f359819-0a84-447d-af3e-116087df5941" dock_bar_guid32="00000000-0000-0000-0000-000000000000" dock_bar_guid64="04995d52-811e-4efb-b7da-d9118e373f35" active_tool_bar_group="78bcb8ed-e27a-4d43-ac47-9046921e9aa4" single_file="False" hide_single_tab="False" point_floating="1124,238">
+    <tool_bar_group guid="9f359819-0a84-447d-af3e-116087df5941" dock_bar_guid32="00000000-0000-0000-0000-000000000000" dock_bar_guid64="04995d52-811e-4efb-b7da-d9118e373f35" active_tool_bar_group="78bcb8ed-e27a-4d43-ac47-9046921e9aa4" single_file="False" hide_single_tab="False" point_floating="834,203">
       <text>
         <locale_1033>RV2</locale_1033>
       </text>
@@ -206,7 +206,7 @@
         </text>
         <tool_bar_id>94d6aea8-f2be-46f3-8ee7-bbd00aabba8e</tool_bar_id>
       </tool_bar_group_item>
-      <dock_bar_info dpi_scale="100" dock_bar="False" docking="True" horz="False" visible="True" floating="True" mru_float_style="8192" bar_id="59466" mru_width="868" point_pos="-2,-2" float_point="1124,238" rect_mru_dock_pos="0,0,35,970" dock_location_u="59420" dock_location="left" float_size="505,60" />
+      <dock_bar_info dpi_scale="100" dock_bar="False" docking="True" horz="False" visible="True" floating="True" mru_float_style="8192" bar_id="59466" mru_width="868" point_pos="-2,-2" float_point="834,203" rect_mru_dock_pos="0,0,35,970" dock_location_u="59420" dock_location="left" float_size="505,60" />
     </tool_bar_group>
   </tool_bar_groups>
   <tool_bars>
