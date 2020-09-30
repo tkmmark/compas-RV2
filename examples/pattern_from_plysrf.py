@@ -8,7 +8,7 @@ from compas_rhino.geometry import RhinoMesh
 from compas.datastructures import mesh_unify_cycles
 from copy import deepcopy
 from compas.utilities import pairwise
-
+import Rhino
 
 def mesh_split_edge(mesh, u, v, n=2):
 
@@ -95,10 +95,30 @@ def edge_strip(mesh, uv):
     return edges
 
 
+def edge_strips(mesh):
+    edges = list(mesh.edges())
+
+    strips = {}
+    index = -1
+    while len(edges) > 0:
+        index += 1
+        u0, v0 = edges.pop()
+        strip = edge_strip(mesh, (u0, v0))
+        strips.update({index: strip})
+
+        for u, v in strip:
+            if (u, v) in edges:
+                edges.remove((u, v))
+            elif (v, u) in edges:
+                edges.remove((v, u))
+
+    return(strips)
+
+
 def mesh_split_edges(mesh, edges, n):
     subd = mesh_fast_copy(mesh)
     for u, v in edges:
-        mesh_split_edge(subd, u, v, n=10)
+        mesh_split_edge(subd, u, v, n)
 
     return subd
 
@@ -126,23 +146,54 @@ def mesh_sbudivide_strip(mesh, uv, n):
 
     return subd
 
+guid = compas_rhino.select_surface()
+rhinosrf = RhinoSurface.from_guid(guid)
+mesh = rhinosrf.brep_to_compas()
+compas_rhino.rs.HideObject(guid)
 
-# guids = compas_rhino.select_surfaces()
-# density = 2, 2
-# meshes = [RhinoSurface.from_guid(guid).uv_to_compas(density=density) for guid in guids]
+# artist = MeshArtist(mesh)
+# artist.draw_faces(join_faces=True)
+# artist.draw_vertexlabels()
+# mesh.to_json('mesh_polysrf_3.json', pretty=True)
 
-# mesh = meshes_join_and_weld(meshes)
-# mesh_unify_cycles(mesh)
-# mesh.to_json('mesh_polysrf.json', pretty=True)
+# mesh = Mesh.from_json('mesh_polysrf_3.json')
+artist = MeshArtist(mesh)
+guids = artist.draw_edges()
+guid_edge = {guid: edge for guid, edge in zip(guids, list(mesh.edges()))}
+artist.redraw()
+
+# # divide all edges into target length, draw a temp view
+# target_length = compas_rhino.rs.GetReal('target edge length?')
+# strips = edge_strips(mesh)
+# for i, edges in strips.items():
+#     edge0 = edges.pop()
+#     n = int(round(mesh.edge_length(edge0[0], edge0[1]) / target_length))
+#     mesh_temp = mesh_sbudivide_strip(mesh, edge0, n)
+
+# compas_rhino.delete_objects(guids, purge=True)
+# artist_temp = MeshArtist(mesh_temp)
+# guids_temp = artist_temp.draw_edges()
+# guid_edge_temp = {guid: edge for guid, edge in zip(guids_temp, list(mesh_temp.edges()))}
+# artist_temp.redraw()
+
+# customize the subdivision for choosen strip
+while True:
+
+    guid = compas_rhino.select_lines('select the edge to be redivided')
+    if not guid:
+        break
+
+    edge = guid_edge[guid[0]]
+    n = compas_rhino.rs.GetInteger('divide into?')
+    mesh = mesh_sbudivide_strip(mesh, edge, n)
+
+    compas_rhino.delete_objects(guids, purge=True)
+    artist = MeshArtist(mesh)
+    guids = artist.draw_edges()
+    guid_edge = {guid: edge for guid, edge in zip(guids, list(mesh.edges()))}
+    artist.redraw()
 
 
-mesh = Mesh.from_json('mesh_polysrf.json')
-
-uv = (1, 9)
-n = 5
-subd = mesh_sbudivide_strip(mesh, uv, n)
-# subd.to_json('mesh_polysrf_split_2.json', pretty=True)
-
-artist = MeshArtist(subd)
-artist.draw_faces(join_faces=True)
-artist.draw_vertexlabels()
+# artist.draw_vertexlabels()
+# artist.draw_faces(join_faces=True)
+# artist.draw_vertexlabels()
