@@ -8,6 +8,7 @@ from .patternobject import PatternObject  # noqa: F401
 from .formobject import FormObject  # noqa: F401
 from .forceobject import ForceObject  # noqa: F401
 from .thrustobject import ThrustObject  # noqa: F401
+from .subdobject import SubdObject  # noqa: F401
 
 
 from compas_rv2.datastructures import Skeleton
