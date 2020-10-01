@@ -24,8 +24,8 @@ def RunCommand(is_interactive):
     if not guid:
         return
 
-    u = PatternObject.settings['from_surface.density.U']
-    v = PatternObject.settings['from_surface.density.V']
+    u = PatternObject.SETTINGS['from_surface.density.U']
+    v = PatternObject.SETTINGS['from_surface.density.V']
 
     options = ['U', 'V']
     while True:

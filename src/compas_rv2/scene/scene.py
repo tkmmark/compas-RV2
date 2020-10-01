@@ -2,8 +2,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from uuid import uuid4
+
 import compas_rhino
-import uuid
 
 from compas_rv2.rhino import SettingsForm
 from compas_rv2.rhino import MeshObject
@@ -20,17 +21,17 @@ class Scene(object):
         self.settings = settings
 
     def add(self, item, **kwargs):
+        kwargs['scene'] = self
         node = MeshObject.build(item, **kwargs)
-        guid = uuid.uuid4()
-        node.id = guid
+        guid = uuid4()
         self.nodes[guid] = node
         return node
 
     def get(self, name):
         selected = []
-        for _id in self.nodes:
-            if name == self.nodes[_id].name:
-                selected.append(self.nodes[_id])
+        for guid in self.nodes:
+            if name == self.nodes[guid].name:
+                selected.append(self.nodes[guid])
         if len(selected) == 0:
             return [None]
         else:
@@ -38,19 +39,18 @@ class Scene(object):
 
     def update(self):
         compas_rhino.rs.EnableRedraw(False)
-        for _id in self.nodes:
-            node = self.nodes[_id]
-            if node.visible:
-                node.draw()
+        for guid in self.nodes:
+            node = self.nodes[guid]
+            node.draw()
         compas_rhino.rs.EnableRedraw(True)
         compas_rhino.rs.Redraw()
 
     def clear(self):
         compas_rhino.rs.EnableRedraw(False)
-        for _id in list(self.nodes.keys()):
-            node = self.nodes[_id]
+        for guid in list(self.nodes):
+            node = self.nodes[guid]
             node.clear()
-            del self.nodes[_id]
+            del self.nodes[guid]
         self.nodes = {}
         compas_rhino.rs.EnableRedraw(True)
         compas_rhino.rs.Redraw()

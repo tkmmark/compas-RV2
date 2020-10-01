@@ -57,12 +57,3 @@ class HorizontalConduit(BaseConduit):
         for start, end in self.lines:
             lines.Add(Line(Point3d(start[0], start[1], 0), Point3d(end[0], end[1], 0)))
         e.Display.DrawLines(lines, self._default_color, self._default_thickness)
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == "__main__":
-
-    pass

@@ -77,9 +77,16 @@ def RunCommand(is_interactive):
 
     formdata, scale = result
 
+    # store in advance such that it can be reset
+    thrust_name = thrust.name
+
     force.datastructure.attributes['scale'] = scale
     form.datastructure.data = formdata
     thrust.datastructure.data = formdata
+
+    # the name of the thrust diagram is stored in the attribute dict of the mesh
+    # therefore the name must be reset explicitly
+    thrust.name = thrust_name
 
     form.datastructure.dual = force.datastructure
     force.datastructure.primal = form.datastructure

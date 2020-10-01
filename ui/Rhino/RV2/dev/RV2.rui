@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RhinoUI major_ver="3" minor_ver="0" guid="10415c90-cc72-422e-981f-b54dbdc3984d" localize="False" default_language_id="1033" dpi_scale="150">
+
   <extend_rhino_menus>
     <menu guid="35cc8159-3bc8-4670-b82e-398755cd0b3b">
       <text>
@@ -196,7 +196,7 @@
     </menu>
   </menus>
   <tool_bar_groups>
-    <tool_bar_group guid="9f359819-0a84-447d-af3e-116087df5941" dock_bar_guid32="00000000-0000-0000-0000-000000000000" dock_bar_guid64="75c10a99-3757-4f68-899c-42e40f81697e" active_tool_bar_group="78bcb8ed-e27a-4d43-ac47-9046921e9aa4" single_file="False" hide_single_tab="False" point_floating="-2147483648,0">
+
       <text>
         <locale_1033>RV2</locale_1033>
       </text>
@@ -206,7 +206,7 @@
         </text>
         <tool_bar_id>94d6aea8-f2be-46f3-8ee7-bbd00aabba8e</tool_bar_id>
       </tool_bar_group_item>
-      <dock_bar_info dpi_scale="150" dock_bar="False" docking="True" horz="False" visible="False" floating="False" mru_float_style="4096" bar_id="59474" mru_width="32767" point_pos="-1,-1" float_point="-2147483648,0" rect_mru_dock_pos="0,0,44,126" dock_location_u="59420" dock_location="left" float_size="72,52" />
+
     </tool_bar_group>
   </tool_bar_groups>
   <tool_bars>
@@ -1267,7 +1267,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==</bitmap>
       <bitmap_item guid="cec4982b-b375-4c9b-80d9-375aa0b6454e" index="36" />
       <bitmap_item guid="e47e844c-1450-4a03-a8b4-ed1c36ea3686" index="37" />
       <bitmap>iVBORw0KGgoAAAANSUhEUgAABMAAAAAgCAYAAAD0QQQHAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAALDQAACw0B7QfALAAAiypJREFUeF7tnQd4VEXXx1dqEiAJnRB6B1FQFGmCioAFBCxYwS4IYvfl
+
 taDYUAFF6UiX3nsvoUmvIiBFekelBwhJ5ju/2TvL3c3dZJNswO/V8zz/ZHbmlHvnTj13Zq5LKRUw
 hG4QZBJkEWT1AXGk3eAk+y/+xb/4F//i7wnabX9w4g8EvnrsSA0v8OVPCb7yvkgvf0rwlfeFk8z1
 hO/12eHEHwh89djhxP9Phm/+2OHEHwh89djhxG+HL7+AsR3ILGCsZx8Dmt+kGT4veScb/+IqfPPL

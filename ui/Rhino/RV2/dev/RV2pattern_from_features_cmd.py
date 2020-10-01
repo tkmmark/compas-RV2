@@ -3,12 +3,17 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+from compas_rhino.geometry import RhinoPoint
+
+from compas_singular.rhino import automated_smoothing_surface_constraints
+from compas_singular.rhino import automated_smoothing_constraints
+from compas_singular.rhino import constrained_smoothing
+from compas_singular.rhino import RhinoSurface
+from compas_singular.rhino import RhinoCurve
+
 from compas_rv2.datastructures import Pattern
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino import get_proxy
-
-from compas_singular.datastructures.mesh.constraints import automated_smoothing_surface_constraints, automated_smoothing_constraints
-from compas_singular.datastructures.mesh.relaxation import constrained_smoothing
 from compas_rv2.rhino import rv2_undo
 
 
@@ -17,7 +22,6 @@ __commandname__ = "RV2pattern_from_features"
 
 @rv2_undo
 def RunCommand(is_interactive):
-
     scene = get_scene()
     if not scene:
         return
@@ -26,21 +30,29 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    srf_guid = compas_rhino.select_surface("Select a surface.")
-    if not srf_guid:
+    delaunay = proxy.function('compas.geometry.delaunay_from_points_numpy')
+
+    # Get input data.
+    surf_guid = compas_rhino.select_surface("Select a surface to decompose.")
+    if not surf_guid:
         return
+    point_guids = compas_rhino.select_points("Select points to include in the decomposition.")
+    curve_guids = []
 
-    crv_guids = []
-    pt_guids = compas_rhino.select_points("Step 1/3 (Optional) - Select points for pole singularities.") or []
+    surface = RhinoSurface.from_guid(surf_guid)
+    curves = [RhinoCurve.from_guid(guid) for guid in curve_guids]
+    points = [RhinoPoint.from_guid(guid) for guid in point_guids]
 
-    box = compas_rhino.rs.BoundingBox([srf_guid])
-    input_subdivision_spacing = 0.01 * compas_rhino.rs.Distance(box[0], box[6])
+    # Compute the feature discretisation length.
+    box = compas_rhino.rs.BoundingBox([surf_guid])
+    diagonal = compas_rhino.rs.Distance(box[0], box[6])
+    D = 0.05 * diagonal
 
-    mesh_edge_length = compas_rhino.rs.GetReal("Step 2/3 - Enter target length for edges.", 1.0)
+    # Get the target length for the final quad mesh.
+    L = compas_rhino.rs.GetReal("Define the target edge length of the pattern.", 1.0)
 
-    delaunay = proxy.function("compas.geometry.triangulation.triangulation_numpy.delaunay_from_points_numpy")
-
-    pattern = Pattern.from_surface_and_features(input_subdivision_spacing, mesh_edge_length, srf_guid, crv_guids, pt_guids, delaunay)
+    # Generate the pattern
+    pattern = Pattern.from_surface_and_features(D, L, surf_guid, curve_guids, point_guids, delaunay=delaunay)
 
     scene.clear()
     scene.add(pattern, name='pattern')
@@ -48,30 +60,23 @@ def RunCommand(is_interactive):
 
     kmax = 10
 
+    # Constrain mesh components to the feature geometry.
+    constraints = automated_smoothing_surface_constraints(pattern, surface)
+    constraints.update(
+        automated_smoothing_constraints(pattern, rhinopoints=points, rhinocurves=curves)
+    )
+
     while True:
-        option = compas_rhino.rs.GetString("Step 3/3 (Optional) - Press Enter to run constrained Laplacian smoothing or ESC to skip.", strings=['Iterations'])
-
-        if option is None:
-            break
-
+        option = compas_rhino.rs.GetString("Smoothen the pattern?", "No", ["Yes", "No"])
         if not option:
-            constraints = automated_smoothing_surface_constraints(pattern, srf_guid)
-            constraints.update(automated_smoothing_constraints(pattern, points=pt_guids, curves=crv_guids))
-            constrained_smoothing(pattern, kmax=kmax, damping=0.5, constraints=constraints, algorithm='area')
-            objs = set(constraints.values())
-            inputs = [srf_guid] + crv_guids + pt_guids
-            for obj in objs:
-                if obj not in inputs:
-                    compas_rhino.rs.DeleteObject(obj)
-            compas_rhino.rs.HideObjects(inputs)
+            break
+        if option != "Yes":
             break
 
-        if option == 'Iterations':
-            new_kmax = compas_rhino.rs.GetInteger("Number of iterations:", kmax)
-            if new_kmax or new_kmax is not None:
-                kmax = new_kmax
-
-    scene.update()
+        constrained_smoothing(
+            pattern, kmax=kmax, damping=0.5, constraints=constraints, algorithm="area"
+        )
+        scene.update()
 
     print('Pattern object successfully created. Input object has been hidden.')
 

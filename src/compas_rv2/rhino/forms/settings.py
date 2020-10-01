@@ -131,16 +131,16 @@ class SettingsForm(forms.Dialog[bool]):
                 object_type = [object_type for object_type in scene.registered_object_types if object_type.__name__ == object_type_name]
                 if len(object_type) > 0:
                     object_type = object_type[0]
-                    if hasattr(object_type, 'settings'):
-                        if isinstance(object_type.settings, dict):  # avoid property objects
-                            all_settings[object_type.__name__] = object_type.settings
+                    if hasattr(object_type, 'SETTINGS'):
+                        if isinstance(object_type.SETTINGS, dict):  # avoid property objects
+                            all_settings[object_type.__name__] = object_type.SETTINGS
                 else:
                     raise TypeError("%s is not registered in the scene" % object_type_name)
-        else:
-            for object_type in scene.registered_object_types:
-                if hasattr(object_type, 'settings'):
-                    if isinstance(object_type.settings, dict):  # avoid property objects
-                        all_settings[object_type.__name__] = object_type.settings
+        # else:
+        #     for object_type in scene.registered_object_types:
+        #         if hasattr(object_type, 'settings'):
+        #             if isinstance(object_type.settings, dict):  # avoid property objects
+        #                 all_settings[object_type.__name__] = object_type.settings
         # overwite with object setting if added as node
         for key in scene.nodes:
             node = scene.nodes[key]

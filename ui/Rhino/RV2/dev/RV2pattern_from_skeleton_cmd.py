@@ -20,13 +20,13 @@ def skeleton_move_skeleton_vertex(skeletonobject):
 
 
 def skeleton_move_mesh_vertex(skeletonobject):
-    skeletonobject.draw_coarse_mesh_vertices()
+    skeletonobject.draw_mesh_vertices()
     skeletonobject.move_mesh_vertex()
-    skeletonobject.clear_coarse_mesh_vertices()
+    skeletonobject.clear_mesh_vertices()
 
 
 def skeleton_dynamic_draw_nodewidth(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices[0]:
+    if skeletonobject.skeleton.skeleton_vertices[0]:
         skeletonobject.dynamic_draw_width('node_width')
     else:
         print("This skeleton doesn't have node vertices!")
@@ -34,7 +34,7 @@ def skeleton_dynamic_draw_nodewidth(skeletonobject):
 
 
 def skeleton_dynamic_draw_leafwidth(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices[1]:
+    if skeletonobject.skeleton.skeleton_vertices[1]:
         skeletonobject.dynamic_draw_width('leaf_width')
     else:
         print("This skeleton doesn't have leaf vertices!")
@@ -42,7 +42,7 @@ def skeleton_dynamic_draw_leafwidth(skeletonobject):
 
 
 def skeleton_dynamic_draw_leafextend(skeletonobject):
-    if skeletonobject.datastructure.skeleton_vertices[1]:
+    if skeletonobject.skeleton.skeleton_vertices[1]:
         skeletonobject.dynamic_draw_width('leaf_extend')
     else:
         print("This skeleton doesn't have leaf vertices!")
@@ -50,7 +50,7 @@ def skeleton_dynamic_draw_leafextend(skeletonobject):
 
 
 def skeleton_add_lines(skeletonobject):
-    if skeletonobject.datastructure.skeleton_branches:
+    if skeletonobject.skeleton.skeleton_branches:
         skeletonobject.add_lines()
     else:
         print("cannot add lines to a dome skeleton!")
@@ -58,7 +58,7 @@ def skeleton_add_lines(skeletonobject):
 
 
 def skeleton_remove_lines(skeletonobject):
-    if skeletonobject.datastructure.skeleton_branches:
+    if skeletonobject.skeleton.skeleton_branches:
         skeletonobject.remove_lines()
     else:
         print("no lines to be removed!")
@@ -66,11 +66,11 @@ def skeleton_remove_lines(skeletonobject):
 
 
 def skeleton_subdivide(skeletonobject):
-    skeletonobject.datastructure.subdivide()
+    skeletonobject.skeleton.subdivide()
 
 
 def skeleton_merge(skeletonobject):
-    skeletonobject.datastructure.merge()
+    skeletonobject.skeleton.merge()
 
 
 config = {
@@ -175,14 +175,10 @@ def RunCommand(is_interactive):
     result = skeletonobject.dynamic_draw_widths()
 
     if not result:
+        layer = skeletonobject.settings['layer']
         skeletonobject.clear()
         compas_rhino.rs.ShowObjects(guids)
-        compas_rhino.delete_layers([
-            skeletonobject.settings['layer'],
-            skeletonobject.settings['skeleton.layer'],
-            skeletonobject.settings['mesh.layer']
-            ])
-
+        compas_rhino.delete_layers([layer])
         return
 
     # modify skeleton
@@ -199,18 +195,16 @@ def RunCommand(is_interactive):
         skeletonobject.draw()
 
     # make pattern
-    mesh = skeletonobject.datastructure.to_mesh()
+    mesh = skeletonobject.skeleton.to_mesh()
     xyz = mesh.vertices_attributes('xyz')
     faces = [mesh.face_vertices(fkey) for fkey in mesh.faces()]
     pattern = Pattern.from_vertices_and_faces(xyz, faces)
 
     # clear skeleton
+    layer = skeletonobject.settings['layer']
     skeletonobject.clear()
-    compas_rhino.delete_layers([
-        skeletonobject.settings['layer'],
-        skeletonobject.settings['skeleton.layer'],
-        skeletonobject.settings['mesh.layer']
-        ])
+    compas_rhino.rs.ShowObjects(guids)
+    compas_rhino.delete_layers([layer])
 
     scene.clear()
     scene.add(pattern, name='pattern')

@@ -2,11 +2,15 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
 
-import compas_rhino
-from compas_rv2.rhino.objects.meshobject import MeshObject
-from compas_rv2.rhino import FormArtist
-from compas_rv2.rhino import delete_objects
 from compas.utilities import i_to_rgb
+from compas.geometry import Point
+from compas.geometry import Scale
+from compas.geometry import Translation
+from compas.geometry import Rotation
+
+import compas_rhino
+
+from .meshobject import MeshObject
 
 
 __all__ = ["FormObject"]
@@ -14,42 +18,9 @@ __all__ = ["FormObject"]
 
 class FormObject(MeshObject):
     """Scene object for RV2 form diagrams.
-
-    Parameters
-    ----------
-    diagram : :class:`compas_rv2.datastructures.FormDiagram`
-        The form diagram data structure.
-
-    Attributes
-    ----------
-    artist : :class:`compas_rv2.rhino.FormArtist`
-        The specialised form diagram artist.
-
-    Notes
-    -----
-    Form diagrams have editable vertex attributes that can be modified
-    by the user through the Rhino interface:
-
-    * `is_anchor`: flag for marking a vertex as anchored,
-    * `is_fixed`: flag for marking a vertex as fixed,
-    * `x`: the X coordinate, and
-    * `y`: the Y coordinate.
-
-    Examples
-    --------
-    >>> form = FormDiagram.from_pattern(pattern)
-    >>> scene = Scene()
-    >>> scene.settings = {... this should be stuff related to the scene, not to the settings of individual nodes ...}
-    >>> node = scene.add(force, name='form', settings=settings)
-    >>> scene.update()
-    >>> node.settings['show.vertices'] = True
-    >>> node.settings['color.vertices'] = {key: (255, 0, 0) for key in node.datastructure.vertices_wehere({'is_fixed': True})}
-    >>> scene.update()
     """
 
-    __module__ = 'compas_rv2.rhino'
-
-    settings = {
+    SETTINGS = {
         'layer': "RV2::FormDiagram",
         'show.vertices': True,
         'show.edges': True,
@@ -59,17 +30,44 @@ class FormObject(MeshObject):
         'color.edges': [0, 127, 0],
     }
 
-    def __init__(self, diagram, **kwargs):
-        super(FormObject, self).__init__(diagram, **kwargs)
-        self.artist = FormArtist(self.datastructure)
+    @property
+    def vertex_xyz(self):
+        """dict : The view coordinates of the mesh object."""
+        origin = Point(0, 0, 0)
+        if self.anchor is not None:
+            xyz = self.mesh.vertex_attributes(self.anchor, 'xyz')
+            point = Point(* xyz)
+            T1 = Translation.from_vector(origin - point)
+            S = Scale.from_factors([self.scale] * 3)
+            R = Rotation.from_euler_angles(self.rotation)
+            T2 = Translation.from_vector(self.location)
+            X = T2 * R * S * T1
+        else:
+            S = Scale.from_factors([self.scale] * 3)
+            R = Rotation.from_euler_angles(self.rotation)
+            T = Translation.from_vector(self.location)
+            X = T * R * S
+        mesh = self.mesh.transformed(X)
+        vertex_xyz = {vertex: mesh.vertex_attributes(vertex, 'xy') + [0.0] for vertex in mesh.vertices()}
+        return vertex_xyz
 
     def draw(self):
-        """Draw the form diagram in the Rhino scene using the current settings."""
-
+        """Draw the objects representing the force diagram.
+        """
         layer = self.settings['layer']
-
         self.artist.layer = layer
         self.artist.clear_layer()
+        self.clear()
+        if not self.visible:
+            return
+        self.artist.vertex_xyz = self.vertex_xyz
+
+        # ======================================================================
+        # Groups
+        # ------
+        # Create groups for vertices and edges.
+        # These groups will be turned on/off based on the visibility settings of the diagram
+        # ======================================================================
 
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
@@ -80,22 +78,21 @@ class FormObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_edges):
             compas_rhino.rs.AddGroup(group_edges)
 
-        # vertices
+        # ======================================================================
+        # Vertices
+        # --------
+        # Draw the vertices and add them to the vertex group.
+        # ======================================================================
 
-        guids_vertices = list(self.guid_vertex.keys())
-        delete_objects(guids_vertices, purge=True)
-
-        keys = list(self.datastructure.vertices())
-
-        color = {key: self.settings['color.vertices'] for key in keys}
+        vertices = list(self.mesh.vertices())
+        color = {vertex: self.settings['color.vertices'] for vertex in vertices}
         color_fixed = self.settings['color.vertices:is_fixed']
         color_anchor = self.settings['color.vertices:is_anchor']
-        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True}) if key in keys})
-        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True}) if key in keys})
+        color.update({vertex: color_fixed for vertex in self.mesh.vertices_where({'is_fixed': True}) if vertex in vertices})
+        color.update({vertex: color_anchor for vertex in self.mesh.vertices_where({'is_anchor': True}) if vertex in vertices})
 
-        guids = self.artist.draw_vertices(keys, color)
-        self.guid_vertex = zip(guids, keys)
-
+        guids = self.artist.draw_vertices(vertices, color)
+        self.guid_vertex = zip(guids, vertices)
         compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
 
         if self.settings['show.vertices']:
@@ -103,28 +100,29 @@ class FormObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_vertices)
 
-        # edges
+        # ======================================================================
+        # Edges
+        # --------
+        # Draw the edges and add them to the edge group.
+        # ======================================================================
 
-        guids_edges = list(self.guid_edge.keys())
-        delete_objects(guids_edges, purge=True)
-
-        keys = list(self.datastructure.edges_where({'_is_edge': True}))
-        color = {key: self.settings['color.edges'] for key in keys}
+        edges = list(self.mesh.edges_where({'_is_edge': True}))
+        color = {edge: self.settings['color.edges'] for edge in edges}
 
         # color analysis
-        if self.scene.settings['RV2']['show.forces']:
-            if self.datastructure.dual:
-                _keys = list(self.datastructure.dual.edges())
-                lengths = [self.datastructure.dual.edge_length(*key) for key in _keys]
-                keys = [self.datastructure.dual.primal_edge(key) for key in _keys]
+        if self.scene and self.scene.settings['RV2']['show.forces']:
+            if self.mesh.dual:
+                _edges = list(self.mesh.dual.edges())
+                lengths = [self.mesh.dual.edge_length(*edge) for edge in _edges]
+                edges = [self.mesh.dual.primal_edge(edge) for edge in _edges]
                 lmin = min(lengths)
                 lmax = max(lengths)
-                for key, length in zip(keys, lengths):
+                for edge, length in zip(edges, lengths):
                     if lmin != lmax:
-                        color[key] = i_to_rgb((length - lmin) / (lmax - lmin))
+                        color[edge] = i_to_rgb((length - lmin) / (lmax - lmin))
 
-        guids = self.artist.draw_edges(keys, color)
-        self.guid_edge = zip(guids, keys)
+        guids = self.artist.draw_edges(edges, color)
+        self.guid_edge = zip(guids, edges)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
         if self.settings['show.edges']:
@@ -132,35 +130,26 @@ class FormObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_edges)
 
-        # angles
+        # ======================================================================
+        # Labels
+        # ------
+        # Add labels for the angle deviations.
+        # ======================================================================
 
-        if self.scene.settings['RV2']['show.angles']:
-
+        if self.scene and self.scene.settings['RV2']['show.angles']:
             tol = self.scene.settings['RV2']['tol.angles']
-            keys = list(self.datastructure.edges_where({'_is_edge': True}))
-            angles = self.datastructure.edges_attribute('_a', keys=keys)
+            edges = list(self.mesh.edges_where({'_is_edge': True}))
+            angles = self.mesh.edges_attribute('_a', keys=edges)
             amin = min(angles)
             amax = max(angles)
             if (amax - amin)**2 > 0.001**2:
                 text = {}
                 color = {}
-                for key, angle in zip(keys, angles):
+                for edge, angle in zip(edges, angles):
                     if angle > tol:
-                        text[key] = "{:.0f}".format(angle)
-                        color[key] = i_to_rgb((angle - amin) / (amax - amin))
+                        text[edge] = "{:.0f}".format(angle)
+                        color[edge] = i_to_rgb((angle - amin) / (amax - amin))
                 guids = self.artist.draw_edgelabels(text, color)
-                self.guid_edgelabel = zip(guids, keys)
+                self.guid_edgelabel = zip(guids, edges)
 
-        else:
-            guids_edgelabels = list(self.guid_edgelabel.keys())
-            delete_objects(guids_edgelabels, purge=True)
-            del self._guid_edgelabel
-            self._guid_edgelabel = {}
-
-
-# ==============================================================================
-# Main
-# ==============================================================================
-
-if __name__ == '__main__':
-    pass
+        # self.redraw()

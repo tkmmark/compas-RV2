@@ -28,8 +28,7 @@ def RunCommand(is_interactive):
     if not proxy:
         return
 
-    # constrained_delaunay_triangulation = proxy.function('compas_triangle.delaunay.constrained_delaunay_triangulation')
-    conforming_delaunay_triangulation = proxy.function('compas_triangle.delaunay.conforming_delaunay_triangulation')
+    conforming_delaunay_triangulation = proxy.function('compas.geometry.conforming_delaunay_triangulation')
 
     boundary_guids = compas_rhino.select_curves('Select outer boundary.')
     if not boundary_guids:

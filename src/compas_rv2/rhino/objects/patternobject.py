@@ -3,35 +3,22 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
-from compas_rv2.rhino import delete_objects
-from compas_rv2.rhino.artists import MeshArtist
-from compas_rv2.rhino.objects.meshobject import MeshObject
+from compas.geometry import Point
+from compas.geometry import Scale
+from compas.geometry import Translation
+from compas.geometry import Rotation
+
+from .meshobject import MeshObject
 
 
 __all__ = ["PatternObject"]
 
 
 class PatternObject(MeshObject):
-    """Scene object for mesh-based data structures in RV2.
-
-    Parameters
-    ----------
-    pattern : :class:`compas_rv2.datastructures.Pattern`
-        The pattern data structure.
-
-    Attributes
-    ----------
-    scene : :class:`compas_rv2.scene.Scene`
-        The RhinoVault 2 scene.
-    pattern : :class:`compas_rv2.datastructures.Pattern`
-        The pattern data structure.
-    artist : :class:`compas_rv2.rhino.PatternArtist`
-        The specialised pasttern artist.
+    """Scene object for patterns in RV2.
     """
 
-    __module__ = 'compas_rv2.rhino'
-
-    settings = {
+    SETTINGS = {
         'layer': "RV2::Pattern",
         'show.vertices': True,
         'show.edges': True,
@@ -46,16 +33,44 @@ class PatternObject(MeshObject):
         'from_surface.density.V': 10,
     }
 
-    def __init__(self, pattern, **kwargs):
-        super(PatternObject, self).__init__(pattern, **kwargs)
-        self.artist = MeshArtist(self.datastructure)
+    @property
+    def vertex_xyz(self):
+        """dict : The view coordinates of the mesh object."""
+        origin = Point(0, 0, 0)
+        if self.anchor is not None:
+            xyz = self.mesh.vertex_attributes(self.anchor, 'xyz')
+            point = Point(* xyz)
+            T1 = Translation.from_vector(origin - point)
+            S = Scale.from_factors([self.scale] * 3)
+            R = Rotation.from_euler_angles(self.rotation)
+            T2 = Translation.from_vector(self.location)
+            X = T2 * R * S * T1
+        else:
+            S = Scale.from_factors([self.scale] * 3)
+            R = Rotation.from_euler_angles(self.rotation)
+            T = Translation.from_vector(self.location)
+            X = T * R * S
+        mesh = self.mesh.transformed(X)
+        vertex_xyz = {vertex: mesh.vertex_attributes(vertex, 'xyz') for vertex in mesh.vertices()}
+        return vertex_xyz
 
     def draw(self):
-        """Draw the pattern in the Rhino scene using the current settings."""
+        """Draw the objects representing the force diagram.
+        """
         layer = self.settings['layer']
-
         self.artist.layer = layer
         self.artist.clear_layer()
+        self.clear()
+        if not self.visible:
+            return
+        self.artist.vertex_xyz = self.vertex_xyz
+
+        # ======================================================================
+        # Groups
+        # ------
+        # Create groups for vertices, edges, and faces.
+        # These groups will be turned on/off based on the visibility settings of the diagram
+        # ======================================================================
 
         group_vertices = "{}::vertices".format(layer)
         group_edges = "{}::edges".format(layer)
@@ -70,23 +85,21 @@ class PatternObject(MeshObject):
         if not compas_rhino.rs.IsGroup(group_faces):
             compas_rhino.rs.AddGroup(group_faces)
 
-        # vertices
+        # ======================================================================
+        # Vertices
+        # --------
+        # Draw the vertices and add them to the vertex group.
+        # ======================================================================
 
-        guids_vertices = list(self.guid_vertex.keys())
-        delete_objects(guids_vertices, purge=True)
-
-        keys = list(self.datastructure.vertices())
-
-        color = {key: self.settings['color.vertices'] for key in keys}
-        # color_constrained = self.settings['color.vertices:is_constrained']
+        vertices = list(self.mesh.vertices())
+        color = {vertex: self.settings['color.vertices'] for vertex in vertices}
         color_fixed = self.settings['color.vertices:is_fixed']
         color_anchor = self.settings['color.vertices:is_anchor']
-        # color.update({key: color_constrained for key in self.datastructure.vertices() if self.datastructure.vertex_attribute(key, 'constraints')})
-        color.update({key: color_fixed for key in self.datastructure.vertices_where({'is_fixed': True})})
-        color.update({key: color_anchor for key in self.datastructure.vertices_where({'is_anchor': True})})
+        color.update({vertex: color_fixed for vertex in self.mesh.vertices_where({'is_fixed': True})})
+        color.update({vertex: color_anchor for vertex in self.mesh.vertices_where({'is_anchor': True})})
 
-        guids = self.artist.draw_vertices(keys, color)
-        self.guid_vertex = zip(guids, keys)
+        guids = self.artist.draw_vertices(vertices, color)
+        self.guid_vertex = zip(guids, vertices)
         compas_rhino.rs.AddObjectsToGroup(guids, group_vertices)
 
         if self.settings['show.vertices']:
@@ -94,15 +107,17 @@ class PatternObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_vertices)
 
-        # edges
+        # ======================================================================
+        # Edges
+        # -----
+        # Draw the edges and add them to the edge group.
+        # ======================================================================
 
-        guids_edges = list(self.guid_edge.keys())
-        delete_objects(guids_edges, purge=True)
+        edges = list(self.mesh.edges())
+        color = {edge: self.settings['color.edges'] for edge in edges}
 
-        keys = list(self.datastructure.edges())
-        color = {key: self.settings['color.edges'] for key in keys}
-        guids = self.artist.draw_edges(keys, color)
-        self.guid_edge = zip(guids, keys)
+        guids = self.artist.draw_edges(edges, color)
+        self.guid_edge = zip(guids, edges)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
 
         if self.settings['show.edges']:
@@ -110,21 +125,25 @@ class PatternObject(MeshObject):
         else:
             compas_rhino.rs.HideGroup(group_edges)
 
-        # faces
+        # ======================================================================
+        # Faces
+        # -----
+        # Draw the faces and add them to the face group.
+        # ======================================================================
 
-        guids_faces = list(self.guid_face.keys())
-        delete_objects(guids_faces, purge=True)
+        faces = list(self.mesh.faces())
+        color = {face: self.settings['color.faces'] for face in faces}
 
-        keys = list(self.datastructure.faces())
-        color = {key: self.settings['color.faces'] for key in keys}
-        guids = self.artist.draw_faces(keys, color)
-        self.guid_face = zip(guids, keys)
+        guids = self.artist.draw_faces(faces, color)
+        self.guid_face = zip(guids, faces)
         compas_rhino.rs.AddObjectsToGroup(guids, group_faces)
 
         if self.settings['show.faces']:
             compas_rhino.rs.ShowGroup(group_faces)
         else:
             compas_rhino.rs.HideGroup(group_faces)
+
+        # self.redraw()
 
 
 # ==============================================================================
