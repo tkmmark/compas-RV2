@@ -156,6 +156,8 @@ class SubdObject(BaseObject):
 
     SETTINGS = {
         'layer': "RV2::Subd",
+        'layer.coarse': "RV2::Subd::coarse",
+        'layer.subd': "RV2::Subd::subd",
         'color.vertices': (255, 255, 255),
         'color.edges': (0, 0, 0),
         'color.faces': (0, 0, 0),
@@ -174,9 +176,11 @@ class SubdObject(BaseObject):
         self._guid_coarse_vertex = {}
         self._guid_coarse_edge = {}
         self._guid_subd_edge = {}
+        self._guid_label = {}
         self._guid_subd = {}
         self._edge_strips = {}
         self._strip_division = {}
+        self._guid_strip_division = {}
         self._anchor = None
         self._location = None
         self._scale = None
@@ -199,6 +203,7 @@ class SubdObject(BaseObject):
         self._guid_coarse_vertex = {}
         self._guid_coarse_edge = {}
         self._edge_strips = edge_strips(self.item)
+        self._guid_label = {}
 
     @property
     def subd(self):
@@ -209,6 +214,7 @@ class SubdObject(BaseObject):
         self._subd = subd
         self._guid_subd_edge = {}
         self._guid_subd = {}
+        self._guid_strip_division = {}
 
     @property
     def guid_coarse_edge(self):
@@ -220,6 +226,15 @@ class SubdObject(BaseObject):
         self._guid_coarse_edge = dict(values)
 
     @property
+    def guid_label(self):
+        """dict: Map between Rhino object GUIDs and skeleton vertex identifiers."""
+        return self._guid_label
+
+    @guid_label.setter
+    def guid_label(self, values):
+        self._guid_label = dict(values)
+
+    @property
     def guid_subd_edge(self):
         """dict: Map between Rhino object GUIDs and skeleton vertex identifiers."""
         return self._guid_subd_edge
@@ -227,6 +242,15 @@ class SubdObject(BaseObject):
     @guid_subd_edge.setter
     def guid_subd_edge(self, values):
         self._guid_subd_edge = dict(values)
+
+    @property
+    def guid_strip_division(self):
+        """dict: Map between Rhino object GUIDs and skeleton vertex identifiers."""
+        return self._guid_strip_division
+
+    @guid_strip_division.setter
+    def guid_strip_division(self, values):
+        self._guid_strip_division = dict(values)
 
 
 # --------------------------------------------------------------------------
@@ -263,6 +287,11 @@ class SubdObject(BaseObject):
 
         self.subd = subd
 
+    def get_draw_default_subd(self):
+        self.get_default_strip_subdvision()
+        self.get_subd()
+        self.draw_subd()
+
     def _change_division(self, edge, n):
         """change subdivision for a strip"""
         for i, edges in self._edge_strips.items():
@@ -273,25 +302,32 @@ class SubdObject(BaseObject):
 
     def change_strip_subd(self):
         """change subdivision for a strip, get input strip and division number from ui"""
-        # guid = compas_rhino.select_lines('select the edge change subdivision')
-        guid = rs.GetObjects(
-            'select the edge change subdivision',
+
+        def custom_filter(rhino_object, geometry, component_index):
+            if rhino_object.Attributes.ObjectId in list(self.guid_coarse_edge.keys()):
+                return True
+            return False
+
+        guid = rs.GetObject(
+            message='select the edge change subdivision',
             preselect=False,
             select=True,
-            group=False,
-            filter=rs.filter.curve
+            custom_filter=custom_filter
             )
         if not guid:
             return
 
-        edge = self.guid_coarse_edge[guid[0]]
+        edge = self.guid_coarse_edge[guid]
         n = compas_rhino.rs.GetInteger('divide into?')
+        if not n or n < 2:
+            print('has to be larger than 2!!')
+            return guid
 
         self._change_division(edge, n)
 
         return guid
 
-    def change_subd(self):
+    def change_draw_subd(self):
         while True:
             guid = self.change_strip_subd()
             if not guid:
@@ -321,21 +357,64 @@ class SubdObject(BaseObject):
         pass
 
     def draw_coarse(self):
-        guids = self.artist.draw_edges()
+        self.artist.layer = self.settings['layer.coarse']
+        color = self.settings['color.edges']
+        guids = self.artist.draw_edges(color=color)
         self.guid_coarse_edge = zip(guids, list(self.item.edges()))
+        # self._draw_strips_label()
         self.artist.redraw()
 
     def draw_subd(self):
-
         artist = MeshArtist(self.subd)
-        layer = self.settings['layer']
+        layer = self.settings['layer.subd']
         color = self.settings['color.subd.edges']
         artist.layer = layer
         guids = artist.draw_edges(color=color)
         self.guid_subd_edge = zip(guids, list(self.subd.edges()))
+
+        self._draw_strips_division_num()
         artist.redraw()
+
+    def _draw_strips_label(self):
+        labels = []
+        for i, edges in self._edge_strips.items():
+            boundary_edge_a_point = self.item.edge_midpoint(*edges[0])
+            boundary_edge_b_point = self.item.edge_midpoint(*edges[-1])
+            labels.append({'pos': boundary_edge_a_point, 'text': str(i)})
+            labels.append({'pos': boundary_edge_b_point, 'text': str(i)})
+
+        guids = compas_rhino.draw_labels(labels, layer=self.settings['layer.coarse'], clear=False, redraw=False)
+        self.guid_label = zip(guids, list(self._edge_strips.keys()))
+
+    def _draw_strips_division_num(self):
+        """draw the subdivision number for all strips"""
+
+        labels = []
+        for strip in list(self._edge_strips.keys()):
+
+            division = self._strip_division[strip]
+            edges = self._edge_strips[strip]
+            boundary_edge_a_point = self.item.edge_midpoint(*edges[0])
+            boundary_edge_b_point = self.item.edge_midpoint(*edges[-1])
+            labels.append({'pos': boundary_edge_a_point, 'text': str(division)})
+            labels.append({'pos': boundary_edge_b_point, 'text': str(division)})
+
+        guids = compas_rhino.draw_labels(labels, layer=self.settings['layer.coarse'], clear=False, redraw=False)
+        self.guid_strip_division = zip(guids, list(self._edge_strips.keys()))
 
     def clear_subd(self):
         guid_subd_edge = list(self.guid_subd_edge.keys())
         delete_objects(guid_subd_edge, purge=True)
         self._guid_subd_edge = {}
+
+        self._clear_strips_division_num()
+
+    def _clear_strips_division_num(self):
+        guids = list(self.guid_strip_division.keys())
+        delete_objects(guids, purge=True)
+        self._guid_strip_division = {}
+
+    def _clear_strips_label(self):
+        guids = list(self.guid_label.keys())
+        delete_objects(guids, purge=True)
+        self._guid_label = {}
