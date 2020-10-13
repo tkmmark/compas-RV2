@@ -76,9 +76,7 @@ def RunCommand(is_interactive):
     pattern = Pattern.from_vertices_and_faces(xyz, faces)
 
     # clear skeleton
-    layer = [
-        subdobject.settings['layer'],
-        ]
+    layer = subdobject.settings['layer']
     subdobject.clear()
     # compas_rhino.rs.ShowObjects(guids)
     compas_rhino.delete_layers([layer])
