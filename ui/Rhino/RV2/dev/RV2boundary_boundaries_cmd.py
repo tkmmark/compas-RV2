@@ -129,10 +129,10 @@ def RunCommand(is_interactive):
     # compute current opening Qs
     Q = []
     for opening in openings:
-        q = pattern.datastructure.edges_attribute('q', keys=opening)
+        q = pattern.datastructure.edges_attribute('q', edges=opening)
         q = sum(q) / len(q)
         Q.append(q)
-        pattern.datastructure.edges_attribute('q', q, keys=opening)
+        pattern.datastructure.edges_attribute('q', q, edges=opening)
 
     # relax the pattern
     relax_pattern(pattern.datastructure, relax)
@@ -151,7 +151,7 @@ def RunCommand(is_interactive):
             q = sag / target * q
             Q[i] = q
             opening = openings[i]
-            pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
+            pattern.datastructure.edges_attribute('q', Q[i], edges=opening)
         relax_pattern(pattern.datastructure, relax)
 
     if count == 10:
@@ -206,7 +206,7 @@ def RunCommand(is_interactive):
                         q = sag / target * q
                         Q[i] = q
                         opening = openings[i]
-                        pattern.datastructure.edges_attribute('q', Q[i], keys=opening)
+                        pattern.datastructure.edges_attribute('q', Q[i], edges=opening)
                     relax_pattern(pattern.datastructure, relax)
 
                 if count == 10:

@@ -131,7 +131,7 @@ class ForceObject(MeshObject):
         if self.scene and self.scene.settings['RV2']['show.angles']:
             tol = self.scene.settings['RV2']['tol.angles']
             edges = list(self.mesh.edges())
-            angles = self.mesh.edges_attribute('_a', keys=edges)
+            angles = self.mesh.edges_attribute('_a', edges=edges)
             amin = min(angles)
             amax = max(angles)
             if (amax - amin)**2 > 0.001**2:

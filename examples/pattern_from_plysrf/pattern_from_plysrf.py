@@ -7,4 +7,6 @@ compas_rhino.rs.HideObject(guid)
 
 subdobject.draw_coarse()
 subdobject.get_draw_default_subd()
+subdobject.draw_subd()
+
 subdobject.change_draw_subd()

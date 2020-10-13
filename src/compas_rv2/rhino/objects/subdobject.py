@@ -290,7 +290,6 @@ class SubdObject(BaseObject):
     def get_draw_default_subd(self):
         self.get_default_strip_subdvision()
         self.get_subd()
-        self.draw_subd()
 
     def _change_division(self, edge, n):
         """change subdivision for a strip"""
@@ -328,13 +327,17 @@ class SubdObject(BaseObject):
         return guid
 
     def change_draw_subd(self):
+        self.draw_strips_division_num(redraw=True)
+
         while True:
             guid = self.change_strip_subd()
             if not guid:
                 break
 
+            self.clear_strips_division_num()
             self.clear_subd()
             self.get_subd()
+            self.draw_strips_division_num()
             self.draw_subd()
 
 # --------------------------------------------------------------------------
@@ -354,7 +357,9 @@ class SubdObject(BaseObject):
         pass
 
     def clear(self):
-        pass
+        self.clear_coarse()
+        self.clear_subd()
+        self.clear_strips_division_num()
 
     def draw_coarse(self):
         self.artist.layer = self.settings['layer.coarse']
@@ -372,7 +377,7 @@ class SubdObject(BaseObject):
         guids = artist.draw_edges(color=color)
         self.guid_subd_edge = zip(guids, list(self.subd.edges()))
 
-        self._draw_strips_division_num()
+        # self.draw_strips_division_num()
         artist.redraw()
 
     def _draw_strips_label(self):
@@ -386,10 +391,11 @@ class SubdObject(BaseObject):
         guids = compas_rhino.draw_labels(labels, layer=self.settings['layer.coarse'], clear=False, redraw=False)
         self.guid_label = zip(guids, list(self._edge_strips.keys()))
 
-    def _draw_strips_division_num(self):
+    def draw_strips_division_num(self, redraw=False):
         """draw the subdivision number for all strips"""
 
         labels = []
+        strips = []
         for strip in list(self._edge_strips.keys()):
 
             division = self._strip_division[strip]
@@ -398,18 +404,25 @@ class SubdObject(BaseObject):
             boundary_edge_b_point = self.item.edge_midpoint(*edges[-1])
             labels.append({'pos': boundary_edge_a_point, 'text': str(division)})
             labels.append({'pos': boundary_edge_b_point, 'text': str(division)})
+            strips.append(strip)
+            strips.append(strip)
 
-        guids = compas_rhino.draw_labels(labels, layer=self.settings['layer.coarse'], clear=False, redraw=False)
-        self.guid_strip_division = zip(guids, list(self._edge_strips.keys()))
+        guids = compas_rhino.draw_labels(labels, layer=self.settings['layer.coarse'], clear=False, redraw=redraw)
+        self.guid_strip_division = zip(guids, strips)
+
+    def clear_coarse(self):
+        guid_coarse_edge = list(self.guid_coarse_edge.keys())
+        delete_objects(guid_coarse_edge, purge=True)
+        self._guid_coarse_edge = {}
 
     def clear_subd(self):
         guid_subd_edge = list(self.guid_subd_edge.keys())
         delete_objects(guid_subd_edge, purge=True)
         self._guid_subd_edge = {}
 
-        self._clear_strips_division_num()
+        # self.clear_strips_division_num()
 
-    def _clear_strips_division_num(self):
+    def clear_strips_division_num(self):
         guids = list(self.guid_strip_division.keys())
         delete_objects(guids, purge=True)
         self._guid_strip_division = {}
