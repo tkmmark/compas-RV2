@@ -162,7 +162,7 @@ class SubdObject(BaseObject):
         'color.edges': (0, 0, 0),
         'color.faces': (0, 0, 0),
         'color.mesh': (0, 0, 0),
-        'color.subd.edges': (100, 100, 100),
+        'color.subd.edges': (180, 180, 180),
         'show.mesh': True,
         'show.vertices': True,
         'show.edges': True,
@@ -382,14 +382,17 @@ class SubdObject(BaseObject):
 
     def _draw_strips_label(self):
         labels = []
+        strips = []
         for i, edges in self._edge_strips.items():
             boundary_edge_a_point = self.item.edge_midpoint(*edges[0])
             boundary_edge_b_point = self.item.edge_midpoint(*edges[-1])
             labels.append({'pos': boundary_edge_a_point, 'text': str(i)})
             labels.append({'pos': boundary_edge_b_point, 'text': str(i)})
+            strips.append(i)
+            strips.append(i)
 
         guids = compas_rhino.draw_labels(labels, layer=self.settings['layer.coarse'], clear=False, redraw=False)
-        self.guid_label = zip(guids, list(self._edge_strips.keys()))
+        self.guid_label = zip(guids, strips)
 
     def draw_strips_division_num(self, redraw=False):
         """draw the subdivision number for all strips"""
@@ -402,8 +405,8 @@ class SubdObject(BaseObject):
             edges = self._edge_strips[strip]
             boundary_edge_a_point = self.item.edge_midpoint(*edges[0])
             boundary_edge_b_point = self.item.edge_midpoint(*edges[-1])
-            labels.append({'pos': boundary_edge_a_point, 'text': str(division)})
-            labels.append({'pos': boundary_edge_b_point, 'text': str(division)})
+            labels.append({'pos': boundary_edge_a_point, 'text': str(division), 'color': (255, 0, 0)})
+            labels.append({'pos': boundary_edge_b_point, 'text': str(division), 'color': (255, 0, 0)})
             strips.append(strip)
             strips.append(strip)
 

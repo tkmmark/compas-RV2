@@ -173,8 +173,7 @@
                         [
                             {"command": "RV2pattern_from_lines"},
                             {"command": "RV2pattern_from_mesh"},
-                            {"command": "RV2pattern_from_surface"},
-                            {"command": "RV2pattern_from_polysurface"},
+                            {"command": "RV2pattern_from_surfaces"},
                             {"command": "RV2pattern_from_skeleton"},
                             {"command": "RV2pattern_from_triangulation"},
                             {"command": "RV2pattern_from_features"}

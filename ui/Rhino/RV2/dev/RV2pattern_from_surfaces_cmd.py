@@ -42,7 +42,7 @@ def RunCommand(is_interactive):
         return
 
     # skeleton from single point or a set of lines
-    guid = compas_rhino.select_surface()
+    guid = compas_rhino.select_surface(message='select an untrimmed surface or a polysurface')
 
     if not guid:
         return
