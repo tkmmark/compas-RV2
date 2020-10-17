@@ -273,16 +273,24 @@ class SubdObject(BaseObject):
     def get_default_strip_subdvision(self):
         """get subdivision number for each strip by user input target length"""
 
+        import random
+
+        def _random_color():
+            return list(random.choice((range(256))) for _ in range(3))
+
         target_length = compas_rhino.rs.GetReal('target edge length?')
         for i, edges in self._edge_strips.items():
             edge0 = edges[0]
             n = int(round(self.item.edge_length(edge0[0], edge0[1]) / target_length))
-            self._strip_division.update({i: n})
+
+            color = _random_color()
+
+            self._strip_division.update({i: [n, color]})
 
     def get_subd(self):
         subd = mesh_fast_copy(self.item)
         for i, edges in self._edge_strips.items():
-            n = self._strip_division[i]
+            n = self._strip_division[i][0]
             subd = mesh_sbudivide_strip(subd, edges[0], n)
 
         self.subd = subd
@@ -297,7 +305,8 @@ class SubdObject(BaseObject):
             if (edge[0], edge[1]) in edges or (edge[1], edge[0]) in edges:
                 break
 
-        self._strip_division.update({i: n})
+        color = self._strip_division[i][1]
+        self._strip_division.update({i: [n, color]})
 
     def change_strip_subd(self):
         """change subdivision for a strip, get input strip and division number from ui"""
@@ -401,12 +410,13 @@ class SubdObject(BaseObject):
         strips = []
         for strip in list(self._edge_strips.keys()):
 
-            division = self._strip_division[strip]
+            division = self._strip_division[strip][0]
+            color = self._strip_division[strip][1]
             edges = self._edge_strips[strip]
             boundary_edge_a_point = self.item.edge_midpoint(*edges[0])
             boundary_edge_b_point = self.item.edge_midpoint(*edges[-1])
-            labels.append({'pos': boundary_edge_a_point, 'text': str(division), 'color': (255, 0, 0)})
-            labels.append({'pos': boundary_edge_b_point, 'text': str(division), 'color': (255, 0, 0)})
+            labels.append({'pos': boundary_edge_a_point, 'text': str(division), 'color': color})
+            labels.append({'pos': boundary_edge_b_point, 'text': str(division), 'color': color})
             strips.append(strip)
             strips.append(strip)
 
