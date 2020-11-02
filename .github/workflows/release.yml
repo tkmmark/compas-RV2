@@ -32,11 +32,6 @@ jobs:
         run: |
           conda install conda-pack cython -y
       
-      - name: dependencies-install
-        shell: PowerShell
-        run: |
-          pip install -r requirements.lock.txt
-      
       - name: rv2-install
         run: |
           python scripts/unzip_electron.py

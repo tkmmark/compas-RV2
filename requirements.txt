@@ -1,6 +1,6 @@
-compas
-compas_cloud
-compas_tna
-compas_skeleton
-compas_triangle
-compas_singular
+COMPAS==0.17.1
+compas_cloud==0.1.0
+compas_tna==0.1.2
+compas_triangle @ git+git://github.com/compas-dev/compas_triangle.git@1a86f1557baa436279422bce3e14f89c4d77057b
+compas_skeleton @ git+git://github.com/BlockResearchGroup/compas_skeleton.git@85527114f4eb757a5b8d9c11425ad2c1c84aee7c
+compas_singular @ git+git://github.com/BlockResearchGroup/compas_singular.git@d2e0b23723d050916907bb5c77fd18616652a27e
