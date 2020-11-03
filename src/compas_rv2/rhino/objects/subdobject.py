@@ -162,7 +162,7 @@ class SubdObject(BaseObject):
         'color.edges': (0, 0, 0),
         'color.faces': (0, 0, 0),
         'color.mesh': (0, 0, 0),
-        'color.subd.edges': (180, 180, 180),
+        'color.subd.edges': (120, 120, 120),
         'show.mesh': True,
         'show.vertices': True,
         'show.edges': True,

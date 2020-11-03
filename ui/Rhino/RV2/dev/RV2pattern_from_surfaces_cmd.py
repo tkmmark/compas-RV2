@@ -85,7 +85,7 @@ def RunCommand(is_interactive):
     scene.add(pattern, name='pattern')
     scene.update()
 
-    print("Pattern object successfully created. Input lines have been hidden.")
+    print("Pattern object successfully created. Input surface(s) have been hidden.")
 
 
 # ==============================================================================
