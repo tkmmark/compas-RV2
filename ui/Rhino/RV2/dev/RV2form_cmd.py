@@ -49,13 +49,6 @@ def RunCommand(is_interactive):
                 form.vertex_attribute(key, 'is_anchor', True)
 
     thrust = form.copy(cls=ThrustDiagram)
-
-    import os
-
-    HERE = os.path.dirname(__file__)
-    FILE = os.path.join(HERE, 'form.json')
-    form.to_json(FILE, pretty=True)
-
     bbox_form = form.bounding_box_xy()
     diagonal = length_vector(subtract_vectors(bbox_form[2], bbox_form[0]))
     zmax = 0.25 * diagonal

@@ -7,6 +7,7 @@ import compas
 import ast
 import compas_rhino
 from compas_rhino import delete_objects
+from compas.utilities import i_to_rgb
 from compas_rv2.rhino import get_scene
 from compas_rv2.rhino.forms.settings import Settings_Tab
 
@@ -103,7 +104,7 @@ class Tree_Table(forms.TreeGridView):
         table.DataStore = treecollection
         table.Activated += table.SelectEvent(sceneNode, edges)
         table.ColumnHeaderClick += table.HeaderClickEvent()
-        table.CellEdited += table.EditEvent(edges)
+        table.CellEdited += table.EditEvent(sceneNode, edges)
         return table
 
     def sort_attributes(self, attributes):
@@ -120,47 +121,13 @@ class Tree_Table(forms.TreeGridView):
         return sorted_attributes
 
     def SelectEvent(self, sceneNode, edges):
-
-        def draw_values(edges, attr):
-
-            guid_previous = list(self._guid_lable.keys())
-            delete_objects(guid_previous, purge=True)
-            self._guid_lable = {}
-
-            datastructure = sceneNode.datastructure
-            is_not_edge = list(datastructure.edges_where({'_is_edge': False}))
-            edges_to_draw = list(set(list(datastructure.edges()))- set(is_not_edge))
-            edges_on_edit = edges
-            edges_others = list(set(edges_to_draw) - set(edges_on_edit))  # noqa E501
-
-            labels = []
-            for edge in edges_on_edit:
-                color = [150, 0, 0]
-                pos = datastructure.edge_midpoint(*edge)
-                value = round(datastructure.edge_attribute(edge, attr), 2)
-                labels.append({'pos': pos, 'text': str(value), 'color': color})
-
-            guids = compas_rhino.draw_labels(labels, layer='Default', clear=False, redraw=True) # noqa E501
-            guid_lable = dict(zip(guids, edges_on_edit))
-            self._guid_lable.update(guid_lable)
-
-            for edge in edges_others:
-                color = [0, 0, 0]
-                pos = datastructure.edge_midpoint(*edge)
-                value = round(datastructure.edge_attribute(edge, attr), 2)
-                labels.append({'pos': pos, 'text': str(value), 'color': color})
-
-            guids = compas_rhino.draw_labels(labels, layer='Default', clear=False, redraw=True) # noqa E501
-            guid_lable = dict(zip(guids, edges_others))
-            self._guid_lable.update(guid_lable)
-
         def on_selected(sender, event):
             attr = event.Item.Values[0]
-            draw_values(edges, attr)
+            self.draw_values(sceneNode, edges, attr)
 
         return on_selected
 
-    def EditEvent(self, edges):
+    def EditEvent(self, sceneNode, edges):
         def on_edited(sender, event):
             try:
                 keys = edges
@@ -199,6 +166,9 @@ class Tree_Table(forms.TreeGridView):
                             event.Item.Values[event.Column] = original_value
                     else:
                         print('value not changed from', original_value)
+
+                    get_set_attributes(key, attr, new_value)
+                self.draw_values(sceneNode, keys, attr)
 
             except Exception as e:
                 print("cell edit failed:", type(e), e)
@@ -252,6 +222,47 @@ class Tree_Table(forms.TreeGridView):
             key, attr = _key
             get_set_attributes(key, attr, new_value)
 
+    def draw_values(self, sceneNode, edges, attr):
+
+        self.clear_label()
+
+        datastructure = sceneNode.datastructure
+        is_not_edge = list(datastructure.edges_where({'_is_edge': False}))
+        edges_to_draw = list(set(list(datastructure.edges())) - set(is_not_edge))
+        edges_selected = list(set(edges) & set(edges_to_draw))
+        edges_unselected = list(set(edges_to_draw) - set(edges_selected))  # noqa E501
+
+        labels = []
+        for edge in edges_selected:
+            color = [0, 0, 0]
+            pos = datastructure.edge_midpoint(*edge)
+            value = round(datastructure.edge_attribute(edge, attr), 2)
+            labels.append({'pos': pos, 'text': str(value), 'color': color})
+
+        guids = compas_rhino.draw_labels(labels, layer='Default', clear=False, redraw=True) # noqa E501
+        guid_lable = dict(zip(guids, edges_selected))
+        self._guid_lable.update(guid_lable)
+
+        labels = []
+        values = [datastructure.edge_attribute(edge, attr) for edge in edges_to_draw]
+        v_max = max(values)
+        v_min = min(values)
+        v_range = v_max - v_min or v_max or 1
+        for edge in edges_unselected:
+            pos = datastructure.edge_midpoint(*edge)
+            value = round(datastructure.edge_attribute(edge, attr), 2)
+            color = i_to_rgb(value/v_range)
+            labels.append({'pos': pos, 'text': str(value), 'color': color})
+
+        guids = compas_rhino.draw_labels(labels, layer='Default', clear=False, redraw=True) # noqa E501
+        guid_lable = dict(zip(guids, edges_unselected))
+        self._guid_lable.update(guid_lable)
+
+    def clear_label(self):
+        guid = list(self._guid_lable.keys())
+        delete_objects(guid, purge=True)
+        self._guid_lable = {}
+
 
 class Tree_Tab(forms.TabPage):
 
@@ -265,6 +276,9 @@ class Tree_Tab(forms.TabPage):
 
     def apply(self):
         self.Content.apply()
+
+    def clear_label(self):
+        self.Content.clear_label()
 
 
 class ModifyAttributesForm(forms.Dialog[bool]):
@@ -303,6 +317,7 @@ class ModifyAttributesForm(forms.Dialog[bool]):
         self.Padding = drawing.Padding(12)
         self.Resizable = True
         self.ClientSize = drawing.Size(400, 600)
+        self.Closing += self.on_close
 
     @property
     def ok(self):
@@ -322,11 +337,19 @@ class ModifyAttributesForm(forms.Dialog[bool]):
         self.ApplyButton.Click += self.on_apply
         return self.ApplyButton
 
+    def on_close(self, sender, event):
+        try:
+            for page in self.TabControl.Pages:
+                page.clear_label()
+        except Exception as e:
+            print(e)
+
     def on_ok(self, sender, event):
         try:
             for page in self.TabControl.Pages:
                 if hasattr(page, 'apply'):
                     page.apply()
+                page.clear_label()
             get_scene().update()
         except Exception as e:
             print(e)
@@ -342,6 +365,11 @@ class ModifyAttributesForm(forms.Dialog[bool]):
             print(e)
 
     def on_cancel(self, sender, event):
+        try:
+            for page in self.TabControl.Pages:
+                page.clear_label()
+        except Exception as e:
+            print(e)
         self.Close()
 
 
