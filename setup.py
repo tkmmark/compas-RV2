@@ -25,7 +25,7 @@ optional_requirements = {}
 
 setup(
     name='compas_rv2',
-    version='1.1.3',
+    version='1.1.4',
     description='RhinoVault for Rhino 6 based on COMPAS',
     long_description=long_description,
     long_description_content_type='text/markdown',
