@@ -7,6 +7,7 @@ import json
 from ast import literal_eval
 
 import scriptcontext as sc
+import Rhino
 
 import compas_rhino
 from compas_rhino.forms import TextForm
@@ -30,6 +31,16 @@ __all__ = [
     "select_faces",
     "rv2_undo"
 ]
+
+
+def set_scriptcontext_doc_to_rhino():
+    sc.doc = Rhino.RhinoDoc.ActiveDoc
+
+def scriptcontext_doc_control(func):
+    def wrapper(*args, **kwargs):
+        set_scriptcontext_doc_to_rhino()
+        return func(*args, **kwargs)
+    return wrapper
 
 
 def match_vertices(diagram, keys):
@@ -159,7 +170,7 @@ def get_rv2():
         return None
     return sc.sticky["RV2"]
 
-
+@scriptcontext_doc_control
 def get_scene():
     rv2 = get_rv2()
     if rv2:
@@ -258,6 +269,7 @@ def undo(sender, e):
 
 
 def rv2_undo(command):
+    @@scriptcontext_doc_control
     def wrapper(*args, **kwargs):
         sc.doc.EndUndoRecord(sc.doc.CurrentUndoRecordSerialNumber)
         undoRecord = sc.doc.BeginUndoRecord("RV2 Undo")
