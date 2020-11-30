@@ -20,7 +20,26 @@ class ThrustArtist(MeshArtist):
     """A customised `MeshArtist` for the RV2 `ThrustDiagram`."""
 
     def draw_loads(self, vertices, color, scale, tol):
+        """Draw the externally applied loads at all vertices of the diagram.
 
+        Parameters
+        ----------
+        color : list or tuple
+            The RGB color specification for load forces.
+            The specification must be in integer format, with each component between 0 and 255.
+        scale : float
+            The scaling factor for the load force vectors.
+
+        Returns
+        -------
+        list
+            A list of tuples, with each tuple containing a vertex identifier
+            paired with the guid of the corresponding load force vector in Rhino.
+
+        Notes
+        -----
+        The magnitude of the externally applied load is calculated by the tributary area of the vertex of the loaded faces times the thickness `t`, plus any additional live load, `pz`.
+        """
         vertex_xyz = self.vertex_xyz
         lines = []
 
