@@ -22,27 +22,36 @@ class ThrustObject(MeshObject):
     SETTINGS = {
         '_is.valid': False,
         'layer': "RV2::ThrustDiagram",
+
         'show.vertices': True,
         'show.edges': False,
         'show.faces': True,
+
         'show.reactions': True,
         'show.residuals': False,
         'show.selfweight': False,
         'show.loads': False,
+
         'show.pipes': False,
+
         'color.vertices': [255, 0, 255],
         'color.vertices:is_fixed': [0, 255, 0],
         'color.vertices:is_anchor': [255, 0, 0],
+
         'color.edges': [255, 0, 255],
-        'color.faces': [255, 0, 255],
+        'color.loads': [0, 150, 0],
         'color.reactions': [0, 80, 0],
         'color.residuals': [0, 255, 255],
+
+        'color.faces': [255, 0, 255],
         'color.pipes': [0, 0, 255],
         'color.invalid': [100, 255, 100],
-        'scale.reactions': 0.1,
+
+        'scale.externalforces': 0.1,
         'scale.residuals': 1.0,
         'scale.pipes': 0.01,
-        'tol.reactions': 1e-3,
+
+        'tol.externalforces': 1e-3,
         'tol.residuals': 1e-3,
         'tol.pipes': 1e-3,
     }
@@ -53,6 +62,7 @@ class ThrustObject(MeshObject):
         self._guid_anchor = {}
         self._guid_reaction = {}
         self._guid_residual = {}
+        self._load = {}
         self._guid_pipe = {}
 
     @property
@@ -99,6 +109,14 @@ class ThrustObject(MeshObject):
     @guid_reaction.setter
     def guid_reaction(self, values):
         self._guid_reaction = dict(values)
+
+    @property
+    def guid_load(self):
+        return self._guid_load
+
+    @guid_load.setter
+    def guid_reaction(self, values):
+        self._load_reaction = dict(values)
 
     @property
     def guid_residual(self):
@@ -247,11 +265,19 @@ class ThrustObject(MeshObject):
         # Color overlays for various display modes.
         # ======================================================================
 
+        if self.settings['_is.valid'] and self.settings['show.loads']:
+            tol = self.settings['tol.externalforces']
+            vertices = list(self.mesh.vertices())
+            color = self.settings['color.loads']
+            scale = self.settings['scale.externalforces']
+            guids = self.artist.draw_reactions(vertices, color, scale, tol)
+            self.guid_load = zip(guids, vertices)
+
         if self.settings['_is.valid'] and self.settings['show.reactions']:
-            tol = self.settings['tol.reactions']
+            tol = self.settings['tol.externalforces']
             anchors = list(self.mesh.vertices_where({'is_anchor': True}))
             color = self.settings['color.reactions']
-            scale = self.settings['scale.reactions']
+            scale = self.settings['scale.externalforces']
             guids = self.artist.draw_reactions(anchors, color, scale, tol)
             self.guid_reaction = zip(guids, anchors)
 

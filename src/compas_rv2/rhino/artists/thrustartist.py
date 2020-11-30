@@ -19,6 +19,23 @@ __all__ = ['ThrustArtist']
 class ThrustArtist(MeshArtist):
     """A customised `MeshArtist` for the RV2 `ThrustDiagram`."""
 
+    def draw_loads(self, vertices, color, scale, tol):
+
+        vertex_xyz = self.vertex_xyz
+        lines = []
+
+        for vertex in vertices:
+            a = vertex_xyz[vertex]
+            area = self.mesh.tributary_area(vertex)
+            thickness = self.mesh.vertex_attribute(vertex, 't')
+            weight = area * thickness
+            live = self.mesh.vertex_attribute(vertex, 'pz')
+
+            load = scale_vector((0, 0, 1), scale * (weight + live))
+            b = add_vectors(a, load)
+            lines.append({'start': a, 'end': b, 'color': color, 'arrow': "start"})
+        return compas_rhino.draw_lines(lines, layer=self.layer, clear=False, redraw=False)
+
     def draw_reactions(self, vertices, color, scale, tol):
         """Draw the reaction forces at the anchored vertices of the diagram.
 
