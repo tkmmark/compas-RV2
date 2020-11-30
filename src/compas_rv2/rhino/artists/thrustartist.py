@@ -30,7 +30,6 @@ class ThrustArtist(MeshArtist):
             thickness = self.mesh.vertex_attribute(vertex, 't')
             weight = area * thickness
             live = self.mesh.vertex_attribute(vertex, 'pz')
-
             load = scale_vector((0, 0, 1), scale * (weight + live))
             b = add_vectors(a, load)
             lines.append({'start': a, 'end': b, 'color': color, 'arrow': "start"})

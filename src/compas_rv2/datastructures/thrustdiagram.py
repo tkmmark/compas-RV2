@@ -31,16 +31,18 @@ class ThrustDiagram(FormDiagram):
             v1 = subtract_vectors(p1, p0)
 
             fkey = self.halfedge[vertex][nbr]
-            if fkey is not None or not self.face_attribute(fkey, '_is_loaded'):
-                p2 = self.face_centroid(fkey)
-                v2 = subtract_vectors(p2, p0)
-                area += length_vector(cross_vectors(v1, v2))
+            if fkey is not None:
+                if self.face_attribute(fkey, '_is_loaded'):
+                    p2 = self.face_centroid(fkey)
+                    v2 = subtract_vectors(p2, p0)
+                    area += length_vector(cross_vectors(v1, v2))
 
             fkey = self.halfedge[nbr][vertex]
-            if fkey is not None or not self.face_attribute(fkey, '_is_loaded'):
-                p3 = self.face_centroid(fkey)
-                v3 = subtract_vectors(p3, p0)
-                area += length_vector(cross_vectors(v1, v3))
+            if fkey is not None:
+                if self.face_attribute(fkey, '_is_loaded'):
+                    p3 = self.face_centroid(fkey)
+                    v3 = subtract_vectors(p3, p0)
+                    area += length_vector(cross_vectors(v1, v3))
 
         return 0.25 * area
 

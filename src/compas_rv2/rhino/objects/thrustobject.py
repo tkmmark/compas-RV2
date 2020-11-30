@@ -62,7 +62,7 @@ class ThrustObject(MeshObject):
         self._guid_anchor = {}
         self._guid_reaction = {}
         self._guid_residual = {}
-        self._load = {}
+        self._guid_load = {}
         self._guid_pipe = {}
 
     @property
@@ -115,8 +115,8 @@ class ThrustObject(MeshObject):
         return self._guid_load
 
     @guid_load.setter
-    def guid_reaction(self, values):
-        self._load_reaction = dict(values)
+    def guid_load(self, values):
+        self._guid_load = dict(values)
 
     @property
     def guid_residual(self):
@@ -140,12 +140,14 @@ class ThrustObject(MeshObject):
         guids += list(self.guid_free)
         guids += list(self.guid_anchor)
         guids += list(self.guid_reaction)
+        guids += list(self.guid_load)
         guids += list(self.guid_residual)
         guids += list(self.guid_pipe)
         compas_rhino.delete_objects(guids, purge=True)
         self._guid_free = {}
         self._guid_anchor = {}
         self._guid_reaction = {}
+        self._guid_load = {}
         self._guid_residual = {}
         self._guid_pipe = {}
 
@@ -270,7 +272,7 @@ class ThrustObject(MeshObject):
             vertices = list(self.mesh.vertices())
             color = self.settings['color.loads']
             scale = self.settings['scale.externalforces']
-            guids = self.artist.draw_reactions(vertices, color, scale, tol)
+            guids = self.artist.draw_loads(vertices, color, scale, tol)
             self.guid_load = zip(guids, vertices)
 
         if self.settings['_is.valid'] and self.settings['show.reactions']:
