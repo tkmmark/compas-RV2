@@ -73,6 +73,8 @@ if __name__ == '__main__':
     register_json_path = os.path.join(compas.APPDATA, "compas_plugins.json")
     if os.path.exists(register_json_path):
         register_json = json.load(open(register_json_path))
+        if not isinstance(register_json["Plugins"], dict):
+            register_json["Plugins"] = {}
     else:
         register_json = {"Plugins": {}, "Current": None}
 
