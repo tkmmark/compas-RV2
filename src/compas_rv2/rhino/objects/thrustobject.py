@@ -266,7 +266,20 @@ class ThrustObject(MeshObject):
         if self.settings['_is.valid'] and self.settings['show.pipes']:
             tol = self.settings['tol.pipes']
             edges = list(self.mesh.edges_where({'_is_edge': True}))
-            color = self.settings['color.pipes']
+            color = {edge: self.settings['color.pipes'] for edge in edges}
+
+            # color analysis
+            if self.scene and self.scene.settings['RV2']['show.forces']:
+                if self.mesh.dual:
+                    _edges = list(self.mesh.dual.edges())
+                    lengths = [self.mesh.dual.edge_length(*edge) for edge in _edges]
+                    edges = [self.mesh.dual.primal_edge(edge) for edge in _edges]
+                    lmin = min(lengths)
+                    lmax = max(lengths)
+                    for edge, length in zip(edges, lengths):
+                        if lmin != lmax:
+                            color[edge] = i_to_rgb((length - lmin) / (lmax - lmin))
+
             scale = self.settings['scale.pipes']
             guids = self.artist.draw_pipes(edges, color, scale, tol)
             self.guid_pipe = zip(guids, edges)
