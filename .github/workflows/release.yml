@@ -16,7 +16,8 @@ jobs:
     name: Release-Windows
     runs-on: "windows-latest"
     steps:
-      - uses: olegtarasov/get-tag@v2
+      - name: Get the tag version
+        uses: dawidd6/action-get-tag@v1
         id: tagName
 
       - uses: actions/checkout@v2
