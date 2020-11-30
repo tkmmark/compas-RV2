@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 
 import compas_rhino
+
+from compas.utilities import i_to_rgb
 from compas.geometry import Point
 from compas.geometry import Scale
 from compas.geometry import Translation
@@ -201,6 +203,18 @@ class ThrustObject(MeshObject):
 
         edges = list(self.mesh.edges_where({'_is_edge': True}))
         color = {edge: self.settings['color.edges'] if self.settings['_is.valid'] else self.settings['color.invalid'] for edge in edges}
+
+        # color analysis
+        if self.scene and self.scene.settings['RV2']['show.forces']:
+            if self.mesh.dual:
+                _edges = list(self.mesh.dual.edges())
+                lengths = [self.mesh.dual.edge_length(*edge) for edge in _edges]
+                edges = [self.mesh.dual.primal_edge(edge) for edge in _edges]
+                lmin = min(lengths)
+                lmax = max(lengths)
+                for edge, length in zip(edges, lengths):
+                    if lmin != lmax:
+                        color[edge] = i_to_rgb((length - lmin) / (lmax - lmin))
         guids = self.artist.draw_edges(edges, color)
         self.guid_edge = zip(guids, edges)
         compas_rhino.rs.AddObjectsToGroup(guids, group_edges)
