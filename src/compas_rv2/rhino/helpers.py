@@ -32,17 +32,6 @@ __all__ = [
     "rv2_undo"
 ]
 
-
-def set_scriptcontext_doc_to_rhino():
-    sc.doc = Rhino.RhinoDoc.ActiveDoc
-
-def scriptcontext_doc_control(func):
-    def wrapper(*args, **kwargs):
-        set_scriptcontext_doc_to_rhino()
-        return func(*args, **kwargs)
-    return wrapper
-
-
 def match_vertices(diagram, keys):
     temp = compas_rhino.get_objects(name="{}.vertex.*".format(diagram.name))
     names = compas_rhino.get_object_names(temp)
@@ -170,12 +159,10 @@ def get_rv2():
         return None
     return sc.sticky["RV2"]
 
-@scriptcontext_doc_control
 def get_scene():
     rv2 = get_rv2()
     if rv2:
         return rv2['scene']
-
 
 def get_proxy():
     if "RV2.proxy" not in sc.sticky:
@@ -269,7 +256,6 @@ def undo(sender, e):
 
 
 def rv2_undo(command):
-    @@scriptcontext_doc_control
     def wrapper(*args, **kwargs):
         sc.doc.EndUndoRecord(sc.doc.CurrentUndoRecordSerialNumber)
         undoRecord = sc.doc.BeginUndoRecord("RV2 Undo")
